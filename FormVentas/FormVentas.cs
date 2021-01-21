@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+
 namespace WindowsFormsApplication1
 {
     public partial class FormVentas : Form
@@ -504,7 +505,7 @@ namespace WindowsFormsApplication1
                 }
                 dataGridView1.DataSource = lFiltrada.ToArray();
             }
-            else if (comboBox3.SelectedItem == "Todas")
+            else if (comboBox3.SelectedItem.ToString() == "Todas")
             {
                 textBox2.Text = "";
                 textBox2.Visible = false;

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
+
 namespace WindowsFormsApplication1
 {
     [Serializable]
+
     class RegistroVenta
     {
         static uint ultimoID;
@@ -16,7 +18,6 @@ namespace WindowsFormsApplication1
         public string fecha { get; set; }
         [DisplayName("CLIENTE")]
         public string cliente { get; set; }
-
         private List<ProdVendido> productosVendidos = new List<ProdVendido>();
 
         public RegistroVenta()
@@ -62,6 +63,5 @@ namespace WindowsFormsApplication1
             }
             return total;
         }
-       
     }
 }

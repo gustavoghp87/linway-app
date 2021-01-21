@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
+
 namespace WindowsFormsApplication1
 {
     [Serializable()]
+
     public class ProductoL
     {
         [DisplayName("Cod:")]
@@ -33,20 +35,24 @@ namespace WindowsFormsApplication1
             this.Nombre = nom;
             this.Precio = pre;
         }
+
         //////////Modificar datos////////////////////
         void modNombre(string nom)
         {
             this.Nombre = nom;
         }
+
         void modPrecio(float costo)
         {
             this.Precio = costo;
         }
+
         /////////obtener Datos ////////////////////////
         string darNombre()
         {
             return this.Nombre;
         }
+
         float darPrecio()
         {
             return this.Precio;
@@ -70,6 +76,7 @@ namespace WindowsFormsApplication1
     public enum TipoLiquido { Suavizante, Desmanchador, JabonLiquido, Auxiliar, Perfume };
 
     [Serializable()]
+    
     public class Liquido : ProductoL
     {
         private TipoLiquido tipoDeLiquido;

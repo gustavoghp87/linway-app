@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+
 namespace WindowsFormsApplication1
 {
     public partial class formNotas : Form
@@ -80,7 +81,7 @@ namespace WindowsFormsApplication1
         {
             List<NotaDeEnvio> lFiltrada = new List<NotaDeEnvio>();
             //todas - hoy - impresas- no impresas
-            if (comboBox1.SelectedItem.ToString() == "Hoy")
+            if (comboBox1.SelectedItem.ToString() == "Hoy") // cambio dps de este, 21/01/2021
             {
                 label2.Text = "";
                 textBox1.Text = "";
@@ -94,14 +95,14 @@ namespace WindowsFormsApplication1
                 }
                 dataGridView1.DataSource = lFiltrada.ToArray();
             }
-            if (comboBox1.SelectedItem == "Todas")
+            if (comboBox1.SelectedItem.ToString() == "Todas")
             {
                 label2.Text = "";
                 textBox1.Text = "";
                 textBox1.Visible = false;
                 dataGridView1.DataSource = notasEnvio.ToArray();
             }
-            if (comboBox1.SelectedItem == "Impresas")
+            if (comboBox1.SelectedItem.ToString() == "Impresas")
             {
                 label2.Text = "";
                 textBox1.Text = "";
@@ -115,7 +116,7 @@ namespace WindowsFormsApplication1
                 }
                 dataGridView1.DataSource = lFiltrada.ToArray();
             }
-            if (comboBox1.SelectedItem == "No impresas")
+            if (comboBox1.SelectedItem.ToString() == "No impresas")
             {
                 label2.Text = "";
                 textBox1.Text = "";
@@ -129,13 +130,13 @@ namespace WindowsFormsApplication1
                 }
                 dataGridView1.DataSource = lFiltrada.ToArray();
             }
-            if (comboBox1.SelectedItem == "Cliente")
+            if (comboBox1.SelectedItem.ToString() == "Cliente")
             {
                 label2.Text = "Dirección:";
                 textBox1.Text = "";
                 textBox1.Visible = true;
             }
-            if (comboBox1.SelectedItem == "Fecha")
+            if (comboBox1.SelectedItem.ToString() == "Fecha")
             {
                 label2.Text = "Fecha:";
                 textBox1.Text = "";
@@ -209,7 +210,7 @@ namespace WindowsFormsApplication1
         List<NotaDeEnvio> obtenerListaAImprimir()
         {
             List<NotaDeEnvio> listaAImprimir = new List<NotaDeEnvio>();
-            if (comboBox2.SelectedItem == "No impresas")
+            if (comboBox2.SelectedItem.ToString() == "No impresas")
             {
                 foreach (NotaDeEnvio nActual in notasEnvio)
                 {
@@ -219,7 +220,7 @@ namespace WindowsFormsApplication1
                     }
                 }
             }
-            if (comboBox2.SelectedItem == "Hoy")
+            if (comboBox2.SelectedItem.ToString() == "Hoy")
             {
                 foreach (NotaDeEnvio nActual in notasEnvio)
                 {
@@ -231,7 +232,7 @@ namespace WindowsFormsApplication1
             }
             if (textBox2.Text != "" && textBox3.Text != "")
             {
-                if (comboBox2.SelectedItem == "Establecer rango")
+                if (comboBox2.SelectedItem.ToString() == "Establecer rango")
                 {
                     if ((int.Parse(textBox2.Text) <= int.Parse(textBox3.Text)) && (int.Parse(textBox3.Text) <= ultimaNota) && (int.Parse(textBox2.Text) >= primeraNota))
                     {
@@ -252,7 +253,7 @@ namespace WindowsFormsApplication1
         }
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((comboBox2.SelectedItem == "No impresas") || ((comboBox2.SelectedItem == "Hoy")))
+            if ((comboBox2.SelectedItem.ToString() == "No impresas") || ((comboBox2.SelectedItem.ToString() == "Hoy")))
             {
                 textBox2.Visible = false;
                 textBox3.Visible = false;
@@ -261,7 +262,7 @@ namespace WindowsFormsApplication1
                 textBox3.Text = "";
                 textBox2.Text = "";
             }
-            if(comboBox2.SelectedItem == "Establecer rango")
+            if(comboBox2.SelectedItem.ToString() == "Establecer rango")
             {
                 textBox2.Visible = true;
                 textBox3.Visible = true;
@@ -295,7 +296,7 @@ namespace WindowsFormsApplication1
         //_________________________GRUPO BORRAR___________________________________
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((comboBox3.SelectedItem == "Impresas") || ((comboBox3.SelectedItem == "Todas") || (comboBox3.SelectedItem == "(Seleccionar)")))
+            if ((comboBox3.SelectedItem.ToString() == "Impresas") || ((comboBox3.SelectedItem.ToString() == "Todas") || (comboBox3.SelectedItem.ToString() == "(Seleccionar)")))
             {
                 textBox4.Visible = false;
                 textBox5.Visible = false;
@@ -304,7 +305,7 @@ namespace WindowsFormsApplication1
                 textBox4.Text = "";
                 textBox5.Text = "";
             }
-            if (comboBox3.SelectedItem == "Establecer rango")
+            if (comboBox3.SelectedItem.ToString() == "Establecer rango")
             {
                 textBox4.Visible = true;
                 textBox5.Visible = true;
@@ -319,7 +320,7 @@ namespace WindowsFormsApplication1
             
             if (textBox5.Text != "" && textBox4.Text != "")
             {
-                if (comboBox3.SelectedItem == "Establecer rango")
+                if (comboBox3.SelectedItem.ToString() == "Establecer rango")
                 {
                     if ((int.Parse(textBox5.Text) <= int.Parse(textBox4.Text)) && (int.Parse(textBox4.Text) <= ultimaNota) && (int.Parse(textBox5.Text) >= primeraNota))
                     {
@@ -336,11 +337,11 @@ namespace WindowsFormsApplication1
                     }
                 }
             }
-            if (comboBox3.SelectedItem == "Todas")
+            if (comboBox3.SelectedItem.ToString() == "Todas")
             {
                 listaABorrar.AddRange(notasEnvio);
             }
-            if (comboBox3.SelectedItem == "Impresas")
+            if (comboBox3.SelectedItem.ToString() == "Impresas")
             {
                 foreach (NotaDeEnvio nActual in notasEnvio)
                 {
@@ -363,7 +364,7 @@ namespace WindowsFormsApplication1
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if ((comboBox3.SelectedItem == "Todas") || (comboBox3.SelectedItem == "Establecer rango") || (comboBox3.SelectedItem == "Impresas"))
+            if ((comboBox3.SelectedItem.ToString() == "Todas") || (comboBox3.SelectedItem.ToString() == "Establecer rango") || (comboBox3.SelectedItem.ToString() == "Impresas"))
             {
                 MessageBox.Show("Confirme si desea borrar las notas de envio seleccionadas");
                 label11.Visible = true;

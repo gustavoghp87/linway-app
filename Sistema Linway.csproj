@@ -9,12 +9,13 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WindowsFormsApplication1</RootNamespace>
+    <RootNamespace>ClasesIn</RootNamespace>
     <AssemblyName>Linway</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>C:\Users\Maria Rosa\Desktop\Sistema Linway\</PublishUrl>
+    <PublishUrl>C:\Sistema Linway\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -86,101 +87,109 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Clases.cs" />
-    <Compile Include="DiasReparto.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Clases/Cliente.cs" />
+    <Compile Include="Clases/Destino.cs" />
+    <Compile Include="Clases/DetalleEnvio.cs" />
+    <Compile Include="Clases/DiasReparto.cs" />
+    <Compile Include="Clases/NotaDeEnvio.cs" />
+    <Compile Include="Clases/Producto.cs" />
+    <Compile Include="Clases/ProductoL.cs" />
+    <Compile Include="Clases/ProdVendido.cs" />
+    <Compile Include="Clases/Recibo.cs" />
+    <Compile Include="Clases/RegistroVenta.cs" />
+    <Compile Include="Clases/Reparto.cs" />
+    <Compile Include="Clases/Venta.cs" />
+    <Compile Include="Form1/Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Form1/Form1.Designer.cs">
+      <DependentUpon>Form1/Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormClientes.cs">
+    <Compile Include="FormClientes/FormClientes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormClientes.Designer.cs">
+    <Compile Include="FormClientes/FormClientes.Designer.cs">
       <DependentUpon>FormClientes.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormCrearNota.cs">
+    <Compile Include="FormCrearNota/FormCrearNota.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormCrearNota.Designer.cs">
+    <Compile Include="FormCrearNota/FormCrearNota.Designer.cs">
       <DependentUpon>FormCrearNota.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormNotasEnvio.cs">
+    <Compile Include="FormNotasEnvio/FormNotasEnvio.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormNotasEnvio.Designer.cs">
+    <Compile Include="FormNotasEnvio/FormNotasEnvio.Designer.cs">
       <DependentUpon>FormNotasEnvio.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form3.cs">
+    <Compile Include="Form3/Form3.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form3.Designer.cs">
+    <Compile Include="Form3/Form3.Designer.cs">
       <DependentUpon>Form3.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form4.cs">
+    <Compile Include="Form4/Form4.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form4.Designer.cs">
+    <Compile Include="Form4/Form4.Designer.cs">
       <DependentUpon>Form4.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormProductos.cs">
+    <Compile Include="FormProductos/FormProductos.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormProductos.Designer.cs">
+    <Compile Include="FormProductos/FormProductos.Designer.cs">
       <DependentUpon>FormProductos.cs</DependentUpon>
     </Compile>
-    <Compile Include="formRecibos.cs">
+    <Compile Include="FormRecibos/FormRecibos.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="formRecibos.Designer.cs">
-      <DependentUpon>formRecibos.cs</DependentUpon>
+    <Compile Include="FormRecibos/FormRecibos.Designer.cs">
+      <DependentUpon>FormRecibos.cs</DependentUpon>
     </Compile>
-    <Compile Include="formReparto.cs">
+    <Compile Include="FormReparto/FormReparto.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="formReparto.Designer.cs">
-      <DependentUpon>formReparto.cs</DependentUpon>
+    <Compile Include="FormReparto/FormReparto.Designer.cs">
+      <DependentUpon>FormReparto.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormVentas.cs">
+    <Compile Include="FormVentas/FormVentas.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormVentas.Designer.cs">
+    <Compile Include="FormVentas/FormVentas.Designer.cs">
       <DependentUpon>FormVentas.cs</DependentUpon>
     </Compile>
     <Compile Include="Importar.cs" />
-    <Compile Include="ProductoL.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegistroVenta.cs" />
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="Form1/Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormClientes.resx">
+    <EmbeddedResource Include="FormClientes/FormClientes.resx">
       <DependentUpon>FormClientes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormCrearNota.resx">
+    <EmbeddedResource Include="FormCrearNota/FormCrearNota.resx">
       <DependentUpon>FormCrearNota.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormNotasEnvio.resx">
+    <EmbeddedResource Include="FormNotasEnvio/FormNotasEnvio.resx">
       <DependentUpon>FormNotasEnvio.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form3.resx">
+    <EmbeddedResource Include="Form3/Form3.resx">
       <DependentUpon>Form3.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form4.resx">
+    <EmbeddedResource Include="Form4/Form4.resx">
       <DependentUpon>Form4.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormProductos.resx">
+    <EmbeddedResource Include="FormProductos/FormProductos.resx">
       <DependentUpon>FormProductos.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="formRecibos.resx">
-      <DependentUpon>formRecibos.cs</DependentUpon>
+    <EmbeddedResource Include="FormRecibos/FormRecibos.resx">
+      <DependentUpon>FormRecibos.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="formReparto.resx">
-      <DependentUpon>formReparto.cs</DependentUpon>
+    <EmbeddedResource Include="FormReparto/FormReparto.resx">
+      <DependentUpon>FormReparto.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormVentas.resx">
+    <EmbeddedResource Include="FormVentas/FormVentas.resx">
       <DependentUpon>FormVentas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -195,7 +204,7 @@
     </Compile>
     <None Include="Linway_TemporaryKey.pfx" />
     <None Include="Properties\DataSources\Cliente.datasource" />
-    <None Include="Properties\DataSources\Form1.datasource" />
+    <None Include="Properties\DataSources\Form1\Form1.datasource" />
     <None Include="Properties\DataSources\Producto.datasource" />
     <None Include="Properties\DataSources\Program.datasource" />
     <None Include="Properties\DataSources\WindowsFormsApplication1.Properties.Resources.datasource" />

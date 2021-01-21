@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+
 namespace WindowsFormsApplication1
 {
     public partial class FormClientes : Form
@@ -19,7 +20,7 @@ namespace WindowsFormsApplication1
         }
 
         const string copiaSeguridad = @"Copias de seguridad\ClientesLinway.bin";
-        const string direccionClientes = "ClientesLinway.bin";
+        const string direccionClientes = @"Copias de seguridad\ClientesLinway.bin";
         List<Cliente> listaClientes = new List<Cliente>();
         private int codigoParaCliente;
 
@@ -45,11 +46,18 @@ namespace WindowsFormsApplication1
         {
             if (File.Exists(direccionClientes))
             {
+                try
+                {
                 Stream archivoClientes = File.OpenRead(direccionClientes);
                 BinaryFormatter traductor = new BinaryFormatter();
                 listaClientes = (List<Cliente>)traductor.Deserialize(archivoClientes);
                 archivoClientes.Close();
                 codigoParaCliente = listaClientes.ElementAt(listaClientes.Count - 1).Numero + 1;
+                }
+                catch
+                {
+                    MessageBox.Show("Falló lectura de datos");
+                }
             }
             return listaClientes;
         }

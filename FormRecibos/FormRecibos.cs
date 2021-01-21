@@ -9,18 +9,19 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+
 namespace WindowsFormsApplication1
 {
-    public partial class formRecibos : Form
+    public partial class FormRecibos : Form
     {
-        public formRecibos()
+        public FormRecibos()
         {
             InitializeComponent();
         }
 
         const string direccionRecibos = "Recibos.bin";
         const string copiaSeguridad = @"Copias de seguridad\Recibos.bin";
-        List<detalleRecibo> listaDetalle = new List<detalleRecibo>();
+        List<DetalleRecibo> listaDetalle = new List<DetalleRecibo>();
         List<Recibo> listaRecibos = new List<Recibo>();
         List<Cliente> listaClientes = new List<Cliente>();
         int primerRecibo = 0;
@@ -307,7 +308,7 @@ namespace WindowsFormsApplication1
 
             if (textBox5.Text != "" && textBox4.Text != "")
             {
-                if (comboBox3.SelectedItem == "Establecer rango")
+                if (comboBox3.SelectedItem.ToString() == "Establecer rango")
                 {
                     if ((int.Parse(textBox5.Text) <= int.Parse(textBox4.Text)) && (int.Parse(textBox4.Text) <= ultimoRecibo) && (int.Parse(textBox5.Text) >= primerRecibo))
                     {
@@ -324,11 +325,11 @@ namespace WindowsFormsApplication1
                     }
                 }
             }
-            if (comboBox3.SelectedItem == "Todas")
+            if (comboBox3.SelectedItem.ToString() == "Todas")
             {
                 listaABorrar.AddRange(listaRecibos);
             }
-            if (comboBox3.SelectedItem == "Impresas")
+            if (comboBox3.SelectedItem.ToString() == "Impresas")
             {
                 foreach (Recibo rActual in listaRecibos)
                 {
@@ -495,22 +496,22 @@ namespace WindowsFormsApplication1
             {
                 if (radioButton1.Checked)
                 {
-                    listaDetalle.Add(new detalleRecibo("Saldo a Favor", float.Parse(textBox8.Text) * -1));
+                    listaDetalle.Add(new DetalleRecibo("Saldo a Favor", float.Parse(textBox8.Text) * -1));
                 }
                 if (radioButton2.Checked)
                 {
-                    listaDetalle.Add(new detalleRecibo("Desc. por devol.", float.Parse(textBox8.Text) * -1));
+                    listaDetalle.Add(new DetalleRecibo("Desc. por devol.", float.Parse(textBox8.Text) * -1));
                 }
                 if (radioButton3.Checked)
                 {
-                    listaDetalle.Add(new detalleRecibo("Saldo pendiente", float.Parse(textBox8.Text)));
+                    listaDetalle.Add(new DetalleRecibo("Saldo pendiente", float.Parse(textBox8.Text)));
                 }
                 if (radioButton4.Checked)
                 {
-                    listaDetalle.Add(new detalleRecibo("Factura N° "+ textBox7.Text, float.Parse(textBox8.Text))); 
+                    listaDetalle.Add(new DetalleRecibo("Factura N° "+ textBox7.Text, float.Parse(textBox8.Text))); 
                 }
                 float subTot = 0;
-                foreach (detalleRecibo dActual in listaDetalle)
+                foreach (DetalleRecibo dActual in listaDetalle)
                 {
                     subTot += dActual.importe;
                 }

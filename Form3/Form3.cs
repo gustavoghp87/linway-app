@@ -9,10 +9,14 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+
 namespace WindowsFormsApplication1
 {
     public partial class Form3 : Form
     {
+        int CodigoDeLaNota;
+        bool impresa;
+        
         public Form3()
         {
             InitializeComponent();
@@ -22,9 +26,7 @@ namespace WindowsFormsApplication1
         {
 
         }
-        int CodigoDeLaNota;
 
-        bool impresa;
         public void rellenar_Datos(NotaDeEnvio laNota)
         {
             lFecha.Text = laNota.Fecha;
@@ -48,7 +50,6 @@ namespace WindowsFormsApplication1
                 label3.Text =  label3.Text +pvActual.Subtotal.ToString(".00") + Environment.NewLine;
             }
             impresa = laNota.Impresa;
-            
         }
 
 
@@ -75,6 +76,7 @@ namespace WindowsFormsApplication1
             mygraphics.ReleaseHdc(dc1);
             memoryGraphics.ReleaseHdc(dc2);
         }
+
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             e.Graphics.DrawImage(memoryImage, 0, 0);
@@ -99,6 +101,7 @@ namespace WindowsFormsApplication1
 
         const string direccionNotas = "NotasDeEnvio.bin";
         List<NotaDeEnvio> notasEnvio = new List<NotaDeEnvio>();
+
         void CargarNotas()
         {
             if (File.Exists(direccionNotas))
@@ -110,6 +113,7 @@ namespace WindowsFormsApplication1
 
             }
         }
+
         void GuardarNotas()
         {
             Stream archivoNotas = File.Create(direccionNotas);
@@ -127,8 +131,5 @@ namespace WindowsFormsApplication1
                 GuardarNotas();
             }
         }
-
-        
-        
     }
 }

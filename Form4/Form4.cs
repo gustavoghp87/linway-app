@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+
 namespace WindowsFormsApplication1
 {
     public partial class Form4 : Form
@@ -42,7 +43,7 @@ namespace WindowsFormsApplication1
             lLocalidad.Text = elRecibo.Cliente.Substring(separador + 1);
 
             lTotal.Text = "$ " + elRecibo.ImporteTotal.ToString(".00");
-            foreach (detalleRecibo drActual in elRecibo.detalle)
+            foreach (DetalleRecibo drActual in elRecibo.detalle)
             {
                 label1.Text = label1.Text + drActual.detalle + Environment.NewLine;
                 label2.Text = label2.Text + drActual.importe.ToString(".00") + Environment.NewLine;

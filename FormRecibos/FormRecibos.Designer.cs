@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApplication1
 {
-    partial class formRecibos
+    partial class FormRecibos
     {
         /// <summary>
         /// Variable del diseñador requerida.
