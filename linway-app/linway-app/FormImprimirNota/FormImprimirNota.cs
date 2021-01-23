@@ -1,0 +1,154 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.InteropServices;
+
+
+namespace linway_app
+{
+    public partial class FormImprimirNota : Form
+    {
+        int CodigoDeLaNota;
+        bool impresa;
+        const string direccionNotas = "NotasDeEnvio.bin";
+        List<NotaDeEnvio> notasEnvio = new List<NotaDeEnvio>();
+        //[DllImport("gdi32.dll", CharSet = CharSet.Unicode)]
+        //public static extern long BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
+        //private Bitmap memoryImage;
+
+        public FormImprimirNota()
+        {
+            InitializeComponent();
+        }
+
+        private void FormImprimirNota_Load(object sender, EventArgs e)
+        {
+        }
+
+        public void Rellenar_Datos(NotaDeEnvio laNota)
+        {
+            lFecha.Text = laNota.Fecha;
+            CodigoDeLaNota = laNota.Codigo;
+            string elcodigo = laNota.Codigo.ToString();
+            for (int i = laNota.Codigo.ToString().Length; i < 5; i++)
+            {
+                elcodigo = "0" + elcodigo;
+            }
+
+            lCodigo.Text = elcodigo;
+            int separador = laNota.Cliente.IndexOf('-');
+            lCalle.Text = laNota.Cliente.Substring(0, separador);
+            lLocalidad.Text = laNota.Cliente.Substring(separador + 1);
+            lTotal.Text = "$ " + laNota.ImporteTotal.ToString(".00");
+
+            foreach (ProdVendido pvActual in laNota.Productos)
+            {
+                label1.Text = label1.Text + pvActual.Cantidad.ToString() + Environment.NewLine;
+                label2.Text = label2.Text + pvActual.Descripcion + Environment.NewLine;
+                label3.Text = label3.Text + pvActual.Subtotal.ToString(".00") + Environment.NewLine;
+            }
+            impresa = laNota.Impresa;
+        }
+
+
+        /// IMPRIMIR
+        /// 
+        
+
+        private void CaptureScreen()
+        {
+            try
+            {
+                Graphics mygraphics = this.CreateGraphics();
+                Size s = this.Size;
+                //memoryImage = new Bitmap(s.Width, s.Height, mygraphics);
+                //Graphics memoryGraphics = Graphics.FromImage(memoryImage);
+                //IntPtr dc1 = mygraphics.GetHdc();
+                //IntPtr dc2 = memoryGraphics.GetHdc();
+                //BitBlt(dc2, 0, 0, this.ClientRectangle.Width, this.ClientRectangle.Height, dc1, 0, 0, 13369376);
+                //mygraphics.ReleaseHdc(dc1);
+                //memoryGraphics.ReleaseHdc(dc2);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al capturar pantalla para imprimir:" + e.Message);
+            }
+        }
+
+        private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            //e.Graphics.DrawImage(memoryImage, 0, 0);
+        }
+
+        private void button1_Click(object sender, System.EventArgs e)
+        {
+            button1.Visible = false;
+            try
+            {
+                CaptureScreen();
+            }
+            catch (Exception h)
+            {
+                MessageBox.Show("Error al imprimir screen:" + h.Message);
+            }
+            PrintDialog printDialog1 = new PrintDialog{Document = printDocument1};
+            DialogResult result = printDialog1.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                printDocument1.Print();
+                Close();
+                MarcarImpresa();
+            }
+        }
+
+        void CargarNotas()
+        {
+            if (File.Exists(direccionNotas))
+            {
+                try
+                {
+                    Stream archivoNotas = File.OpenRead(direccionNotas);
+                    BinaryFormatter traductor = new BinaryFormatter();
+                    notasEnvio = (List<NotaDeEnvio>) traductor.Deserialize(archivoNotas);
+                    archivoNotas.Close();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error al leer las notas de envío:" + e.Message);
+                }
+            }
+        }
+
+        void GuardarNotas()
+        {
+            try
+            {
+                Stream archivoNotas = File.Create(direccionNotas);
+                BinaryFormatter traductor = new BinaryFormatter();
+                traductor.Serialize(archivoNotas, notasEnvio);
+                archivoNotas.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al guardar las notas de envío:" + e.Message);
+            }
+        }
+
+        void MarcarImpresa()
+        {
+            if (!impresa)
+            {
+                CargarNotas();
+                notasEnvio.Find(x => x.Codigo == CodigoDeLaNota).Impresa = true;
+                GuardarNotas();
+            }
+        }
+    }
+}
