@@ -190,6 +190,5 @@ namespace linway_app
         private System.Windows.Forms.PrintPreviewDialog printPreviewDialog1;
         private System.Windows.Forms.Label lCodigo;
         private System.Windows.Forms.Button button1;
-
     }
 }

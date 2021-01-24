@@ -20,8 +20,7 @@ namespace linway_app
 
         public Form1()
         {
-            try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.ToString()); }
-            
+            try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.ToString()); }    
         }
 
         void Actualizar()
@@ -43,7 +42,10 @@ namespace linway_app
         {
             Actualizar();
             dataGridView2.Columns[0].Width = 20;
+            dataGridView2.Columns[1].Width = 85;
             dataGridView2.Columns[2].Width = 35;
+
+
             dataGridView1.Columns[0].Width = 30;
             dataGridView1.Columns[1].Width = 200;
             dataGridView1.Columns[2].Width = 30;
@@ -68,7 +70,7 @@ namespace linway_app
         private void verClientesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormClientes fClientes = new FormClientes();
-            fClientes.agregarClientes();
+            fClientes.AgregarClientes();
             fClientes.Show();
         }
 
@@ -89,7 +91,7 @@ namespace linway_app
         private void modificarClienteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormClientes fModificar = new FormClientes();
-            fModificar.modificarClientes();
+            fModificar.ModificarClientes();
             fModificar.Show();
         }
 
@@ -117,7 +119,7 @@ namespace linway_app
         private void borrarClienteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormClientes fBorrar = new FormClientes();
-            fBorrar.borrarClientes();
+            fBorrar.BorrarClientes();
             fBorrar.Show();
         }
 
@@ -301,10 +303,10 @@ namespace linway_app
         private void importarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new Importar().importarExcel(dataGridView1, "ORDEN DEL SISTEMA LINWAY");
-            reemplazarImportadosALista(dataGridView1);
+            ReemplazarImportadosALista(dataGridView1);
         }
 
-        private void reemplazarImportadosALista(DataGridView grd)
+        private void ReemplazarImportadosALista(DataGridView grd)
         {
             listaClientes.Clear();
             for (int i = 0; i < grd.Rows.Count - 1; i++)

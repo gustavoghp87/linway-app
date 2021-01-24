@@ -15,13 +15,11 @@ namespace linway_app
     public partial class FormNotasEnvio : Form
     {
         const string direccionNotas = "NotasDeEnvio.bin";
-        const string copiaSeguridadNotas = "NotasDeEnvio.bin";
-
+        const string copiaSeguridadNotas = @"Copias de seguridad/NotasDeEnvio.bin";
         int ultimaNota;
         int primeraNota = 0;
-
         List<NotaDeEnvio> notasEnvio = new List<NotaDeEnvio>();
-        List<Producto> listaProductos = new List<Producto>();
+        readonly List<Producto> listaProductos = new List<Producto>();
         List<ProdVendido> listaPV = new List<ProdVendido>();
 
         public FormNotasEnvio()
@@ -173,6 +171,7 @@ namespace linway_app
                         ListaFiltrada.Add(nActual);
                     }
                 }
+
                 if (x == 'f')
                 {
                     if (nActual.Fecha.Contains(texto))
@@ -180,6 +179,7 @@ namespace linway_app
                         ListaFiltrada.Add(nActual);
                     }
                 }
+
             }
             dataGridView1.DataSource = ListaFiltrada.ToArray();
         }
@@ -202,7 +202,6 @@ namespace linway_app
             {
                 foreach (NotaDeEnvio nActual in ObtenerListaAImprimir())
                 {
-                    MessageBox.Show(nActual.Fecha.ToString());
                     try
                     {
                         FormImprimirNota vistaPrevia = new FormImprimirNota();

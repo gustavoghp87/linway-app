@@ -83,6 +83,9 @@ namespace linway_app
             this.menuStrip1.Size = new System.Drawing.Size(925, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
+
+
+
             // 
             // clientesToolStripMenuItem
             // 
@@ -131,6 +134,9 @@ namespace linway_app
             this.importarToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.importarToolStripMenuItem.Text = "Importar";
             this.importarToolStripMenuItem.Click += new System.EventHandler(this.importarToolStripMenuItem_Click);
+
+
+
             // 
             // productosToolStripMenuItem
             // 
@@ -170,6 +176,9 @@ namespace linway_app
             this.exportarProductosToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.exportarProductosToolStripMenuItem.Text = "Exportar Productos";
             this.exportarProductosToolStripMenuItem.Click += new System.EventHandler(this.exportarProductosToolStripMenuItem_Click);
+
+
+
             // 
             // notasDeEnvioToolStripMenuItem
             // 
@@ -193,6 +202,9 @@ namespace linway_app
             this.verNotasDeEnvíoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.verNotasDeEnvíoToolStripMenuItem.Text = "Ver notas de envío";
             this.verNotasDeEnvíoToolStripMenuItem.Click += new System.EventHandler(this.verNotasDeEnvíoToolStripMenuItem_Click);
+
+
+
             // 
             // ventaDeProductosToolStripMenuItem
             // 
@@ -208,6 +220,9 @@ namespace linway_app
             this.verVentasToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.verVentasToolStripMenuItem.Text = "Ver ventas";
             this.verVentasToolStripMenuItem.Click += new System.EventHandler(this.verVentasToolStripMenuItem_Click);
+
+
+
             // 
             // hojaDeRepartoToolStripMenuItem
             // 
@@ -223,6 +238,9 @@ namespace linway_app
             this.verHojasDeRepartoToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.verHojasDeRepartoToolStripMenuItem.Text = "Ver hojas de reparto";
             this.verHojasDeRepartoToolStripMenuItem.Click += new System.EventHandler(this.verHojasDeRepartoToolStripMenuItem_Click);
+
+
+
             // 
             // remitosToolStripMenuItem
             // 
@@ -238,26 +256,19 @@ namespace linway_app
             this.verRecibosToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.verRecibosToolStripMenuItem.Text = "Ver recibos";
             this.verRecibosToolStripMenuItem.Click += new System.EventHandler(this.verRecibosToolStripMenuItem_Click);
+
+
+
             // 
-            // label26
+            // label12
             // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(139, 71);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(96, 13);
-            this.label26.TabIndex = 27;
-            this.label26.Text = "Buscar por nombre";
-            this.label26.Visible = false;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(12, 388);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(69, 18);
-            this.label10.TabIndex = 21;
-            this.label10.Text = "Clientes";
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(12, 70);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(86, 18);
+            this.label12.TabIndex = 24;
+            this.label12.Text = "Productos";
             // 
             // button10
             // 
@@ -270,16 +281,15 @@ namespace linway_app
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
-            // button5
+            // label26
             // 
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button5.Location = new System.Drawing.Point(104, 383);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(29, 23);
-            this.button5.TabIndex = 22;
-            this.button5.Text = ">>";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(139, 71);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(96, 13);
+            this.label26.TabIndex = 27;
+            this.label26.Text = "Buscar por nombre";
+            this.label26.Visible = false;
             // 
             // BuscadorProductos
             // 
@@ -302,6 +312,30 @@ namespace linway_app
             this.dataGridView1.RowHeadersWidth = 10;
             this.dataGridView1.Size = new System.Drawing.Size(898, 150);
             this.dataGridView1.TabIndex = 1;
+
+
+
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(12, 388);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(69, 18);
+            this.label10.TabIndex = 21;
+            this.label10.Text = "Clientes";
+            // 
+            // button5
+            // 
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.button5.Location = new System.Drawing.Point(104, 383);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(29, 23);
+            this.button5.TabIndex = 22;
+            this.button5.Text = ">>";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // label11
             // 
@@ -320,17 +354,7 @@ namespace linway_app
             this.BuscadorClientes.Size = new System.Drawing.Size(110, 20);
             this.BuscadorClientes.TabIndex = 20;
             this.BuscadorClientes.Visible = false;
-            this.BuscadorClientes.TextChanged += new System.EventHandler(this.textBox8_TextChanged);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(12, 70);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(86, 18);
-            this.label12.TabIndex = 24;
-            this.label12.Text = "Productos";
+            this.BuscadorClientes.TextChanged += new System.EventHandler(this.textBox8_TextChanged);            
             // 
             // dataGridView2
             // 
@@ -345,6 +369,9 @@ namespace linway_app
             this.dataGridView2.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridView2.Size = new System.Drawing.Size(340, 281);
             this.dataGridView2.TabIndex = 19;
+
+
+
             // 
             // botonActualizar
             // 
@@ -355,10 +382,14 @@ namespace linway_app
             this.botonActualizar.Text = "Actualizar";
             this.botonActualizar.UseVisualStyleBackColor = true;
             this.botonActualizar.Click += new System.EventHandler(this.botonActualizar_Click);
+
+
+
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+
             // 
             // Form1
             // 
@@ -382,6 +413,8 @@ namespace linway_app
             this.Controls.Add(this.label26);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.ShowInTaskbar = true;
+            this.ShowIcon = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -395,7 +428,6 @@ namespace linway_app
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

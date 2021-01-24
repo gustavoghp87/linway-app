@@ -8,12 +8,18 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.Data.SqlClient;
 
 
 namespace linway_app
 {
     public partial class FormClientes : Form
     {
+        public string server = "LAPTOP-GHP";
+        public string username = "ghp21";
+        public string psw = "";
+        public string database = "linway-db";
+
         public FormClientes()
         {
             InitializeComponent();
@@ -29,7 +35,7 @@ namespace linway_app
             CargarClientes();
         }
 
-        public List<Cliente> darClientes()
+        public List<Cliente> DarClientes()
         {
             return this.listaClientes;
         }
@@ -69,25 +75,25 @@ namespace linway_app
             return listaClientes;
         }
 
-        public void agregarClientes()
+        public void AgregarClientes()
         {
             gbModificar.Enabled = false;
             gbBorrar.Enabled = false;
         }
 
-        public void modificarClientes()
+        public void ModificarClientes()
         {
             gbAgregar.Enabled = false;
             gbBorrar.Enabled = false;
         }
 
-        public void borrarClientes()
+        public void BorrarClientes()
         {
             gbModificar.Enabled = false;
             gbAgregar.Enabled = false;
         }
 
-        private void crearCopiaSeguridad(object sender, EventArgs e)
+        private void CrearCopiaSeguridad(object sender, EventArgs e)
         {
             try
             {
@@ -113,7 +119,7 @@ namespace linway_app
 
         //                                                                    agregar Cliente
 
-        public bool todoOKagregarC()
+        public bool TodoOKagregarC()
         {
             bool correcto = false;
             if ((textBox1.Text != "") && (textBox2.Text != "") && (textBox3.Text != "") && (textBox4.Text != "") && (textBox5.Text != "") && (textBox18.Text != ""))
@@ -126,9 +132,49 @@ namespace linway_app
             return correcto;
         }
 
+        private void AgregarEnDB(int codigoParaCliente, string direccion, int cp, int telefono, string nombre, string cuit, TipoR tipo)
+        {
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = server + ".database.windows.net",
+                    UserID = username,
+                    Password = psw,
+                    InitialCatalog = database
+                };
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    // authors(name, nationality) VALUES('Gabriel García Márquez', 'COL');
+                    string sql = "INSERT INTO clientes(id, nombre, direccion, cuit, cp, telefono, condicion) " +
+                        "VALUES(" + codigoParaCliente + ", " + nombre + ", " + direccion + ", " + cuit + ", " + cp +
+                        ", " + telefono + ", " + tipo + ");";
+                    MessageBox.Show(sql);
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        connection.Open();
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Console.WriteLine("{0} {1}", reader.GetString(0), reader.GetString(1));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+                MessageBox.Show("Error al guardar en SQL SERVER:" + e.Message);
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            if (todoOKagregarC())
+            if (TodoOKagregarC())
             {
                 string nombre = textBox1.Text;
                 string direccion = textBox2.Text + " - " + textBox18.Text;
@@ -145,6 +191,7 @@ namespace linway_app
                 listaClientes.Add(nuevoCliente);
                 GuardarClientes();
                 button2.PerformClick();
+                AgregarEnDB(codigoParaCliente, direccion, cp, telefono, nombre, cuit, tipo);
             }
             else
             {
@@ -210,7 +257,7 @@ namespace linway_app
 
         //                                                               modificar cliente
 
-        bool todoOkModificarC()
+        bool TodoOkModificarC()
         {
             bool correcto = false;
             if ((label23.Text != "No encontrado") && (textBox10.Text != "") && (textBox11.Text != "") && (textBox14.Text != "") && (textBox23.Text != "") && (textBox24.Text != "") && (textBox25.Text != ""))
@@ -264,7 +311,7 @@ namespace linway_app
 
         private void button9_Click(object sender, EventArgs e)
         {
-            if (todoOkModificarC())
+            if (TodoOkModificarC())
             {
                 CargarClientes();
                 foreach (Cliente cActual in listaClientes)
@@ -304,7 +351,6 @@ namespace linway_app
 
         //                                                               Borrar clientes
 
-
         private void textBox22_Leave(object sender, EventArgs e)
         {
             if (textBox22.Text != "")
@@ -337,7 +383,7 @@ namespace linway_app
 
         private void bSalir_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
     }

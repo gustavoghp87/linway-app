@@ -494,7 +494,7 @@ namespace linway_app
             this.bCopiaSeguridad.TabIndex = 45;
             this.bCopiaSeguridad.Text = "Crear copia de seguridad";
             this.bCopiaSeguridad.UseVisualStyleBackColor = true;
-            this.bCopiaSeguridad.Click += new System.EventHandler(this.crearCopiaSeguridad);
+            this.bCopiaSeguridad.Click += new System.EventHandler(this.CrearCopiaSeguridad);
             // 
             // bSalir
             // 

@@ -8,7 +8,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.InteropServices;
 
 
 namespace linway_app
@@ -19,9 +18,9 @@ namespace linway_app
         bool impresa;
         const string direccionNotas = "NotasDeEnvio.bin";
         List<NotaDeEnvio> notasEnvio = new List<NotaDeEnvio>();
-        //[DllImport("gdi32.dll", CharSet = CharSet.Unicode)]
-        //public static extern long BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
-        //private Bitmap memoryImage;
+        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
+        public static extern long BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
+        private Bitmap memoryImage;
 
         public FormImprimirNota()
         {
@@ -59,8 +58,6 @@ namespace linway_app
 
 
         /// IMPRIMIR
-        /// 
-        
 
         private void CaptureScreen()
         {
@@ -68,13 +65,13 @@ namespace linway_app
             {
                 Graphics mygraphics = this.CreateGraphics();
                 Size s = this.Size;
-                //memoryImage = new Bitmap(s.Width, s.Height, mygraphics);
-                //Graphics memoryGraphics = Graphics.FromImage(memoryImage);
-                //IntPtr dc1 = mygraphics.GetHdc();
-                //IntPtr dc2 = memoryGraphics.GetHdc();
-                //BitBlt(dc2, 0, 0, this.ClientRectangle.Width, this.ClientRectangle.Height, dc1, 0, 0, 13369376);
-                //mygraphics.ReleaseHdc(dc1);
-                //memoryGraphics.ReleaseHdc(dc2);
+                memoryImage = new Bitmap(s.Width, s.Height, mygraphics);
+                Graphics memoryGraphics = Graphics.FromImage(memoryImage);
+                IntPtr dc1 = mygraphics.GetHdc();
+                IntPtr dc2 = memoryGraphics.GetHdc();
+                BitBlt(dc2, 0, 0, this.ClientRectangle.Width, this.ClientRectangle.Height, dc1, 0, 0, 13369376);
+                mygraphics.ReleaseHdc(dc1);
+                memoryGraphics.ReleaseHdc(dc2);
             }
             catch (Exception e)
             {
@@ -84,7 +81,7 @@ namespace linway_app
 
         private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
-            //e.Graphics.DrawImage(memoryImage, 0, 0);
+            e.Graphics.DrawImage(memoryImage, 0, 0);
         }
 
         private void button1_Click(object sender, System.EventArgs e)
@@ -93,12 +90,13 @@ namespace linway_app
             try
             {
                 CaptureScreen();
+                MessageBox.Show("Pantalla capturada");
             }
             catch (Exception h)
             {
                 MessageBox.Show("Error al imprimir screen:" + h.Message);
             }
-            PrintDialog printDialog1 = new PrintDialog{Document = printDocument1};
+            PrintDialog printDialog1 = new PrintDialog { Document = printDocument1 };
             DialogResult result = printDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -123,6 +121,11 @@ namespace linway_app
                 {
                     MessageBox.Show("Error al leer las notas de envío:" + e.Message);
                 }
+            }
+            else
+            {
+                MessageBox.Show("No existe NotasDeEnvio.bin; procediendo a crear...");
+                GuardarNotas();
             }
         }
 
