@@ -2,11 +2,11 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+//using System.ComponentModel;
+//using System.Data;
+//using System.Drawing;
+//using System.Linq;
+//using System.Text;
 using System.Windows.Forms;
 
 
@@ -264,7 +264,7 @@ namespace linway_app
                 comboBox1.SelectedIndex = comboBox4.SelectedIndex;
                 comboBox2.SelectedIndex = comboBox5.SelectedIndex;
                 Destino nDestino = new Destino(label8.Text.Substring(0, label8.Text.IndexOf('-')));
-                listaRepartos.Find(x => x.Nombre.Contains(comboBox5.Text)).agregarDestino(nDestino);
+                listaRepartos.Find(x => x.Nombre.Contains(comboBox5.Text)).AgregarDestino(nDestino);
                 GuardarHDR();
                 LimpiarPantalla();
                 CargarHDR();
@@ -287,14 +287,21 @@ namespace linway_app
             CargarHDR();
 
             listaRepartos = diasDeReparto.Find(x => x.Dia == dia).Reparto;
-            listaRepartos.Find(x => x.Nombre == reparto).cargarPorVenta(lVentas, direc.Substring(0, direc.IndexOf('-')));
+            listaRepartos.Find(x => x.Nombre == reparto).CargarPorVenta(lVentas, direc.Substring(0, direc.IndexOf('-')));
             GuardarHDR();
         }
+
         public void CargarAHojaDeReparto2(string direc, string dia, string reparto, List<ProdVendido> lVentas)
         {
             CargarHDR();
             listaRepartos = diasDeReparto.Find(x => x.Dia == dia).Reparto;
-            listaRepartos.Find(x => x.Nombre == reparto).cargarPorNota(lVentas, direc.Substring(0, direc.IndexOf('-')));
+            Reparto elreparto = listaRepartos.Find(x => x.Nombre == reparto);
+            if (elreparto == null)
+            {
+                MessageBox.Show("Falló la lectura de ese reparto.");
+                return;
+            }
+            elreparto.CargarPorNota(lVentas, direc.Substring(0, direc.IndexOf('-')));
             GuardarHDR();
         }
 

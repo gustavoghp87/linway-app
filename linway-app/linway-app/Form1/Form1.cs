@@ -20,17 +20,17 @@ namespace linway_app
 
         public Form1()
         {
-            try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.ToString()); }    
+            try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.ToString()); }
         }
 
-        void Actualizar()
+        public void Actualizar()
         {
             try
             {
-            listaClientes = new FormClientes().CargarClientes();
-            listaProductos = new FormProductos().CargarProductos();
-            dataGridView1.DataSource = listaClientes.ToArray();
-            dataGridView2.DataSource = listaProductos.ToArray();
+                listaClientes = new FormClientes().CargarClientes();
+                listaProductos = new FormProductos().CargarProductos();
+                dataGridView1.DataSource = listaClientes.ToArray();
+                dataGridView2.DataSource = listaProductos.ToArray();
             }
             catch (Exception e)
             {
@@ -41,11 +41,13 @@ namespace linway_app
         private void Form1_Load(object sender, EventArgs e)
         {
             Actualizar();
-            dataGridView2.Columns[0].Width = 20;
-            dataGridView2.Columns[1].Width = 85;
-            dataGridView2.Columns[2].Width = 35;
 
+            // location (12, 96)     size (340, 281)
+            dataGridView2.Columns[0].Width = 48;
+            dataGridView2.Columns[1].Width = 220;
+            dataGridView2.Columns[2].Width = 72;
 
+            // location (12, 388)     size (898, 150)
             dataGridView1.Columns[0].Width = 30;
             dataGridView1.Columns[1].Width = 200;
             dataGridView1.Columns[2].Width = 30;
@@ -62,7 +64,6 @@ namespace linway_app
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
         }
-
 
 
 
@@ -302,7 +303,7 @@ namespace linway_app
         // _________________________IMPORTAR____________________
         private void importarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new Importar().importarExcel(dataGridView1, "ORDEN DEL SISTEMA LINWAY");
+            new Importar().ImportarExcel(dataGridView1, "ORDEN DEL SISTEMA LINWAY");
             ReemplazarImportadosALista(dataGridView1);
         }
 

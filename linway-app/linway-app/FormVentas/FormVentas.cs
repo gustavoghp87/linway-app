@@ -426,24 +426,6 @@ namespace linway_app
         //recibir ventas
         public void RecibirProductosVendidos(List<ProdVendido> listaPV, String client)
         {
-            //try
-            //{
-                
-               
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show("Error cargando VENTAS (externo): " + e.Message);
-            //}
-
-            //try
-            //{
-            //}
-            //catch (Exception i)
-            //{
-            //    MessageBox.Show("Error cargando REGISTROS (externo): " + i.Message);
-            //}
-            
             try
             {
                 RegistroVenta nuevoRegistro = new RegistroVenta();

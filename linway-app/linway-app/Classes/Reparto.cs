@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
+//using System.Linq;
+//using System.Text;
+//using System.ComponentModel;
+using System.Windows.Forms;
 
 
 namespace linway_app
@@ -49,12 +50,12 @@ namespace linway_app
             }
         }
 
-        public void agregarDestino(Destino dest)
+        public void AgregarDestino(Destino dest)
         {
             this.Destinos.Add(dest);
         }
 
-        public void cargarPorVenta(List<Venta> lVenta, string dire)
+        public void CargarPorVenta(List<Venta> lVenta, string dire)
         {
             if (!Destinos.Exists(x => x.Direccion == dire))
             {
@@ -63,32 +64,39 @@ namespace linway_app
             Destinos.Find(x => x.Direccion == dire).ModificarPorV(lVenta);
             foreach (Venta vActual in lVenta)
             {
-                modificarContadores(vActual.Cantidad, vActual.Producto);
+                ModificarContadores(vActual.Cantidad, vActual.Producto);
             }
         }
 
-        public void cargarPorNota(List<ProdVendido> lVenta, string dire)
+        public void CargarPorNota(List<ProdVendido> lVenta, string dire)
         {
             if (!Destinos.Exists(x => x.Direccion == dire))
             {
                 Destinos.Add(new Destino(dire));
             }
-            Destinos.Find(x => x.Direccion == dire).ModificarPorN(lVenta);
-            foreach (ProdVendido pvActual in lVenta)
+            try
             {
-                modificarContadores(pvActual.Cantidad, pvActual.Descripcion);
+                Destinos.Find(x => x.Direccion == dire).ModificarPorN(lVenta);
+                foreach (ProdVendido pvActual in lVenta)
+                {
+                    ModificarContadores(pvActual.Cantidad, pvActual.Descripcion);
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Falla en CargarPorNota: " + exc);
             }
         }
 
-        private void modificarContadores(int cant, string producto)
+        private void ModificarContadores(int cant, string producto)
         {
             if (esPolvo(producto))
             {
-                sumarPolvo(cant, producto);
+                SumarPolvo(cant, producto);
             }
             if ((!esPolvo(producto)) && (!esOtro(producto)))
             {
-                sumarLiquido(cant);
+                SumarLiquido(cant);
             }
         }
 
@@ -103,7 +111,7 @@ namespace linway_app
             return es;
         }
 
-        private void sumarPolvo(int c, string cadena)
+        private void SumarPolvo(int c, string cadena)
         {
             if (cadena.Contains("pol - p"))
             {
@@ -138,7 +146,7 @@ namespace linway_app
             return es;
         }
 
-        private void sumarLiquido(int c)
+        private void SumarLiquido(int c)
         {
             this.TL += c;
         }

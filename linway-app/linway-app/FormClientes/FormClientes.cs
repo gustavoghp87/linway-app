@@ -8,18 +8,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Microsoft.Data.SqlClient;
 
 
 namespace linway_app
 {
     public partial class FormClientes : Form
     {
-        public string server = "LAPTOP-GHP";
-        public string username = "ghp21";
-        public string psw = "";
-        public string database = "linway-db";
-
         public FormClientes()
         {
             InitializeComponent();
@@ -132,46 +126,6 @@ namespace linway_app
             return correcto;
         }
 
-        private void AgregarEnDB(int codigoParaCliente, string direccion, int cp, int telefono, string nombre, string cuit, TipoR tipo)
-        {
-            try
-            {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
-                {
-                    DataSource = server + ".database.windows.net",
-                    UserID = username,
-                    Password = psw,
-                    InitialCatalog = database
-                };
-
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    // authors(name, nationality) VALUES('Gabriel García Márquez', 'COL');
-                    string sql = "INSERT INTO clientes(id, nombre, direccion, cuit, cp, telefono, condicion) " +
-                        "VALUES(" + codigoParaCliente + ", " + nombre + ", " + direccion + ", " + cuit + ", " + cp +
-                        ", " + telefono + ", " + tipo + ");";
-                    MessageBox.Show(sql);
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        connection.Open();
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                Console.WriteLine("{0} {1}", reader.GetString(0), reader.GetString(1));
-                            }
-                        }
-                    }
-                }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e.ToString());
-                MessageBox.Show("Error al guardar en SQL SERVER:" + e.Message);
-            }
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             if (TodoOKagregarC())
@@ -191,7 +145,8 @@ namespace linway_app
                 listaClientes.Add(nuevoCliente);
                 GuardarClientes();
                 button2.PerformClick();
-                AgregarEnDB(codigoParaCliente, direccion, cp, telefono, nombre, cuit, tipo);
+                bool response = new DBconnection().AgregarClienteEnDB(direccion, cp, telefono, nombre, cuit, tipo);
+                if (response) Close();
             }
             else
             {

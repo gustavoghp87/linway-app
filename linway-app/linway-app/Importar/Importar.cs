@@ -16,14 +16,16 @@ namespace linway_app
         OleDbDataAdapter MyDataAdapter;
         DataTable dt;
 
-        public void importarExcel(DataGridView dgv, String nombreHoja)
+        public void ImportarExcel(DataGridView dgv, string nombreHoja)
         {
             string ruta = "";
             try
             {
-                OpenFileDialog openfile1 = new OpenFileDialog();
-                openfile1.Filter = "Excel Files |*.xls";
-                openfile1.Title = "Seleccione el archivo de Excel";
+                OpenFileDialog openfile1 = new OpenFileDialog
+                {
+                    Filter = "Excel Files |*.xls",
+                    Title = "Seleccione el archivo de Excel"
+                };
                 if (openfile1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     if (openfile1.FileName.Equals("") == false)
@@ -34,7 +36,7 @@ namespace linway_app
 
                 //conn = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + ruta + ";Extended Properties='Excel 8.0 Xml;HDR=Yes'");
                 conn = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + ruta + ";Extended Properties='Excel 8.0;HDR=Yes;IMEX=1'");
-                MyDataAdapter = new OleDbDataAdapter("Select * from [" + nombreHoja + "$]", conn);
+                MyDataAdapter = new OleDbDataAdapter("Select * from [" + openfile1.FileName + "]", conn);
                 dt = new DataTable();
                 MyDataAdapter.Fill(dt);
                 dgv.DataSource = dt;

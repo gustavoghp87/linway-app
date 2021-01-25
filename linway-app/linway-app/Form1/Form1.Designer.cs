@@ -90,11 +90,12 @@ namespace linway_app
             // clientesToolStripMenuItem
             // 
             this.clientesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.verClientesToolStripMenuItem,
-            this.modificarClienteToolStripMenuItem,
-            this.borrarClienteToolStripMenuItem,
-            this.exToolStripMenuItem,
-            this.importarToolStripMenuItem});
+                this.verClientesToolStripMenuItem,
+                this.modificarClienteToolStripMenuItem,
+                this.borrarClienteToolStripMenuItem,
+                this.exToolStripMenuItem,
+                this.importarToolStripMenuItem
+            });
             this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
             this.clientesToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.clientesToolStripMenuItem.Text = "Clientes";
@@ -129,7 +130,7 @@ namespace linway_app
             // 
             // importarToolStripMenuItem
             // 
-            this.importarToolStripMenuItem.Enabled = false;
+            this.importarToolStripMenuItem.Enabled = true;
             this.importarToolStripMenuItem.Name = "importarToolStripMenuItem";
             this.importarToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.importarToolStripMenuItem.Text = "Importar";
@@ -367,7 +368,7 @@ namespace linway_app
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowHeadersWidth = 10;
             this.dataGridView2.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridView2.Size = new System.Drawing.Size(340, 281);
+            this.dataGridView2.Size = new System.Drawing.Size(380, 281);
             this.dataGridView2.TabIndex = 19;
 
 

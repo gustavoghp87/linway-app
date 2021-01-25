@@ -242,8 +242,9 @@ namespace linway_app
                 //Agregar a ventas
                 if (checkBox4.Checked)
                 {
-                    FormVentas formVentas = new FormVentas();
-                    formVentas.RecibirProductosVendidos(listaPV, label36.Text);
+                    //FormVentas formVentas = new FormVentas();
+                    //formVentas.RecibirProductosVendidos(listaPV, label36.Text);
+                    new FormVentas().RecibirProductosVendidos(listaPV, label36.Text);
                 }
                 if (checkBox1.Checked)
                 {
@@ -254,6 +255,7 @@ namespace linway_app
                 if (checkBox3.Checked)
                 {
                     FormReparto fr = new FormReparto();
+                    //MessageBox.Show(label36.Text + " " + comboBox4.Text + " " + comboBox3.Text + " " + listaPV);
                     fr.CargarAHojaDeReparto2(label36.Text, comboBox4.Text, comboBox3.Text, listaPV);
                     fr.Close();
                 }
