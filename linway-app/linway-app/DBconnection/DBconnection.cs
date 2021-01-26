@@ -14,7 +14,7 @@ namespace linway_app
         //private readonly string connString;
         private SqlConnection connection;
         readonly SqlConnectionStringBuilder builder;
-        private readonly string value;
+        //private readonly string value;
 
         public DBconnection() {
             //connString = "Data Source=" + server + ";Initial Catalog=" + database + ";User=" + username + ";Password=" + psw + ";";

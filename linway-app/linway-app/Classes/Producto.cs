@@ -31,34 +31,30 @@ namespace linway_app
             this.Precio = pre;
         }
 
-        /////////////Cargar todos datos///////////////////
-        void cargarDatos(string nom, float pre)
+        void CargarDatos(string nom, float pre)
         {
             this.Nombre = nom;
             this.Precio = pre;
         }
 
-        //////////Modificar datos////////////////////
-        void modNombre(string nom)
+        void ModNombre(string nom)
         {
             this.Nombre = nom;
         }
 
-        void modPrecio(float costo)
+        void ModPrecio(float costo)
         {
             this.Precio = costo;
         }
 
-        /////////obtener Datos ////////////////////////
-        string darNombre()
+        string DarNombre()
         {
             return this.Nombre;
         }
 
-        float darPrecio()
+        float DarPrecio()
         {
             return this.Precio;
         }
-        //////////////////////////////////////////////////
     }
 }

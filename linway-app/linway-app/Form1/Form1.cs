@@ -301,26 +301,22 @@ namespace linway_app
 
 
         // _________________________IMPORTAR____________________
-        private void importarToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ImportarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new Importar().ImportarExcel(dataGridView1, "ORDEN DEL SISTEMA LINWAY");
-            ReemplazarImportadosALista(dataGridView1);
-        }
-
-        private void ReemplazarImportadosALista(DataGridView grd)
-        {
+            dataGridView1.DataSource = new Importar().ImportarExcel();
             listaClientes.Clear();
-            for (int i = 0; i < grd.Rows.Count - 1; i++)
-            {
-                int Numero = Int32.Parse(grd.Rows[i].Cells[0].Value.ToString());
-                string Direccion = grd.Rows[i].Cells[1].Value.ToString();
-                int CodigoPostal = Int32.Parse(grd.Rows[i].Cells[2].Value.ToString());
-                int Telefono = Int32.Parse(grd.Rows[i].Cells[3].Value.ToString());
-                string Nombre = grd.Rows[i].Cells[4].Value.ToString();
-                string CUIT = grd.Rows[i].Cells[5].Value.ToString();
-                TipoR Tipo;
 
-                if (grd.Rows[i].Cells[6].Value.ToString() == "Inscripto")
+            for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+            {
+                int Numero = Int32.Parse(dataGridView1.Rows[i].Cells[0].Value.ToString());
+                string Direccion = dataGridView1.Rows[i].Cells[1].Value.ToString();
+                int CodigoPostal = Int32.Parse(dataGridView1.Rows[i].Cells[2].Value.ToString());
+                int Telefono = Int32.Parse(dataGridView1.Rows[i].Cells[3].Value.ToString());
+                string Nombre = dataGridView1.Rows[i].Cells[4].Value.ToString();
+                string CUIT = dataGridView1.Rows[i].Cells[5].Value.ToString();
+                
+                TipoR Tipo;
+                if (dataGridView1.Rows[i].Cells[6].Value.ToString() == "Inscripto")
                 {
                     Tipo = TipoR.Inscripto;
                 }
@@ -335,5 +331,32 @@ namespace linway_app
             //GuardarClientes();
             Actualizar();
         }
+
+        private void ImportarProductos_ToolStripMenuItem1(object sender, EventArgs e)
+        {
+            dataGridView2.DataSource = new Importar().ImportarExcel().DefaultView;
+            listaProductos.Clear();
+
+            try
+            {
+                for (int i = 0; i < dataGridView2.Rows.Count-1; i++)
+                {
+                    //MessageBox.Show(dataGridView2.Rows[i].Cells[0].Value.ToString() + " " + dataGridView2.Rows[i].Cells[1].Value.ToString() + " " + dataGridView2.Rows[i].Cells[2].Value.ToString());
+                    int Codigo = Int32.Parse(dataGridView2.Rows[i].Cells[0].Value.ToString());
+                    string Nombre = dataGridView2.Rows[i].Cells[1].Value.ToString();
+                    float Precio = float.Parse(dataGridView2.Rows[i].Cells[2].Value.ToString());
+                    Producto nuevoProducto = new Producto(Codigo, Nombre, Precio);
+                    listaProductos.Add(nuevoProducto);
+                }
+                //GuardarClientes();
+                //Actualizar();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Hay un problema con los datos de Excel: " + exc.Message);
+            }
+        }
+
+
     }
 }
