@@ -23,7 +23,7 @@ namespace linway_app
             builder = new SqlConnectionStringBuilder
             {
                 DataSource = Environment.GetEnvironmentVariable("SERVER"),
-                UserID = Environment.GetEnvironmentVariable("USERNAME"),
+                UserID = Environment.GetEnvironmentVariable("USERNAMEDB"),
                 Password = Environment.GetEnvironmentVariable("PSW"),
                 InitialCatalog = Environment.GetEnvironmentVariable("DATABASE")
             };
