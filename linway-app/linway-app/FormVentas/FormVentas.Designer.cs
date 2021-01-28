@@ -56,9 +56,10 @@ namespace linway_app
             this.nuevaVentaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reiniciarVentasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.verRegistroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.borrarRegistrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bExportar = new System.Windows.Forms.Button();
             this.bActualizar = new System.Windows.Forms.Button();
-            this.bSeguridad = new System.Windows.Forms.Button();
+            this.bCopiaSeguridad = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.cbSeguroBorrar = new System.Windows.Forms.CheckBox();
             this.button20 = new System.Windows.Forms.Button();
@@ -80,14 +81,13 @@ namespace linway_app
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.borrarRegistrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbBorrarReg = new System.Windows.Forms.GroupBox();
-            this.bCancelarBorrarReg = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.tbDesde = new System.Windows.Forms.TextBox();
-            this.tbHasta = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.bBorrarRegVentas = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.tbHasta = new System.Windows.Forms.TextBox();
+            this.tbDesde = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.bCancelarBorrarReg = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.gbNuevaVenta.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
@@ -387,38 +387,46 @@ namespace linway_app
             this.verRegistroToolStripMenuItem.Text = "Ver registro...";
             this.verRegistroToolStripMenuItem.Click += new System.EventHandler(this.verRegistroToolStripMenuItem_Click);
             // 
+            // borrarRegistrosToolStripMenuItem
+            // 
+            this.borrarRegistrosToolStripMenuItem.Name = "borrarRegistrosToolStripMenuItem";
+            this.borrarRegistrosToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.borrarRegistrosToolStripMenuItem.Text = "Borrar registros";
+            this.borrarRegistrosToolStripMenuItem.Click += new System.EventHandler(this.borrarRegistrosToolStripMenuItem_Click);
+            // 
             // bExportar
             // 
             this.bExportar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bExportar.Location = new System.Drawing.Point(572, 449);
             this.bExportar.Name = "bExportar";
-            this.bExportar.Size = new System.Drawing.Size(75, 23);
+            this.bExportar.Size = new System.Drawing.Size(75, 30);
             this.bExportar.TabIndex = 39;
             this.bExportar.Text = "Exportar";
             this.bExportar.UseVisualStyleBackColor = true;
+            this.bExportar.Visible = false;
             this.bExportar.Click += new System.EventHandler(this.exportarAExcel_Click);
             // 
             // bActualizar
             // 
             this.bActualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bActualizar.Location = new System.Drawing.Point(312, 449);
+            this.bActualizar.Location = new System.Drawing.Point(314, 441);
             this.bActualizar.Name = "bActualizar";
-            this.bActualizar.Size = new System.Drawing.Size(75, 23);
+            this.bActualizar.Size = new System.Drawing.Size(148, 38);
             this.bActualizar.TabIndex = 40;
             this.bActualizar.Text = "Actualizar";
             this.bActualizar.UseVisualStyleBackColor = true;
             this.bActualizar.Click += new System.EventHandler(this.actualizarListas_Click);
             // 
-            // bSeguridad
+            // bCopiaSeguridad
             // 
-            this.bSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bSeguridad.Location = new System.Drawing.Point(393, 449);
-            this.bSeguridad.Name = "bSeguridad";
-            this.bSeguridad.Size = new System.Drawing.Size(173, 23);
-            this.bSeguridad.TabIndex = 41;
-            this.bSeguridad.Text = "Crear copia de seguridad";
-            this.bSeguridad.UseVisualStyleBackColor = true;
-            this.bSeguridad.Click += new System.EventHandler(this.crearCopiaSeguridad_Click);
+            this.bCopiaSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bCopiaSeguridad.Location = new System.Drawing.Point(474, 441);
+            this.bCopiaSeguridad.Name = "bCopiaSeguridad";
+            this.bCopiaSeguridad.Size = new System.Drawing.Size(169, 38);
+            this.bCopiaSeguridad.TabIndex = 41;
+            this.bCopiaSeguridad.Text = "Crear copia de seguridad";
+            this.bCopiaSeguridad.UseVisualStyleBackColor = true;
+            this.bCopiaSeguridad.Click += new System.EventHandler(this.bCopiaSeguridad_Click);
             // 
             // groupBox7
             // 
@@ -657,13 +665,6 @@ namespace linway_app
             this.label5.TabIndex = 2;
             this.label5.Text = "Ver:";
             // 
-            // borrarRegistrosToolStripMenuItem
-            // 
-            this.borrarRegistrosToolStripMenuItem.Name = "borrarRegistrosToolStripMenuItem";
-            this.borrarRegistrosToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.borrarRegistrosToolStripMenuItem.Text = "Borrar registros";
-            this.borrarRegistrosToolStripMenuItem.Click += new System.EventHandler(this.borrarRegistrosToolStripMenuItem_Click);
-            // 
             // gbBorrarReg
             // 
             this.gbBorrarReg.Controls.Add(this.bBorrarRegVentas);
@@ -681,40 +682,16 @@ namespace linway_app
             this.gbBorrarReg.Text = "Borrar registros de venta";
             this.gbBorrarReg.Visible = false;
             // 
-            // bCancelarBorrarReg
+            // bBorrarRegVentas
             // 
-            this.bCancelarBorrarReg.Location = new System.Drawing.Point(189, 153);
-            this.bCancelarBorrarReg.Name = "bCancelarBorrarReg";
-            this.bCancelarBorrarReg.Size = new System.Drawing.Size(75, 23);
-            this.bCancelarBorrarReg.TabIndex = 24;
-            this.bCancelarBorrarReg.Text = "Cancelar";
-            this.bCancelarBorrarReg.UseVisualStyleBackColor = true;
-            this.bCancelarBorrarReg.Click += new System.EventHandler(this.cancelarClick_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 41);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(81, 48);
-            this.label4.TabIndex = 25;
-            this.label4.Text = "ID. Desde:\r\n\r\nHasta:\r\n";
-            // 
-            // tbDesde
-            // 
-            this.tbDesde.Location = new System.Drawing.Point(110, 38);
-            this.tbDesde.Name = "tbDesde";
-            this.tbDesde.Size = new System.Drawing.Size(100, 22);
-            this.tbDesde.TabIndex = 26;
-            this.tbDesde.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
-            // 
-            // tbHasta
-            // 
-            this.tbHasta.Location = new System.Drawing.Point(110, 68);
-            this.tbHasta.Name = "tbHasta";
-            this.tbHasta.Size = new System.Drawing.Size(100, 22);
-            this.tbHasta.TabIndex = 27;
-            this.tbHasta.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
+            this.bBorrarRegVentas.Enabled = false;
+            this.bBorrarRegVentas.Location = new System.Drawing.Point(108, 153);
+            this.bBorrarRegVentas.Name = "bBorrarRegVentas";
+            this.bBorrarRegVentas.Size = new System.Drawing.Size(75, 23);
+            this.bBorrarRegVentas.TabIndex = 29;
+            this.bBorrarRegVentas.Text = "Borrar";
+            this.bBorrarRegVentas.UseVisualStyleBackColor = true;
+            this.bBorrarRegVentas.Click += new System.EventHandler(this.bBorrarRegVentas_Click);
             // 
             // checkBox1
             // 
@@ -728,16 +705,40 @@ namespace linway_app
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // bBorrarRegVentas
+            // tbHasta
             // 
-            this.bBorrarRegVentas.Enabled = false;
-            this.bBorrarRegVentas.Location = new System.Drawing.Point(108, 153);
-            this.bBorrarRegVentas.Name = "bBorrarRegVentas";
-            this.bBorrarRegVentas.Size = new System.Drawing.Size(75, 23);
-            this.bBorrarRegVentas.TabIndex = 29;
-            this.bBorrarRegVentas.Text = "Borrar";
-            this.bBorrarRegVentas.UseVisualStyleBackColor = true;
-            this.bBorrarRegVentas.Click += new System.EventHandler(this.bBorrarRegVentas_Click);
+            this.tbHasta.Location = new System.Drawing.Point(110, 68);
+            this.tbHasta.Name = "tbHasta";
+            this.tbHasta.Size = new System.Drawing.Size(100, 22);
+            this.tbHasta.TabIndex = 27;
+            this.tbHasta.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
+            // 
+            // tbDesde
+            // 
+            this.tbDesde.Location = new System.Drawing.Point(110, 38);
+            this.tbDesde.Name = "tbDesde";
+            this.tbDesde.Size = new System.Drawing.Size(100, 22);
+            this.tbDesde.TabIndex = 26;
+            this.tbDesde.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(23, 41);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(81, 48);
+            this.label4.TabIndex = 25;
+            this.label4.Text = "ID. Desde:\r\n\r\nHasta:\r\n";
+            // 
+            // bCancelarBorrarReg
+            // 
+            this.bCancelarBorrarReg.Location = new System.Drawing.Point(189, 153);
+            this.bCancelarBorrarReg.Name = "bCancelarBorrarReg";
+            this.bCancelarBorrarReg.Size = new System.Drawing.Size(75, 23);
+            this.bCancelarBorrarReg.TabIndex = 24;
+            this.bCancelarBorrarReg.Text = "Cancelar";
+            this.bCancelarBorrarReg.UseVisualStyleBackColor = true;
+            this.bCancelarBorrarReg.Click += new System.EventHandler(this.cancelarClick_Click);
             // 
             // FormVentas
             // 
@@ -750,7 +751,7 @@ namespace linway_app
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.bSeguridad);
+            this.Controls.Add(this.bCopiaSeguridad);
             this.Controls.Add(this.bActualizar);
             this.Controls.Add(this.bExportar);
             this.Controls.Add(this.label27);
@@ -819,7 +820,7 @@ namespace linway_app
         private System.Windows.Forms.ToolStripMenuItem reiniciarVentasToolStripMenuItem;
         private System.Windows.Forms.Button bExportar;
         private System.Windows.Forms.Button bActualizar;
-        private System.Windows.Forms.Button bSeguridad;
+        private System.Windows.Forms.Button bCopiaSeguridad;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Button button20;
         private System.Windows.Forms.Button button19;

@@ -93,9 +93,9 @@
             // button22
             // 
             this.button22.Enabled = false;
-            this.button22.Location = new System.Drawing.Point(169, 119);
+            this.button22.Location = new System.Drawing.Point(169, 117);
             this.button22.Name = "button22";
-            this.button22.Size = new System.Drawing.Size(75, 23);
+            this.button22.Size = new System.Drawing.Size(75, 25);
             this.button22.TabIndex = 4;
             this.button22.Text = "Aceptar";
             this.button22.UseVisualStyleBackColor = true;
@@ -219,7 +219,7 @@
             this.button4.TabIndex = 6;
             this.button4.Text = "Limpiar";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(Limpiar_Click);
+            this.button4.Click += new System.EventHandler(this.Limpiar_Click);
             // 
             // button3
             // 
@@ -229,7 +229,7 @@
             this.button3.TabIndex = 5;
             this.button3.Text = "Agregar";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.AgregarProducto_Click);
             // 
             // label8
             // 
@@ -242,7 +242,7 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(57, 52);
+            this.textBox7.Location = new System.Drawing.Point(64, 52);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(94, 21);
             this.textBox7.TabIndex = 4;
@@ -259,7 +259,7 @@
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(57, 30);
+            this.textBox6.Location = new System.Drawing.Point(64, 28);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(125, 21);
             this.textBox6.TabIndex = 3;

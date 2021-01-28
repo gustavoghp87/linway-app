@@ -14,12 +14,13 @@ namespace linway_app
 {
     public partial class FormVentas : Form
     {
-        const string direccionVentas = "VentaProductos.bin";
-        const string copiaDeSeguridad = @"Copias de seguridad\VentaProductos.bin";
-        List<Cliente> listaClientes = new List<Cliente>();
-        List<Producto> listaProductos = new List<Producto>();
+        const string direccionVentas = @"Base de datos\VentaProductos.bin";
+        const string direccionRegistro = @"Base de datos\RegistroVentas.bin";
         List<Venta> listaVentas = new List<Venta>();
-        List<Venta> listaAgregarVentas = new List<Venta>();
+        List<RegistroVenta> listaRegistro = new List<RegistroVenta>();
+        readonly List<Cliente> listaClientes = new List<Cliente>();
+        readonly List<Producto> listaProductos = new List<Producto>();
+        readonly List<Venta> listaAgregarVentas = new List<Venta>();
 
         public FormVentas()
         {
@@ -32,26 +33,6 @@ namespace linway_app
             CargarRegistros();
         }
 
-        public void ObtenerDatos(List<Cliente> clientes, List<Producto> productos)
-        {
-            listaClientes.AddRange(clientes);
-            listaProductos.AddRange(productos);
-        }
-
-        private void GuardarVentas()
-        {
-            try
-            {
-                Stream archivoVentas = File.Create(direccionVentas);
-                BinaryFormatter traductor3 = new BinaryFormatter();
-                traductor3.Serialize(archivoVentas, listaVentas);
-                archivoVentas.Close();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error al guardar las ventas:" + e.Message);
-            }
-        }
 
         public List<Venta> CargarVentas()
         {
@@ -63,33 +44,40 @@ namespace linway_app
                     BinaryFormatter traductor = new BinaryFormatter();
                     listaVentas = (List<Venta>) traductor.Deserialize(archivoVentas);
                     archivoVentas.Close();
+                    dataGridView3.DataSource = listaVentas.ToArray();
+                    dataGridView3.Columns[1].Width = 40;
                 }
                 catch (Exception e)
                 {
-                    GuardarVentas();
-                    MessageBox.Show("Error al leer las ventas (interno). Se creó uno nuevo." + e.Message);
+                    MessageBox.Show("Error al leer las ventas: " + e.Message);
                 }
             }
             else
             {
-                GuardarVentas();
-                try
-                {
-                    Stream archivoVentas = File.OpenRead(direccionVentas);
-                    BinaryFormatter traductor = new BinaryFormatter();
-                    listaVentas = (List<Venta>)traductor.Deserialize(archivoVentas);
-                    archivoVentas.Close();
-                    MessageBox.Show("Se creó VentaProductos.bin porque no existía");
-                }
-                catch (Exception e)
-                {
-                    GuardarVentas();
-                    MessageBox.Show("Error al leer las ventas (interno). No existe VentaProductos.bin y no se pudo crear uno." + e.Message);
-                }
+                MessageBox.Show("No se encontró el archivo Ventas en la carpeta Base de datos...");
             }
-            dataGridView3.DataSource = listaVentas.ToArray();
-            dataGridView3.Columns[1].Width = 40;
             return listaVentas;
+        }
+
+        private void GuardarVentas()
+        {
+            try
+            {
+                Stream archivo = File.Create(direccionVentas);
+                BinaryFormatter traductor3 = new BinaryFormatter();
+                traductor3.Serialize(archivo, listaVentas);
+                archivo.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al guardar las ventas:" + e.Message);
+            }
+        }
+
+        public void ObtenerDatos(List<Cliente> clientes, List<Producto> productos)
+        {
+            listaClientes.AddRange(clientes);
+            listaProductos.AddRange(productos);
         }
 
         public void LimpiarPantalla()
@@ -123,83 +111,41 @@ namespace linway_app
         }
 
         //crear copia seguridad
-        private void crearCopiaSeguridad_Click(object sender, EventArgs e)
+        private void bCopiaSeguridad_Click(object sender, EventArgs e)
         {
-            try
+            CargarVentas();
+            CargarRegistros();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel ventas.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Ventas a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
             {
-                Stream archivoVentas = File.Create(copiaDeSeguridad);
-                BinaryFormatter traductor3 = new BinaryFormatter();
-                traductor3.Serialize(archivoVentas, listaVentas);
-                archivoVentas.Close();
+                bool success = new Exportar().ExportarAExcel(listaVentas);
+                if (!success)
+                {
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
+                }
             }
-            catch (Exception f)
+
+            DialogResult dialogResult2 = MessageBox.Show("Esta acción reemplazará al actual Excel registroVentas.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Registro de Ventas a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult2 == DialogResult.Yes)
             {
-                MessageBox.Show("Error al crear copia de seguridad de ventas:" + f.Message);
-            }
-            try
-            {
-                Stream archivoRegistros = File.Create(copiaDeSeguridadRegistro);
-                BinaryFormatter traductor4 = new BinaryFormatter();
-                traductor4.Serialize(archivoRegistros, listaRegistro);
-                archivoRegistros.Close();
-                bSeguridad.Text = "Creacion exitosa";
-                bSeguridad.Enabled = false;
-            }
-            catch (Exception g)
-            {
-                MessageBox.Show("Error al crear copia de seguridad de registro:" + g.Message);
+                bool success = new Exportar().ExportarAExcel(listaRegistro);
+                if (success)
+                {
+                    bCopiaSeguridad.ForeColor = Color.Green;
+                    bCopiaSeguridad.Enabled = false;
+                    bCopiaSeguridad.Text = "Creacion exitosa";
+                    MessageBox.Show("Terminados ambos archivos Excel: ventas y registroVentas");
+                }
+                else
+                {
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
+                }
             }
         }
 
-        //exportar
         private void exportarAExcel_Click(object sender, EventArgs e)
         {
-            ExportarDataGridViewExcel(dataGridView3);
-        }
-
-        private void ExportarDataGridViewExcel(DataGridView grd)
-        {
-            SaveFileDialog fichero = new SaveFileDialog();
-            fichero.Filter = "Excel (*.xls)|*.xls";
-            if (fichero.ShowDialog() == DialogResult.OK)
-            {
-                Microsoft.Office.Interop.Excel.Application aplicacion;
-                Microsoft.Office.Interop.Excel.Workbook libros_trabajo;
-                Microsoft.Office.Interop.Excel.Worksheet hoja_trabajo;
-                Microsoft.Office.Interop.Excel.Range excelCellrange;
-                aplicacion = new Microsoft.Office.Interop.Excel.Application();
-                libros_trabajo = aplicacion.Workbooks.Add();
-                hoja_trabajo =
-                    (Microsoft.Office.Interop.Excel.Worksheet)libros_trabajo.Worksheets.get_Item(1);
-                //Recorremos el DataGridView rellenando la hoja de trabajo
-                for (int i = 0; i < grd.Rows.Count; i++)
-                {
-                    for (int j = 0; j < grd.Columns.Count; j++)
-                    {
-                        hoja_trabajo.Cells[i + 3, j + 1] = grd.Rows[i].Cells[j].Value.ToString();
-                    }
-                }
-                //cabezera
-                hoja_trabajo.Cells[1, 1] = "VENTAS";
-                hoja_trabajo.Cells[1, 1].Font.Bold = true;
-                hoja_trabajo.Cells[1, 1].Font.Underline = true;
-                hoja_trabajo.Cells[1, 1].Font.Size = 11;
-                hoja_trabajo.Cells[2, 1] = "Producto";
-                hoja_trabajo.Cells[2, 2] = "Cantidad";
-                //Establecer rango de celdas
-                excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[2, 1], hoja_trabajo.Cells[grd.Rows.Count + 2, grd.Columns.Count]];
-                //Autoestablecer ancho de columnas
-                excelCellrange.EntireColumn.AutoFit();
-                //rellenar bordes
-                Microsoft.Office.Interop.Excel.Borders border = excelCellrange.Borders;
-                border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-                border.Weight = 2d;
-                //guardar.
-                libros_trabajo.SaveAs(fichero.FileName,
-                    Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal);
-                libros_trabajo.Close(true);
-                aplicacion.Quit();
-            }
+        //   anulado
         }
 
         //nueva venta
@@ -209,7 +155,7 @@ namespace linway_app
             gbNuevaVenta.Visible = true;
             listaAgregarVentas.Clear();
             dataGridView5.DataSource = listaAgregarVentas.ToArray();
-            dataGridView5.Columns[1].Width = 40;
+            dataGridView5.Columns[1].Width = 60;
         }
 
         private void ReordenarVentas()
@@ -468,30 +414,11 @@ namespace linway_app
 
         ///////////////////////////////REGISTRO DE VENTAS//////////////////////////////////////
 
-        const string direccionRegistro = "RegistroVentas.bin";
-        const string copiaDeSeguridadRegistro = @"Copias de seguridad\RegistroVentas.bin";
-        private List<RegistroVenta> listaRegistro = new List<RegistroVenta>();
-
         private void verRegistroToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
             gbVerRegistro.Visible = true;
             dataGridView2.DataSource = new List<ProdVendido>().ToArray();
-        }
-
-        private void GuardarRegistros()
-        {
-            try
-            {
-                Stream archivoRegistros = File.Create(direccionRegistro);
-                BinaryFormatter traductor3 = new BinaryFormatter();
-                traductor3.Serialize(archivoRegistros, listaRegistro);
-                archivoRegistros.Close();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error al guardar registro de ventas:" + e.Message);
-            }
         }
 
         public void CargarRegistros()
@@ -500,10 +427,11 @@ namespace linway_app
             {
                 try
                 {
-                    Stream archivoRegistro = File.OpenRead(direccionRegistro);
+                    Stream archivo = File.OpenRead(direccionRegistro);
                     BinaryFormatter traductor = new BinaryFormatter();
-                    listaRegistro = (List<RegistroVenta>) traductor.Deserialize(archivoRegistro);
-                    archivoRegistro.Close();
+                    listaRegistro = (List<RegistroVenta>) traductor.Deserialize(archivo);
+                    archivo.Close();
+
                     if (listaRegistro.Count > 0)
                         new RegistroVenta(listaRegistro.ElementAt(listaRegistro.Count - 1).id);
                     dataGridView1.DataSource = listaRegistro.ToArray();
@@ -518,8 +446,22 @@ namespace linway_app
             }
             else
             {
-                MessageBox.Show("Se creará RegistroVentas.bin porque no existe");
-                GuardarRegistros();
+                MessageBox.Show("No se encontró el archivo RegistroVentas en la carpeta Base de datos...");
+            }
+        }
+
+        private void GuardarRegistros()
+        {
+            try
+            {
+                Stream archivo = File.Create(direccionRegistro);
+                BinaryFormatter traductor3 = new BinaryFormatter();
+                traductor3.Serialize(archivo, listaRegistro);
+                archivo.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al guardar registro de ventas: " + e.Message);
             }
         }
 

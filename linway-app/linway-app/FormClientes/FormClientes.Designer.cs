@@ -72,6 +72,7 @@ namespace linway_app
             this.label21 = new System.Windows.Forms.Label();
             this.bCopiaSeguridad = new System.Windows.Forms.Button();
             this.bSalir = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.gbBorrar.SuspendLayout();
             this.gbAgregar.SuspendLayout();
             this.gbModificar.SuspendLayout();
@@ -87,7 +88,7 @@ namespace linway_app
             this.gbBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbBorrar.Location = new System.Drawing.Point(592, 12);
             this.gbBorrar.Name = "gbBorrar";
-            this.gbBorrar.Size = new System.Drawing.Size(267, 164);
+            this.gbBorrar.Size = new System.Drawing.Size(277, 164);
             this.gbBorrar.TabIndex = 42;
             this.gbBorrar.TabStop = false;
             this.gbBorrar.Text = "Borrar Cliente";
@@ -202,7 +203,7 @@ namespace linway_app
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(141, 222);
+            this.button2.Location = new System.Drawing.Point(148, 222);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 20;
@@ -239,7 +240,7 @@ namespace linway_app
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(141, 191);
+            this.radioButton1.Location = new System.Drawing.Point(148, 191);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(103, 19);
             this.radioButton1.TabIndex = 18;
@@ -488,29 +489,41 @@ namespace linway_app
             // bCopiaSeguridad
             // 
             this.bCopiaSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bCopiaSeguridad.Location = new System.Drawing.Point(635, 203);
+            this.bCopiaSeguridad.Location = new System.Drawing.Point(614, 185);
             this.bCopiaSeguridad.Name = "bCopiaSeguridad";
-            this.bCopiaSeguridad.Size = new System.Drawing.Size(191, 35);
+            this.bCopiaSeguridad.Size = new System.Drawing.Size(120, 49);
             this.bCopiaSeguridad.TabIndex = 45;
             this.bCopiaSeguridad.Text = "Crear copia de seguridad";
             this.bCopiaSeguridad.UseVisualStyleBackColor = true;
-            this.bCopiaSeguridad.Click += new System.EventHandler(this.CrearCopiaSeguridad);
+            this.bCopiaSeguridad.Click += new System.EventHandler(this.bCopiaSeguridad_Click);
             // 
             // bSalir
             // 
-            this.bSalir.Location = new System.Drawing.Point(700, 244);
+            this.bSalir.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bSalir.Location = new System.Drawing.Point(614, 240);
             this.bSalir.Name = "bSalir";
-            this.bSalir.Size = new System.Drawing.Size(87, 35);
+            this.bSalir.Size = new System.Drawing.Size(244, 39);
             this.bSalir.TabIndex = 46;
             this.bSalir.Text = "Salir";
             this.bSalir.UseVisualStyleBackColor = true;
             this.bSalir.Click += new System.EventHandler(this.bSalir_Click);
             // 
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Location = new System.Drawing.Point(738, 185);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(120, 49);
+            this.button3.TabIndex = 47;
+            this.button3.Text = "Importar";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
             // FormClientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(869, 291);
+            this.ClientSize = new System.Drawing.Size(881, 291);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.bSalir);
             this.Controls.Add(this.bCopiaSeguridad);
             this.Controls.Add(this.gbModificar);
@@ -581,5 +594,6 @@ namespace linway_app
         private System.Windows.Forms.CheckBox cbSeguroBorrar;
         private System.Windows.Forms.Button bCopiaSeguridad;
         private System.Windows.Forms.Button bSalir;
+        private System.Windows.Forms.Button button3;
     }
 }

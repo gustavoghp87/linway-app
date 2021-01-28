@@ -35,7 +35,6 @@ namespace linway_app
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button3 = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.opcionesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.agregarRepartoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,7 +64,6 @@ namespace linway_app
             this.label6 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button12 = new System.Windows.Forms.Button();
             this.label26 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
@@ -81,6 +79,7 @@ namespace linway_app
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.button12 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
@@ -123,8 +122,8 @@ namespace linway_app
             this.label39 = new System.Windows.Forms.Label();
             this.button17 = new System.Windows.Forms.Button();
             this.button18 = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.gpNuevoReparto.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -135,6 +134,7 @@ namespace linway_app
             this.groupBox7.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -206,19 +206,6 @@ namespace linway_app
             this.button3.Text = "Ver";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 249);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersWidth = 10;
-            this.dataGridView1.Size = new System.Drawing.Size(858, 201);
-            this.dataGridView1.TabIndex = 5;
             // 
             // menuStrip1
             // 
@@ -495,7 +482,6 @@ namespace linway_app
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.button12);
             this.groupBox3.Controls.Add(this.label26);
             this.groupBox3.Controls.Add(this.label22);
             this.groupBox3.Controls.Add(this.label21);
@@ -512,27 +498,17 @@ namespace linway_app
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.label9);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox3.Location = new System.Drawing.Point(12, 116);
+            this.groupBox3.Location = new System.Drawing.Point(12, 128);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(466, 100);
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Datos de planilla:";
             // 
-            // button12
-            // 
-            this.button12.Location = new System.Drawing.Point(385, 71);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(75, 23);
-            this.button12.TabIndex = 16;
-            this.button12.Text = "Exportar";
-            this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.button12_Click);
-            // 
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(293, 66);
+            this.label26.Location = new System.Drawing.Point(337, 66);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(46, 16);
             this.label26.TabIndex = 15;
@@ -542,7 +518,7 @@ namespace linway_app
             // 
             this.label22.AutoSize = true;
             this.label22.ForeColor = System.Drawing.Color.Red;
-            this.label22.Location = new System.Drawing.Point(267, 66);
+            this.label22.Location = new System.Drawing.Point(283, 66);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(16, 16);
             this.label22.TabIndex = 13;
@@ -561,7 +537,7 @@ namespace linway_app
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(158, 66);
+            this.label20.Location = new System.Drawing.Point(155, 66);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(107, 16);
             this.label20.TabIndex = 11;
@@ -670,6 +646,17 @@ namespace linway_app
             this.label9.Size = new System.Drawing.Size(32, 16);
             this.label9.TabIndex = 0;
             this.label9.Text = "TA:";
+            // 
+            // button12
+            // 
+            this.button12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button12.Location = new System.Drawing.Point(309, 244);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(169, 50);
+            this.button12.TabIndex = 16;
+            this.button12.Text = "Crear copia de seguridad";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.CrearCopiaDeSeguridad_Click);
             // 
             // groupBox4
             // 
@@ -941,7 +928,7 @@ namespace linway_app
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(28, 223);
+            this.checkBox1.Location = new System.Drawing.Point(28, 267);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(153, 17);
             this.checkBox1.TabIndex = 16;
@@ -1135,11 +1122,25 @@ namespace linway_app
             this.button18.UseVisualStyleBackColor = true;
             this.button18.Click += new System.EventHandler(this.button18_Click);
             // 
-            // formReparto
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(12, 300);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersWidth = 10;
+            this.dataGridView1.Size = new System.Drawing.Size(858, 201);
+            this.dataGridView1.TabIndex = 5;
+            // 
+            // FormReparto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(882, 475);
+            this.ClientSize = new System.Drawing.Size(882, 513);
+            this.Controls.Add(this.button12);
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.gpNuevoReparto);
             this.Controls.Add(this.groupBox2);
@@ -1155,7 +1156,7 @@ namespace linway_app
             this.Controls.Add(this.groupBox6);
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.Name = "formReparto";
+            this.Name = "FormReparto";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -1166,7 +1167,6 @@ namespace linway_app
             this.Load += new System.EventHandler(this.formReparto_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.gpNuevoReparto.ResumeLayout(false);
@@ -1185,6 +1185,7 @@ namespace linway_app
             this.groupBox8.PerformLayout();
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1197,7 +1198,6 @@ namespace linway_app
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem opcionesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem agregarRepartoToolStripMenuItem;
@@ -1286,5 +1286,6 @@ namespace linway_app
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.Button button17;
         private System.Windows.Forms.Button button18;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }

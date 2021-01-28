@@ -29,13 +29,13 @@ namespace linway_app
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.verClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modificarClienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.borrarClienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.productosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.agregarProductoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modificarProductoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,7 +62,6 @@ namespace linway_app
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.botonActualizar = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.importarProductos_ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -90,8 +89,7 @@ namespace linway_app
             this.verClientesToolStripMenuItem,
             this.modificarClienteToolStripMenuItem,
             this.borrarClienteToolStripMenuItem,
-            this.exToolStripMenuItem,
-            this.importarToolStripMenuItem});
+            this.exToolStripMenuItem});
             this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
             this.clientesToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.clientesToolStripMenuItem.Text = "Clientes";
@@ -99,47 +97,38 @@ namespace linway_app
             // verClientesToolStripMenuItem
             // 
             this.verClientesToolStripMenuItem.Name = "verClientesToolStripMenuItem";
-            this.verClientesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.verClientesToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.verClientesToolStripMenuItem.Text = "Agregar Cliente";
             this.verClientesToolStripMenuItem.Click += new System.EventHandler(this.verClientesToolStripMenuItem_Click);
             // 
             // modificarClienteToolStripMenuItem
             // 
             this.modificarClienteToolStripMenuItem.Name = "modificarClienteToolStripMenuItem";
-            this.modificarClienteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.modificarClienteToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.modificarClienteToolStripMenuItem.Text = "Modificar cliente";
             this.modificarClienteToolStripMenuItem.Click += new System.EventHandler(this.modificarClienteToolStripMenuItem_Click);
             // 
             // borrarClienteToolStripMenuItem
             // 
             this.borrarClienteToolStripMenuItem.Name = "borrarClienteToolStripMenuItem";
-            this.borrarClienteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.borrarClienteToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.borrarClienteToolStripMenuItem.Text = "Borrar cliente";
             this.borrarClienteToolStripMenuItem.Click += new System.EventHandler(this.borrarClienteToolStripMenuItem_Click);
             // 
             // exToolStripMenuItem
             // 
             this.exToolStripMenuItem.Name = "exToolStripMenuItem";
-            this.exToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.exToolStripMenuItem.Text = "Exportar clientes";
-            this.exToolStripMenuItem.Click += new System.EventHandler(this.exToolStripMenuItem_Click);
-            // 
-            // importarToolStripMenuItem
-            // 
-            this.importarToolStripMenuItem.Name = "importarToolStripMenuItem";
-            this.importarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.importarToolStripMenuItem.Text = "Importar";
-            this.importarToolStripMenuItem.Click += new System.EventHandler(this.ImportarToolStripMenuItem_Click);
+            this.exToolStripMenuItem.Visible = false;
             // 
             // productosToolStripMenuItem
             // 
             this.productosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                this.agregarProductoToolStripMenuItem,
-                this.modificarProductoToolStripMenuItem,
-                this.borrarProductoToolStripMenuItem,
-                this.exportarProductosToolStripMenuItem,
-                this.importarProductos_ToolStripMenuItem1
-            });
+            this.agregarProductoToolStripMenuItem,
+            this.modificarProductoToolStripMenuItem,
+            this.borrarProductoToolStripMenuItem,
+            this.exportarProductosToolStripMenuItem});
             this.productosToolStripMenuItem.Name = "productosToolStripMenuItem";
             this.productosToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
             this.productosToolStripMenuItem.Text = "Productos";
@@ -147,30 +136,30 @@ namespace linway_app
             // agregarProductoToolStripMenuItem
             // 
             this.agregarProductoToolStripMenuItem.Name = "agregarProductoToolStripMenuItem";
-            this.agregarProductoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.agregarProductoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.agregarProductoToolStripMenuItem.Text = "Agregar producto";
             this.agregarProductoToolStripMenuItem.Click += new System.EventHandler(this.agregarProductoToolStripMenuItem_Click);
             // 
             // modificarProductoToolStripMenuItem
             // 
             this.modificarProductoToolStripMenuItem.Name = "modificarProductoToolStripMenuItem";
-            this.modificarProductoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.modificarProductoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.modificarProductoToolStripMenuItem.Text = "Modificar producto";
             this.modificarProductoToolStripMenuItem.Click += new System.EventHandler(this.modificarProductoToolStripMenuItem_Click);
             // 
             // borrarProductoToolStripMenuItem
             // 
             this.borrarProductoToolStripMenuItem.Name = "borrarProductoToolStripMenuItem";
-            this.borrarProductoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.borrarProductoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.borrarProductoToolStripMenuItem.Text = "Borrar producto";
             this.borrarProductoToolStripMenuItem.Click += new System.EventHandler(this.borrarProductoToolStripMenuItem_Click);
             // 
             // exportarProductosToolStripMenuItem
             // 
             this.exportarProductosToolStripMenuItem.Name = "exportarProductosToolStripMenuItem";
-            this.exportarProductosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportarProductosToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.exportarProductosToolStripMenuItem.Text = "Exportar Productos";
-            this.exportarProductosToolStripMenuItem.Click += new System.EventHandler(this.exportarProductosToolStripMenuItem_Click);
+            this.exportarProductosToolStripMenuItem.Visible = false;
             // 
             // notasDeEnvioToolStripMenuItem
             // 
@@ -301,7 +290,7 @@ namespace linway_app
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 10;
-            this.dataGridView1.Size = new System.Drawing.Size(898, 327);
+            this.dataGridView1.Size = new System.Drawing.Size(898, 204);
             this.dataGridView1.TabIndex = 1;
             // 
             // label11
@@ -361,13 +350,6 @@ namespace linway_app
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // importarProductos_ToolStripMenuItem1
-            // 
-            this.importarProductos_ToolStripMenuItem1.Name = "importarProductos_ToolStripMenuItem1";
-            this.importarProductos_ToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.importarProductos_ToolStripMenuItem1.Text = "Importar";
-            this.importarProductos_ToolStripMenuItem1.Click += new System.EventHandler(this.ImportarProductos_ToolStripMenuItem1);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -375,7 +357,7 @@ namespace linway_app
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(925, 755);
+            this.ClientSize = new System.Drawing.Size(925, 623);
             this.Controls.Add(this.botonActualizar);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.label12);
@@ -389,12 +371,13 @@ namespace linway_app
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.label26);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sistema Linway 2021";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            //this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -437,9 +420,7 @@ namespace linway_app
         private System.Windows.Forms.ToolStripMenuItem borrarClienteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem verRecibosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importarToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem verVentasToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importarProductos_ToolStripMenuItem1;
     }
 }

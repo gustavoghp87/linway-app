@@ -16,30 +16,20 @@ namespace linway_app
 {
     public partial class FormProductos : Form
     {
+        const string direccionProductos = @"Base de datos\ProductosLinway.bin";
+        //const string copiaDeSeguridad = @"Copias de seguridad\ProductosLinway.bin";
+        private int ultimoProducto;
+        List<Producto> listaProductos = new List<Producto>();
+        ProductoL productoNuevo;
+
         public FormProductos()
         {
             InitializeComponent();
         }
 
-        const string direccionProductos = "ProductosLinway.bin";
-        const string copiaDeSeguridad = @"Copias de seguridad\ProductosLinway.bin";
-        List<Producto> listaProductos = new List<Producto>();
-        private int ultimoProducto;
-
-        private void GuardarProductos()
+        private void FormProductos_Load(object sender, EventArgs e)
         {
-            try
-            {
-                Stream archivoProductos = File.Create(direccionProductos);
-                BinaryFormatter traductor2 = new BinaryFormatter();
-                traductor2.Serialize(archivoProductos, listaProductos);
-                archivoProductos.Close();
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error al guardar los productos" + e.Message);
-            }
+            CargarProductos();
         }
 
         public List<Producto> CargarProductos()
@@ -57,10 +47,29 @@ namespace linway_app
                 catch (Exception e)
                 {
                     MessageBox.Show("Falló lectura de datos de productos: " + e.Message);
-                    throw;
                 }
             }
+            else
+            {
+                MessageBox.Show("No se encontró el archivo Productos en la carpeta en Base de datos...");
+            }
             return listaProductos;
+        }
+
+        private void GuardarProductos()
+        {
+            try
+            {
+                Stream archivo = File.Create(direccionProductos);
+                BinaryFormatter traductor = new BinaryFormatter();
+                traductor.Serialize(archivo, listaProductos);
+                archivo.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al guardar los productos" + e.Message);
+            }
+            CargarProductos();
         }
 
         public void AgregarProductos()
@@ -81,12 +90,6 @@ namespace linway_app
             gbModificar.Enabled = false;
         }
 
-        private void FormProductos_Load(object sender, EventArgs e)
-        {
-            CargarProductos();
-        }
-
-        //Agregar
         private void Limpiar_Click(object sender, EventArgs e)
         {
             textBox21.Text = "";
@@ -114,7 +117,7 @@ namespace linway_app
             return ((textBox6.Text != "") && (textBox7.Text != ""));
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void AgregarProducto_Click(object sender, EventArgs e)
         {
             if (TodoOKagregarP())
             {
@@ -124,7 +127,7 @@ namespace linway_app
                 Producto nuevoProducto = new Producto(ultimoProducto, nombre, precio);
                 listaProductos.Add(nuevoProducto);
                 GuardarProductos();
-                button4.PerformClick();
+                button4.PerformClick();         // limpiar
             }
             else
             {
@@ -267,40 +270,70 @@ namespace linway_app
         //Copia Seguridad
         private void CrearCopiaSeguridad_Click(object sender, EventArgs e)
         {
-            try
+            CargarProductos();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel productos.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Productos a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
             {
-                Stream archivoProductos = File.Create(copiaDeSeguridad);
-                BinaryFormatter traductor2 = new BinaryFormatter();
-                traductor2.Serialize(archivoProductos, listaProductos);
-                archivoProductos.Close();
-                bCopiaSeguridad.Enabled = false;
-                bCopiaSeguridad.Text = "Creacion exitosa";
+                bool success = new Exportar().ExportarAExcel(listaProductos);
+                if (success)
+                {
+                    bCopiaSeguridad.ForeColor = Color.Green;
+                    bCopiaSeguridad.Enabled = false;
+                    bCopiaSeguridad.Text = "Creacion exitosa";
+                }
+                else
+                {
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
+                }
             }
-            catch (Exception f)
+            else if (dialogResult == DialogResult.No)
             {
-                MessageBox.Show("Error creando copia de seguridad:" + f.Message);
+                return;
             }
+        }
+
+        private void ImportarDesdeExcel()
+        {
+            //dataGridView2.DataSource = new Importar().ImportarExcel("productos.xlsx").DefaultView;
+            //listaProductos.Clear();
+            //GenerarListaProductosDesdeGrid();
+            //try
+            //{
+            //    for (int i = 0; i < dataGridView2.Rows.Count - 1; i++)
+            //    {
+            //        //MessageBox.Show(dataGridView2.Rows[i].Cells[0].Value.ToString() + " " + dataGridView2.Rows[i].Cells[1].Value.ToString() + " " + dataGridView2.Rows[i].Cells[2].Value.ToString());
+            //        int Codigo = Int32.Parse(dataGridView2.Rows[i].Cells[0].Value.ToString());
+            //        string Nombre = dataGridView2.Rows[i].Cells[1].Value.ToString();
+            //        float Precio = float.Parse(dataGridView2.Rows[i].Cells[2].Value.ToString());
+            //        Producto nuevoProducto = new Producto(Codigo, Nombre, Precio);
+            //        listaProductos.Add(nuevoProducto);
+            //    }
+            //    //GuardarClientes();
+            //    //Actualizar();
+            //}
+            //catch (Exception exc)
+            //{
+            //    MessageBox.Show("Hay un problema con los datos de Excel: " + exc.Message);
+            //}
         }
 
         private void bSalir_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
 
 
-        // Agregar - 2
-        ProductoL productoNuevo;
 
         private void SeleccionarTipo_CheckedChanged(object sender, EventArgs e)
         {
+            comboBox1.Visible = true;
+            RadioButton elegido = (RadioButton) sender;
 
-            RadioButton elegido = (RadioButton)sender;
             switch (elegido.Text)
             {
                 case "Liquido":
                     productoNuevo = new Liquido();
-                    comboBox1.Visible = true;
                     comboBox1.DataSource = Enum.GetValues(typeof(TipoLiquido));
                     break;
                 case "Polvo":

@@ -2,11 +2,11 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+//using System.ComponentModel;
+//using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
+//using System.Text;
 using System.Windows.Forms;
 
 
@@ -14,24 +14,45 @@ namespace linway_app
 {
     public partial class FormClientes : Form
     {
+        const string direccionClientes = @"Base de datos\ClientesLinway.bin";
+        private int codigoParaCliente;
+        List<Cliente> listaClientes = new List<Cliente>();
+
         public FormClientes()
         {
             InitializeComponent();
         }
-
-        const string direccionClientes = "ClientesLinway.bin";
-        const string copiaSeguridad = @"Copias de seguridad\ClientesLinway.bin";
-        List<Cliente> listaClientes = new List<Cliente>();
-        private int codigoParaCliente;
 
         private void FormClientes_Load(object sender, EventArgs e)
         {
             CargarClientes();
         }
 
-        public List<Cliente> DarClientes()
+        public List<Cliente> CargarClientes()
         {
-            return this.listaClientes;
+            if (File.Exists(direccionClientes))
+            {
+                listaClientes.Clear();
+
+                try
+                {
+                    Stream archivo = File.OpenRead(direccionClientes);
+                    BinaryFormatter traductor = new BinaryFormatter();
+                    listaClientes = (List<Cliente>) traductor.Deserialize(archivo);
+                    archivo.Close();
+                    codigoParaCliente = listaClientes.ElementAt(listaClientes.Count - 1).Numero + 1;
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Falló lectura de datos de cliente:" + e.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No se encontró archivo de clientes en la carpeta Base de datos...");
+            }
+            
+            return listaClientes;
         }
 
         private void GuardarClientes()
@@ -49,24 +70,9 @@ namespace linway_app
             }
         }
 
-        public List<Cliente> CargarClientes()
+        public List<Cliente> DarClientes()
         {
-            if (File.Exists(direccionClientes))
-            {
-                try
-                {
-                    Stream archivoClientes = File.OpenRead(direccionClientes);
-                    BinaryFormatter traductor = new BinaryFormatter();
-                    listaClientes = (List<Cliente>)traductor.Deserialize(archivoClientes);
-                    archivoClientes.Close();
-                    codigoParaCliente = listaClientes.ElementAt(listaClientes.Count - 1).Numero + 1;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Falló lectura de datos de cliente:" + e.Message);
-                }
-            }
-            return listaClientes;
+            return this.listaClientes;
         }
 
         public void AgregarClientes()
@@ -87,25 +93,107 @@ namespace linway_app
             gbAgregar.Enabled = false;
         }
 
-        private void CrearCopiaSeguridad(object sender, EventArgs e)
+        private void bCopiaSeguridad_Click(object sender, EventArgs e)
         {
-            try
+            CargarClientes();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel clientes.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Clientes a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
             {
-                Stream archivoClientes = File.Create(copiaSeguridad);
-                BinaryFormatter traductor = new BinaryFormatter();
-                traductor.Serialize(archivoClientes, listaClientes);
-                archivoClientes.Close();
-                bCopiaSeguridad.ForeColor = Color.Green;
-                bCopiaSeguridad.Enabled = false;
-                bCopiaSeguridad.Text = "Creacion exitosa";
+                bool success = new Exportar().ExportarAExcel(listaClientes);
+                if (success)
+                {
+                    //MessageBox.Show("Exportado Clientes con éxito a Copias de seguridad");
+                    bCopiaSeguridad.ForeColor = Color.Green;
+                    bCopiaSeguridad.Enabled = false;
+                    bCopiaSeguridad.Text = "Creacion exitosa";
+                }
+                else
+                {
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
+                }
             }
-            catch (Exception f)
+            else if (dialogResult == DialogResult.No)
             {
-                MessageBox.Show("Error al crear copia de seguridad de clientes:" + f.Message);
+                return;
             }
         }
 
+        public List<Cliente> ImportarClientes()    // conectarlo a botón
+        {
+            //Importar importacion = new Importar();
+            //dt = new System.Data.DataTable();
+            //dt = importacion.ImportarExcel("clientes.xlsx");
+            //MessageBox.Show("Cargando datos desde Excel clientes...");
+            //listaClientes.Clear();
 
+            //for (int i = 0; i < dt.Rows.Count; i++)
+            //{
+            //    try
+            //    {
+            //        int Numero = Int32.Parse(dt.Rows[i].ItemArray[0].ToString());
+            //        string Direccion = dt.Rows[i].ItemArray[1].ToString();
+            //        int CodigoPostal = Int32.Parse(dt.Rows[i].ItemArray[2].ToString());
+            //        int Telefono = Int32.Parse(dt.Rows[i].ItemArray[3].ToString());
+            //        string Nombre = dt.Rows[i].ItemArray[4].ToString();
+            //        string CUIT = dt.Rows[i].ItemArray[5].ToString();
+            //        TipoR Tipo;
+            //        if (dt.Rows[i].ItemArray[6].ToString() == "Inscripto")
+            //        {
+            //            Tipo = TipoR.Inscripto;
+            //        }
+            //        else
+            //        {
+            //            Tipo = TipoR.Monotributo;
+            //        }
+
+            //        listaClientes.Add(new Cliente(Numero, Direccion, CodigoPostal, Telefono, Nombre, CUIT, Tipo));
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show("Error al leer Excel de clientes: " + ex.Message);
+            //    }
+            //}
+            //codigoParaCliente = listaClientes.Count + 1;
+            //GuardarClientes();
+            ////MessageBox.Show("Cantidad en la lista Clientes: " + listaClientes.Count);
+            return listaClientes;
+
+            //dataGridView1.DataSource = new Importar().ImportarExcel("clientes.xlsx").DefaultView;
+            //listaClientes.Clear();
+            //GenerarListaClientesDesdeGrid();
+
+            //try
+            //{
+            //    for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+            //    {
+            //        int Numero = Int32.Parse(dataGridView1.Rows[i].Cells[0].Value.ToString());
+            //        string Direccion = dataGridView1.Rows[i].Cells[1].Value.ToString();
+            //        int CodigoPostal = Int32.Parse(dataGridView1.Rows[i].Cells[2].Value.ToString());
+            //        int Telefono = Int32.Parse(dataGridView1.Rows[i].Cells[3].Value.ToString());
+            //        string Nombre = dataGridView1.Rows[i].Cells[4].Value.ToString();
+            //        string CUIT = dataGridView1.Rows[i].Cells[5].Value.ToString();
+
+            //        TipoR Tipo;
+            //        if (dataGridView1.Rows[i].Cells[6].Value.ToString() == "Inscripto")
+            //        {
+            //            Tipo = TipoR.Inscripto;
+            //        }
+            //        else
+            //        {
+            //            Tipo = TipoR.Monotributo;
+            //        }
+
+            //        Cliente nuevoCliente = new Cliente(Numero, Direccion, CodigoPostal, Telefono, Nombre, CUIT, Tipo);
+            //        listaClientes.Add(nuevoCliente);
+            //    }
+            //    //GuardarClientes();
+            //    //Actualizar();
+            //}
+            //catch (Exception exc)
+            //{
+            //    MessageBox.Show("Hay un problema con los datos de Excel: " + exc.Message);
+            //}
+        }
 
 
 
@@ -140,13 +228,14 @@ namespace linway_app
                 {
                     tipo = TipoR.Inscripto;
                 }
-                CargarClientes();
+                //CargarClientes();
                 Cliente nuevoCliente = new Cliente(codigoParaCliente, direccion, cp, telefono, nombre, cuit, tipo);
                 listaClientes.Add(nuevoCliente);
-                GuardarClientes();
+                //GuardarClientes();
                 button2.PerformClick();
-                bool response = new DBconnection().AgregarClienteEnDB(direccion, cp, telefono, nombre, cuit, tipo);
-                if (response) Close();
+                
+                //bool response = new DBconnection().AgregarClienteEnDB(direccion, cp, telefono, nombre, cuit, tipo);
+                //if (response) Close();
             }
             else
             {
@@ -210,7 +299,7 @@ namespace linway_app
 
 
 
-        //                                                               modificar cliente
+        //                                     modificar cliente
 
         bool TodoOkModificarC()
         {
@@ -268,12 +357,11 @@ namespace linway_app
         {
             if (TodoOkModificarC())
             {
-                CargarClientes();
+                //CargarClientes();
                 foreach (Cliente cActual in listaClientes)
                 {
                     if (cActual.Direccion.Equals(label23.Text))
                     {
-
                         cActual.Direccion = textBox23.Text;
                         cActual.Telefono = int.Parse(textBox24.Text);
                         cActual.CodigoPostal = int.Parse(textBox25.Text);
@@ -287,10 +375,10 @@ namespace linway_app
                         {
                             cActual.Tipo = TipoR.Monotributo;
                         }
-                        GuardarClientes();
-                        button8.PerformClick();
                     }
                 }
+                //GuardarClientes();
+                button8.PerformClick();
             }
             else
             {
@@ -304,7 +392,7 @@ namespace linway_app
 
 
 
-        //                                                               Borrar clientes
+        //                                        Borrar clientes
 
         private void textBox22_Leave(object sender, EventArgs e)
         {
@@ -327,9 +415,9 @@ namespace linway_app
         {
             if (cbSeguroBorrar.Checked)
             {
-                CargarClientes();
+                //CargarClientes();
                 listaClientes.Remove(listaClientes.Find(x => x.Direccion == label47.Text));
-                GuardarClientes();
+                //GuardarClientes();
                 cbSeguroBorrar.Checked = false;
                 label47.Text = "";
                 textBox22.Text = "";
@@ -339,7 +427,7 @@ namespace linway_app
         private void bSalir_Click(object sender, EventArgs e)
         {
             Close();
+            GuardarClientes();
         }
-
     }
 }

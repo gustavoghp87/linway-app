@@ -14,35 +14,34 @@ namespace linway_app
 {
     public partial class FormRecibos : Form
     {
-        const string direccionRecibos = "Recibos.bin";
+        const string direccionRecibos = @"Base de datos\Recibos.bin";
         const string copiaSeguridad = @"Copias de seguridad\Recibos.bin";
-        List<DetalleRecibo> listaDetalle = new List<DetalleRecibo>();
-        List<Recibo> listaRecibos = new List<Recibo>();
-        List<Cliente> listaClientes = new List<Cliente>();
         int primerRecibo = 0;
         int ultimoRecibo;
+        readonly List<Cliente> listaClientes = new List<Cliente>();
+        readonly List<DetalleRecibo> listaDetalle = new List<DetalleRecibo>();
+        List<Recibo> listaRecibos = new List<Recibo>();
 
         public FormRecibos()
         {
             InitializeComponent();
         }
 
-        void GuardarRecibos()
+        private void formRecibos_Load(object sender, EventArgs e)
         {
-            try
-            {
-                Stream archivoRecibos = File.Create(direccionRecibos);
-                BinaryFormatter traductor = new BinaryFormatter();
-                traductor.Serialize(archivoRecibos, listaRecibos);
-                archivoRecibos.Close();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error al guardar los recibos:" + e.Message);
-            }
+            CargarRecibos();
+
+            dataGridView1.DataSource = listaRecibos.ToArray();
+            dataGridView1.Columns[0].Width = 30;
+            dataGridView1.Columns[1].Width = 50;
+            dataGridView1.Columns[3].Width = 45;
+            dataGridView1.Columns[4].Width = 50;
+
+            dataGridView2.DataSource = listaDetalle.ToArray();
+            dataGridView2.Columns[1].Width = 55;
         }
 
-        void AbrirRecibos()
+        void CargarRecibos()
         {
             if (File.Exists(direccionRecibos))
             {
@@ -58,6 +57,11 @@ namespace linway_app
                     MessageBox.Show("Error al leer los recibos" + e.Message);
                 }
             }
+            else
+            {
+                MessageBox.Show("No se encontró el archivo Recibos en la carpeta Base de datos...");
+            }
+
             foreach (Recibo rActual in listaRecibos)
             {
                 if (primerRecibo == 0)
@@ -69,26 +73,30 @@ namespace linway_app
             lCantRecibos.Text = listaRecibos.Count.ToString() + " recibos.";
         }
 
-        public void CargarClientes(List<Cliente> clientes)
+        void GuardarRecibos()
         {
-            this.listaClientes.AddRange(clientes);
+            try
+            {
+                Stream archivo = File.Create(direccionRecibos);
+                BinaryFormatter traductor = new BinaryFormatter();
+                traductor.Serialize(archivo, listaRecibos);
+                archivo.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al guardar los recibos: " + e.Message);
+            }
         }
 
-        private void formRecibos_Load(object sender, EventArgs e)
+        public void CargarClientes(List<Cliente> clientes)
         {
-            AbrirRecibos();
-            dataGridView1.DataSource = listaRecibos.ToArray();
-            dataGridView1.Columns[0].Width = 30;
-            dataGridView1.Columns[1].Width = 50;
-            dataGridView1.Columns[3].Width = 60;
-            dataGridView1.Columns[4].Width = 30;
-            dataGridView2.DataSource = listaDetalle.ToArray();
-            dataGridView2.Columns[1].Width = 50;
+            listaClientes.AddRange(clientes);
         }
+
 
         private void formRecibos_FormClosing(object sender, FormClosingEventArgs e)
         {
-            AbrirRecibos();
+            CargarRecibos();
             GuardarRecibos();
         }
 
@@ -165,6 +173,7 @@ namespace linway_app
                 textBox1.Visible = true;
             }
         }
+
         void FiltrarDatos(string texto, char x)
         {
             List<Recibo> ListaFiltrada = new List<Recibo>();
@@ -233,9 +242,10 @@ namespace linway_app
             }
         }
 
-        List<Recibo> ObtenerListaAImprimir()
+        private List<Recibo> ObtenerListaAImprimir()
         {
             List<Recibo> listaAImprimir = new List<Recibo>();
+
             if (comboBox2.SelectedItem.ToString() == "No impresas")
             {
                 foreach (Recibo rActual in listaRecibos)
@@ -246,6 +256,7 @@ namespace linway_app
                     }
                 }
             }
+
             if (comboBox2.SelectedItem.ToString() == "Hoy")
             {
                 foreach (Recibo rActual in listaRecibos)
@@ -256,6 +267,7 @@ namespace linway_app
                     }
                 }
             }
+
             if (textBox2.Text != "" && textBox3.Text != "")
             {
                 if (comboBox2.SelectedItem.ToString() == "Establecer rango")
@@ -275,8 +287,10 @@ namespace linway_app
                     }
                 }
             }
+
             return listaAImprimir;
         }
+
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((comboBox2.SelectedItem.ToString() == "No impresas") || ((comboBox2.SelectedItem.ToString() == "Hoy")))
@@ -296,7 +310,6 @@ namespace linway_app
                 label5.Visible = true;
             }
             label7.Text = ObtenerListaAImprimir().Count.ToString();
-
         }
 
         private void textBox3_Leave(object sender, EventArgs e)
@@ -406,7 +419,7 @@ namespace linway_app
 
         private void button4_Click(object sender, EventArgs e)
         {
-            AbrirRecibos();
+            CargarRecibos();
             foreach (Recibo rActual in ObtenerListaABorrar())
             {
                 listaRecibos.Remove(rActual);
@@ -565,15 +578,15 @@ namespace linway_app
                 label18.Text = subTot.ToString();
                 LimpiarCampos();
                 dataGridView2.DataSource = listaDetalle.ToArray();
+                
                 if ((label15.Text != "") && (label15.Text != "No encontrado"))
                 {
                     button6.Enabled = true;
                 }
-
             }
             else
             {
-                MessageBox.Show("Complete correctamente los campos");
+                MessageBox.Show("Complete correctamente los campos.");
             }
         }
 
@@ -590,7 +603,7 @@ namespace linway_app
 
         private void button6_Click(object sender, EventArgs e)
         {
-            AbrirRecibos();
+            CargarRecibos();
             this.ultimoRecibo++;
             listaRecibos.Add(new Recibo(ultimoRecibo, label15.Text, listaDetalle));
             LimpiarCampos();
@@ -606,87 +619,77 @@ namespace linway_app
 
         private void button9_Click(object sender, EventArgs e)
         {
-            AbrirRecibos();
+            CargarRecibos();
             dataGridView1.DataSource = listaRecibos.ToArray();
         }
 
         //Exportar
         private void bExportar_Click(object sender, EventArgs e)
         {
-            ExportarDataGridViewExcel(dataGridView1);
-        }
-
-        private void ExportarDataGridViewExcel(DataGridView grd)
-        {
-            SaveFileDialog fichero = new SaveFileDialog();
-            fichero.Filter = "Excel (*.xls)|*.xls";
-            if (fichero.ShowDialog() == DialogResult.OK)
-            {
-                Microsoft.Office.Interop.Excel.Application aplicacion;
-                Microsoft.Office.Interop.Excel.Workbook libros_trabajo;
-                Microsoft.Office.Interop.Excel.Worksheet hoja_trabajo;
-                Microsoft.Office.Interop.Excel.Range excelCellrange;
-                aplicacion = new Microsoft.Office.Interop.Excel.Application();
-                libros_trabajo = aplicacion.Workbooks.Add();
-                hoja_trabajo =
-                    (Microsoft.Office.Interop.Excel.Worksheet)libros_trabajo.Worksheets.get_Item(1);
-                //Recorremos el DataGridView rellenando la hoja de trabajo
-                for (int i = 0; i < grd.Rows.Count; i++)
-                {
-                    for (int j = 0; j < grd.Columns.Count; j++)
-                    {
-                        hoja_trabajo.Cells[i + 3, j + 1] = grd.Rows[i].Cells[j].Value.ToString();
-                    }
-                }
-
-                hoja_trabajo.Cells[2, 1] = "Número";
-                hoja_trabajo.Cells[2, 2] = "Fecha";
-                hoja_trabajo.Cells[2, 3] = "Direccion";
-                hoja_trabajo.Cells[2, 4] = "Total";
-                hoja_trabajo.Cells[2, 5] = "Impresa";
-
-                //Establecer rango de celdas
-                excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[2, 1], hoja_trabajo.Cells[grd.Rows.Count + 2, grd.Columns.Count]];
-                excelCellrange.Font.Bold = true;
-
-                //Autoestablecer ancho de columnas
-                excelCellrange.EntireColumn.AutoFit();
-                //rellenar bordes
-                Microsoft.Office.Interop.Excel.Borders border = excelCellrange.Borders;
-                border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-                border.Weight = 2d;
-                //guardar.
-                try
-                {
-                    libros_trabajo.SaveAs(fichero.FileName, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal);
-                    libros_trabajo.Close(true);
-                    aplicacion.Quit();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Error al exportar a Excel:" + e.Message);
-                }
-            }
-
+            // anulado
         }
 
         //Copia de seguridad
         private void bCopiaSeguridad_Click(object sender, EventArgs e)
         {
-            try
+            MessageBox.Show("En mantenimiento...");
+            return;
+            try               // llevar a Importar y eliminar diálogo
             {
-                Stream archivoNotas = File.Create(copiaSeguridad);
-                BinaryFormatter traductor = new BinaryFormatter();
-                traductor.Serialize(archivoNotas, listaRecibos);
-                archivoNotas.Close();
-                bCopiaSeguridad.ForeColor = Color.Green;
-                bCopiaSeguridad.Enabled = false;
-                bCopiaSeguridad.Text = "Creacion exitosa";
+                SaveFileDialog fichero = new SaveFileDialog();
+                fichero.Filter = "Excel (*.xls)|*.xls";
+                if (fichero.ShowDialog() == DialogResult.OK)
+                {
+                    Microsoft.Office.Interop.Excel.Application aplicacion;
+                    Microsoft.Office.Interop.Excel.Workbook libros_trabajo;
+                    Microsoft.Office.Interop.Excel.Worksheet hoja_trabajo;
+                    Microsoft.Office.Interop.Excel.Range excelCellrange;
+                    aplicacion = new Microsoft.Office.Interop.Excel.Application();
+                    libros_trabajo = aplicacion.Workbooks.Add();
+                    hoja_trabajo = (Microsoft.Office.Interop.Excel.Worksheet) libros_trabajo.Worksheets.get_Item(1);
+
+                    DataGridView grd = dataGridView1;
+
+                    for (int i = 0; i < grd.Rows.Count; i++)
+                    {
+                        for (int j = 0; j < grd.Columns.Count; j++)
+                        {
+                            hoja_trabajo.Cells[i + 3, j + 1] = grd.Rows[i].Cells[j].Value.ToString();
+                        }
+                    }
+
+                    hoja_trabajo.Cells[2, 1] = "Número";
+                    hoja_trabajo.Cells[2, 2] = "Fecha";
+                    hoja_trabajo.Cells[2, 3] = "Direccion";
+                    hoja_trabajo.Cells[2, 4] = "Total";
+                    hoja_trabajo.Cells[2, 5] = "Impresa";
+
+                    excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[2, 1], hoja_trabajo.Cells[grd.Rows.Count + 2, grd.Columns.Count]];
+                    excelCellrange.Font.Bold = true;
+                    excelCellrange.EntireColumn.AutoFit();
+                    Microsoft.Office.Interop.Excel.Borders border = excelCellrange.Borders;
+                    border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
+                    border.Weight = 2d;
+
+                    try
+                    {
+                        libros_trabajo.SaveAs(fichero.FileName, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal);
+                        libros_trabajo.Close(true);
+                        aplicacion.Quit();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al exportar a Excel: " + ex.Message);
+                    }
+                }
             }
             catch (Exception f)
             {
-                MessageBox.Show("Error al hacer copia de seguridad de los recibos:" + f.Message);
+                MessageBox.Show("Error al hacer copia de seguridad de los recibos: " + f.Message);
             }
+            bCopiaSeguridad.ForeColor = Color.Green;
+            bCopiaSeguridad.Enabled = false;
+            bCopiaSeguridad.Text = "Creacion exitosa";
         }
     }
 }

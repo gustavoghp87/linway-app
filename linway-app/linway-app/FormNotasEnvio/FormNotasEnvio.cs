@@ -14,64 +14,17 @@ namespace linway_app
 {
     public partial class FormNotasEnvio : Form
     {
-        const string direccionNotas = "NotasDeEnvio.bin";
+        const string direccionNotas = @"Base de datos\NotasDeEnvio.bin";
         const string copiaSeguridadNotas = @"Copias de seguridad/NotasDeEnvio.bin";
         int ultimaNota;
         int primeraNota = 0;
-        List<NotaDeEnvio> notasEnvio = new List<NotaDeEnvio>();
         readonly List<Producto> listaProductos = new List<Producto>();
+        List<NotaDeEnvio> notasEnvio = new List<NotaDeEnvio>();
         List<ProdVendido> listaPV = new List<ProdVendido>();
 
         public FormNotasEnvio()
         {
             InitializeComponent();
-        }
-
-        void CargarNotas()
-        {
-            if (File.Exists(direccionNotas))
-            {
-                try
-                {
-                    Stream archivoNotas = File.OpenRead(direccionNotas);
-                    BinaryFormatter traductor = new BinaryFormatter();
-                    notasEnvio = (List<NotaDeEnvio>)traductor.Deserialize(archivoNotas);
-                    archivoNotas.Close();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Error al leer las notas de envío:" + e.Message);
-                }
-            }
-            foreach (NotaDeEnvio nActual in notasEnvio)
-            {
-                if (primeraNota == 0)
-                {
-                    primeraNota = nActual.Codigo;
-                }
-                ultimaNota = nActual.Codigo;
-            }
-            lCantNotas.Text = notasEnvio.Count.ToString() + " notas de envio.";
-        }
-
-        void GuardarNotas()
-        {
-            try
-            {
-                Stream archivoNotas = File.Create(direccionNotas);
-                BinaryFormatter traductor = new BinaryFormatter();
-                traductor.Serialize(archivoNotas, notasEnvio);
-                archivoNotas.Close();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error al guardar las notas de envío:" + e.Message);
-            }
-        }
-
-        public void RecibirProductos(List<Producto> productos)
-        {
-            this.listaProductos.AddRange(productos);
         }
 
         private void FormNotas_Load(object sender, EventArgs e)
@@ -88,6 +41,60 @@ namespace linway_app
             dataGridView2.DataSource = listaPV.ToArray();
             dataGridView2.Columns[0].Width = 30;
             dataGridView2.Columns[2].Width = 40;
+        }
+
+        void CargarNotas()
+        {
+            if (File.Exists(direccionNotas))
+            {
+                try
+                {
+                    Stream archivo = File.OpenRead(direccionNotas);
+                    BinaryFormatter traductor = new BinaryFormatter();
+                    notasEnvio = (List<NotaDeEnvio>) traductor.Deserialize(archivo);
+                    archivo.Close();
+                    
+                    foreach (NotaDeEnvio nActual in notasEnvio)
+                    {
+                        if (primeraNota == 0)
+                        {
+                            primeraNota = nActual.Codigo;
+                        }
+                        ultimaNota = nActual.Codigo;
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error al leer las notas de envío: " + e.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No se encontró el archivo Notas de Envío en la carpeta Base de datos...");
+            }
+
+            lCantNotas.Text = notasEnvio.Count.ToString() + " notas de envio.";
+        }
+
+        void GuardarNotas()
+        {
+            try
+            {
+                Stream archivo = File.Create(direccionNotas);
+                BinaryFormatter traductor = new BinaryFormatter();
+                traductor.Serialize(archivo, notasEnvio);
+                archivo.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al guardar las notas de envío:" + e.Message);
+            }
+        }
+
+        public void RecibirProductos(List<Producto> productos)
+        {
+            listaProductos.AddRange(productos);
         }
 
 
@@ -110,6 +117,7 @@ namespace linway_app
                 }
                 dataGridView1.DataSource = lFiltrada.ToArray();
             }
+
             if (comboBox1.SelectedItem.ToString() == "Todas")
             {
                 label2.Text = "";
@@ -117,6 +125,7 @@ namespace linway_app
                 textBox1.Visible = false;
                 dataGridView1.DataSource = notasEnvio.ToArray();
             }
+
             if (comboBox1.SelectedItem.ToString() == "Impresas")
             {
                 label2.Text = "";
@@ -131,6 +140,7 @@ namespace linway_app
                 }
                 dataGridView1.DataSource = lFiltrada.ToArray();
             }
+
             if (comboBox1.SelectedItem.ToString() == "No impresas")
             {
                 label2.Text = "";
@@ -145,12 +155,14 @@ namespace linway_app
                 }
                 dataGridView1.DataSource = lFiltrada.ToArray();
             }
+
             if (comboBox1.SelectedItem.ToString() == "Cliente")
             {
                 label2.Text = "Dirección:";
                 textBox1.Text = "";
                 textBox1.Visible = true;
             }
+
             if (comboBox1.SelectedItem.ToString() == "Fecha")
             {
                 label2.Text = "Fecha:";
@@ -158,6 +170,7 @@ namespace linway_app
                 textBox1.Visible = true;
             }
         }
+
         void FiltrarDatos(string texto, char x)
         {
             List<NotaDeEnvio> ListaFiltrada = new List<NotaDeEnvio>();
@@ -183,6 +196,7 @@ namespace linway_app
             }
             dataGridView1.DataSource = ListaFiltrada.ToArray();
         }
+
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             if (comboBox1.SelectedItem.ToString() == "Cliente")
@@ -215,6 +229,7 @@ namespace linway_app
                 }
             }
         }
+
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
@@ -233,7 +248,7 @@ namespace linway_app
             }
         }
 
-        List<NotaDeEnvio> ObtenerListaAImprimir()
+        public List<NotaDeEnvio> ObtenerListaAImprimir()
         {
             List<NotaDeEnvio> listaAImprimir = new List<NotaDeEnvio>();
 
@@ -302,7 +317,6 @@ namespace linway_app
             }
 
             label7.Text = ObtenerListaAImprimir().Count.ToString();
-
         }
 
         private void textBox3_Leave(object sender, EventArgs e)
@@ -350,7 +364,7 @@ namespace linway_app
             label10.Text = ObtenerListaABorrar().Count.ToString();
         }
 
-        List<NotaDeEnvio> ObtenerListaABorrar()
+        public List<NotaDeEnvio> ObtenerListaABorrar()
         {
             List<NotaDeEnvio> listaABorrar = new List<NotaDeEnvio>();
 
@@ -674,79 +688,33 @@ namespace linway_app
         //Excel exportar
         private void bExportar_Click(object sender, EventArgs e)
         {
-            ExportarDataGridViewExcel(dataGridView1);
+            // Anulado
         }
 
-        private void ExportarDataGridViewExcel(DataGridView grd)
+        private void bCopiaSeguridad_Click(object sender, EventArgs e)         // quitar diálogo, llevar a Exportar
         {
-            SaveFileDialog fichero = new SaveFileDialog();
-            fichero.Filter = "Excel (*.xls)|*.xls";
-            if (fichero.ShowDialog() == DialogResult.OK)
+            CargarNotas();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel notas.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Notas de Envío a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
             {
-                Microsoft.Office.Interop.Excel.Application aplicacion;
-                Microsoft.Office.Interop.Excel.Workbook libros_trabajo;
-                Microsoft.Office.Interop.Excel.Worksheet hoja_trabajo;
-                Microsoft.Office.Interop.Excel.Range excelCellrange;
-                aplicacion = new Microsoft.Office.Interop.Excel.Application();
-                libros_trabajo = aplicacion.Workbooks.Add();
-                hoja_trabajo =
-                    (Microsoft.Office.Interop.Excel.Worksheet)libros_trabajo.Worksheets.get_Item(1);
-                //Recorremos el DataGridView rellenando la hoja de trabajo
-                for (int i = 0; i < grd.Rows.Count; i++)
+                bool success = new Exportar().ExportarAExcel(notasEnvio);
+                if (success)
                 {
-                    for (int j = 0; j < grd.Columns.Count; j++)
-                    {
-                        hoja_trabajo.Cells[i + 3, j + 1] = grd.Rows[i].Cells[j].Value.ToString();
-                    }
+                    bCopiaSeguridad.ForeColor = Color.Green;
+                    bCopiaSeguridad.Enabled = false;
+                    bCopiaSeguridad.Text = "Creacion exitosa";
                 }
-
-                hoja_trabajo.Cells[2, 1] = "Número";
-                hoja_trabajo.Cells[2, 2] = "Fecha";
-                hoja_trabajo.Cells[2, 3] = "Direccion";
-                hoja_trabajo.Cells[2, 4] = "Detalle";
-                hoja_trabajo.Cells[2, 5] = "Total";
-                hoja_trabajo.Cells[2, 6] = "Impresa";
-
-                //Establecer rango de celdas
-                excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[2, 1], hoja_trabajo.Cells[grd.Rows.Count + 2, grd.Columns.Count]];
-                excelCellrange.Font.Bold = true;
-
-                //Autoestablecer ancho de columnas
-                excelCellrange.EntireColumn.AutoFit();
-                //rellenar bordes
-                Microsoft.Office.Interop.Excel.Borders border = excelCellrange.Borders;
-                border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-                border.Weight = 2d;
-                //guardar.
-                try
+                else
                 {
-                    libros_trabajo.SaveAs(fichero.FileName, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal);
-                    libros_trabajo.Close(true);
-                    aplicacion.Quit();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Error al exportar notas de envío a Excel:" + e.Message);
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
                 }
             }
         }
 
-        private void bCopiaSeguridad_Click(object sender, EventArgs e)
+        private void ImportarNotasDeEnvio_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Stream archivoNotas = File.Create(copiaSeguridadNotas);
-                BinaryFormatter traductor = new BinaryFormatter();
-                traductor.Serialize(archivoNotas, notasEnvio);
-                archivoNotas.Close();
-                bCopiaSeguridad.ForeColor = Color.Green;
-                bCopiaSeguridad.Enabled = false;
-                bCopiaSeguridad.Text = "Creacion exitosa";
-            }
-            catch (Exception f)
-            {
-                MessageBox.Show("Error al crear copia de seguridad de notas de envío:" + f.Message);
-            }
+            MessageBox.Show("En mantenimiento...");
+            //new Importar().ImportarExcel();
         }
     }
 }

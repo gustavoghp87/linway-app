@@ -16,8 +16,9 @@ namespace linway_app
     {
         int CodigoDeLaNota;
         bool impresa;
-        const string direccionNotas = "NotasDeEnvio.bin";
+        const string direccionNotas = @"Base de datos\NotasDeEnvio.bin";
         List<NotaDeEnvio> notasEnvio = new List<NotaDeEnvio>();
+        
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         public static extern long BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
         private Bitmap memoryImage;
@@ -29,6 +30,43 @@ namespace linway_app
 
         private void FormImprimirNota_Load(object sender, EventArgs e)
         {
+        }
+
+        void CargarNotas()
+        {
+            if (File.Exists(direccionNotas))
+            {
+                try
+                {
+                    Stream archivo = File.OpenRead(direccionNotas);
+                    BinaryFormatter traductor = new BinaryFormatter();
+                    notasEnvio = (List<NotaDeEnvio>) traductor.Deserialize(archivo);
+                    archivo.Close();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error al leer las notas de envío: " + e.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No existe el archivo Notas de Envío en la carpeta Base de datos...");
+            }
+        }
+
+        void GuardarNotas()
+        {
+            try
+            {
+                Stream archivo = File.Create(direccionNotas);
+                BinaryFormatter traductor = new BinaryFormatter();
+                traductor.Serialize(archivo, notasEnvio);
+                archivo.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al guardar las notas de envío: " + e.Message);
+            }
         }
 
         public void Rellenar_Datos(NotaDeEnvio laNota)
@@ -75,7 +113,7 @@ namespace linway_app
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error al capturar pantalla para imprimir:" + e.Message);
+                MessageBox.Show("Error al capturar pantalla para imprimir: " + e.Message);
             }
         }
 
@@ -90,11 +128,11 @@ namespace linway_app
             try
             {
                 CaptureScreen();
-                MessageBox.Show("Pantalla capturada");
+                //MessageBox.Show("Pantalla capturada");
             }
             catch (Exception h)
             {
-                MessageBox.Show("Error al imprimir screen:" + h.Message);
+                MessageBox.Show("Error al imprimir screen: " + h.Message);
             }
             PrintDialog printDialog1 = new PrintDialog { Document = printDocument1 };
             DialogResult result = printDialog1.ShowDialog();
@@ -103,44 +141,6 @@ namespace linway_app
                 printDocument1.Print();
                 Close();
                 MarcarImpresa();
-            }
-        }
-
-        void CargarNotas()
-        {
-            if (File.Exists(direccionNotas))
-            {
-                try
-                {
-                    Stream archivoNotas = File.OpenRead(direccionNotas);
-                    BinaryFormatter traductor = new BinaryFormatter();
-                    notasEnvio = (List<NotaDeEnvio>) traductor.Deserialize(archivoNotas);
-                    archivoNotas.Close();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Error al leer las notas de envío:" + e.Message);
-                }
-            }
-            else
-            {
-                MessageBox.Show("No existe NotasDeEnvio.bin; procediendo a crear...");
-                GuardarNotas();
-            }
-        }
-
-        void GuardarNotas()
-        {
-            try
-            {
-                Stream archivoNotas = File.Create(direccionNotas);
-                BinaryFormatter traductor = new BinaryFormatter();
-                traductor.Serialize(archivoNotas, notasEnvio);
-                archivoNotas.Close();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error al guardar las notas de envío:" + e.Message);
             }
         }
 

@@ -41,6 +41,7 @@ namespace linway_app
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
             this.button1 = new System.Windows.Forms.Button();
+            this.AutoSize = true;
             this.SuspendLayout();
             // 
             // lFecha

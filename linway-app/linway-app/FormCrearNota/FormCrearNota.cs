@@ -14,17 +14,17 @@ namespace linway_app
 {
     public partial class FormCrearNota : Form
     {
+        const string direccionNotas = @"Base de datos\NotasDeEnvio.bin";
+        int codigoParaNotaEnvio;
+        List<NotaDeEnvio> listaNotas = new List<NotaDeEnvio>();
+        readonly List<ProdVendido> listaPV = new List<ProdVendido>();
+        readonly List<Producto> listaProductos = new List<Producto>();
+        readonly List<Cliente> listaClientes = new List<Cliente>();
+        
         public FormCrearNota()
         {
             InitializeComponent();
         }
-
-        const string direccionNotas = "NotasDeEnvio.bin";
-        List<ProdVendido> listaPV = new List<ProdVendido>();
-        List<Producto> listaProductos = new List<Producto>();
-        List<Cliente> listaClientes = new List<Cliente>();
-        List<NotaDeEnvio> listaNotas = new List<NotaDeEnvio>();
-        int codigoParaNotaEnvio;
 
         private void CargarNotas()
         {
@@ -32,27 +32,31 @@ namespace linway_app
             {
                 try
                 {
-                    Stream archivoNotas = File.OpenRead(direccionNotas);
+                    Stream archivo = File.OpenRead(direccionNotas);
                     BinaryFormatter traductor = new BinaryFormatter();
-                    listaNotas = (List<NotaDeEnvio>) traductor.Deserialize(archivoNotas);
-                    archivoNotas.Close();
-                    codigoParaNotaEnvio = listaNotas.ElementAt(listaNotas.Count - 1).Codigo + 1;
+                    listaNotas = (List<NotaDeEnvio>) traductor.Deserialize(archivo);
+                    archivo.Close();
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show("Error al leer las notas de envío:" + e.Message);
                 }
             }
+            else
+            {
+                MessageBox.Show("No se encontró el archivo Notas de Envío en la carpeta Base de datos...");
+            }
+            if (listaNotas.Count>1) codigoParaNotaEnvio = listaNotas.ElementAt(listaNotas.Count - 1).Codigo + 1;
         }
 
         private void GuardarNotas()
         {
             try
             {
-                Stream archivoNotas = File.Create(direccionNotas);
+                Stream archivo = File.Create(direccionNotas);
                 BinaryFormatter traductor = new BinaryFormatter();
-                traductor.Serialize(archivoNotas, listaNotas);
-                archivoNotas.Close();
+                traductor.Serialize(archivo, listaNotas);
+                archivo.Close();
             }
             catch (Exception e)
             {
@@ -70,13 +74,13 @@ namespace linway_app
 
         public void cargarProductosYClientes(List<Producto> productos, List<Cliente> clientes)
         {
-            this.listaProductos.AddRange(productos);
-            this.listaClientes.AddRange(clientes);
+            listaProductos.AddRange(productos);
+            listaClientes.AddRange(clientes);
         }
 
         private void button16_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void soloNumero_KeyPress(object sender, KeyPressEventArgs e)
@@ -240,18 +244,21 @@ namespace linway_app
                 CargarNotas();
                 NotaDeEnvio nuevaNota = new NotaDeEnvio(codigoParaNotaEnvio, label36.Text, listaPV, false);
                 //Agregar a ventas
+
                 if (checkBox4.Checked)
                 {
                     //FormVentas formVentas = new FormVentas();
                     //formVentas.RecibirProductosVendidos(listaPV, label36.Text);
                     new FormVentas().RecibirProductosVendidos(listaPV, label36.Text);
                 }
+
                 if (checkBox1.Checked)
                 {
                     FormImprimirNota formimprimir = new FormImprimirNota();
                     formimprimir.Rellenar_Datos(nuevaNota);
                     formimprimir.Show();
                 }
+
                 if (checkBox3.Checked)
                 {
                     FormReparto fr = new FormReparto();
@@ -259,9 +266,10 @@ namespace linway_app
                     fr.CargarAHojaDeReparto2(label36.Text, comboBox4.Text, comboBox3.Text, listaPV);
                     fr.Close();
                 }
+
                 listaNotas.Add(nuevaNota);
                 GuardarNotas();
-                this.Close();
+                Close();
             }
             else
             {

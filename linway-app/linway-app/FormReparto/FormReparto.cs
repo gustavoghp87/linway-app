@@ -14,16 +14,31 @@ namespace linway_app
 {
     public partial class FormReparto : Form
     {
-        const string direccionHDR = "HojaDeReparto.bin";
-        const string direccionClientes = "ClientesLinway.bin";
-        List<DiasReparto> diasDeReparto = new List<DiasReparto>();
+        const string direccionHDR = @"Base de datos\HojaDeReparto.bin";
+        const string direccionClientes = @"Base de datos\ClientesLinway.bin";
         List<Reparto> listaRepartos = new List<Reparto>();
         List<Reparto> listaRepartos2 = new List<Reparto>();
         List<Destino> listaDestinos = new List<Destino>();
+        List<DiasReparto> diasDeReparto = new List<DiasReparto>();
 
         public FormReparto()
         {
             InitializeComponent();
+        }
+
+        void GuardarHDR()
+        {
+            try
+            {
+                Stream archivoHDR = File.Create(direccionHDR);
+                BinaryFormatter traductor = new BinaryFormatter();
+                traductor.Serialize(archivoHDR, diasDeReparto);
+                archivoHDR.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al guardar las hojas de reparto:" + e.Message);
+            }
         }
 
         void CargarHDR()
@@ -32,10 +47,10 @@ namespace linway_app
             {
                 try
                 {
-                    Stream archivoHDR = File.OpenRead(direccionHDR);
+                    Stream archivo = File.OpenRead(direccionHDR);
                     BinaryFormatter traductor = new BinaryFormatter();
-                    diasDeReparto = (List<DiasReparto>)traductor.Deserialize(archivoHDR);
-                    archivoHDR.Close();
+                    diasDeReparto = (List<DiasReparto>) traductor.Deserialize(archivo);
+                    archivo.Close();
                 }
                 catch (Exception e)
                 {
@@ -56,21 +71,6 @@ namespace linway_app
             dataGridView1.DataSource = listaDestinos.ToArray();
         }
 
-        void GuardarHDR()
-        {
-            try
-            {
-                Stream archivoHDR = File.Create(direccionHDR);
-                BinaryFormatter traductor = new BinaryFormatter();
-                traductor.Serialize(archivoHDR, diasDeReparto);
-                archivoHDR.Close();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error al guardar las hojas de reparto:" + e.Message);
-            }
-        }
-
         void ActualizarHDR(string elDia, string elReparto)
         {
             CargarHDR();
@@ -87,15 +87,16 @@ namespace linway_app
         private void formReparto_Load(object sender, EventArgs e)
         {
             CargarHDR();
-            dataGridView1.Columns[0].Width = 30;
-            dataGridView1.Columns[1].Width = 200;
+
+            dataGridView1.Columns[0].Width = 25;
+            dataGridView1.Columns[1].Width = 100;
             dataGridView1.Columns[2].Width = 30;
-            dataGridView1.Columns[3].Width = 400;
+            //dataGridView1.Columns[3].Width = 400;
             dataGridView1.Columns[4].Width = 30;
             dataGridView1.Columns[5].Width = 30;
             dataGridView1.Columns[6].Width = 30;
             dataGridView1.Columns[7].Width = 30;
-            dataGridView1.Columns[8].Width = 30;
+            dataGridView1.Columns[8].Width = 60;
         }
 
         private void formReparto_FormClosing(object sender, FormClosingEventArgs e)
@@ -223,28 +224,30 @@ namespace linway_app
             }
         }
 
-        private void textBox2_Leave(object sender, EventArgs e)
+        private void textBox2_Leave(object sender, EventArgs e)  // Agregar a destino a recorrido
         {
             List<Cliente> listaClientes = new List<Cliente>();
+
             if (File.Exists(direccionClientes))
             {
                 try
                 {
-                    Stream archivoClientes = File.OpenRead(direccionClientes);
+                    Stream archivo = File.OpenRead(direccionClientes);
                     BinaryFormatter traductor = new BinaryFormatter();
-                    listaClientes = (List<Cliente>) traductor.Deserialize(archivoClientes);
-                    archivoClientes.Close();
+                    listaClientes = (List<Cliente>) traductor.Deserialize(archivo);
+                    archivo.Close();
                 }
                 catch (Exception f)
                 {
-                    MessageBox.Show("Error al leer archivo de clientes:" + f.Message);
+                    MessageBox.Show("Error al leer archivo de clientes: " + f.Message);
                 }
             }
-            if (textBox2.Text == "")
-            {
-                label8.Text = "no encontrado";
-            }
             else
+            {
+                MessageBox.Show("No se encontró el archivo Clientes en la carpeta");
+            }
+
+            if (textBox2.Text != "")
             {
                 if (listaClientes.Exists(x => x.Numero == int.Parse(textBox2.Text)))
                 {
@@ -255,7 +258,12 @@ namespace linway_app
                     label8.Text = "no encontrado";
                 }
             }
+            else
+            {
+                label8.Text = "no encontrado";
+            }
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
             if ((label8.Text != "No encontrado") && (comboBox4.Text != ""))
@@ -298,13 +306,12 @@ namespace linway_app
             Reparto elreparto = listaRepartos.Find(x => x.Nombre == reparto);
             if (elreparto == null)
             {
-                MessageBox.Show("Falló la lectura de ese reparto.");
+                MessageBox.Show("Falló la lectura de ese reparto");
                 return;
             }
             elreparto.CargarPorNota(lVentas, direc.Substring(0, direc.IndexOf('-')));
             GuardarHDR();
         }
-
 
         //_LImpiar DATOS_ 
         //todos los dias
@@ -334,7 +341,7 @@ namespace linway_app
             LimpiarPantalla();
         }
 
-        //dia seleciionado
+        //dia seleccionado
         private void diaEspecíficoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
@@ -418,7 +425,6 @@ namespace linway_app
             {
                 label30.Text = "No encontrado";
             }
-
         }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
@@ -443,6 +449,7 @@ namespace linway_app
                     bool despues;
                     int aMover = listaDestinos.IndexOf(listaDestinos.Find(x => x.Direccion == label30.Text));
                     int aDejarAtras = listaDestinos.IndexOf(listaDestinos.Find(x => x.Direccion == label31.Text));
+
                     if (aMover > aDejarAtras)
                     {
                         despues = true;
@@ -451,7 +458,9 @@ namespace linway_app
                     {
                         despues = false;
                     }
+                    
                     listaDestinos.Insert(listaDestinos.IndexOf(listaDestinos.Find(x => x.Direccion == label31.Text)) + 1, listaDestinos.Find(x => x.Direccion == label30.Text));
+                    
                     if (despues)
                     {
                         listaDestinos.RemoveAt(aMover + 1);
@@ -460,6 +469,7 @@ namespace linway_app
                     {
                         listaDestinos.RemoveAt(aMover);
                     }
+
                     GuardarHDR();
                     LimpiarPantalla();
                     CargarHDR();
@@ -496,15 +506,26 @@ namespace linway_app
             }
         }
 
-        //Exportar a excel.
-        private void button12_Click(object sender, EventArgs e)
+        private void CrearCopiaDeSeguridad_Click(object sender, EventArgs e)  // ya sabes qué hacer
         {
             //checkBox1.Checked = true;
-            ExportarDataGridViewExcel(dataGridView1);
-        }
+            Cargar();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel notas.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Notas de Envío a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                bool success = new Exportar().ExportarAExcel(notasEnvio);
+                if (success)
+                {
+                    bCopiaSeguridad.ForeColor = Color.Green;
+                    bCopiaSeguridad.Enabled = false;
+                    bCopiaSeguridad.Text = "Creacion exitosa";
+                }
+                else
+                {
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
+                }
+            }
 
-        private void ExportarDataGridViewExcel(DataGridView grd)
-        {
             SaveFileDialog fichero = new SaveFileDialog();
             fichero.Filter = "Excel (*.xls)|*.xls";
             if (fichero.ShowDialog() == DialogResult.OK)
@@ -516,7 +537,9 @@ namespace linway_app
                 aplicacion = new Microsoft.Office.Interop.Excel.Application();
                 libros_trabajo = aplicacion.Workbooks.Add();
                 hoja_trabajo = (Microsoft.Office.Interop.Excel.Worksheet)libros_trabajo.Worksheets.get_Item(1);
-                // Recorremos el DataGridView rellenando la hoja de trabajo
+
+                DataGridView grd = dataGridView1;
+
                 for (int i = 0; i < grd.Rows.Count; i++)
                 {
                     for (int j = 1; j < grd.Columns.Count; j++)
@@ -536,8 +559,6 @@ namespace linway_app
                 hoja_trabajo.Cells[2, 7] = "T";
                 hoja_trabajo.Cells[2, 8] = "AE";
 
-
-                //Establecer rango de celdas
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[2, 1], hoja_trabajo.Cells[grd.Rows.Count + 4, grd.Columns.Count - 1]];
                 excelCellrange.Font.Bold = true;
 
@@ -561,23 +582,20 @@ namespace linway_app
                 hoja_trabajo.Cells[grd.Rows.Count + 4, 8] = "AE";
 
 
-                //Autoestablecer ancho de columnas
                 excelCellrange.EntireColumn.AutoFit();
-                //rellenar bordes
                 Microsoft.Office.Interop.Excel.Borders border = excelCellrange.Borders;
                 border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
                 border.Weight = 2d;
-                //guardar.
+
                 try
                 {
                     libros_trabajo.SaveAs(fichero.FileName, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal);
                     libros_trabajo.Close(true);
                     aplicacion.Quit();
-
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Error al exportar hojas de repartos a Excel:" + e.Message);
+                    MessageBox.Show("Error al exportar hojas de repartos a Excel: " + ex.Message);
                 }
             }
         }
@@ -645,7 +663,7 @@ namespace linway_app
             }
         }
 
-        void restarContadores()
+        void RestarContadores()
         {
             listaRepartos.Find(x => x.Nombre == comboBox2.Text).TL -= listaDestinos.Find(x => x.Direccion == label36.Text).L;
             listaRepartos.Find(x => x.Nombre == comboBox2.Text).TA -= listaDestinos.Find(x => x.Direccion == label36.Text).A;
@@ -658,7 +676,6 @@ namespace linway_app
             listaRepartos.Find(x => x.Nombre == comboBox2.Text).TotalB -= listaDestinos.Find(x => x.Direccion == label36.Text).AE;
             listaRepartos.Find(x => x.Nombre == comboBox2.Text).TD -= listaDestinos.Find(x => x.Direccion == label36.Text).D;
             listaRepartos.Find(x => x.Nombre == comboBox2.Text).TotalB -= listaDestinos.Find(x => x.Direccion == label36.Text).D;
-
         }
 
         private void button18_Click(object sender, EventArgs e)
@@ -666,7 +683,7 @@ namespace linway_app
             if (listaDestinos.Exists(x => x.Direccion == label36.Text))
             {
                 ReCargarHDR(comboBox1.Text, comboBox2.Text);
-                restarContadores();
+                RestarContadores();
                 VerDatos(listaRepartos.Find(x => x.Nombre.Equals(comboBox2.Text)));
                 listaDestinos.Find(x => x.Direccion == label36.Text).Limpiar();
                 GuardarHDR();
@@ -678,8 +695,5 @@ namespace linway_app
                 MessageBox.Show("Verifique que los datos sean correctos");
             }
         }
-
-        //BORRAR REPARTO //
-
     }
 }

@@ -23,9 +23,9 @@ namespace linway_app
         public RegistroVenta()
         {
             ultimoID++;
-            this.id = ultimoID;
-            this.fecha = DateTime.Today.ToString().Substring(0, 10);
-            this.cliente = "Venta particular";
+            id = ultimoID;
+            fecha = DateTime.Today.ToString().Substring(0, 10);
+            cliente = "Venta particular";
         }
 
         public RegistroVenta(uint ultimo)
@@ -39,19 +39,19 @@ namespace linway_app
             {
                 float precio = productos.Find(x => x.Nombre.Equals(vActual.Producto)).Precio;
                 ProdVendido nuevoPV = new ProdVendido(vActual.Producto, vActual.Cantidad, precio * vActual.Cantidad);
-                this.productosVendidos.Add(nuevoPV);
+                productosVendidos.Add(nuevoPV);
             }
         }
 
         public void RecibirProdVendidos(List<ProdVendido> pv, string client)
         {
-            this.productosVendidos.AddRange(pv);
-            this.cliente = client;
+            productosVendidos.AddRange(pv);
+            cliente = client;
         }
 
         public List<ProdVendido> obtenerPV()
         {
-            return this.productosVendidos;
+            return productosVendidos;
         }
 
         public float ObtenerTotal()

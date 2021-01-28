@@ -1,12 +1,5 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 
@@ -23,48 +16,78 @@ namespace linway_app
             try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.ToString()); }
         }
 
-        public void Actualizar()
-        {
-            try
-            {
-                listaClientes = new FormClientes().CargarClientes();
-                listaProductos = new FormProductos().CargarProductos();
-                dataGridView1.DataSource = listaClientes.ToArray();
-                dataGridView2.DataSource = listaProductos.ToArray();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
             Actualizar();
-
+            
             // location (12, 96)     size (340, 281)
             dataGridView2.Columns[0].Width = 48;
             dataGridView2.Columns[1].Width = 220;
             dataGridView2.Columns[2].Width = 72;
 
             // location (12, 388)     size (898, 150)
-            dataGridView1.Columns[0].Width = 30;
-            dataGridView1.Columns[1].Width = 200;
-            dataGridView1.Columns[2].Width = 30;
+            dataGridView1.Columns[0].Width = 40;
+            dataGridView1.Columns[1].Width = 250;
+            dataGridView1.Columns[2].Width = 60;
             dataGridView1.Columns[3].Width = 60;
-            dataGridView1.Columns[5].Width = 70;
+            dataGridView1.Columns[4].Width = 200;
+            dataGridView1.Columns[5].Width = 65;
             dataGridView1.Columns[6].Width = 65;
+
+            //Wait(5000);
+        }
+
+        public void Actualizar()
+        {
+            try
+            {
+                listaClientes = new FormClientes().CargarClientes();
+                dataGridView1.DataSource = listaClientes.ToArray();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al actualizar clientes: " + e.ToString());
+            }
+            try
+            {
+                listaProductos = new FormProductos().CargarProductos();
+                dataGridView2.DataSource = listaProductos.ToArray();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al actualizar productos: " + e.ToString());
+            }
+            //Wait(5000);
+        }
+
+        public void Wait(int milliseconds)
+        {
+            var timer1 = new System.Windows.Forms.Timer();
+            if (milliseconds == 0 || milliseconds < 0) return;
+
+            // Console.WriteLine("start wait timer");
+            timer1.Interval = milliseconds;
+            timer1.Enabled = true;
+            timer1.Start();
+
+            timer1.Tick += (s, e) =>
+            {
+                timer1.Enabled = false;
+                timer1.Stop();
+                // Console.WriteLine("stop wait timer");
+            };
+
+            while (timer1.Enabled)
+            {
+                MessageBox.Show("Actualizando...");
+                Actualizar();
+            }
         }
 
         private void botonActualizar_Click(object sender, EventArgs e)
         {
             Actualizar();
         }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-        }
-
 
 
         // MENUES .
@@ -223,140 +246,5 @@ namespace linway_app
         {
             FiltrarDatosP(BuscadorProductos.Text);
         }
-
-
-        //////////////////////////// EXPORTAR ///////////////////////////////////////
-        private void exportarProductosToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExportarDataGridViewExcel(dataGridView2, 'p');
-        }
-
-        private void exToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExportarDataGridViewExcel(dataGridView1, 'c');
-        }
-
-        private void ExportarDataGridViewExcel(DataGridView grd, char laLista)
-        {
-            SaveFileDialog fichero = new SaveFileDialog();
-            fichero.Filter = "Excel (*.xls)|*.xls";
-            if (fichero.ShowDialog() == DialogResult.OK)
-            {
-                Microsoft.Office.Interop.Excel.Application aplicacion;
-                Microsoft.Office.Interop.Excel.Workbook libros_trabajo;
-                Microsoft.Office.Interop.Excel.Worksheet hoja_trabajo;
-                Microsoft.Office.Interop.Excel.Range excelCellrange;
-                aplicacion = new Microsoft.Office.Interop.Excel.Application();
-                libros_trabajo = aplicacion.Workbooks.Add();
-                hoja_trabajo =
-                    (Microsoft.Office.Interop.Excel.Worksheet)libros_trabajo.Worksheets.get_Item(1);
-                //Recorremos el DataGridView rellenando la hoja de trabajo
-                for (int i = 0; i < grd.Rows.Count; i++)
-                {
-                    for (int j = 0; j < grd.Columns.Count; j++)
-                    {
-                        hoja_trabajo.Cells[i + 3, j + 1] = grd.Rows[i].Cells[j].Value.ToString();
-                    }
-                }
-
-                //cabezera
-                if (laLista == 'p')
-                {
-                    hoja_trabajo.Cells[1, 2] = "PRODUCTOS";
-                    hoja_trabajo.Cells[1, 2].Font.Bold = true;
-                    hoja_trabajo.Cells[1, 2].Font.Underline = true;
-                    hoja_trabajo.Cells[1, 2].Font.Size = 11;
-                    hoja_trabajo.Cells[2, 1] = "Codigo";
-                    hoja_trabajo.Cells[2, 2] = "Producto";
-                    hoja_trabajo.Cells[2, 3] = "p/Unidad";
-                }
-                if (laLista == 'c')
-                {
-                    hoja_trabajo.Cells[1, 1] = "Clientes";
-                    hoja_trabajo.Cells[1, 1].Font.Bold = true;
-                    hoja_trabajo.Cells[1, 1].Font.Underline = true;
-                    hoja_trabajo.Cells[1, 1].Font.Size = 11;
-                    hoja_trabajo.Cells[2, 1] = "Codigo";
-                    hoja_trabajo.Cells[2, 2] = "Direccion - Localidad";
-                    hoja_trabajo.Cells[2, 3] = "CP";
-                    hoja_trabajo.Cells[2, 4] = "Telefono";
-                    hoja_trabajo.Cells[2, 5] = "Nombre y Apellido";
-                    hoja_trabajo.Cells[2, 6] = "CUIT";
-                    hoja_trabajo.Cells[2, 7] = "Tipo";
-                }
-                //Establecer rango de celdas
-                excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[2, 1], hoja_trabajo.Cells[grd.Rows.Count + 2, grd.Columns.Count]];
-                //Autoestablecer ancho de columnas
-                excelCellrange.EntireColumn.AutoFit();
-                //rellenar bordes
-                Microsoft.Office.Interop.Excel.Borders border = excelCellrange.Borders;
-                border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-                border.Weight = 2d;
-                //guardar.
-                libros_trabajo.SaveAs(fichero.FileName, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal);
-                libros_trabajo.Close(true);
-                aplicacion.Quit();
-            }
-        }
-
-
-        // _________________________IMPORTAR____________________
-        private void ImportarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            dataGridView1.DataSource = new Importar().ImportarExcel();
-            listaClientes.Clear();
-
-            for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
-            {
-                int Numero = Int32.Parse(dataGridView1.Rows[i].Cells[0].Value.ToString());
-                string Direccion = dataGridView1.Rows[i].Cells[1].Value.ToString();
-                int CodigoPostal = Int32.Parse(dataGridView1.Rows[i].Cells[2].Value.ToString());
-                int Telefono = Int32.Parse(dataGridView1.Rows[i].Cells[3].Value.ToString());
-                string Nombre = dataGridView1.Rows[i].Cells[4].Value.ToString();
-                string CUIT = dataGridView1.Rows[i].Cells[5].Value.ToString();
-                
-                TipoR Tipo;
-                if (dataGridView1.Rows[i].Cells[6].Value.ToString() == "Inscripto")
-                {
-                    Tipo = TipoR.Inscripto;
-                }
-                else
-                {
-                    Tipo = TipoR.Monotributo;
-                }
-
-                Cliente nuevoCliente = new Cliente(Numero, Direccion, CodigoPostal, Telefono, Nombre, CUIT, Tipo);
-                listaClientes.Add(nuevoCliente);
-            }
-            //GuardarClientes();
-            Actualizar();
-        }
-
-        private void ImportarProductos_ToolStripMenuItem1(object sender, EventArgs e)
-        {
-            dataGridView2.DataSource = new Importar().ImportarExcel().DefaultView;
-            listaProductos.Clear();
-
-            try
-            {
-                for (int i = 0; i < dataGridView2.Rows.Count-1; i++)
-                {
-                    //MessageBox.Show(dataGridView2.Rows[i].Cells[0].Value.ToString() + " " + dataGridView2.Rows[i].Cells[1].Value.ToString() + " " + dataGridView2.Rows[i].Cells[2].Value.ToString());
-                    int Codigo = Int32.Parse(dataGridView2.Rows[i].Cells[0].Value.ToString());
-                    string Nombre = dataGridView2.Rows[i].Cells[1].Value.ToString();
-                    float Precio = float.Parse(dataGridView2.Rows[i].Cells[2].Value.ToString());
-                    Producto nuevoProducto = new Producto(Codigo, Nombre, Precio);
-                    listaProductos.Add(nuevoProducto);
-                }
-                //GuardarClientes();
-                //Actualizar();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Hay un problema con los datos de Excel: " + exc.Message);
-            }
-        }
-
-
     }
 }
