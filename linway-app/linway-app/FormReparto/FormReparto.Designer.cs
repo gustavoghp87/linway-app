@@ -79,7 +79,7 @@ namespace linway_app
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.button12 = new System.Windows.Forms.Button();
+            this.bCopiaSeguridad = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
@@ -123,6 +123,8 @@ namespace linway_app
             this.button17 = new System.Windows.Forms.Button();
             this.button18 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.exportarButton = new System.Windows.Forms.Button();
+            this.ImportarButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.gpNuevoReparto.SuspendLayout();
@@ -647,16 +649,16 @@ namespace linway_app
             this.label9.TabIndex = 0;
             this.label9.Text = "TA:";
             // 
-            // button12
+            // bCopiaSeguridad
             // 
-            this.button12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button12.Location = new System.Drawing.Point(309, 244);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(169, 50);
-            this.button12.TabIndex = 16;
-            this.button12.Text = "Crear copia de seguridad";
-            this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.CrearCopiaDeSeguridad_Click);
+            this.bCopiaSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bCopiaSeguridad.Location = new System.Drawing.Point(187, 244);
+            this.bCopiaSeguridad.Name = "bCopiaSeguridad";
+            this.bCopiaSeguridad.Size = new System.Drawing.Size(137, 50);
+            this.bCopiaSeguridad.TabIndex = 16;
+            this.bCopiaSeguridad.Text = "Crear copia de seguridad";
+            this.bCopiaSeguridad.UseVisualStyleBackColor = true;
+            this.bCopiaSeguridad.Click += new System.EventHandler(this.CrearCopiaDeSeguridad_Click);
             // 
             // groupBox4
             // 
@@ -1135,12 +1137,36 @@ namespace linway_app
             this.dataGridView1.Size = new System.Drawing.Size(858, 201);
             this.dataGridView1.TabIndex = 5;
             // 
+            // exportarButton
+            // 
+            this.exportarButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.exportarButton.Location = new System.Drawing.Point(341, 244);
+            this.exportarButton.Name = "exportarButton";
+            this.exportarButton.Size = new System.Drawing.Size(137, 50);
+            this.exportarButton.TabIndex = 19;
+            this.exportarButton.Text = "Exportar este";
+            this.exportarButton.UseVisualStyleBackColor = true;
+            this.exportarButton.Click += new System.EventHandler(this.ExportarButton_Click);
+            // 
+            // ImportarButton
+            // 
+            this.ImportarButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ImportarButton.Location = new System.Drawing.Point(733, 244);
+            this.ImportarButton.Name = "ImportarButton";
+            this.ImportarButton.Size = new System.Drawing.Size(137, 50);
+            this.ImportarButton.TabIndex = 20;
+            this.ImportarButton.Text = "Importar";
+            this.ImportarButton.UseVisualStyleBackColor = true;
+            this.ImportarButton.Click += new System.EventHandler(this.ImportarButton_Click);
+            // 
             // FormReparto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 513);
-            this.Controls.Add(this.button12);
+            this.Controls.Add(this.ImportarButton);
+            this.Controls.Add(this.exportarButton);
+            this.Controls.Add(this.bCopiaSeguridad);
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.gpNuevoReparto);
             this.Controls.Add(this.groupBox2);
@@ -1254,7 +1280,7 @@ namespace linway_app
         private System.Windows.Forms.ComboBox comboBox8;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button bCopiaSeguridad;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Label label27;
@@ -1287,5 +1313,7 @@ namespace linway_app
         private System.Windows.Forms.Button button17;
         private System.Windows.Forms.Button button18;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button exportarButton;
+        private System.Windows.Forms.Button ImportarButton;
     }
 }

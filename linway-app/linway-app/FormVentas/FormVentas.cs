@@ -200,13 +200,20 @@ namespace linway_app
             bool encontrado = false;
             if (textBox12.Text != "")
             {
-                foreach (Producto pActual in listaProductos)
+                try
                 {
-                    if (pActual.Codigo == int.Parse(textBox12.Text))
+                    foreach (Producto pActual in listaProductos)
                     {
-                        encontrado = true;
-                        label28.Text = pActual.Nombre;
+                        if (pActual.Codigo == int.Parse(textBox12.Text))
+                        {
+                            encontrado = true;
+                            label28.Text = pActual.Nombre;
+                        }
                     }
+                }
+                catch
+                {
+                    return;
                 }
             }
             if (!encontrado)

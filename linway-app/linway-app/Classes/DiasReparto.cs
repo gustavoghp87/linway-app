@@ -16,12 +16,12 @@ namespace linway_app
 
         public DiasReparto(string _dia)
         {
-            this.Dia = _dia;
+            Dia = _dia;
         }
 
         public void agregarReparto(Reparto rep)
         {
-            this.Reparto.Add(rep);
+            Reparto.Add(rep);
         }
     }
 }

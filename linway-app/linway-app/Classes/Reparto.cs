@@ -24,26 +24,26 @@ namespace linway_app
 
         public Reparto(string _name)
         {
-            this.Nombre = _name;
-            this.TA = 0;
-            this.TE = 0;
-            this.TD = 0;
-            this.TT = 0;
-            this.TAE = 0;
-            this.TotalB = 0;
-            this.TL = 0;
+            Nombre = _name;
+            TA = 0;
+            TE = 0;
+            TD = 0;
+            TT = 0;
+            TAE = 0;
+            TotalB = 0;
+            TL = 0;
             Destinos = new List<Destino>();
         }
 
         public void LimpiarDatos()
         {
-            this.TA = 0;
-            this.TE = 0;
-            this.TD = 0;
-            this.TT = 0;
-            this.TAE = 0;
-            this.TotalB = 0;
-            this.TL = 0;
+            TA = 0;
+            TE = 0;
+            TD = 0;
+            TT = 0;
+            TAE = 0;
+            TotalB = 0;
+            TL = 0;
             foreach (Destino dActual in Destinos)
             {
                 dActual.Limpiar();
@@ -52,7 +52,7 @@ namespace linway_app
 
         public void AgregarDestino(Destino dest)
         {
-            this.Destinos.Add(dest);
+            Destinos.Add(dest);
         }
 
         public void CargarPorVenta(List<Venta> lVenta, string dire)
@@ -115,25 +115,25 @@ namespace linway_app
         {
             if (cadena.Contains("pol - p"))
             {
-                this.TT += (c / 20);
+                TT += (c / 20);
             }
             if (cadena.Contains("san - p"))
             {
-                this.TD += (c / 20);
+                TD += (c / 20);
             }
             if (cadena.Contains("bón - p"))
             {
-                this.TE += (c / 20);
+                TE += (c / 20);
             }
             if (cadena.Contains("son - p"))
             {
-                this.TA += (c / 20);
+                TA += (c / 20);
             }
             if (cadena.Contains("ial - p"))
             {
-                this.TAE += (c / 20);
+                TAE += (c / 20);
             }
-            this.TotalB = this.TT + this.TD + this.TE + this.TA + this.TAE;
+            TotalB = TT + TD + TE + TA + TAE;
         }
 
         private bool esOtro(string cadena)
@@ -148,7 +148,7 @@ namespace linway_app
 
         private void SumarLiquido(int c)
         {
-            this.TL += c;
+            TL += c;
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 //using System.ComponentModel;
 //using System.Data;
-//using System.Drawing;
+using System.Drawing;
 //using System.Linq;
 //using System.Text;
 using System.Windows.Forms;
@@ -26,19 +26,19 @@ namespace linway_app
             InitializeComponent();
         }
 
-        void GuardarHDR()
+        private void formReparto_Load(object sender, EventArgs e)
         {
-            try
-            {
-                Stream archivoHDR = File.Create(direccionHDR);
-                BinaryFormatter traductor = new BinaryFormatter();
-                traductor.Serialize(archivoHDR, diasDeReparto);
-                archivoHDR.Close();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error al guardar las hojas de reparto:" + e.Message);
-            }
+            CargarHDR();
+
+            dataGridView1.Columns[0].Width = 25;
+            dataGridView1.Columns[1].Width = 100;
+            dataGridView1.Columns[2].Width = 30;
+            //dataGridView1.Columns[3].Width = 400;
+            dataGridView1.Columns[4].Width = 30;
+            dataGridView1.Columns[5].Width = 30;
+            dataGridView1.Columns[6].Width = 30;
+            dataGridView1.Columns[7].Width = 30;
+            dataGridView1.Columns[8].Width = 60;
         }
 
         void CargarHDR()
@@ -54,7 +54,7 @@ namespace linway_app
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Error al leer las hojas de reparto:" + e.Message);
+                    MessageBox.Show("Error al leer las hojas de reparto: " + e.Message);
                 }
             }
             else
@@ -71,6 +71,21 @@ namespace linway_app
             dataGridView1.DataSource = listaDestinos.ToArray();
         }
 
+        void GuardarHDR()
+        {
+            try
+            {
+                Stream archivoHDR = File.Create(direccionHDR);
+                BinaryFormatter traductor = new BinaryFormatter();
+                traductor.Serialize(archivoHDR, diasDeReparto);
+                archivoHDR.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al guardar las hojas de reparto:" + e.Message);
+            }
+        }
+
         void ActualizarHDR(string elDia, string elReparto)
         {
             CargarHDR();
@@ -82,21 +97,6 @@ namespace linway_app
             CargarHDR();
             listaRepartos = diasDeReparto.Find(x => x.Dia == elDia).Reparto;
             listaDestinos = listaRepartos.Find(x => x.Nombre == elReparto).Destinos;
-        }
-
-        private void formReparto_Load(object sender, EventArgs e)
-        {
-            CargarHDR();
-
-            dataGridView1.Columns[0].Width = 25;
-            dataGridView1.Columns[1].Width = 100;
-            dataGridView1.Columns[2].Width = 30;
-            //dataGridView1.Columns[3].Width = 400;
-            dataGridView1.Columns[4].Width = 30;
-            dataGridView1.Columns[5].Width = 30;
-            dataGridView1.Columns[6].Width = 30;
-            dataGridView1.Columns[7].Width = 30;
-            dataGridView1.Columns[8].Width = 60;
         }
 
         private void formReparto_FormClosing(object sender, FormClosingEventArgs e)
@@ -295,8 +295,15 @@ namespace linway_app
             CargarHDR();
 
             listaRepartos = diasDeReparto.Find(x => x.Dia == dia).Reparto;
-            listaRepartos.Find(x => x.Nombre == reparto).CargarPorVenta(lVentas, direc.Substring(0, direc.IndexOf('-')));
-            GuardarHDR();
+            try
+            {
+                listaRepartos.Find(x => x.Nombre == reparto).CargarPorVenta(lVentas, direc.Substring(0, direc.IndexOf('-')));
+                GuardarHDR();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
         }
 
         public void CargarAHojaDeReparto2(string direc, string dia, string reparto, List<ProdVendido> lVentas)
@@ -509,11 +516,12 @@ namespace linway_app
         private void CrearCopiaDeSeguridad_Click(object sender, EventArgs e)  // ya sabes qué hacer
         {
             //checkBox1.Checked = true;
-            Cargar();
-            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel notas.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Notas de Envío a Excel", MessageBoxButtons.YesNo);
+
+            CargarHDR();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel repartos.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Repartos a Excel", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                bool success = new Exportar().ExportarAExcel(notasEnvio);
+                bool success = new Exportar().ExportarAExcel(diasDeReparto);
                 if (success)
                 {
                     bCopiaSeguridad.ForeColor = Color.Green;
@@ -525,79 +533,34 @@ namespace linway_app
                     MessageBox.Show("Hubo un error al guardar los cambios.");
                 }
             }
+        }
 
-            SaveFileDialog fichero = new SaveFileDialog();
-            fichero.Filter = "Excel (*.xls)|*.xls";
-            if (fichero.ShowDialog() == DialogResult.OK)
+        private void ExportarButton_Click(object sender, EventArgs e)
+        {
+            CargarHDR();
+            if (comboBox1.Text == "" || comboBox2.Text == "") return;
+            DialogResult dialogResult = MessageBox.Show("Exportar " + comboBox1.Text + " - " + comboBox2.Text + " ¿Confirmar?", "Exportar Reparto a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
             {
-                Microsoft.Office.Interop.Excel.Application aplicacion;
-                Microsoft.Office.Interop.Excel.Workbook libros_trabajo;
-                Microsoft.Office.Interop.Excel.Worksheet hoja_trabajo;
-                Microsoft.Office.Interop.Excel.Range excelCellrange;
-                aplicacion = new Microsoft.Office.Interop.Excel.Application();
-                libros_trabajo = aplicacion.Workbooks.Add();
-                hoja_trabajo = (Microsoft.Office.Interop.Excel.Worksheet)libros_trabajo.Worksheets.get_Item(1);
+                Reparto reparto = diasDeReparto.Find(x => x.Dia == comboBox1.Text).Reparto.Find(x => x.Nombre == comboBox2.Text);
+                string litros = label22.Text;
+                string bolsas = label21.Text;
 
-                DataGridView grd = dataGridView1;
-
-                for (int i = 0; i < grd.Rows.Count; i++)
+                bool success = new Exportar().ExportarAExcel(reparto, comboBox1.Text, litros, bolsas);
+                if (success)
                 {
-                    for (int j = 1; j < grd.Columns.Count; j++)
-                    {
-                        hoja_trabajo.Cells[i + 3, j] = grd.Rows[i].Cells[j].Value.ToString();
-                    }
+                    MessageBox.Show("Terminado");
                 }
-                hoja_trabajo.Cells[1, 3] = "DIA " + comboBox1.Text + " -  RECORRIDO " + comboBox2.Text;
-                hoja_trabajo.Cells[1, 3].Font.Bold = true;
-                hoja_trabajo.Cells[1, 3].Font.Size = 11;
-                hoja_trabajo.Cells[2, 1] = "Dirección";
-                hoja_trabajo.Cells[2, 2] = "L";
-                hoja_trabajo.Cells[2, 3] = "Productos";
-                hoja_trabajo.Cells[2, 4] = "A";
-                hoja_trabajo.Cells[2, 5] = "E";
-                hoja_trabajo.Cells[2, 6] = "D";
-                hoja_trabajo.Cells[2, 7] = "T";
-                hoja_trabajo.Cells[2, 8] = "AE";
-
-                excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[2, 1], hoja_trabajo.Cells[grd.Rows.Count + 4, grd.Columns.Count - 1]];
-                excelCellrange.Font.Bold = true;
-
-                hoja_trabajo.Cells[grd.Rows.Count + 3, 1] = "TOTALES:";
-                hoja_trabajo.Cells[grd.Rows.Count + 3, 2] = label22.Text;
-                hoja_trabajo.Cells[grd.Rows.Count + 4, 3] = " TOTAL PESO: " + ((listaRepartos.Find(x => x.Nombre == comboBox2.Text).TotalB * 20) + int.Parse(label22.Text)).ToString() + "                    Total bolsas: " + label21.Text;
-                hoja_trabajo.Cells[grd.Rows.Count + 3, 4] = label14.Text;
-                hoja_trabajo.Cells[grd.Rows.Count + 3, 5] = label15.Text;
-                hoja_trabajo.Cells[grd.Rows.Count + 3, 6] = label16.Text;
-                hoja_trabajo.Cells[grd.Rows.Count + 3, 7] = label17.Text;
-                hoja_trabajo.Cells[grd.Rows.Count + 3, 8] = label18.Text;
-                /*
-                hoja_trabajo.Cells[grd.Rows.Count + 3, 9] = label21.Text;
-                hoja_trabajo.Cells[grd.Rows.Count + 3, 9].Font.Bold = true;
-                hoja_trabajo.Cells[grd.Rows.Count + 3, 9].EntireColumn.AutoFit();
-                 */
-                hoja_trabajo.Cells[grd.Rows.Count + 4, 4] = "A";
-                hoja_trabajo.Cells[grd.Rows.Count + 4, 5] = "E";
-                hoja_trabajo.Cells[grd.Rows.Count + 4, 6] = "D";
-                hoja_trabajo.Cells[grd.Rows.Count + 4, 7] = "T";
-                hoja_trabajo.Cells[grd.Rows.Count + 4, 8] = "AE";
-
-
-                excelCellrange.EntireColumn.AutoFit();
-                Microsoft.Office.Interop.Excel.Borders border = excelCellrange.Borders;
-                border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-                border.Weight = 2d;
-
-                try
+                else
                 {
-                    libros_trabajo.SaveAs(fichero.FileName, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal);
-                    libros_trabajo.Close(true);
-                    aplicacion.Quit();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al exportar hojas de repartos a Excel: " + ex.Message);
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
                 }
             }
+        }
+
+        private void ImportarButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("En mantenimiento...");
         }
 
 
