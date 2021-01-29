@@ -15,6 +15,7 @@ namespace linway_app
     public partial class FormClientes : Form
     {
         const string direccionClientes = @"Base de datos\ClientesLinway.bin";
+        const string copiaDeSeguridad = "clientes.xlsx";
         private int codigoParaCliente;
         List<Cliente> listaClientes = new List<Cliente>();
 
@@ -33,7 +34,6 @@ namespace linway_app
             if (File.Exists(direccionClientes))
             {
                 listaClientes.Clear();
-
                 try
                 {
                     Stream archivo = File.OpenRead(direccionClientes);
@@ -68,11 +68,6 @@ namespace linway_app
             {
                 MessageBox.Show("Error al guardar archivo de clientes:" + e.Message);
             }
-        }
-
-        public List<Cliente> DarClientes()
-        {
-            return this.listaClientes;
         }
 
         public void AgregarClientes()
@@ -118,81 +113,31 @@ namespace linway_app
             }
         }
 
-        public List<Cliente> ImportarClientes()    // conectarlo a botón
+        public void ImportarClientes_Click(object sender, EventArgs e)    // conectarlo a botón
         {
-            //Importar importacion = new Importar();
-            //dt = new System.Data.DataTable();
-            //dt = importacion.ImportarExcel("clientes.xlsx");
-            //MessageBox.Show("Cargando datos desde Excel clientes...");
-            //listaClientes.Clear();
-
-            //for (int i = 0; i < dt.Rows.Count; i++)
-            //{
-            //    try
-            //    {
-            //        int Numero = Int32.Parse(dt.Rows[i].ItemArray[0].ToString());
-            //        string Direccion = dt.Rows[i].ItemArray[1].ToString();
-            //        int CodigoPostal = Int32.Parse(dt.Rows[i].ItemArray[2].ToString());
-            //        int Telefono = Int32.Parse(dt.Rows[i].ItemArray[3].ToString());
-            //        string Nombre = dt.Rows[i].ItemArray[4].ToString();
-            //        string CUIT = dt.Rows[i].ItemArray[5].ToString();
-            //        TipoR Tipo;
-            //        if (dt.Rows[i].ItemArray[6].ToString() == "Inscripto")
-            //        {
-            //            Tipo = TipoR.Inscripto;
-            //        }
-            //        else
-            //        {
-            //            Tipo = TipoR.Monotributo;
-            //        }
-
-            //        listaClientes.Add(new Cliente(Numero, Direccion, CodigoPostal, Telefono, Nombre, CUIT, Tipo));
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show("Error al leer Excel de clientes: " + ex.Message);
-            //    }
-            //}
-            //codigoParaCliente = listaClientes.Count + 1;
-            //GuardarClientes();
-            ////MessageBox.Show("Cantidad en la lista Clientes: " + listaClientes.Count);
-            return listaClientes;
-
-            //dataGridView1.DataSource = new Importar().ImportarExcel("clientes.xlsx").DefaultView;
-            //listaClientes.Clear();
-            //GenerarListaClientesDesdeGrid();
-
-            //try
-            //{
-            //    for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
-            //    {
-            //        int Numero = Int32.Parse(dataGridView1.Rows[i].Cells[0].Value.ToString());
-            //        string Direccion = dataGridView1.Rows[i].Cells[1].Value.ToString();
-            //        int CodigoPostal = Int32.Parse(dataGridView1.Rows[i].Cells[2].Value.ToString());
-            //        int Telefono = Int32.Parse(dataGridView1.Rows[i].Cells[3].Value.ToString());
-            //        string Nombre = dataGridView1.Rows[i].Cells[4].Value.ToString();
-            //        string CUIT = dataGridView1.Rows[i].Cells[5].Value.ToString();
-
-            //        TipoR Tipo;
-            //        if (dataGridView1.Rows[i].Cells[6].Value.ToString() == "Inscripto")
-            //        {
-            //            Tipo = TipoR.Inscripto;
-            //        }
-            //        else
-            //        {
-            //            Tipo = TipoR.Monotributo;
-            //        }
-
-            //        Cliente nuevoCliente = new Cliente(Numero, Direccion, CodigoPostal, Telefono, Nombre, CUIT, Tipo);
-            //        listaClientes.Add(nuevoCliente);
-            //    }
-            //    //GuardarClientes();
-            //    //Actualizar();
-            //}
-            //catch (Exception exc)
-            //{
-            //    MessageBox.Show("Hay un problema con los datos de Excel: " + exc.Message);
-            //}
+            CargarClientes();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de clientes por el contenido del Excel clientes.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Clientes desde Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                listaClientes.Clear();
+                try
+                {
+                    listaClientes = new Importar(copiaDeSeguridad).ImportarClientes();
+                }
+                catch
+                {
+                    listaClientes.Clear();
+                    CargarClientes();
+                    throw;
+                }
+                codigoParaCliente = listaClientes.Count + 1;
+                GuardarClientes();
+                MessageBox.Show("Terminado");
+            }
+            else
+            {
+                return;
+            }
         }
 
 

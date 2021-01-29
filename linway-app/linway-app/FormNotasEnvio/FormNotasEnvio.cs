@@ -14,13 +14,13 @@ namespace linway_app
 {
     public partial class FormNotasEnvio : Form
     {
-        const string direccionNotas = @"Base de datos\NotasDeEnvio.bin";
-        const string copiaSeguridadNotas = @"Copias de seguridad/NotasDeEnvio.bin";
+        const string direccion = @"Base de datos\NotasDeEnvio.bin";
+        const string copiaDeSeguridad = "notas.xlsx";
         int ultimaNota;
         int primeraNota = 0;
-        readonly List<Producto> listaProductos = new List<Producto>();
         List<NotaDeEnvio> notasEnvio = new List<NotaDeEnvio>();
         List<ProdVendido> listaPV = new List<ProdVendido>();
+        readonly List<Producto> listaProductos = new List<Producto>();
 
         public FormNotasEnvio()
         {
@@ -45,11 +45,11 @@ namespace linway_app
 
         void CargarNotas()
         {
-            if (File.Exists(direccionNotas))
+            if (File.Exists(direccion))
             {
                 try
                 {
-                    Stream archivo = File.OpenRead(direccionNotas);
+                    Stream archivo = File.OpenRead(direccion);
                     BinaryFormatter traductor = new BinaryFormatter();
                     notasEnvio = (List<NotaDeEnvio>) traductor.Deserialize(archivo);
                     archivo.Close();
@@ -62,7 +62,6 @@ namespace linway_app
                         }
                         ultimaNota = nActual.Codigo;
                     }
-
                 }
                 catch (Exception e)
                 {
@@ -81,7 +80,7 @@ namespace linway_app
         {
             try
             {
-                Stream archivo = File.Create(direccionNotas);
+                Stream archivo = File.Create(direccion);
                 BinaryFormatter traductor = new BinaryFormatter();
                 traductor.Serialize(archivo, notasEnvio);
                 archivo.Close();
@@ -647,6 +646,7 @@ namespace linway_app
                 }
             }
         }
+
         private void button9_Click(object sender, EventArgs e)
         {
             ProdVendido nuevoPV = new ProdVendido();
@@ -713,8 +713,29 @@ namespace linway_app
 
         private void ImportarNotasDeEnvio_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("En mantenimiento...");
-            //new Importar().ImportarExcel();
+            CargarNotas();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de notas de envío por el contenido del Excel notas.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Notas de Envío desde Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                notasEnvio.Clear();
+                try
+                {
+                    //notasEnvio = 
+                    new Importar(copiaDeSeguridad).ImportaNotas();
+                    //GuardarNotas();
+                    CargarNotas();
+                }
+                catch
+                {
+                    notasEnvio.Clear();
+                    CargarNotas();
+                }
+                MessageBox.Show("Terminado");
+            }
+            else
+            {
+                return;
+            }
         }
     }
 }

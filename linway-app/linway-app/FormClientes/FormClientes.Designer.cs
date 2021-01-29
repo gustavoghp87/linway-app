@@ -72,7 +72,7 @@ namespace linway_app
             this.label21 = new System.Windows.Forms.Label();
             this.bCopiaSeguridad = new System.Windows.Forms.Button();
             this.bSalir = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.ImportarClientes = new System.Windows.Forms.Button();
             this.gbBorrar.SuspendLayout();
             this.gbAgregar.SuspendLayout();
             this.gbModificar.SuspendLayout();
@@ -508,22 +508,23 @@ namespace linway_app
             this.bSalir.UseVisualStyleBackColor = true;
             this.bSalir.Click += new System.EventHandler(this.bSalir_Click);
             // 
-            // button3
+            // ImportarClientes
             // 
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(738, 185);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(120, 49);
-            this.button3.TabIndex = 47;
-            this.button3.Text = "Importar";
-            this.button3.UseVisualStyleBackColor = true;
+            this.ImportarClientes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ImportarClientes.Location = new System.Drawing.Point(738, 185);
+            this.ImportarClientes.Name = "ImportarClientes";
+            this.ImportarClientes.Size = new System.Drawing.Size(120, 49);
+            this.ImportarClientes.TabIndex = 47;
+            this.ImportarClientes.Text = "Importar";
+            this.ImportarClientes.UseVisualStyleBackColor = true;
+            this.ImportarClientes.Click += new System.EventHandler(this.ImportarClientes_Click);
             // 
             // FormClientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 291);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.ImportarClientes);
             this.Controls.Add(this.bSalir);
             this.Controls.Add(this.bCopiaSeguridad);
             this.Controls.Add(this.gbModificar);
@@ -594,6 +595,6 @@ namespace linway_app
         private System.Windows.Forms.CheckBox cbSeguroBorrar;
         private System.Windows.Forms.Button bCopiaSeguridad;
         private System.Windows.Forms.Button bSalir;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button ImportarClientes;
     }
 }

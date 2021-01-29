@@ -24,10 +24,10 @@ namespace linway_app
 
         public NotaDeEnvio(int cod, string clie, List<ProdVendido> listaP, bool siono)
         {
-            this.Codigo = cod;
-            this.Fecha = DateTime.Today.ToString().Substring(0, 10);
-            this.Cliente = clie;
-            this.Productos.AddRange(listaP);
+            Codigo = cod;
+            Fecha = DateTime.Today.ToString().Substring(0, 10);
+            Cliente = clie;
+            Productos.AddRange(listaP);
             float subTo = 0;
             string deta = "";
             foreach (ProdVendido vActual in listaP)
@@ -35,14 +35,14 @@ namespace linway_app
                 subTo += vActual.Subtotal;
                 deta = deta + vActual.Cantidad.ToString() + "x " + vActual.Descripcion + ". ";
             }
-            this.ImporteTotal = subTo;
-            this.Detalle = deta;
-            this.Impresa = siono;
+            ImporteTotal = subTo;
+            Detalle = deta;
+            Impresa = siono;
         }
 
         public void Modificar(List<ProdVendido> listaP)
         {
-            this.Productos = listaP;
+            Productos = listaP;
             float subTo = 0;
             string deta = "";
             foreach (ProdVendido vActual in listaP)
@@ -50,10 +50,9 @@ namespace linway_app
                 subTo += vActual.Subtotal;
                 deta = deta + vActual.Cantidad.ToString() + "x " + vActual.Descripcion + ". ";
             }
-            this.ImporteTotal = subTo;
-            this.Detalle = deta;
-            this.Impresa = false;
+            ImporteTotal = subTo;
+            Detalle = deta;
+            Impresa = false;
         }
-
     }
 }

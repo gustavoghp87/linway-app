@@ -59,6 +59,7 @@
             this.button7 = new System.Windows.Forms.Button();
             this.bCopiaSeguridad = new System.Windows.Forms.Button();
             this.bExit = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.gbBorrar.SuspendLayout();
             this.gbAgregar.SuspendLayout();
             this.gbModificar.SuspendLayout();
@@ -378,9 +379,9 @@
             // bCopiaSeguridad
             // 
             this.bCopiaSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bCopiaSeguridad.Location = new System.Drawing.Point(12, 182);
+            this.bCopiaSeguridad.Location = new System.Drawing.Point(155, 182);
             this.bCopiaSeguridad.Name = "bCopiaSeguridad";
-            this.bCopiaSeguridad.Size = new System.Drawing.Size(191, 27);
+            this.bCopiaSeguridad.Size = new System.Drawing.Size(125, 37);
             this.bCopiaSeguridad.TabIndex = 44;
             this.bCopiaSeguridad.Text = "Crear copia de seguridad";
             this.bCopiaSeguridad.UseVisualStyleBackColor = true;
@@ -389,19 +390,31 @@
             // bExit
             // 
             this.bExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bExit.Location = new System.Drawing.Point(654, 182);
+            this.bExit.Location = new System.Drawing.Point(642, 182);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(81, 27);
+            this.bExit.Size = new System.Drawing.Size(93, 27);
             this.bExit.TabIndex = 45;
             this.bExit.Text = "Salir";
             this.bExit.UseVisualStyleBackColor = true;
             this.bExit.Click += new System.EventHandler(this.bSalir_Click);
             // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(12, 182);
+            this.button1.Name = "ImportarBtn";
+            this.button1.Size = new System.Drawing.Size(122, 37);
+            this.button1.TabIndex = 46;
+            this.button1.Text = "Importar";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.ImportarBtn);
+            // 
             // FormProductos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(832, 216);
+            this.ClientSize = new System.Drawing.Size(832, 222);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.bExit);
             this.Controls.Add(this.bCopiaSeguridad);
             this.Controls.Add(this.gbModificar);
@@ -460,5 +473,6 @@
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button button1;
     }
 }

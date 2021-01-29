@@ -17,7 +17,7 @@ namespace linway_app
     public partial class FormProductos : Form
     {
         const string direccionProductos = @"Base de datos\ProductosLinway.bin";
-        //const string copiaDeSeguridad = @"Copias de seguridad\ProductosLinway.bin";
+        const string copiaDeSeguridad = "productos.xlsx";
         private int ultimoProducto;
         List<Producto> listaProductos = new List<Producto>();
         ProductoL productoNuevo;
@@ -292,29 +292,31 @@ namespace linway_app
             }
         }
 
-        private void ImportarDesdeExcel()
+        private void ImportarBtn(object sender, EventArgs e)
         {
-            //dataGridView2.DataSource = new Importar().ImportarExcel("productos.xlsx").DefaultView;
-            //listaProductos.Clear();
-            //GenerarListaProductosDesdeGrid();
-            //try
-            //{
-            //    for (int i = 0; i < dataGridView2.Rows.Count - 1; i++)
-            //    {
-            //        //MessageBox.Show(dataGridView2.Rows[i].Cells[0].Value.ToString() + " " + dataGridView2.Rows[i].Cells[1].Value.ToString() + " " + dataGridView2.Rows[i].Cells[2].Value.ToString());
-            //        int Codigo = Int32.Parse(dataGridView2.Rows[i].Cells[0].Value.ToString());
-            //        string Nombre = dataGridView2.Rows[i].Cells[1].Value.ToString();
-            //        float Precio = float.Parse(dataGridView2.Rows[i].Cells[2].Value.ToString());
-            //        Producto nuevoProducto = new Producto(Codigo, Nombre, Precio);
-            //        listaProductos.Add(nuevoProducto);
-            //    }
-            //    //GuardarClientes();
-            //    //Actualizar();
-            //}
-            //catch (Exception exc)
-            //{
-            //    MessageBox.Show("Hay un problema con los datos de Excel: " + exc.Message);
-            //}
+            CargarProductos();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de productos por el contenido del Excel productos.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Productos desde Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                listaProductos.Clear();
+                try
+                {
+                    listaProductos = new Importar(copiaDeSeguridad).ImportarProductos();
+                    GuardarProductos();
+                    CargarProductos();
+                }
+                catch
+                {
+                    listaProductos.Clear();
+                    CargarProductos();
+                    throw;
+                }
+                MessageBox.Show("Terminado");
+            }
+            else
+            {
+                return;
+            }
         }
 
         private void bSalir_Click(object sender, EventArgs e)
