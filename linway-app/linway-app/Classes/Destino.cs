@@ -23,27 +23,27 @@ namespace linway_app
 
         public Destino(string cliente)
         {
-            this.Direccion = cliente;
-            this.Entregar = false;
-            this.L = 0;
-            this.Productos = "";
-            this.A = 0;
-            this.E = 0;
-            this.D = 0;
-            this.T = 0;
-            this.AE = 0;
+            Direccion = cliente;
+            Entregar = false;
+            L = 0;
+            Productos = "";
+            A = 0;
+            E = 0;
+            D = 0;
+            T = 0;
+            AE = 0;
         }
 
         public void Limpiar()
         {
-            this.Entregar = false;
-            this.L = 0;
-            this.Productos = "";
-            this.A = 0;
-            this.E = 0;
-            this.D = 0;
-            this.T = 0;
-            this.AE = 0;
+            Entregar = false;
+            L = 0;
+            Productos = "";
+            A = 0;
+            E = 0;
+            D = 0;
+            T = 0;
+            AE = 0;
         }
 
         public void ModificarPorV(List<Venta> ventasL)
@@ -79,7 +79,7 @@ namespace linway_app
                 //Aca agregar para cada producto ( si es polvo, liquido, bolsas o talonario con funciones bool)
                 if (prod.Contains("olsas"))
                 {
-                    this.Productos = this.Productos + cant.ToString() + " " + prod.Substring(0, prod.IndexOf('(')) + ". ";
+                    Productos = Productos + cant.ToString() + " " + prod.Substring(0, prod.IndexOf('(')) + ". ";
                 }
                 else
                 {
@@ -87,20 +87,20 @@ namespace linway_app
                     {
                         if (esPolvo(prod))
                         {
-                            this.Productos = this.Productos + (cant / 20).ToString() + "x20 " + prod.Substring(0, prod.IndexOf('-')) + ". ";
+                            Productos = Productos + (cant / 20).ToString() + "x20 " + prod.Substring(0, prod.IndexOf('-')) + ". ";
                         }
                         else
                         {
-                            this.Productos = this.Productos + cant.ToString() + " " + prod.Substring(0, prod.IndexOf('-')) + ". ";
+                            Productos = Productos + cant.ToString() + " " + prod.Substring(0, prod.IndexOf('-')) + ". ";
                         }
                     }
                     else
                     {
-                        this.Productos = this.Productos + cant.ToString() + " " + prod + ". ";
+                        Productos = Productos + cant.ToString() + " " + prod + ". ";
                     }
                 }
             }
-            this.Entregar = true;
+            Entregar = true;
         }
 
         private bool esPolvo(string cadena)
@@ -118,23 +118,23 @@ namespace linway_app
         {
             if (cadena.Contains("pol - p"))
             {
-                this.T += (c / 20);
+                T += (c / 20);
             }
             if (cadena.Contains("san - p"))
             {
-                this.D += (c / 20);
+                D += (c / 20);
             }
             if (cadena.Contains("bón - p"))
             {
-                this.E += (c / 20);
+                E += (c / 20);
             }
             if (cadena.Contains("son - p"))
             {
-                this.A += (c / 20);
+                A += (c / 20);
             }
             if (cadena.Contains("ial - p"))
             {
-                this.AE += (c / 20);
+                AE += (c / 20);
             }
         }
 
@@ -160,7 +160,7 @@ namespace linway_app
 
         private void sumarLiquido(int c)
         {
-            this.L += c;
+            L += c;
         }
     }
 }

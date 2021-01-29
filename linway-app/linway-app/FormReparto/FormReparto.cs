@@ -160,8 +160,13 @@ namespace linway_app
         {
             if (comboBox1.Text != "")
             {
-                listaDestinos = listaRepartos.Find(x => x.Nombre.Equals(comboBox2.Text)).Destinos;
-                VerDatos(listaRepartos.Find(x => x.Nombre.Equals(comboBox2.Text)));
+                try
+                {
+                    listaDestinos = listaRepartos.Find(x => x.Nombre.Equals(comboBox2.Text)).Destinos;
+                    VerDatos(listaRepartos.Find(x => x.Nombre.Equals(comboBox2.Text)));
+                }
+                catch
+                { }
             }
             dataGridView1.DataSource = listaDestinos.ToArray();
         }

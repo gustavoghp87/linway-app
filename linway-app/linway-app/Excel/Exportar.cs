@@ -54,7 +54,7 @@ namespace linway_app
                     i++;
                 }
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[listaClientes.Count + 1, 7]];
-                return GenerateFile("clientes.xlsx");
+                return GenerateFile("/Copias de seguridad/clientes.xlsx");
             }
             catch (Exception e)
             {
@@ -84,7 +84,7 @@ namespace linway_app
                     i++;
                 }
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[listaProductos.Count + 1, 3]];
-                return GenerateFile("productos.xlsx");
+                return GenerateFile("/Copias de seguridad/productos.xlsx");
             }
             catch (Exception e)
             {
@@ -123,7 +123,7 @@ namespace linway_app
                     i++;
                 }
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[notasEnvio.Count + 1, 6]];
-                return GenerateFile("notas.xlsx");
+                return GenerateFile("/Copias de seguridad/notas.xlsx");
             }
             catch (Exception e)
             {
@@ -152,7 +152,7 @@ namespace linway_app
                 }
 
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[listaVentas.Count + 1, 2]];
-                return GenerateFile("ventas.xlsx");
+                return GenerateFile("/Copias de seguridad/ventas.xlsx");
             }
             catch (Exception e)
             {
@@ -183,7 +183,7 @@ namespace linway_app
                 }
 
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[listaRegistros.Count + 1, 3]];
-                return GenerateFile("registroVentas.xlsx");
+                return GenerateFile("/Copias de seguridad/registroVentas.xlsx");
             }
             catch (Exception e)
             {
@@ -196,69 +196,64 @@ namespace linway_app
         {
             try
             {
-                MessageBox.Show(diasDeReparto[0].Dia + " - " + diasDeReparto[0].Reparto[0].Nombre + " - " + diasDeReparto[0].Reparto[0].Destinos[0].Direccion);
-                return true;
-                //hoja_trabajo.Cells[1, 9] = "REPARTOS";
-                //hoja_trabajo.Cells[1, 9].Font.Bold = true;
-                //hoja_trabajo.Cells[1, 9].Font.Underline = true;
-                //hoja_trabajo.Cells[1, 9].Font.Size = 11;
-
-                //hoja_trabajo.Cells[1, 3] = "DIA " + data[1] + " -  RECORRIDO " + data[2];
-                //hoja_trabajo.Cells[1, 3].Font.Bold = true;
-                //hoja_trabajo.Cells[1, 3].Font.Size = 11;
+                hoja_trabajo.Cells[1, 11] = "REPARTOS";
+                hoja_trabajo.Cells[1, 11].Font.Bold = true;
+                hoja_trabajo.Cells[1, 11].Font.Underline = true;
+                hoja_trabajo.Cells[1, 11].Font.Size = 11;
                 
-                //hoja_trabajo.Cells[2, 1] = "Dirección";
-                //hoja_trabajo.Cells[2, 2] = "L";
-                //hoja_trabajo.Cells[2, 3] = "Productos";
-                //hoja_trabajo.Cells[2, 4] = "A";
-                //hoja_trabajo.Cells[2, 5] = "E";
-                //hoja_trabajo.Cells[2, 6] = "D";
-                //hoja_trabajo.Cells[2, 7] = "T";
-                //hoja_trabajo.Cells[2, 8] = "AE";
+                int i = 0;
+                foreach (DiasReparto dia in diasDeReparto)
+                {
+                    hoja_trabajo.Cells[1 + i, 1] = dia.Dia;
+                    hoja_trabajo.Cells[1 + i, 1].Font.Bold = true;
+                    hoja_trabajo.Cells[1 + i, 1].Font.Size = 11;
+                    
+                    foreach (Reparto reparto in dia.Reparto)
+                    {
+                        MessageBox.Show(reparto.Nombre + " - " + reparto.TT + " - " + reparto.TA + " - " + reparto.TE + " - " + reparto.TD + " - " + reparto.TAE + " - " + reparto.TL + " - " + reparto.TotalB);
+                        hoja_trabajo.Cells[2 + i, 1] = reparto.Nombre;
+                        hoja_trabajo.Cells[2 + i, 1].Font.Bold = true;
+                        hoja_trabajo.Cells[2 + i, 1].Font.Size = 11;
+                        hoja_trabajo.Cells[2 + i, 2] = "Productos";
+                        hoja_trabajo.Cells[2 + i, 2].Font.Bold = true;
+                        hoja_trabajo.Cells[2 + i, 2].Font.Size = 11;
+                        hoja_trabajo.Cells[2 + i, 3] = "Entregar";
+                        hoja_trabajo.Cells[2 + i, 3].Font.Bold = true;
+                        hoja_trabajo.Cells[2 + i, 3].Font.Size = 11;
+                        hoja_trabajo.Cells[2 + i, 4] = "L";
+                        hoja_trabajo.Cells[2 + i, 5] = "A";
+                        hoja_trabajo.Cells[2 + i, 6] = "E";
+                        hoja_trabajo.Cells[2 + i, 7] = "D";
+                        hoja_trabajo.Cells[2 + i, 8] = "T";
+                        hoja_trabajo.Cells[2 + i, 9] = "AE";
+                        hoja_trabajo.Cells[2 + i, 4].Font.Bold = true;
+                        hoja_trabajo.Cells[2 + i, 5].Font.Bold = true;
+                        hoja_trabajo.Cells[2 + i, 6].Font.Bold = true;
+                        hoja_trabajo.Cells[2 + i, 7].Font.Bold = true;
+                        hoja_trabajo.Cells[2 + i, 8].Font.Bold = true;
+                        hoja_trabajo.Cells[2 + i, 9].Font.Bold = true;
 
-                //hoja_trabajo.Cells[listaRepartos.Count + 2, 9] = data[0];
-                //hoja_trabajo.Cells[listaRepartos.Count + 2, 9].Font.Bold = true;
-                //hoja_trabajo.Cells[listaRepartos.Count + 2, 9].EntireColumn.AutoFit();
-                
-                //hoja_trabajo.Cells[listaRepartos.Count + 4, 4] = "A";
-                //hoja_trabajo.Cells[listaRepartos.Count + 4, 5] = "E";
-                //hoja_trabajo.Cells[listaRepartos.Count + 4, 6] = "D";
-                //hoja_trabajo.Cells[listaRepartos.Count + 4, 7] = "T";
-                //hoja_trabajo.Cells[listaRepartos.Count + 4, 8] = "AE";
+                        foreach (Destino destino in reparto.Destinos)
+                        {
+                            hoja_trabajo.Cells[3 + i, 1] = destino.Direccion;
+                            hoja_trabajo.Cells[3 + i, 2] = destino.Productos;
+                            if (destino.Entregar) hoja_trabajo.Cells[3 + i, 3] = "SI";
+                            else                  hoja_trabajo.Cells[3 + i, 3] = "NO";
+                            hoja_trabajo.Cells[3 + i, 4] = destino.L;
+                            hoja_trabajo.Cells[3 + i, 5] = destino.A;
+                            hoja_trabajo.Cells[3 + i, 6] = destino.E;
+                            hoja_trabajo.Cells[3 + i, 7] = destino.D;
+                            hoja_trabajo.Cells[3 + i, 8] = destino.T;
+                            hoja_trabajo.Cells[3 + i, 9] = destino.AE;
+                            i++;
+                        }
+                        i++;
+                    }
+                    i++;
+                }
 
-                //hoja_trabajo.Cells[listaRepartos.Count + 3, 1] = "TOTALES:";
-                //hoja_trabajo.Cells[listaRepartos.Count + 3, 2] = data[3];
-                //hoja_trabajo.Cells[listaRepartos.Count + 4, 3] = " TOTAL PESO: " + data[4] + data[5] + "        Total bolsas: " + data[6];
-                //hoja_trabajo.Cells[listaRepartos.Count + 3, 4] = data[7];
-                //hoja_trabajo.Cells[listaRepartos.Count + 3, 5] = data[8];
-                //hoja_trabajo.Cells[listaRepartos.Count + 3, 6] = data[9];
-                //hoja_trabajo.Cells[listaRepartos.Count + 3, 7] = data[10];
-                //hoja_trabajo.Cells[listaRepartos.Count + 3, 8] = data[11];
-
-                //int i = 0;
-                //MessageBox.Show("Hay " + listaRepartos.Count + "repartos");
-                //while (i < listaRepartos.Count)
-                //{
-                //    int j = 0;
-                //    while (j < listaRepartos[i].Destinos.Count)
-                //    {
-                //        hoja_trabajo.Cells[i + j + 2, 1] = listaRepartos[i].Destinos[j].Direccion;
-                //        hoja_trabajo.Cells[i + 2, 2] = listaRepartos[i].Destinos[j].L;
-                //        hoja_trabajo.Cells[i + 2, 3] = listaRepartos[i].Destinos[j].Productos;
-                //        hoja_trabajo.Cells[i + 2, 4] = listaRepartos[i].Destinos[j].A;
-                //        hoja_trabajo.Cells[i + 2, 5] = listaRepartos[i].Destinos[j].E;
-                //        hoja_trabajo.Cells[i + 2, 6] = listaRepartos[i].Destinos[j].D;
-                //        hoja_trabajo.Cells[i + 2, 7] = listaRepartos[i].Destinos[j].T;
-                //        hoja_trabajo.Cells[i + 2, 8] = listaRepartos[i].Destinos[j].AE;
-                //        j++;
-                //    }
-                //    //data.Add((listaRepartos.Find(x => x.Nombre == comboBox2.Text).TotalB * 20).ToString());
-                //    //data.Add((int.Parse(label22.Text)).ToString());
-                //    i++;
-                //}
-
-                //excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[listaRepartos.Count + 1, 8]];
-                //return GenerateFile("repartos.xlsx");
+                excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[i + 3, 9]];
+                return GenerateFile("/Copias de seguridad/repartos.xlsx");
             }
             catch (Exception e)
             {
@@ -271,10 +266,6 @@ namespace linway_app
         {
             try
             {
-                //hoja_trabajo.Cells[1, 9] = "REPARTOS";
-                //hoja_trabajo.Cells[1, 9].Font.Bold = true;
-                //hoja_trabajo.Cells[1, 9].Font.Underline = true;
-                //hoja_trabajo.Cells[1, 9].Font.Size = 11;
                 hoja_trabajo.Cells[1, 3] = "DIA " + dia + " -  RECORRIDO " + reparto.Nombre;
                 hoja_trabajo.Cells[1, 3].Font.Bold = true;
                 hoja_trabajo.Cells[1, 3].Font.Size = 11;
@@ -346,7 +337,7 @@ namespace linway_app
 
 
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[reparto.Destinos.Count + 4, 8]];
-                return GenerateFile("reparto-" + dia + "-" + reparto.Nombre +".xlsx");
+                return GenerateFile("/Repartos/reparto-" + dia + "-" + reparto.Nombre + ".xlsx");
             }
             catch (Exception e)
             {
@@ -355,7 +346,7 @@ namespace linway_app
             }
         }
 
-        private bool GenerateFile(string archivo)
+        private bool GenerateFile(string path)
         {
             try
             {
@@ -364,7 +355,7 @@ namespace linway_app
                 border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
                 border.Weight = 2d;
                 aplicacion.DisplayAlerts = false;
-                libros_trabajo.SaveAs(Directory.GetCurrentDirectory().ToString() + "/Repartos/" + archivo,
+                libros_trabajo.SaveAs(Directory.GetCurrentDirectory().ToString() + path,
                     Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal);
                 libros_trabajo.Close(true);
                 //MessageBox.Show("Exportación a Excel terminada.");

@@ -409,9 +409,9 @@ namespace linway_app
             // bActualizar
             // 
             this.bActualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bActualizar.Location = new System.Drawing.Point(314, 441);
+            this.bActualizar.Location = new System.Drawing.Point(314, 427);
             this.bActualizar.Name = "bActualizar";
-            this.bActualizar.Size = new System.Drawing.Size(148, 38);
+            this.bActualizar.Size = new System.Drawing.Size(148, 52);
             this.bActualizar.TabIndex = 40;
             this.bActualizar.Text = "Actualizar";
             this.bActualizar.UseVisualStyleBackColor = true;
@@ -420,9 +420,9 @@ namespace linway_app
             // bCopiaSeguridad
             // 
             this.bCopiaSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bCopiaSeguridad.Location = new System.Drawing.Point(474, 441);
+            this.bCopiaSeguridad.Location = new System.Drawing.Point(474, 427);
             this.bCopiaSeguridad.Name = "bCopiaSeguridad";
-            this.bCopiaSeguridad.Size = new System.Drawing.Size(169, 38);
+            this.bCopiaSeguridad.Size = new System.Drawing.Size(169, 52);
             this.bCopiaSeguridad.TabIndex = 41;
             this.bCopiaSeguridad.Text = "Crear copia de seguridad";
             this.bCopiaSeguridad.UseVisualStyleBackColor = true;
@@ -744,7 +744,7 @@ namespace linway_app
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(922, 483);
+            this.ClientSize = new System.Drawing.Size(922, 494);
             this.Controls.Add(this.gbVerRegistro);
             this.Controls.Add(this.gbNuevaVenta);
             this.Controls.Add(this.gbBorrarReg);
