@@ -251,48 +251,56 @@ namespace linway_app
         {
             List<NotaDeEnvio> listaAImprimir = new List<NotaDeEnvio>();
 
-            if (comboBox2.SelectedItem.ToString() == "No impresas")
+            try
             {
-                foreach (NotaDeEnvio nActual in notasEnvio)
+                if (comboBox2.SelectedItem.ToString() == "No impresas")
                 {
-                    if (!nActual.Impresa)
+                    foreach (NotaDeEnvio nActual in notasEnvio)
                     {
-                        listaAImprimir.Add(nActual);
-                    }
-                }
-            }
-
-            if (comboBox2.SelectedItem.ToString() == "Hoy")
-            {
-                foreach (NotaDeEnvio nActual in notasEnvio)
-                {
-                    if (nActual.Fecha == DateTime.Today.ToString().Substring(0, 10))
-                    {
-                        listaAImprimir.Add(nActual);
-                    }
-                }
-            }
-
-            if (textBox2.Text != "" && textBox3.Text != "")
-            {
-                if (comboBox2.SelectedItem.ToString() == "Establecer rango")
-                {
-                    if ((int.Parse(textBox2.Text) <= int.Parse(textBox3.Text)) && (int.Parse(textBox3.Text) <= ultimaNota) && (int.Parse(textBox2.Text) >= primeraNota))
-                    {
-                        int j = int.Parse(textBox3.Text);
-                        for (int i = int.Parse(textBox2.Text); i <= j; i++)
+                        if (!nActual.Impresa)
                         {
-                            listaAImprimir.Add(notasEnvio.Find(x => x.Codigo == i));
+                            listaAImprimir.Add(nActual);
                         }
                     }
-                    else
+                }
+
+                if (comboBox2.SelectedItem.ToString() == "Hoy")
+                {
+                    foreach (NotaDeEnvio nActual in notasEnvio)
                     {
-                        MessageBox.Show("Rango establecido incorrecto");
+                        if (nActual.Fecha == DateTime.Today.ToString().Substring(0, 10))
+                        {
+                            listaAImprimir.Add(nActual);
+                        }
                     }
                 }
+
+                if (textBox2.Text != "" && textBox3.Text != "")
+                {
+                    if (comboBox2.SelectedItem.ToString() == "Establecer rango")
+                    {
+                        if ((int.Parse(textBox2.Text) <= int.Parse(textBox3.Text)) && (int.Parse(textBox3.Text) <= ultimaNota) && (int.Parse(textBox2.Text) >= primeraNota))
+                        {
+                            int j = int.Parse(textBox3.Text);
+                            for (int i = int.Parse(textBox2.Text); i <= j; i++)
+                            {
+                                listaAImprimir.Add(notasEnvio.Find(x => x.Codigo == i));
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Rango establecido incorrecto");
+                        }
+                    }
+                }
+                return listaAImprimir;
+            }
+            catch (Exception excep)
+            {
+                MessageBox.Show("Error en la lista de notas de envío: " + excep.Message);
+                return null;
             }
 
-            return listaAImprimir;
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -653,19 +661,19 @@ namespace linway_app
 
             if (label25.Text.Contains("pendiente"))
             {
-                nuevoPV.cargarPV(label25.Text, 1, float.Parse(label26.Text));
+                nuevoPV.CargarPV(label25.Text, 1, float.Parse(label26.Text));
             }
             else if ((label25.Text.Contains("favor")) || (label25.Text.Contains("devoluci")) || (label25.Text.Contains("BONIF")))
             {
-                nuevoPV.cargarPV(label25.Text, 1, float.Parse(label26.Text) * -1);
+                nuevoPV.CargarPV(label25.Text, 1, float.Parse(label26.Text) * -1);
             }
             else if ((label25.Text.Contains("actura")))
             {
-                nuevoPV.cargarPV(label25.Text + textBox11.Text, 1, float.Parse(label26.Text));
+                nuevoPV.CargarPV(label25.Text + textBox11.Text, 1, float.Parse(label26.Text));
             }
             else
             {
-                nuevoPV.cargarPV(label25.Text, int.Parse(textBox10.Text), float.Parse(label26.Text));
+                nuevoPV.CargarPV(label25.Text, int.Parse(textBox10.Text), float.Parse(label26.Text));
             }
 
             listaPV.Add(nuevoPV);
@@ -711,7 +719,7 @@ namespace linway_app
             }
         }
 
-        private void ImportarNotasDeEnvio_Click(object sender, EventArgs e)
+        public void ImportarNotasDeEnvio_Click(object sender, EventArgs e)
         {
             CargarNotas();
             DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de notas de envío por el contenido del Excel notas.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Notas de Envío desde Excel", MessageBoxButtons.YesNo);
@@ -720,21 +728,19 @@ namespace linway_app
                 notasEnvio.Clear();
                 try
                 {
-                    //notasEnvio = 
-                    new Importar(copiaDeSeguridad).ImportaNotas();
-                    //GuardarNotas();
+                    notasEnvio = new Importar(copiaDeSeguridad).ImportarNotas();
+                    foreach (NotaDeEnvio nde in notasEnvio)
+                    {
+                        MessageBox.Show(nde.Cliente + " " + nde.Codigo + " " + nde.Detalle + " " + nde.Fecha + " " + nde.ImporteTotal + " " + nde.Impresa);
+                    }
+                    GuardarNotas();
                     CargarNotas();
                 }
                 catch
                 {
-                    notasEnvio.Clear();
-                    CargarNotas();
+
                 }
                 MessageBox.Show("Terminado");
-            }
-            else
-            {
-                return;
             }
         }
     }

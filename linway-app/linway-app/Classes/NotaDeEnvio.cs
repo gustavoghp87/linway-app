@@ -40,6 +40,24 @@ namespace linway_app
             Impresa = siono;
         }
 
+        public NotaDeEnvio(int cod, string clie, List<ProdVendido> listaP, bool siono, string fecha, float total) // solo para importar notas desde excel
+        {
+            Codigo = cod;
+            Fecha = fecha;
+            Cliente = clie;
+            Productos.AddRange(listaP);
+            float subTo = 0;
+            string deta = "";
+            foreach (ProdVendido vActual in listaP)
+            {
+                subTo += vActual.Subtotal;
+                deta = deta + vActual.Cantidad.ToString() + "x " + vActual.Descripcion + ". ";
+            }
+            ImporteTotal = total;
+            Detalle = deta;
+            Impresa = siono;
+        }
+
         public void Modificar(List<ProdVendido> listaP)
         {
             Productos = listaP;

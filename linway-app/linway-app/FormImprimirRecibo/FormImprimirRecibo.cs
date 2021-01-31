@@ -16,10 +16,12 @@ namespace linway_app
     {
 
         const string direccionRecibos = "Recibos.bin";
-        List<Recibo> listaRecibos = new List<Recibo>();
         int CodigoDeLaNota;
         bool impresa;
+        List<Recibo> listaRecibos = new List<Recibo>();
         private Bitmap memoryImage;
+        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
+        public static extern long BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
 
         public FormImprimirRecibo()
         {
@@ -29,7 +31,40 @@ namespace linway_app
         private void FormImprimirRecibo_Load(object sender, EventArgs e)
         {
         }
-        
+
+        void AbrirRecibos()
+        {
+            if (File.Exists(direccionRecibos))
+            {
+                try
+                {
+                    Stream archivo = File.OpenRead(direccionRecibos);
+                    BinaryFormatter traductor = new BinaryFormatter();
+                    listaRecibos = (List<Recibo>)traductor.Deserialize(archivo);
+                    archivo.Close();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error al leer los recibos para imprimir:" + e.Message);
+                }
+            }
+        }
+
+        void GuardarRecibos()
+        {
+            try
+            {
+                Stream archivoRecibos = File.Create(direccionRecibos);
+                BinaryFormatter traductor = new BinaryFormatter();
+                traductor.Serialize(archivoRecibos, listaRecibos);
+                archivoRecibos.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error al guardar los recibos:" + e.Message);
+            }
+        }
+
         public void Rellenar_Datos(Recibo elRecibo)
         {
             lFecha.Text = elRecibo.Fecha;
@@ -48,32 +83,23 @@ namespace linway_app
             lTotal.Text = "$ " + elRecibo.ImporteTotal.ToString(".00");
             foreach (DetalleRecibo drActual in elRecibo.detalle)
             {
-                label1.Text = label1.Text + drActual.detalle + Environment.NewLine;
-                label2.Text = label2.Text + drActual.importe.ToString(".00") + Environment.NewLine;
+                label1.Text = label1.Text + drActual.Detalle + Environment.NewLine;
+                label2.Text = label2.Text + drActual.Importe.ToString(".00") + Environment.NewLine;
             }
             impresa = elRecibo.Impresa;
-
         }
 
         /// IMPRIMIR
-        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        public static extern long BitBlt(IntPtr hdcDest,
-            int nXDest, int nYDest, int nWidth, int nHeight,
-            IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
 
         private void CaptureScreen()
         {
-            Graphics mygraphics = this.CreateGraphics();
-            Size s = this.Size;
-            memoryImage = new Bitmap(s.Width, s.Height,
-                mygraphics);
-            Graphics memoryGraphics = Graphics.FromImage(
-                memoryImage);
+            Graphics mygraphics = CreateGraphics();
+            Size s = Size;
+            memoryImage = new Bitmap(s.Width, s.Height, mygraphics);
+            Graphics memoryGraphics = Graphics.FromImage(memoryImage);
             IntPtr dc1 = mygraphics.GetHdc();
             IntPtr dc2 = memoryGraphics.GetHdc();
-            BitBlt(dc2, 0, 0, this.ClientRectangle.Width,
-                this.ClientRectangle.Height, dc1, 0, 0,
-                13369376);
+            BitBlt(dc2, 0, 0, ClientRectangle.Width, ClientRectangle.Height, dc1, 0, 0, 13369376);
             mygraphics.ReleaseHdc(dc1);
             memoryGraphics.ReleaseHdc(dc2);
         }
@@ -94,40 +120,7 @@ namespace linway_app
             {
                 printDocument1.Print();
                 MarcarImpresa();
-                this.Close();
-            }
-        }
-
-        void GuardarRecibos()
-        {
-            try
-            {
-                Stream archivoRecibos = File.Create(direccionRecibos);
-                BinaryFormatter traductor = new BinaryFormatter();
-                traductor.Serialize(archivoRecibos, listaRecibos);
-                archivoRecibos.Close();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error al guardar los recibos:" + e.Message);
-            }
-        }
-
-        void AbrirRecibos()
-        {
-            if (File.Exists(direccionRecibos))
-            {
-                try
-                {
-                    Stream archivo = File.OpenRead(direccionRecibos);
-                    BinaryFormatter traductor = new BinaryFormatter();
-                    listaRecibos = (List<Recibo>) traductor.Deserialize(archivo);
-                    archivo.Close();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Error al leer los recibos para imprimir:" + e.Message);
-                }
+                Close();
             }
         }
 

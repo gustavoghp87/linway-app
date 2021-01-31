@@ -176,9 +176,9 @@ namespace linway_app
                 int i = 0;
                 while (i < listaRegistros.Count)
                 {
-                    hoja_trabajo.Cells[i + 2, 1] = listaRegistros[i].id;
-                    hoja_trabajo.Cells[i + 2, 2] = listaRegistros[i].fecha;
-                    hoja_trabajo.Cells[i + 2, 3] = listaRegistros[i].cliente;
+                    hoja_trabajo.Cells[i + 2, 1] = listaRegistros[i].Id;
+                    hoja_trabajo.Cells[i + 2, 2] = listaRegistros[i].Fecha;
+                    hoja_trabajo.Cells[i + 2, 3] = listaRegistros[i].Cliente;
                     i++;
                 }
 

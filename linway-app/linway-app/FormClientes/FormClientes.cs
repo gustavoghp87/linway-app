@@ -134,10 +134,6 @@ namespace linway_app
                 GuardarClientes();
                 MessageBox.Show("Terminado");
             }
-            else
-            {
-                return;
-            }
         }
 
 

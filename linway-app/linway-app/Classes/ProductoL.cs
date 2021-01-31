@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
 
 
@@ -20,42 +17,42 @@ namespace linway_app
 
         public ProductoL()
         {
-            this.Nombre = "producto";
-            this.Precio = 0;
+            Nombre = "producto";
+            Precio = 0;
         }
         public ProductoL(int cod, string nom, float pre)
         {
-            this.Codigo = cod;
-            this.Nombre = nom;
-            this.Precio = pre;
+            Codigo = cod;
+            Nombre = nom;
+            Precio = pre;
         }
 
         void cargarDatos(string nom, float pre)
         {
-            this.Nombre = nom;
-            this.Precio = pre;
+            Nombre = nom;
+            Precio = pre;
         }
 
         //////////Modificar datos////////////////////
         void modNombre(string nom)
         {
-            this.Nombre = nom;
+            Nombre = nom;
         }
 
         void modPrecio(float costo)
         {
-            this.Precio = costo;
+            Precio = costo;
         }
 
         /////////obtener Datos ////////////////////////
         string darNombre()
         {
-            return this.Nombre;
+            return Nombre;
         }
 
         float darPrecio()
         {
-            return this.Precio;
+            return Precio;
         }
 
         public virtual bool mismoProductoQue(ProductoL otroProducto)
@@ -93,7 +90,7 @@ namespace linway_app
 
         public override Enum obtenerTipoDeProducto()
         {
-            return this.tipoDeLiquido;
+            return tipoDeLiquido;
         }
 
     }
@@ -112,12 +109,12 @@ namespace linway_app
 
         public override void darTipoDeProducto(Enum unEnum)
         {
-            this.tipoDePolvo = (TipoPolvo)unEnum;
+            tipoDePolvo = (TipoPolvo) unEnum;
         }
 
         public override Enum obtenerTipoDeProducto()
         {
-            return this.tipoDePolvo;
+            return tipoDePolvo;
         }
     }
 
@@ -155,5 +152,4 @@ namespace linway_app
             return null;
         }
     }
-
 }

@@ -573,7 +573,7 @@ namespace linway_app
                 float subTot = 0;
                 foreach (DetalleRecibo dActual in listaDetalle)
                 {
-                    subTot += dActual.importe;
+                    subTot += dActual.Importe;
                 }
                 label18.Text = subTot.ToString();
                 LimpiarCampos();

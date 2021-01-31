@@ -88,6 +88,7 @@ namespace linway_app
             this.tbDesde = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.bCancelarBorrarReg = new System.Windows.Forms.Button();
+            this.ImportarBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.gbNuevaVenta.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
@@ -411,7 +412,7 @@ namespace linway_app
             this.bActualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bActualizar.Location = new System.Drawing.Point(314, 427);
             this.bActualizar.Name = "bActualizar";
-            this.bActualizar.Size = new System.Drawing.Size(148, 52);
+            this.bActualizar.Size = new System.Drawing.Size(97, 52);
             this.bActualizar.TabIndex = 40;
             this.bActualizar.Text = "Actualizar";
             this.bActualizar.UseVisualStyleBackColor = true;
@@ -420,9 +421,9 @@ namespace linway_app
             // bCopiaSeguridad
             // 
             this.bCopiaSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bCopiaSeguridad.Location = new System.Drawing.Point(474, 427);
+            this.bCopiaSeguridad.Location = new System.Drawing.Point(422, 427);
             this.bCopiaSeguridad.Name = "bCopiaSeguridad";
-            this.bCopiaSeguridad.Size = new System.Drawing.Size(169, 52);
+            this.bCopiaSeguridad.Size = new System.Drawing.Size(109, 52);
             this.bCopiaSeguridad.TabIndex = 41;
             this.bCopiaSeguridad.Text = "Crear copia de seguridad";
             this.bCopiaSeguridad.UseVisualStyleBackColor = true;
@@ -740,11 +741,23 @@ namespace linway_app
             this.bCancelarBorrarReg.UseVisualStyleBackColor = true;
             this.bCancelarBorrarReg.Click += new System.EventHandler(this.cancelarClick_Click);
             // 
+            // ImportarBtn
+            // 
+            this.ImportarBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ImportarBtn.Location = new System.Drawing.Point(541, 427);
+            this.ImportarBtn.Name = "ImportarBtn";
+            this.ImportarBtn.Size = new System.Drawing.Size(102, 52);
+            this.ImportarBtn.TabIndex = 48;
+            this.ImportarBtn.Text = "Importar";
+            this.ImportarBtn.UseVisualStyleBackColor = true;
+            this.ImportarBtn.Click += new System.EventHandler(this.ImportarBtn_Click);
+            // 
             // FormVentas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(922, 494);
+            this.ClientSize = new System.Drawing.Size(922, 488);
+            this.Controls.Add(this.ImportarBtn);
             this.Controls.Add(this.gbVerRegistro);
             this.Controls.Add(this.gbNuevaVenta);
             this.Controls.Add(this.gbBorrarReg);
@@ -851,5 +864,6 @@ namespace linway_app
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button bBorrarRegVentas;
+        private System.Windows.Forms.Button ImportarBtn;
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
 
 
 namespace linway_app
@@ -16,13 +12,13 @@ namespace linway_app
 
         public Venta(string prod)
         {
-            this.Producto = prod;
-            this.Cantidad = 0;
+            Producto = prod;
+            Cantidad = 0;
         }
 
-        public void realizarVenta(int cant)
+        public void RealizarVenta(int cant)
         {
-            this.Cantidad += cant;
+            Cantidad += cant;
         }
     }
 }

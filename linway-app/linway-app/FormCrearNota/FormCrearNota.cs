@@ -169,19 +169,19 @@ namespace linway_app
                 ProdVendido nuevoPV = new ProdVendido();
                 if (label38.Text.Contains("pendiente"))
                 {
-                    nuevoPV.cargarPV(label38.Text, 1, float.Parse(label40.Text));
+                    nuevoPV.CargarPV(label38.Text, 1, float.Parse(label40.Text));
                 }
                 else if ((label38.Text.Contains("favor")) || (label38.Text.Contains("devoluci")) || (label38.Text.Contains("BONIF")))
                 {
-                    nuevoPV.cargarPV(label38.Text, 1, float.Parse(label40.Text) * -1);
+                    nuevoPV.CargarPV(label38.Text, 1, float.Parse(label40.Text) * -1);
                 }
                 else if ((label38.Text.Contains("actura")))
                 {
-                    nuevoPV.cargarPV(label38.Text + textBox20.Text, 1, float.Parse(label40.Text));
+                    nuevoPV.CargarPV(label38.Text + textBox20.Text, 1, float.Parse(label40.Text));
                 }
                 else
                 {
-                    nuevoPV.cargarPV(label38.Text, int.Parse(textBox17.Text), float.Parse(label40.Text));
+                    nuevoPV.CargarPV(label38.Text, int.Parse(textBox17.Text), float.Parse(label40.Text));
                 }
                 listaPV.Add(nuevoPV);
                 float impTotal = 0;
@@ -243,6 +243,7 @@ namespace linway_app
             {
                 CargarNotas();
                 NotaDeEnvio nuevaNota = new NotaDeEnvio(codigoParaNotaEnvio, label36.Text, listaPV, false);
+                MessageBox.Show(codigoParaNotaEnvio + label36.Text + listaPV[0].Descripcion);
                 //Agregar a ventas
 
                 if (checkBox4.Checked)

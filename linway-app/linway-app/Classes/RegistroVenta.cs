@@ -11,26 +11,33 @@ namespace linway_app
 
     class RegistroVenta
     {
-        static uint ultimoID;
+        static uint UltimoID;
         [DisplayName("ID:")]
-        public uint id { get; set; }
+        public uint Id { get; set; }
         [DisplayName("FECHA")]
-        public string fecha { get; set; }
+        public string Fecha { get; set; }
         [DisplayName("CLIENTE")]
-        public string cliente { get; set; }
-        private List<ProdVendido> productosVendidos = new List<ProdVendido>();
+        public string Cliente { get; set; }
+        private readonly List<ProdVendido> productosVendidos = new List<ProdVendido>();
 
         public RegistroVenta()
         {
-            ultimoID++;
-            id = ultimoID;
-            fecha = DateTime.Today.ToString().Substring(0, 10);
-            cliente = "Venta particular";
+            UltimoID++;
+            Id = UltimoID;
+            Fecha = DateTime.Today.ToString().Substring(0, 10);
+            Cliente = "Venta particular";
         }
 
         public RegistroVenta(uint ultimo)
         {
-            ultimoID = ultimo;
+            UltimoID = ultimo;
+        }
+
+        public RegistroVenta(uint Id, string Fecha, string Cliente)
+        {
+            this.Id = Id;
+            this.Fecha = Fecha;
+            this.Cliente = Cliente;
         }
 
         public void RecibirListaVentas(List<Venta> ventas, List<Producto> productos)
@@ -46,10 +53,10 @@ namespace linway_app
         public void RecibirProdVendidos(List<ProdVendido> pv, string client)
         {
             productosVendidos.AddRange(pv);
-            cliente = client;
+            Cliente = client;
         }
 
-        public List<ProdVendido> obtenerPV()
+        public List<ProdVendido> ObtenerPV()
         {
             return productosVendidos;
         }

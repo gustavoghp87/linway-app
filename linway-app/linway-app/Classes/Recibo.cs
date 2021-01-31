@@ -22,17 +22,17 @@ namespace linway_app
 
         public Recibo(int cod, string clie, List<DetalleRecibo> listaD)
         {
-            this.Codigo = cod;
-            this.Fecha = DateTime.Today.ToString().Substring(0, 10);
-            this.Cliente = clie;
+            Codigo = cod;
+            Fecha = DateTime.Today.ToString().Substring(0, 10);
+            Cliente = clie;
             float subTo = 0;
             foreach (DetalleRecibo dActual in listaD)
             {
-                subTo += dActual.importe;
+                subTo += dActual.Importe;
             }
-            this.detalle.AddRange(listaD);
-            this.ImporteTotal = subTo;
-            this.Impresa = false;
+            detalle.AddRange(listaD);
+            ImporteTotal = subTo;
+            Impresa = false;
         }
     }
 }

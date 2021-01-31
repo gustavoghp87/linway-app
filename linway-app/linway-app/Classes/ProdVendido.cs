@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
 
 
@@ -18,9 +15,9 @@ namespace linway_app
 
         public ProdVendido(string desc, int cant, float prec)
         {
-            this.Descripcion = desc;
-            this.Cantidad = cant;
-            this.Subtotal = prec;
+            Descripcion = desc;
+            Cantidad = cant;
+            Subtotal = prec;
         }
 
         public ProdVendido()
@@ -28,11 +25,11 @@ namespace linway_app
 
         }
 
-        public void cargarPV(string desc, int cant, float prec)
+        public void CargarPV(string desc, int cant, float prec)
         {
-            this.Descripcion = desc;
-            this.Cantidad = cant;
-            this.Subtotal = prec;
+            Descripcion = desc;
+            Cantidad = cant;
+            Subtotal = prec;
         }
     }
 }

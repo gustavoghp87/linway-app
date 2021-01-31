@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -30,6 +26,7 @@ namespace linway_app
 
         private void FormImprimirNota_Load(object sender, EventArgs e)
         {
+            CargarNotas();
         }
 
         void CargarNotas()
@@ -71,27 +68,37 @@ namespace linway_app
 
         public void Rellenar_Datos(NotaDeEnvio laNota)
         {
-            lFecha.Text = laNota.Fecha;
-            CodigoDeLaNota = laNota.Codigo;
-            string elcodigo = laNota.Codigo.ToString();
-            for (int i = laNota.Codigo.ToString().Length; i < 5; i++)
+            try
             {
-                elcodigo = "0" + elcodigo;
+                if (laNota.Cliente.Contains("–")) laNota.Cliente = laNota.Cliente.Replace("–", "-");
+                //MessageBox.Show(laNota.Cliente);
+                //MessageBox.Show(laNota.Cliente.IndexOf('-').ToString());
+                lFecha.Text = laNota.Fecha;
+                CodigoDeLaNota = laNota.Codigo;
+                string elcodigo = laNota.Codigo.ToString();
+                for (int i = laNota.Codigo.ToString().Length; i < 5; i++)
+                {
+                    elcodigo = "0" + elcodigo;
+                }
+
+                lCodigo.Text = elcodigo;
+                int separador = laNota.Cliente.IndexOf('-');
+                lCalle.Text = laNota.Cliente.Substring(0, separador);
+                lLocalidad.Text = laNota.Cliente.Substring(separador + 1);
+                lTotal.Text = "$ " + laNota.ImporteTotal.ToString(".00");
+
+                foreach (ProdVendido pvActual in laNota.Productos)
+                {
+                    label1.Text = label1.Text + pvActual.Cantidad.ToString() + Environment.NewLine;
+                    label2.Text = label2.Text + pvActual.Descripcion + Environment.NewLine;
+                    label3.Text = label3.Text + pvActual.Subtotal.ToString(".00") + Environment.NewLine;
+                }
+                impresa = laNota.Impresa;
             }
-
-            lCodigo.Text = elcodigo;
-            int separador = laNota.Cliente.IndexOf('-');
-            lCalle.Text = laNota.Cliente.Substring(0, separador);
-            lLocalidad.Text = laNota.Cliente.Substring(separador + 1);
-            lTotal.Text = "$ " + laNota.ImporteTotal.ToString(".00");
-
-            foreach (ProdVendido pvActual in laNota.Productos)
+            catch (Exception exc)
             {
-                label1.Text = label1.Text + pvActual.Cantidad.ToString() + Environment.NewLine;
-                label2.Text = label2.Text + pvActual.Descripcion + Environment.NewLine;
-                label3.Text = label3.Text + pvActual.Subtotal.ToString(".00") + Environment.NewLine;
+                MessageBox.Show("Error rellenando los datos: " + exc.Message);
             }
-            impresa = laNota.Impresa;
         }
 
 

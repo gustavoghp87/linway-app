@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
 
 
 namespace linway_app
@@ -11,13 +7,13 @@ namespace linway_app
 
     public class DetalleRecibo
     {
-        public string detalle { get; set; }
-        public float importe { get; set; }
+        public string Detalle { get; set; }
+        public float Importe { get; set; }
 
         public DetalleRecibo(string det, float imp)
         {
-            this.detalle = det;
-            this.importe = imp;
+            Detalle = det;
+            Importe = imp;
         }
     }
 }
