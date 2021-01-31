@@ -51,7 +51,6 @@ namespace linway_app
             {
                 MessageBox.Show("No se encontró archivo de clientes en la carpeta Base de datos...");
             }
-            
             return listaClientes;
         }
 
@@ -68,24 +67,6 @@ namespace linway_app
             {
                 MessageBox.Show("Error al guardar archivo de clientes:" + e.Message);
             }
-        }
-
-        public void AgregarClientes()
-        {
-            gbModificar.Enabled = false;
-            gbBorrar.Enabled = false;
-        }
-
-        public void ModificarClientes()
-        {
-            gbAgregar.Enabled = false;
-            gbBorrar.Enabled = false;
-        }
-
-        public void BorrarClientes()
-        {
-            gbModificar.Enabled = false;
-            gbAgregar.Enabled = false;
         }
 
         private void bCopiaSeguridad_Click(object sender, EventArgs e)
@@ -115,27 +96,42 @@ namespace linway_app
 
         public void ImportarClientes_Click(object sender, EventArgs e)    // conectarlo a botón
         {
+            listaClientes.Clear();
             CargarClientes();
             DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de clientes por el contenido del Excel clientes.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Clientes desde Excel", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 listaClientes.Clear();
-                try
+                listaClientes = new Importar(copiaDeSeguridad).ImportarClientes();
+                if (listaClientes != null)
                 {
-                    listaClientes = new Importar(copiaDeSeguridad).ImportarClientes();
+                    GuardarClientes();
                 }
-                catch
+                else
                 {
-                    listaClientes.Clear();
-                    CargarClientes();
-                    throw;
+                    MessageBox.Show("Falló Clientes; cancelado");
                 }
-                codigoParaCliente = listaClientes.Count + 1;
-                GuardarClientes();
-                MessageBox.Show("Terminado");
+                CargarClientes();
             }
         }
 
+        public void AgregarClientes()
+        {
+            gbModificar.Enabled = false;
+            gbBorrar.Enabled = false;
+        }
+
+        public void ModificarClientes()
+        {
+            gbAgregar.Enabled = false;
+            gbBorrar.Enabled = false;
+        }
+
+        public void BorrarClientes()
+        {
+            gbModificar.Enabled = false;
+            gbAgregar.Enabled = false;
+        }
 
 
 

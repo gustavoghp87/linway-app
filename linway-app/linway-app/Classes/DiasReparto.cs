@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
 
 
 namespace linway_app
 {
-    [Serializable]
+    [Serializable()]
 
     public class DiasReparto
     {
@@ -19,7 +16,7 @@ namespace linway_app
             Dia = _dia;
         }
 
-        public void agregarReparto(Reparto rep)
+        public void AgregarReparto(Reparto rep)
         {
             Reparto.Add(rep);
         }

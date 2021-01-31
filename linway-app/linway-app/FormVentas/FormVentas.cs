@@ -30,7 +30,6 @@ namespace linway_app
             CargarRegistros();
         }
 
-
         public List<Venta> CargarVentas()
         {
             if (File.Exists(direccionVentas))

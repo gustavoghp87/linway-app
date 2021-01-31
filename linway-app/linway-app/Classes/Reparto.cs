@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.ComponentModel;
 using System.Windows.Forms;
 
 
 namespace linway_app
 {
-    [Serializable]
+    [Serializable()]
 
     public class Reparto
     {
@@ -90,24 +87,23 @@ namespace linway_app
 
         private void ModificarContadores(int cant, string producto)
         {
-            if (esPolvo(producto))
+            if (EsPolvo(producto))
             {
                 SumarPolvo(cant, producto);
             }
-            if ((!esPolvo(producto)) && (!esOtro(producto)))
+            if ((!EsPolvo(producto)) && (!EsOtro(producto)))
             {
                 SumarLiquido(cant);
             }
         }
 
-        private bool esPolvo(string cadena)
+        private bool EsPolvo(string cadena)
         {
             bool es = false;
             if ((cadena.Contains("pol - p")) || (cadena.Contains("san - p")) || (cadena.Contains("bón - p")) || (cadena.Contains("son - p")) || (cadena.Contains("ial - p")))
             {
                 es = true;
             }
-
             return es;
         }
 
@@ -136,7 +132,7 @@ namespace linway_app
             TotalB = TT + TD + TE + TA + TAE;
         }
 
-        private bool esOtro(string cadena)
+        private bool EsOtro(string cadena)
         {
             bool es = false;
             if ((cadena.Contains("olsas")) || (cadena.Contains("cobrar")) || (cadena.Contains("Tal/")) || (cadena.Contains("queador")) || (cadena.Contains("BONIFI")) || (cadena.Contains("pendiente")) || (cadena.Contains("actura")) || (cadena.Contains("favor")) || (cadena.Contains("escuento")))

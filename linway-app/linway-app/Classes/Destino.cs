@@ -34,6 +34,19 @@ namespace linway_app
             AE = 0;
         }
 
+        public Destino(string cliente, string productos, bool entregar, int l, int a, int e, int d, int t, int ae)  // para importar repartos
+        {
+            Direccion = cliente;
+            Entregar = entregar;
+            L = l;
+            Productos = productos;
+            A = a;
+            E = e;
+            D = d;
+            T = t;
+            AE = ae;
+        }
+
         public void Limpiar()
         {
             Entregar = false;

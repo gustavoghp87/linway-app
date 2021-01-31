@@ -196,6 +196,89 @@ namespace linway_app
             }
         }
 
+        public List<DiasReparto> ImportarHojaDeRepartos()
+        {
+            List<DiasReparto> diasRepartos = new List<DiasReparto>();
+            try
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i].ItemArray[0].ToString() == "") continue;
+                    string Dia = dt.Rows[i].ItemArray[0].ToString();
+                    if (Dia == "") break;
+                    string Nombre = dt.Rows[i].ItemArray[1].ToString();
+                    if (Nombre == "") continue;
+                    string Direccion = dt.Rows[i].ItemArray[2].ToString();
+                    if (Direccion.Contains("–")) Direccion = Direccion.Replace("–", "-");
+                    string Productos = dt.Rows[i].ItemArray[3].ToString();
+                    bool Entregar = dt.Rows[i].ItemArray[4].ToString() == "SI";
+                    int L = int.Parse(dt.Rows[i].ItemArray[5].ToString());
+                    int A = int.Parse(dt.Rows[i].ItemArray[6].ToString());
+                    int E = int.Parse(dt.Rows[i].ItemArray[7].ToString());
+                    int D = int.Parse(dt.Rows[i].ItemArray[8].ToString());
+                    int T = int.Parse(dt.Rows[i].ItemArray[9].ToString());
+                    int AE = int.Parse(dt.Rows[i].ItemArray[10].ToString());
+
+
+                    bool existeDia = false;
+                    bool existeNombre = false;
+
+                    Destino nuevoDestino = new Destino(Direccion, Productos, Entregar, L, A, E, D, T, AE);
+
+                    foreach (DiasReparto dia in diasRepartos)
+                    {
+                        if (dia.Dia == Dia)
+                        {
+                            existeDia = true;
+                            foreach (Reparto reparto in dia.Reparto)
+                            {
+                                if (reparto.Nombre == Nombre)
+                                {
+                                    existeNombre = true;
+                                    reparto.AgregarDestino(nuevoDestino);
+                                }
+                            }
+
+                            if (!existeNombre)
+                            {
+                                Reparto nuevoReparto = new Reparto(Nombre);
+                                nuevoReparto.AgregarDestino(nuevoDestino);
+                                dia.AgregarReparto(nuevoReparto);
+                            }
+                        }
+                    }
+
+                    if (!existeDia)
+                    {
+                        Reparto reparto = new Reparto(Nombre);
+                        reparto.AgregarDestino(nuevoDestino);
+
+                        DiasReparto diaNuevo = new DiasReparto(Dia);
+                        diaNuevo.AgregarReparto(reparto);
+                        diasRepartos.Add(diaNuevo);
+                    }
+
+                    //MessageBox.Show(Dia + " - " + Nombre + " - " + Direccion + " - " + Productos + " - " + Entregar.ToString());
+                }
+
+                //foreach (DiasReparto dias in diasRepartos)
+                //{
+                //    foreach (Reparto reparto in dias.Reparto)
+                //    {
+                //        foreach (Destino destino in reparto.Destinos)
+                //        {
+                //            MessageBox.Show(dias.Dia + " - " + reparto.Nombre + " - " + destino.Productos);
+                //        }
+                //    }
+                //}
+                return diasRepartos;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Error importando el Excel " + archivo + ": " + exc.Message);
+                return null;
+            }
+        }
 
     }
 

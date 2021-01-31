@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Data;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 
 
@@ -196,63 +190,84 @@ namespace linway_app
         {
             try
             {
-                hoja_trabajo.Cells[1, 11] = "REPARTOS";
-                hoja_trabajo.Cells[1, 11].Font.Bold = true;
-                hoja_trabajo.Cells[1, 11].Font.Underline = true;
-                hoja_trabajo.Cells[1, 11].Font.Size = 11;
+                //hoja_trabajo.Cells[1, 11] = "REPARTOS";
+                //hoja_trabajo.Cells[1, 11].Font.Bold = true;
+                //hoja_trabajo.Cells[1, 11].Font.Underline = true;
+                //hoja_trabajo.Cells[1, 11].Font.Size = 11;
                 
+                hoja_trabajo.Cells[1, 1] = "DIA";
+                hoja_trabajo.Cells[1, 1].Font.Bold = true;
+                hoja_trabajo.Cells[1, 1].Font.Size = 11;
+
+                hoja_trabajo.Cells[1, 2] = "NOMBRE";
+                hoja_trabajo.Cells[1, 2].Font.Bold = true;
+                hoja_trabajo.Cells[1, 2].Font.Size = 11;
+
+                hoja_trabajo.Cells[1, 3] = "DIRECCION";
+                hoja_trabajo.Cells[1, 3].Font.Bold = true;
+                hoja_trabajo.Cells[1, 3].Font.Size = 11;
+
+                hoja_trabajo.Cells[1, 4] = "PRODUCTOS";
+                hoja_trabajo.Cells[1, 4].Font.Bold = true;
+                hoja_trabajo.Cells[1, 4].Font.Size = 11;
+
+                hoja_trabajo.Cells[1, 5] = "ENTREGAR";
+                hoja_trabajo.Cells[1, 5].Font.Bold = true;
+                hoja_trabajo.Cells[1, 5].Font.Size = 11;
+
+                hoja_trabajo.Cells[1, 6] = "LITROS";
+                hoja_trabajo.Cells[1, 6].Font.Bold = true;
+                hoja_trabajo.Cells[1, 6].Font.Size = 11;
+
+                hoja_trabajo.Cells[1, 7] = "A";
+                hoja_trabajo.Cells[1, 7].Font.Bold = true;
+                hoja_trabajo.Cells[1, 7].Font.Size = 11;
+
+                hoja_trabajo.Cells[1, 8] = "E";
+                hoja_trabajo.Cells[1, 8].Font.Bold = true;
+                hoja_trabajo.Cells[1, 8].Font.Size = 11;
+
+                hoja_trabajo.Cells[1, 9] = "D";
+                hoja_trabajo.Cells[1, 9].Font.Bold = true;
+                hoja_trabajo.Cells[1, 9].Font.Size = 11;
+
+                hoja_trabajo.Cells[1, 10] = "T";
+                hoja_trabajo.Cells[1, 10].Font.Bold = true;
+                hoja_trabajo.Cells[1, 10].Font.Size = 11;
+
+                hoja_trabajo.Cells[1, 11] = "AE";
+                hoja_trabajo.Cells[1, 11].Font.Bold = true;
+                hoja_trabajo.Cells[1, 11].Font.Size = 11;
+
                 int i = 0;
                 foreach (DiasReparto dia in diasDeReparto)
                 {
-                    hoja_trabajo.Cells[1 + i, 1] = dia.Dia;
-                    hoja_trabajo.Cells[1 + i, 1].Font.Bold = true;
-                    hoja_trabajo.Cells[1 + i, 1].Font.Size = 11;
-                    
                     foreach (Reparto reparto in dia.Reparto)
                     {
-                        MessageBox.Show(reparto.Nombre + " - " + reparto.TT + " - " + reparto.TA + " - " + reparto.TE + " - " + reparto.TD + " - " + reparto.TAE + " - " + reparto.TL + " - " + reparto.TotalB);
-                        hoja_trabajo.Cells[2 + i, 1] = reparto.Nombre;
-                        hoja_trabajo.Cells[2 + i, 1].Font.Bold = true;
-                        hoja_trabajo.Cells[2 + i, 1].Font.Size = 11;
-                        hoja_trabajo.Cells[2 + i, 2] = "Productos";
-                        hoja_trabajo.Cells[2 + i, 2].Font.Bold = true;
-                        hoja_trabajo.Cells[2 + i, 2].Font.Size = 11;
-                        hoja_trabajo.Cells[2 + i, 3] = "Entregar";
-                        hoja_trabajo.Cells[2 + i, 3].Font.Bold = true;
-                        hoja_trabajo.Cells[2 + i, 3].Font.Size = 11;
-                        hoja_trabajo.Cells[2 + i, 4] = "L";
-                        hoja_trabajo.Cells[2 + i, 5] = "A";
-                        hoja_trabajo.Cells[2 + i, 6] = "E";
-                        hoja_trabajo.Cells[2 + i, 7] = "D";
-                        hoja_trabajo.Cells[2 + i, 8] = "T";
-                        hoja_trabajo.Cells[2 + i, 9] = "AE";
-                        hoja_trabajo.Cells[2 + i, 4].Font.Bold = true;
-                        hoja_trabajo.Cells[2 + i, 5].Font.Bold = true;
-                        hoja_trabajo.Cells[2 + i, 6].Font.Bold = true;
-                        hoja_trabajo.Cells[2 + i, 7].Font.Bold = true;
-                        hoja_trabajo.Cells[2 + i, 8].Font.Bold = true;
-                        hoja_trabajo.Cells[2 + i, 9].Font.Bold = true;
-
                         foreach (Destino destino in reparto.Destinos)
                         {
-                            hoja_trabajo.Cells[3 + i, 1] = destino.Direccion;
-                            hoja_trabajo.Cells[3 + i, 2] = destino.Productos;
-                            if (destino.Entregar) hoja_trabajo.Cells[3 + i, 3] = "SI";
-                            else                  hoja_trabajo.Cells[3 + i, 3] = "NO";
-                            hoja_trabajo.Cells[3 + i, 4] = destino.L;
-                            hoja_trabajo.Cells[3 + i, 5] = destino.A;
-                            hoja_trabajo.Cells[3 + i, 6] = destino.E;
-                            hoja_trabajo.Cells[3 + i, 7] = destino.D;
-                            hoja_trabajo.Cells[3 + i, 8] = destino.T;
-                            hoja_trabajo.Cells[3 + i, 9] = destino.AE;
+                            //MessageBox.Show(reparto.Nombre + " - " + reparto.TT + " - " + reparto.TA + " - " + reparto.TE + " - " + reparto.TD + " - " + reparto.TAE + " - " + reparto.TL + " - " + reparto.TotalB);
+                            hoja_trabajo.Cells[2 + i, 1] = dia.Dia;
+                            hoja_trabajo.Cells[2 + i, 1].Font.Bold = true;
+                            hoja_trabajo.Cells[2 + i, 1].Font.Size = 11;
+                            hoja_trabajo.Cells[2 + i, 2] = reparto.Nombre;
+                            hoja_trabajo.Cells[2 + i, 2].Font.Bold = true;
+                            hoja_trabajo.Cells[2 + i, 2].Font.Size = 11;
+                            hoja_trabajo.Cells[2 + i, 3] = destino.Direccion;
+                            hoja_trabajo.Cells[2 + i, 4] = destino.Productos;
+                            if (destino.Entregar) hoja_trabajo.Cells[2 + i, 5] = "SI";
+                            else                  hoja_trabajo.Cells[2 + i, 5] = "NO";
+                            hoja_trabajo.Cells[2 + i, 6] = destino.L;
+                            hoja_trabajo.Cells[2 + i, 7] = destino.A;
+                            hoja_trabajo.Cells[2 + i, 8] = destino.E;
+                            hoja_trabajo.Cells[2 + i, 9] = destino.D;
+                            hoja_trabajo.Cells[2 + i, 10] = destino.T;
+                            hoja_trabajo.Cells[2 + i, 11] = destino.AE;
                             i++;
                         }
-                        i++;
                     }
-                    i++;
                 }
-
-                excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[i + 3, 9]];
+                excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[i + 1, 11]];
                 return GenerateFile("/Copias de seguridad/repartos.xlsx");
             }
             catch (Exception e)
@@ -334,7 +349,6 @@ namespace linway_app
                 hoja_trabajo.Cells[reparto.Destinos.Count + 4, 6].Font.Bold = true;
                 hoja_trabajo.Cells[reparto.Destinos.Count + 4, 7].Font.Bold = true;
                 hoja_trabajo.Cells[reparto.Destinos.Count + 4, 8].Font.Bold = true;
-
 
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[reparto.Destinos.Count + 4, 8]];
                 return GenerateFile("/Repartos/reparto-" + dia + "-" + reparto.Nombre + ".xlsx");

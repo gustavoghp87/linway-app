@@ -2,11 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
-//using System.ComponentModel;
-//using System.Data;
 using System.Drawing;
-//using System.Linq;
-//using System.Text;
 using System.Windows.Forms;
 
 
@@ -16,6 +12,7 @@ namespace linway_app
     {
         const string direccionHDR = @"Base de datos\HojaDeReparto.bin";
         const string direccionClientes = @"Base de datos\ClientesLinway.bin";
+        const string copiaDeSeguridad = "repartos.xlsx";
         List<Reparto> listaRepartos = new List<Reparto>();
         List<Reparto> listaRepartos2 = new List<Reparto>();
         List<Destino> listaDestinos = new List<Destino>();
@@ -83,6 +80,71 @@ namespace linway_app
             catch (Exception e)
             {
                 MessageBox.Show("Error al guardar las hojas de reparto:" + e.Message);
+            }
+        }
+
+        private void CrearCopiaDeSeguridad_Click(object sender, EventArgs e)
+        {
+            //checkBox1.Checked = true;
+            CargarHDR();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel repartos.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Repartos a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                bool success = new Exportar().ExportarAExcel(diasDeReparto);
+                if (success)
+                {
+                    bCopiaSeguridad.ForeColor = Color.Green;
+                    bCopiaSeguridad.Enabled = false;
+                    bCopiaSeguridad.Text = "Creacion exitosa";
+                }
+                else
+                {
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
+                }
+            }
+        }
+
+        private void ExportarButton_Click(object sender, EventArgs e)
+        {
+            CargarHDR();
+            if (comboBox1.Text == "" || comboBox2.Text == "") return;
+            DialogResult dialogResult = MessageBox.Show("Exportar " + comboBox1.Text + " - " + comboBox2.Text + " ¿Confirmar?", "Exportar Reparto a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                Reparto reparto = diasDeReparto.Find(x => x.Dia == comboBox1.Text).Reparto.Find(x => x.Nombre == comboBox2.Text);
+                string litros = label22.Text;
+                string bolsas = label21.Text;
+
+                bool success = new Exportar().ExportarAExcel(reparto, comboBox1.Text, litros, bolsas);
+                if (success)
+                {
+                    MessageBox.Show("Terminado");
+                }
+                else
+                {
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
+                }
+            }
+        }
+
+        private void ImportarButton_Click(object sender, EventArgs e)
+        {
+            CargarHDR();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de hojas de reparto por el contenido del Excel repartos.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Repartos desde Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                diasDeReparto.Clear();
+                diasDeReparto = new Importar(copiaDeSeguridad).ImportarHojaDeRepartos();
+                if (diasDeReparto != null)
+                {
+                    GuardarHDR();
+                }
+                else
+                {
+                    MessageBox.Show("Falló Repartos; cancelado");
+                }
+                CargarHDR();
+                MessageBox.Show("Terminado");
             }
         }
 
@@ -194,7 +256,7 @@ namespace linway_app
             if ((textBox1.Text != ""))
             {
                 Reparto nReparto = new Reparto(textBox1.Text);
-                diasDeReparto.Find(x => x.Dia.Contains(comboBox3.Text)).agregarReparto(nReparto);
+                diasDeReparto.Find(x => x.Dia.Contains(comboBox3.Text)).AgregarReparto(nReparto);
             }
             GuardarHDR();
             LimpiarPantalla();
@@ -276,6 +338,7 @@ namespace linway_app
                 ReCargarHDR(comboBox4.Text, comboBox5.Text);
                 comboBox1.SelectedIndex = comboBox4.SelectedIndex;
                 comboBox2.SelectedIndex = comboBox5.SelectedIndex;
+                if (label8.Text.Contains("–")) label8.Text = label8.Text.Replace("–", "-");
                 Destino nDestino = new Destino(label8.Text.Substring(0, label8.Text.IndexOf('-')));
                 listaRepartos.Find(x => x.Nombre.Contains(comboBox5.Text)).AgregarDestino(nDestino);
                 GuardarHDR();
@@ -516,56 +579,6 @@ namespace linway_app
                 dataGridView1.DataSource = listaDestinos.ToArray();
 
             }
-        }
-
-        private void CrearCopiaDeSeguridad_Click(object sender, EventArgs e)  // ya sabes qué hacer
-        {
-            //checkBox1.Checked = true;
-
-            CargarHDR();
-            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel repartos.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Repartos a Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                bool success = new Exportar().ExportarAExcel(diasDeReparto);
-                if (success)
-                {
-                    bCopiaSeguridad.ForeColor = Color.Green;
-                    bCopiaSeguridad.Enabled = false;
-                    bCopiaSeguridad.Text = "Creacion exitosa";
-                }
-                else
-                {
-                    MessageBox.Show("Hubo un error al guardar los cambios.");
-                }
-            }
-        }
-
-        private void ExportarButton_Click(object sender, EventArgs e)
-        {
-            CargarHDR();
-            if (comboBox1.Text == "" || comboBox2.Text == "") return;
-            DialogResult dialogResult = MessageBox.Show("Exportar " + comboBox1.Text + " - " + comboBox2.Text + " ¿Confirmar?", "Exportar Reparto a Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                Reparto reparto = diasDeReparto.Find(x => x.Dia == comboBox1.Text).Reparto.Find(x => x.Nombre == comboBox2.Text);
-                string litros = label22.Text;
-                string bolsas = label21.Text;
-
-                bool success = new Exportar().ExportarAExcel(reparto, comboBox1.Text, litros, bolsas);
-                if (success)
-                {
-                    MessageBox.Show("Terminado");
-                }
-                else
-                {
-                    MessageBox.Show("Hubo un error al guardar los cambios.");
-                }
-            }
-        }
-
-        private void ImportarButton_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("En mantenimiento...");
         }
 
 
