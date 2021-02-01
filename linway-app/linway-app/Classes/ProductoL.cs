@@ -85,7 +85,7 @@ namespace linway_app
 
         public override void darTipoDeProducto(Enum unEnum)
         {
-            tipoDeLiquido = (TipoLiquido)unEnum;
+            tipoDeLiquido = (TipoLiquido) unEnum;
         }
 
         public override Enum obtenerTipoDeProducto()

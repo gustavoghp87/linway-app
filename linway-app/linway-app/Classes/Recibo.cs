@@ -34,5 +34,20 @@ namespace linway_app
             ImporteTotal = subTo;
             Impresa = false;
         }
+
+        public Recibo(int cod, string clie, List<DetalleRecibo> listaD, string fecha, bool impresa)  // para importar
+        {
+            Codigo = cod;
+            Fecha = fecha;
+            Cliente = clie;
+            float subTo = 0;
+            foreach (DetalleRecibo dActual in listaD)
+            {
+                subTo += dActual.Importe;
+            }
+            listaDetalles.AddRange(listaD);
+            ImporteTotal = subTo;
+            Impresa = impresa;
+        }
     }
 }

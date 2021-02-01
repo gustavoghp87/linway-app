@@ -20,41 +20,41 @@ namespace linway_app
 
         public Producto()
         {
-            this.Nombre = "producto";
-            this.Precio = 0;
+            Nombre = "producto";
+            Precio = 0;
         }
 
         public Producto(int cod, string nom, float pre)
         {
-            this.Codigo = cod;
-            this.Nombre = nom;
-            this.Precio = pre;
+            Codigo = cod;
+            Nombre = nom;
+            Precio = pre;
         }
 
         void CargarDatos(string nom, float pre)
         {
-            this.Nombre = nom;
-            this.Precio = pre;
+            Nombre = nom;
+            Precio = pre;
         }
 
         void ModNombre(string nom)
         {
-            this.Nombre = nom;
+            Nombre = nom;
         }
 
         void ModPrecio(float costo)
         {
-            this.Precio = costo;
+            Precio = costo;
         }
 
         string DarNombre()
         {
-            return this.Nombre;
+            return Nombre;
         }
 
         float DarPrecio()
         {
-            return this.Precio;
+            return Precio;
         }
     }
 }

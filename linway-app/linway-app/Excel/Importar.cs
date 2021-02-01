@@ -125,7 +125,7 @@ namespace linway_app
                         j++;
                     }
                     float total = float.Parse(dt.Rows[i].ItemArray[4].ToString());
-                    bool impresa = dt.Rows[i].ItemArray[5].ToString() == "SI";
+                    bool impresa = dt.Rows[i].ItemArray[5].ToString().ToLower() == "si" || dt.Rows[i].ItemArray[5].ToString().ToLower() == "sí";
                     //MessageBox.Show(Codigo + " " + fecha + " " + clie + " " + dt.Rows[i].ItemArray[4].ToString() + " - " + dt.Rows[i].ItemArray[5].ToString());
                     try
                     {
@@ -212,7 +212,7 @@ namespace linway_app
                     string Direccion = dt.Rows[i].ItemArray[2].ToString();
                     if (Direccion.Contains("–")) Direccion = Direccion.Replace("–", "-");
                     string Productos = dt.Rows[i].ItemArray[3].ToString();
-                    bool Entregar = dt.Rows[i].ItemArray[4].ToString() == "SI";
+                    bool Entregar = dt.Rows[i].ItemArray[4].ToString().ToLower() == "si" || dt.Rows[i].ItemArray[4].ToString().ToLower() == "sí";
                     int L = int.Parse(dt.Rows[i].ItemArray[5].ToString());
                     int A = int.Parse(dt.Rows[i].ItemArray[6].ToString());
                     int E = int.Parse(dt.Rows[i].ItemArray[7].ToString());
@@ -276,42 +276,23 @@ namespace linway_app
                     int Numero = Int32.Parse(dt.Rows[i].ItemArray[0].ToString());
                     string Fecha = dt.Rows[i].ItemArray[1].ToString();
                     string Direccion = dt.Rows[i].ItemArray[2].ToString();
-                    float Total = float.Parse(dt.Rows[i].ItemArray[3].ToString());
-                    bool Impresa = dt.Rows[i].ItemArray[4].ToString() == "SI";
+                    //float Total = float.Parse(dt.Rows[i].ItemArray[3].ToString());
+                    bool Impresa = dt.Rows[i].ItemArray[4].ToString().ToLower() == "si" || dt.Rows[i].ItemArray[4].ToString().ToLower() == "sí";
 
-
+                    List<DetalleRecibo> listaDetalles = new List<DetalleRecibo>();
                     string detalles = dt.Rows[i].ItemArray[5].ToString();
-
                     string[] pares = detalles.Split('|');
-
-                    int j = 0;
-                    foreach (string uno in pares)
+                    foreach (string par in pares)
                     {
-                        string[] productos = uno.Split(':');
-
-                        string detalle = productos[0].Substring(0, productos[0].IndexOf(' por'));
-
-                        foreach (string valor in productos)
-                        if (j%2 == 0)
-                        {
-                            MessageBox.Show("Detalle: " + valor);
-                        }
-                        else
-                        {
-                            MessageBox.Show("... importe: " + valor);
-                        }
-                        j++;
+                        if (par == "" || par == " " || par == "  ") continue;
+                        string[] productos = par.Split(':');
+                        string detalle = productos[0];
+                        float valor = float.Parse(productos[1]);
+                        listaDetalles.Add(new DetalleRecibo(detalle, valor));
                     }
-
-
-
-                    //List<DetalleRecibo> detalleRecibo = new DetalleRecibo(string det, float imp);
-
-                    //new Recibo(Numero, Direccion, detalleRecibo);
-
+                    listaRecibos.Add(new Recibo(Numero, Direccion, listaDetalles, Fecha, Impresa));
                 }
-                //return listaRecibos;
-                return null;
+                return listaRecibos;
             }
             catch (Exception exc)
             {

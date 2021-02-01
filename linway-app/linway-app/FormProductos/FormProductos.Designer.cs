@@ -151,7 +151,7 @@
             // 
             // comboBox1
             // 
-            this.comboBox1.Enabled = false;
+            this.comboBox1.Enabled = true;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(157, 76);
             this.comboBox1.Name = "comboBox1";
@@ -163,7 +163,7 @@
             // radioButton4
             // 
             this.radioButton4.AutoSize = true;
-            this.radioButton4.Enabled = false;
+            this.radioButton4.Enabled = true;
             this.radioButton4.Location = new System.Drawing.Point(96, 104);
             this.radioButton4.Name = "radioButton4";
             this.radioButton4.Size = new System.Drawing.Size(48, 19);
@@ -176,7 +176,7 @@
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Enabled = false;
+            this.radioButton3.Enabled = true;
             this.radioButton3.Location = new System.Drawing.Point(11, 105);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(78, 19);
@@ -189,7 +189,7 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Enabled = false;
+            this.radioButton2.Enabled = true;
             this.radioButton2.Location = new System.Drawing.Point(96, 80);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(55, 19);
@@ -202,7 +202,7 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Enabled = false;
+            this.radioButton1.Enabled = true;
             this.radioButton1.Location = new System.Drawing.Point(12, 81);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(66, 19);
@@ -402,7 +402,7 @@
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(12, 182);
-            this.button1.Name = "ImportarBtn";
+            this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(122, 37);
             this.button1.TabIndex = 46;
             this.button1.Text = "Importar";
@@ -413,7 +413,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(832, 222);
+            this.ClientSize = new System.Drawing.Size(832, 227);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.bExit);
             this.Controls.Add(this.bCopiaSeguridad);
