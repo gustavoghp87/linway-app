@@ -13,10 +13,32 @@ namespace linway_app
         readonly Microsoft.Office.Interop.Excel.Worksheet hoja_trabajo;
         Microsoft.Office.Interop.Excel.Range excelCellrange;
 
-        public Exportar() {
+        public Exportar()
+        {
             aplicacion = new Microsoft.Office.Interop.Excel.Application();
             libros_trabajo = aplicacion.Workbooks.Add();
             hoja_trabajo = (Microsoft.Office.Interop.Excel.Worksheet)libros_trabajo.Worksheets.get_Item(1);
+        }
+
+        private bool GenerateFile(string path)
+        {
+            try
+            {
+                excelCellrange.EntireColumn.AutoFit();
+                Microsoft.Office.Interop.Excel.Borders border = excelCellrange.Borders;
+                border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
+                border.Weight = 2d;
+                aplicacion.DisplayAlerts = false;
+                libros_trabajo.SaveAs(Directory.GetCurrentDirectory().ToString() + path, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal);
+                libros_trabajo.Close(true);
+                aplicacion.Quit();
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error exportando (2): " + e.Message);
+                return false;
+            }
         }
 
         public bool ExportarAExcel(List<Cliente> listaClientes)
@@ -194,7 +216,7 @@ namespace linway_app
                 //hoja_trabajo.Cells[1, 11].Font.Bold = true;
                 //hoja_trabajo.Cells[1, 11].Font.Underline = true;
                 //hoja_trabajo.Cells[1, 11].Font.Size = 11;
-                
+
                 hoja_trabajo.Cells[1, 1] = "DIA";
                 hoja_trabajo.Cells[1, 1].Font.Bold = true;
                 hoja_trabajo.Cells[1, 1].Font.Size = 11;
@@ -256,7 +278,7 @@ namespace linway_app
                             hoja_trabajo.Cells[2 + i, 3] = destino.Direccion;
                             hoja_trabajo.Cells[2 + i, 4] = destino.Productos;
                             if (destino.Entregar) hoja_trabajo.Cells[2 + i, 5] = "SI";
-                            else                  hoja_trabajo.Cells[2 + i, 5] = "NO";
+                            else hoja_trabajo.Cells[2 + i, 5] = "NO";
                             hoja_trabajo.Cells[2 + i, 6] = destino.L;
                             hoja_trabajo.Cells[2 + i, 7] = destino.A;
                             hoja_trabajo.Cells[2 + i, 8] = destino.E;
@@ -360,47 +382,55 @@ namespace linway_app
             }
         }
 
-        private bool GenerateFile(string path)
+        public bool ExportarAExcel(List<Recibo> listaRecibos)
         {
             try
             {
-                excelCellrange.EntireColumn.AutoFit();
-                Microsoft.Office.Interop.Excel.Borders border = excelCellrange.Borders;
-                border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-                border.Weight = 2d;
-                aplicacion.DisplayAlerts = false;
-                libros_trabajo.SaveAs(Directory.GetCurrentDirectory().ToString() + path,
-                    Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal);
-                libros_trabajo.Close(true);
-                //MessageBox.Show("Exportación a Excel terminada.");
-                aplicacion.Quit();
-                return true;
+                hoja_trabajo.Cells[1, 1] = "Numero";
+                hoja_trabajo.Cells[1, 1].Font.Bold = true;
+                hoja_trabajo.Cells[1, 2] = "Fecha";
+                hoja_trabajo.Cells[1, 2].Font.Bold = true;
+                hoja_trabajo.Cells[1, 3] = "Direccion";
+                hoja_trabajo.Cells[1, 3].Font.Bold = true;
+                hoja_trabajo.Cells[1, 4] = "Total";
+                hoja_trabajo.Cells[1, 4].Font.Bold = true;
+                hoja_trabajo.Cells[1, 5] = "Impresa";
+                hoja_trabajo.Cells[1, 5].Font.Bold = true;
+                hoja_trabajo.Cells[1, 6] = "Detalles";
+                hoja_trabajo.Cells[1, 6].Font.Bold = true;
+                int i = 0;
+                while (i < listaRecibos.Count)
+                {
+                    hoja_trabajo.Cells[i + 2, 1] = listaRecibos[i].Codigo;
+                    hoja_trabajo.Cells[i + 2, 2] = listaRecibos[i].Fecha;
+                    hoja_trabajo.Cells[i + 2, 3] = listaRecibos[i].Cliente;
+                    hoja_trabajo.Cells[i + 2, 4] = listaRecibos[i].ImporteTotal;
+                    if (listaRecibos[i].Impresa == true) hoja_trabajo.Cells[i + 2, 5] = "SI";
+                    else                                 hoja_trabajo.Cells[i + 2, 5] = "NO";
+
+                    string detalles = "";
+                    try
+                    {
+                        foreach (DetalleRecibo detalle in listaRecibos[i].listaDetalles)
+                        {
+                            if (detalle != null) detalles += detalle.Detalle + " por: " + detalle.Importe.ToString() + " | ";
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                    }
+                    hoja_trabajo.Cells[i + 2, 6] = detalles;
+                    i++;
+                }
+                excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[listaRecibos.Count + 1, 5]];
+                return GenerateFile("/Copias de seguridad/recibos.xlsx");
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error exportando (2): " + e.Message);
+                MessageBox.Show("Error exportando (1): " + e.Message);
                 return false;
             }
         }
     }
 }
-
-
-
-
-
-//        for (int i = 0; i < grd.Rows.Count; i++)
-//        {
-//            for (int j = 0; j < grd.Columns.Count; j++)
-//            {
-//                hoja_trabajo.Cells[i + 3, j + 1] = grd.Rows[i].Cells[j].Value.ToString();
-//            }
-//        }
-
-//        for (int i = 0; i < dt.Rows.Count; i++)
-//        {
-//            for (int j = 0; j < dt.Columns.Count; j++)
-//            {
-//                hoja_trabajo.Cells[i + 2, j + 1] = dt.Rows[i].ItemArray[j].ToString();
-//            }
-//        }

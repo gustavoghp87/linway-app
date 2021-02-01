@@ -33,9 +33,9 @@ namespace linway_app
         {
             if (File.Exists(direccionClientes))
             {
-                listaClientes.Clear();
                 try
                 {
+                    listaClientes.Clear();
                     Stream archivo = File.OpenRead(direccionClientes);
                     BinaryFormatter traductor = new BinaryFormatter();
                     listaClientes = (List<Cliente>) traductor.Deserialize(archivo);
@@ -101,11 +101,11 @@ namespace linway_app
             DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de clientes por el contenido del Excel clientes.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Clientes desde Excel", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                listaClientes.Clear();
                 listaClientes = new Importar(copiaDeSeguridad).ImportarClientes();
                 if (listaClientes != null)
                 {
                     GuardarClientes();
+                    MessageBox.Show("Terminado");
                 }
                 else
                 {

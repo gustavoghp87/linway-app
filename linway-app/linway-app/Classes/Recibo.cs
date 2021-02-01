@@ -13,12 +13,12 @@ namespace linway_app
     {
         [DisplayName("N°:")]
         public int Codigo { get; set; }
-        public String Fecha { get; set; }
+        public string Fecha { get; set; }
         public string Cliente { get; set; }
         [DisplayName("Total")]
         public float ImporteTotal { get; set; }
         public bool Impresa { get; set; }
-        public List<DetalleRecibo> detalle = new List<DetalleRecibo>();
+        public List<DetalleRecibo> listaDetalles = new List<DetalleRecibo>();
 
         public Recibo(int cod, string clie, List<DetalleRecibo> listaD)
         {
@@ -30,7 +30,7 @@ namespace linway_app
             {
                 subTo += dActual.Importe;
             }
-            detalle.AddRange(listaD);
+            listaDetalles.AddRange(listaD);
             ImporteTotal = subTo;
             Impresa = false;
         }

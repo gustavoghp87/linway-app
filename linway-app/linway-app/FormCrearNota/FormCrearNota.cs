@@ -244,7 +244,7 @@ namespace linway_app
                 CargarNotas();
                 NotaDeEnvio nuevaNota = new NotaDeEnvio(codigoParaNotaEnvio, label36.Text, listaPV, false);
                 if (label36.Text.Contains("–")) label36.Text = label36.Text.Replace("–", "-");
-                MessageBox.Show(codigoParaNotaEnvio + label36.Text + listaPV[0].Descripcion);
+                // MessageBox.Show(codigoParaNotaEnvio + label36.Text + listaPV[0].Descripcion);
                 //Agregar a ventas
 
                 if (checkBox4.Checked)

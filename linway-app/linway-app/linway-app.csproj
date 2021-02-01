@@ -258,7 +258,7 @@
   <ItemGroup>
     <Compile Include="Classes\Cliente.cs" />
     <Compile Include="Classes\Destino.cs" />
-    <Compile Include="Classes\DetalleEnvio.cs" />
+    <Compile Include="Classes\DetalleRecibo.cs" />
     <Compile Include="Classes\DiasReparto.cs" />
     <Compile Include="Classes\NotaDeEnvio.cs" />
     <Compile Include="Classes\Producto.cs" />

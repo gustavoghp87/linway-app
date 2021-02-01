@@ -15,12 +15,12 @@ namespace linway_app
     public partial class FormRecibos : Form
     {
         const string direccionRecibos = @"Base de datos\Recibos.bin";
-        const string copiaSeguridad = @"Copias de seguridad\Recibos.bin";
+        const string copiaDeSeguridad = "recibos.xlsx";
         int primerRecibo = 0;
         int ultimoRecibo;
+        List<Recibo> listaRecibos = new List<Recibo>();
         readonly List<Cliente> listaClientes = new List<Cliente>();
         readonly List<DetalleRecibo> listaDetalle = new List<DetalleRecibo>();
-        List<Recibo> listaRecibos = new List<Recibo>();
 
         public FormRecibos()
         {
@@ -85,6 +85,47 @@ namespace linway_app
             catch (Exception e)
             {
                 MessageBox.Show("Error al guardar los recibos: " + e.Message);
+            }
+        }
+
+        private void bCopiaSeguridad_Click(object sender, EventArgs e)
+        {
+            CargarRecibos();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel recibos.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Recibos a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                bool success = new Exportar().ExportarAExcel(listaRecibos);
+                if (success)
+                {
+                    bCopiaSeguridad.ForeColor = Color.Green;
+                    bCopiaSeguridad.Enabled = false;
+                    bCopiaSeguridad.Text = "Creacion exitosa";
+                }
+                else
+                {
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
+                }
+            }
+        }
+
+        private void Importar_Click(object sender, EventArgs e)
+        {
+            listaRecibos.Clear();
+            CargarRecibos();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de recibos por el contenido del Excel recibos.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Recibos desde Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                listaRecibos = new Importar(copiaDeSeguridad).ImportarRecibos();
+                if (listaRecibos != null)
+                {
+                    GuardarRecibos();
+                    MessageBox.Show("Terminado");
+                }
+                else
+                {
+                    MessageBox.Show("Falló Recibos; cancelado");
+                }
+                CargarRecibos();
             }
         }
 
@@ -627,69 +668,6 @@ namespace linway_app
         private void bExportar_Click(object sender, EventArgs e)
         {
             // anulado
-        }
-
-        //Copia de seguridad
-        private void bCopiaSeguridad_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("En mantenimiento...");
-            return;
-            try               // llevar a Importar y eliminar diálogo
-            {
-                SaveFileDialog fichero = new SaveFileDialog();
-                fichero.Filter = "Excel (*.xls)|*.xls";
-                if (fichero.ShowDialog() == DialogResult.OK)
-                {
-                    Microsoft.Office.Interop.Excel.Application aplicacion;
-                    Microsoft.Office.Interop.Excel.Workbook libros_trabajo;
-                    Microsoft.Office.Interop.Excel.Worksheet hoja_trabajo;
-                    Microsoft.Office.Interop.Excel.Range excelCellrange;
-                    aplicacion = new Microsoft.Office.Interop.Excel.Application();
-                    libros_trabajo = aplicacion.Workbooks.Add();
-                    hoja_trabajo = (Microsoft.Office.Interop.Excel.Worksheet) libros_trabajo.Worksheets.get_Item(1);
-
-                    DataGridView grd = dataGridView1;
-
-                    for (int i = 0; i < grd.Rows.Count; i++)
-                    {
-                        for (int j = 0; j < grd.Columns.Count; j++)
-                        {
-                            hoja_trabajo.Cells[i + 3, j + 1] = grd.Rows[i].Cells[j].Value.ToString();
-                        }
-                    }
-
-                    hoja_trabajo.Cells[2, 1] = "Número";
-                    hoja_trabajo.Cells[2, 2] = "Fecha";
-                    hoja_trabajo.Cells[2, 3] = "Direccion";
-                    hoja_trabajo.Cells[2, 4] = "Total";
-                    hoja_trabajo.Cells[2, 5] = "Impresa";
-
-                    excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[2, 1], hoja_trabajo.Cells[grd.Rows.Count + 2, grd.Columns.Count]];
-                    excelCellrange.Font.Bold = true;
-                    excelCellrange.EntireColumn.AutoFit();
-                    Microsoft.Office.Interop.Excel.Borders border = excelCellrange.Borders;
-                    border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-                    border.Weight = 2d;
-
-                    try
-                    {
-                        libros_trabajo.SaveAs(fichero.FileName, Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookNormal);
-                        libros_trabajo.Close(true);
-                        aplicacion.Quit();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error al exportar a Excel: " + ex.Message);
-                    }
-                }
-            }
-            catch (Exception f)
-            {
-                MessageBox.Show("Error al hacer copia de seguridad de los recibos: " + f.Message);
-            }
-            bCopiaSeguridad.ForeColor = Color.Green;
-            bCopiaSeguridad.Enabled = false;
-            bCopiaSeguridad.Text = "Creacion exitosa";
         }
     }
 }

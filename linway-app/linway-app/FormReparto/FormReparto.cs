@@ -129,22 +129,22 @@ namespace linway_app
 
         private void ImportarButton_Click(object sender, EventArgs e)
         {
+            diasDeReparto.Clear();
             CargarHDR();
             DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de hojas de reparto por el contenido del Excel repartos.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Repartos desde Excel", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                diasDeReparto.Clear();
                 diasDeReparto = new Importar(copiaDeSeguridad).ImportarHojaDeRepartos();
                 if (diasDeReparto != null)
                 {
                     GuardarHDR();
+                    MessageBox.Show("Terminado");
                 }
                 else
                 {
                     MessageBox.Show("Falló Repartos; cancelado");
                 }
                 CargarHDR();
-                MessageBox.Show("Terminado");
             }
         }
 

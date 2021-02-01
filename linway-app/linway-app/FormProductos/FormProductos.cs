@@ -72,6 +72,51 @@ namespace linway_app
             CargarProductos();
         }
 
+        private void CrearCopiaSeguridad_Click(object sender, EventArgs e)
+        {
+            CargarProductos();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel productos.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Productos a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                bool success = new Exportar().ExportarAExcel(listaProductos);
+                if (success)
+                {
+                    bCopiaSeguridad.ForeColor = Color.Green;
+                    bCopiaSeguridad.Enabled = false;
+                    bCopiaSeguridad.Text = "Creacion exitosa";
+                }
+                else
+                {
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
+                }
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                return;
+            }
+        }
+
+        private void ImportarBtn(object sender, EventArgs e)
+        {
+            listaProductos.Clear();
+            CargarProductos();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de productos por el contenido del Excel productos.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Productos desde Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                listaProductos = new Importar(copiaDeSeguridad).ImportarProductos();
+                if (listaProductos != null)
+                {
+                    GuardarProductos();
+                    MessageBox.Show("Terminado");
+                }
+                else
+                {
+                    MessageBox.Show("Falló Productos; cancelado");
+                }
+                CargarProductos();
+            }
+        }
+
         public void AgregarProductos()
         {
             gbModificar.Enabled = false;
@@ -264,58 +309,6 @@ namespace linway_app
             else
             {
                 MessageBox.Show("Tilde si esta seguro para borrar el producto");
-            }
-        }
-
-        //Copia Seguridad
-        private void CrearCopiaSeguridad_Click(object sender, EventArgs e)
-        {
-            CargarProductos();
-            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel productos.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Productos a Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                bool success = new Exportar().ExportarAExcel(listaProductos);
-                if (success)
-                {
-                    bCopiaSeguridad.ForeColor = Color.Green;
-                    bCopiaSeguridad.Enabled = false;
-                    bCopiaSeguridad.Text = "Creacion exitosa";
-                }
-                else
-                {
-                    MessageBox.Show("Hubo un error al guardar los cambios.");
-                }
-            }
-            else if (dialogResult == DialogResult.No)
-            {
-                return;
-            }
-        }
-
-        private void ImportarBtn(object sender, EventArgs e)
-        {
-            CargarProductos();
-            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de productos por el contenido del Excel productos.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Productos desde Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                listaProductos.Clear();
-                try
-                {
-                    listaProductos = new Importar(copiaDeSeguridad).ImportarProductos();
-                    GuardarProductos();
-                    CargarProductos();
-                }
-                catch
-                {
-                    listaProductos.Clear();
-                    CargarProductos();
-                    throw;
-                }
-                MessageBox.Show("Terminado");
-            }
-            else
-            {
-                return;
             }
         }
 

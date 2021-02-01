@@ -91,6 +91,47 @@ namespace linway_app
             }
         }
 
+        private void bCopiaSeguridad_Click(object sender, EventArgs e)         // quitar diálogo, llevar a Exportar
+        {
+            CargarNotas();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel notas.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Notas de Envío a Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                bool success = new Exportar().ExportarAExcel(notasEnvio);
+                if (success)
+                {
+                    bCopiaSeguridad.ForeColor = Color.Green;
+                    bCopiaSeguridad.Enabled = false;
+                    bCopiaSeguridad.Text = "Creacion exitosa";
+                }
+                else
+                {
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
+                }
+            }
+        }
+
+        public void ImportarNotasDeEnvio_Click(object sender, EventArgs e)
+        {
+            notasEnvio.Clear();
+            CargarNotas();
+            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de notas de envío por el contenido del Excel notas.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Notas de Envío desde Excel", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                notasEnvio = new Importar(copiaDeSeguridad).ImportarNotas();
+                if (notasEnvio != null)
+                {
+                    GuardarNotas();
+                    MessageBox.Show("Terminado");
+                }
+                else
+                {
+                    MessageBox.Show("Falló Notas; cancelado");
+                }
+                CargarNotas();
+            }
+        }
+
         public void RecibirProductos(List<Producto> productos)
         {
             listaProductos.AddRange(productos);
@@ -697,51 +738,6 @@ namespace linway_app
         private void bExportar_Click(object sender, EventArgs e)
         {
             // Anulado
-        }
-
-        private void bCopiaSeguridad_Click(object sender, EventArgs e)         // quitar diálogo, llevar a Exportar
-        {
-            CargarNotas();
-            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel notas.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Notas de Envío a Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                bool success = new Exportar().ExportarAExcel(notasEnvio);
-                if (success)
-                {
-                    bCopiaSeguridad.ForeColor = Color.Green;
-                    bCopiaSeguridad.Enabled = false;
-                    bCopiaSeguridad.Text = "Creacion exitosa";
-                }
-                else
-                {
-                    MessageBox.Show("Hubo un error al guardar los cambios.");
-                }
-            }
-        }
-
-        public void ImportarNotasDeEnvio_Click(object sender, EventArgs e)
-        {
-            CargarNotas();
-            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de notas de envío por el contenido del Excel notas.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Notas de Envío desde Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                notasEnvio.Clear();
-                try
-                {
-                    notasEnvio = new Importar(copiaDeSeguridad).ImportarNotas();
-                    foreach (NotaDeEnvio nde in notasEnvio)
-                    {
-                        MessageBox.Show(nde.Cliente + " " + nde.Codigo + " " + nde.Detalle + " " + nde.Fecha + " " + nde.ImporteTotal + " " + nde.Impresa);
-                    }
-                    GuardarNotas();
-                    CargarNotas();
-                }
-                catch
-                {
-
-                }
-                MessageBox.Show("Terminado");
-            }
         }
     }
 }

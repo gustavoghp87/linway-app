@@ -13,6 +13,8 @@ namespace linway_app
     {
         const string direccionVentas = @"Base de datos\VentaProductos.bin";
         const string direccionRegistro = @"Base de datos\RegistroVentas.bin";
+        const string copiaDeSeguridad = "ventas.xlsx";
+        const string copiaDeSeguridad2 = "registroVentas.xlsx";
         List<Venta> listaVentas = new List<Venta>();
         List<RegistroVenta> listaRegistro = new List<RegistroVenta>();
         readonly List<Cliente> listaClientes = new List<Cliente>();
@@ -114,7 +116,6 @@ namespace linway_app
             }
         }
 
-        //crear copia seguridad
         private void bCopiaSeguridad_Click(object sender, EventArgs e)
         {
             CargarVentas();
@@ -147,8 +148,6 @@ namespace linway_app
             }
         }
 
-        const string copiaDeSeguridad = "ventas.xlsx";
-        const string copiaDeSeguridad2 = "registroVentas.xlsx";
         private void ImportarBtn_Click(object sender, EventArgs e)
         {
             CargarVentas();

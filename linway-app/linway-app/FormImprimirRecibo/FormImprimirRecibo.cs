@@ -81,7 +81,7 @@ namespace linway_app
             lLocalidad.Text = elRecibo.Cliente.Substring(separador + 1);
 
             lTotal.Text = "$ " + elRecibo.ImporteTotal.ToString(".00");
-            foreach (DetalleRecibo drActual in elRecibo.detalle)
+            foreach (DetalleRecibo drActual in elRecibo.listaDetalles)
             {
                 label1.Text = label1.Text + drActual.Detalle + Environment.NewLine;
                 label2.Text = label2.Text + drActual.Importe.ToString(".00") + Environment.NewLine;

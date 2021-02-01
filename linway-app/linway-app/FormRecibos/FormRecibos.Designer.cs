@@ -82,7 +82,7 @@ namespace linway_app
             this.bExportar = new System.Windows.Forms.Button();
             this.bCopiaSeguridad = new System.Windows.Forms.Button();
             this.lCantRecibos = new System.Windows.Forms.Label();
-            this.button10 = new System.Windows.Forms.Button();
+            this.Importar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -674,7 +674,7 @@ namespace linway_app
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button9.Location = new System.Drawing.Point(12, 355);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(156, 37);
+            this.button9.Size = new System.Drawing.Size(99, 37);
             this.button9.TabIndex = 8;
             this.button9.Text = "Actualizar";
             this.button9.UseVisualStyleBackColor = true;
@@ -695,9 +695,9 @@ namespace linway_app
             // bCopiaSeguridad
             // 
             this.bCopiaSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bCopiaSeguridad.Location = new System.Drawing.Point(174, 355);
+            this.bCopiaSeguridad.Location = new System.Drawing.Point(135, 355);
             this.bCopiaSeguridad.Name = "bCopiaSeguridad";
-            this.bCopiaSeguridad.Size = new System.Drawing.Size(172, 37);
+            this.bCopiaSeguridad.Size = new System.Drawing.Size(100, 37);
             this.bCopiaSeguridad.TabIndex = 11;
             this.bCopiaSeguridad.Text = "Crear copia de seguridad";
             this.bCopiaSeguridad.UseVisualStyleBackColor = true;
@@ -714,22 +714,23 @@ namespace linway_app
             this.lCantRecibos.TabIndex = 12;
             this.lCantRecibos.Text = "recibos.";
             // 
-            // button10
+            // Importar
             // 
-            this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button10.Location = new System.Drawing.Point(93, 355);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(75, 23);
-            this.button10.TabIndex = 13;
-            this.button10.Text = "Importar";
-            this.button10.UseVisualStyleBackColor = true;
+            this.Importar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Importar.Location = new System.Drawing.Point(245, 355);
+            this.Importar.Name = "Importar";
+            this.Importar.Size = new System.Drawing.Size(99, 37);
+            this.Importar.TabIndex = 13;
+            this.Importar.Text = "Importar";
+            this.Importar.UseVisualStyleBackColor = true;
+            this.Importar.Click += new System.EventHandler(this.Importar_Click);
             // 
             // FormRecibos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(812, 396);
-            this.Controls.Add(this.button10);
+            this.Controls.Add(this.Importar);
             this.Controls.Add(this.lCantRecibos);
             this.Controls.Add(this.bCopiaSeguridad);
             this.Controls.Add(this.bExportar);
@@ -821,6 +822,6 @@ namespace linway_app
         private System.Windows.Forms.Button bExportar;
         private System.Windows.Forms.Button bCopiaSeguridad;
         private System.Windows.Forms.Label lCantRecibos;
-        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button Importar;
     }
 }

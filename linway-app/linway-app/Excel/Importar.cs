@@ -44,6 +44,7 @@ namespace linway_app
                 List<Cliente> listaClientes = new List<Cliente>();
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
+                    if (dt.Rows[i].ItemArray[0].ToString() == "") continue;
                     int Numero = Int32.Parse(dt.Rows[i].ItemArray[0].ToString());
                     string Direccion = dt.Rows[i].ItemArray[1].ToString();
                     if (Direccion.Contains("–")) Direccion = Direccion.Replace("–", "-");
@@ -113,7 +114,7 @@ namespace linway_app
                     int cantidad = 0;
                     foreach (string producto in productos)
                     {
-                        if (j%2 == 0)
+                        if (j % 2 == 0)
                         {
                             cantidad = Int32.Parse(producto.Substring(0, producto.IndexOf('x')));
                         }
@@ -218,13 +219,9 @@ namespace linway_app
                     int D = int.Parse(dt.Rows[i].ItemArray[8].ToString());
                     int T = int.Parse(dt.Rows[i].ItemArray[9].ToString());
                     int AE = int.Parse(dt.Rows[i].ItemArray[10].ToString());
-
-
                     bool existeDia = false;
                     bool existeNombre = false;
-
                     Destino nuevoDestino = new Destino(Direccion, Productos, Entregar, L, A, E, D, T, AE);
-
                     foreach (DiasReparto dia in diasRepartos)
                     {
                         if (dia.Dia == Dia)
@@ -257,20 +254,8 @@ namespace linway_app
                         diaNuevo.AgregarReparto(reparto);
                         diasRepartos.Add(diaNuevo);
                     }
-
                     //MessageBox.Show(Dia + " - " + Nombre + " - " + Direccion + " - " + Productos + " - " + Entregar.ToString());
                 }
-
-                //foreach (DiasReparto dias in diasRepartos)
-                //{
-                //    foreach (Reparto reparto in dias.Reparto)
-                //    {
-                //        foreach (Destino destino in reparto.Destinos)
-                //        {
-                //            MessageBox.Show(dias.Dia + " - " + reparto.Nombre + " - " + destino.Productos);
-                //        }
-                //    }
-                //}
                 return diasRepartos;
             }
             catch (Exception exc)
@@ -280,32 +265,59 @@ namespace linway_app
             }
         }
 
+        public List<Recibo> ImportarRecibos()
+        {
+            List<Recibo> listaRecibos = new List<Recibo>();
+            try
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i].ItemArray[0].ToString() == "") continue;
+                    int Numero = Int32.Parse(dt.Rows[i].ItemArray[0].ToString());
+                    string Fecha = dt.Rows[i].ItemArray[1].ToString();
+                    string Direccion = dt.Rows[i].ItemArray[2].ToString();
+                    float Total = float.Parse(dt.Rows[i].ItemArray[3].ToString());
+                    bool Impresa = dt.Rows[i].ItemArray[4].ToString() == "SI";
+
+
+                    string detalles = dt.Rows[i].ItemArray[5].ToString();
+
+                    string[] pares = detalles.Split('|');
+
+                    int j = 0;
+                    foreach (string uno in pares)
+                    {
+                        string[] productos = uno.Split(':');
+
+                        string detalle = productos[0].Substring(0, productos[0].IndexOf(' por'));
+
+                        foreach (string valor in productos)
+                        if (j%2 == 0)
+                        {
+                            MessageBox.Show("Detalle: " + valor);
+                        }
+                        else
+                        {
+                            MessageBox.Show("... importe: " + valor);
+                        }
+                        j++;
+                    }
+
+
+
+                    //List<DetalleRecibo> detalleRecibo = new DetalleRecibo(string det, float imp);
+
+                    //new Recibo(Numero, Direccion, detalleRecibo);
+
+                }
+                //return listaRecibos;
+                return null;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Error importando el Excel " + archivo + ": " + exc.Message);
+                return null;
+            }
+        }
     }
-
 }
-
-
-
-//OpenFileDialog openfile1 = new OpenFileDialog
-//{
-//    Filter = "Excel Files |*.xls",
-//    Title = "Seleccione el archivo de Excel"
-//};
-
-//if (openfile1.ShowDialog() == DialogResult.OK)
-//{
-//    if (openfile1.FileName.Equals("") == false)
-//    {
-//        ruta = openfile1.FileName;
-//    }
-//}
-
-//for (int i = 0; i < dataGridView2.Rows.Count - 1; i++)
-//    {
-//        //MessageBox.Show(dataGridView2.Rows[i].Cells[0].Value.ToString() + " " + dataGridView2.Rows[i].Cells[1].Value.ToString() + " " + dataGridView2.Rows[i].Cells[2].Value.ToString());
-//        int Codigo = Int32.Parse(dataGridView2.Rows[i].Cells[0].Value.ToString());
-//        string Nombre = dataGridView2.Rows[i].Cells[1].Value.ToString();
-//        float Precio = float.Parse(dataGridView2.Rows[i].Cells[2].Value.ToString());
-//        Producto nuevoProducto = new Producto(Codigo, Nombre, Precio);
-//        listaProductos.Add(nuevoProducto);
-//    }
