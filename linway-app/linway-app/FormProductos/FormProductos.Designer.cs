@@ -84,7 +84,7 @@
             // 
             this.cbSeguroBorrar.AutoSize = true;
             this.cbSeguroBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbSeguroBorrar.Location = new System.Drawing.Point(9, 96);
+            this.cbSeguroBorrar.Location = new System.Drawing.Point(9, 94);
             this.cbSeguroBorrar.Name = "cbSeguroBorrar";
             this.cbSeguroBorrar.Size = new System.Drawing.Size(238, 17);
             this.cbSeguroBorrar.TabIndex = 5;
@@ -144,14 +144,13 @@
             this.gbAgregar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbAgregar.Location = new System.Drawing.Point(12, 12);
             this.gbAgregar.Name = "gbAgregar";
-            this.gbAgregar.Size = new System.Drawing.Size(268, 164);
+            this.gbAgregar.Size = new System.Drawing.Size(268, 208);
             this.gbAgregar.TabIndex = 42;
             this.gbAgregar.TabStop = false;
             this.gbAgregar.Text = "Agregar Producto";
             // 
             // comboBox1
             // 
-            this.comboBox1.Enabled = true;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(157, 76);
             this.comboBox1.Name = "comboBox1";
@@ -163,7 +162,6 @@
             // radioButton4
             // 
             this.radioButton4.AutoSize = true;
-            this.radioButton4.Enabled = true;
             this.radioButton4.Location = new System.Drawing.Point(96, 104);
             this.radioButton4.Name = "radioButton4";
             this.radioButton4.Size = new System.Drawing.Size(48, 19);
@@ -176,7 +174,6 @@
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Enabled = true;
             this.radioButton3.Location = new System.Drawing.Point(11, 105);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(78, 19);
@@ -189,7 +186,6 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Enabled = true;
             this.radioButton2.Location = new System.Drawing.Point(96, 80);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(55, 19);
@@ -202,7 +198,6 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Enabled = true;
             this.radioButton1.Location = new System.Drawing.Point(12, 81);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(66, 19);
@@ -214,9 +209,9 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(128, 135);
+            this.button4.Location = new System.Drawing.Point(142, 151);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.Size = new System.Drawing.Size(89, 31);
             this.button4.TabIndex = 6;
             this.button4.Text = "Limpiar";
             this.button4.UseVisualStyleBackColor = true;
@@ -224,9 +219,10 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(47, 135);
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Location = new System.Drawing.Point(27, 147);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(91, 39);
             this.button3.TabIndex = 5;
             this.button3.Text = "Agregar";
             this.button3.UseVisualStyleBackColor = true;
@@ -280,7 +276,7 @@
             this.gbModificar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbModificar.Location = new System.Drawing.Point(286, 12);
             this.gbModificar.Name = "gbModificar";
-            this.gbModificar.Size = new System.Drawing.Size(266, 192);
+            this.gbModificar.Size = new System.Drawing.Size(266, 208);
             this.gbModificar.TabIndex = 43;
             this.gbModificar.TabStop = false;
             this.gbModificar.Text = "Modificar Producto";
@@ -379,9 +375,9 @@
             // bCopiaSeguridad
             // 
             this.bCopiaSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bCopiaSeguridad.Location = new System.Drawing.Point(155, 182);
+            this.bCopiaSeguridad.Location = new System.Drawing.Point(558, 167);
             this.bCopiaSeguridad.Name = "bCopiaSeguridad";
-            this.bCopiaSeguridad.Size = new System.Drawing.Size(125, 37);
+            this.bCopiaSeguridad.Size = new System.Drawing.Size(151, 37);
             this.bCopiaSeguridad.TabIndex = 44;
             this.bCopiaSeguridad.Text = "Crear copia de seguridad";
             this.bCopiaSeguridad.UseVisualStyleBackColor = true;
@@ -390,9 +386,9 @@
             // bExit
             // 
             this.bExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bExit.Location = new System.Drawing.Point(642, 182);
+            this.bExit.Location = new System.Drawing.Point(731, 181);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(93, 27);
+            this.bExit.Size = new System.Drawing.Size(93, 61);
             this.bExit.TabIndex = 45;
             this.bExit.Text = "Salir";
             this.bExit.UseVisualStyleBackColor = true;
@@ -401,9 +397,9 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(12, 182);
+            this.button1.Location = new System.Drawing.Point(558, 210);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(122, 37);
+            this.button1.Size = new System.Drawing.Size(151, 37);
             this.button1.TabIndex = 46;
             this.button1.Text = "Importar";
             this.button1.UseVisualStyleBackColor = true;
@@ -413,7 +409,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(832, 227);
+            this.ClientSize = new System.Drawing.Size(832, 254);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.bExit);
             this.Controls.Add(this.bCopiaSeguridad);

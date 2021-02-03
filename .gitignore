@@ -5,6 +5,7 @@
 /roto
 .vs
 .env
+clave.txt
 
 
 ## Ignore Visual Studio temporary files, build results, and
