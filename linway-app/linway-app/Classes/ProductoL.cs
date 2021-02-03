@@ -5,7 +5,6 @@ using System.ComponentModel;
 namespace linway_app
 {
     [Serializable()]
-
     public class ProductoL
     {
         [DisplayName("Cod:")]
@@ -20,6 +19,7 @@ namespace linway_app
             Nombre = "producto";
             Precio = 0;
         }
+
         public ProductoL(int cod, string nom, float pre)
         {
             Codigo = cod;
@@ -33,7 +33,6 @@ namespace linway_app
             Precio = pre;
         }
 
-        //////////Modificar datos////////////////////
         void modNombre(string nom)
         {
             Nombre = nom;
@@ -44,7 +43,6 @@ namespace linway_app
             Precio = costo;
         }
 
-        /////////obtener Datos ////////////////////////
         string darNombre()
         {
             return Nombre;
@@ -55,16 +53,16 @@ namespace linway_app
             return Precio;
         }
 
-        public virtual bool mismoProductoQue(ProductoL otroProducto)
+        public virtual bool MismoProductoQue(ProductoL otroProducto)
         {
             return false;
         }
 
-        public virtual void darTipoDeProducto(Enum unEnum)
+        public virtual void DarTipoDeProducto(Enum unEnum)
         {
         }
 
-        public virtual Enum obtenerTipoDeProducto()
+        public virtual Enum ObtenerTipoDeProducto()
         {
             return null;
         }
@@ -73,26 +71,24 @@ namespace linway_app
     public enum TipoLiquido { Suavizante, Desmanchador, JabonLiquido, Auxiliar, Perfume };
 
     [Serializable()]
-
     public class Liquido : ProductoL
     {
         private TipoLiquido tipoDeLiquido;
 
-        public override bool mismoProductoQue(ProductoL otroProducto)
+        public override bool MismoProductoQue(ProductoL otroProducto)
         {
             return false;
         }
 
-        public override void darTipoDeProducto(Enum unEnum)
+        public override void DarTipoDeProducto(Enum unEnum)
         {
             tipoDeLiquido = (TipoLiquido) unEnum;
         }
 
-        public override Enum obtenerTipoDeProducto()
+        public override Enum ObtenerTipoDeProducto()
         {
             return tipoDeLiquido;
         }
-
     }
 
     public enum TipoPolvo { Texapol, Alison, AlisonEspecial, Dispersan, Eslabon, Blanqueador };
@@ -102,17 +98,17 @@ namespace linway_app
     {
         private TipoPolvo tipoDePolvo;
 
-        public override bool mismoProductoQue(ProductoL otroProducto)
+        public override bool MismoProductoQue(ProductoL otroProducto)
         {
             return false;
         }
 
-        public override void darTipoDeProducto(Enum unEnum)
+        public override void DarTipoDeProducto(Enum unEnum)
         {
             tipoDePolvo = (TipoPolvo) unEnum;
         }
 
-        public override Enum obtenerTipoDeProducto()
+        public override Enum ObtenerTipoDeProducto()
         {
             return tipoDePolvo;
         }
@@ -121,15 +117,15 @@ namespace linway_app
     [Serializable()]
     public class Unidades : ProductoL
     {
-        public override bool mismoProductoQue(ProductoL otroProducto)
+        public override bool MismoProductoQue(ProductoL otroProducto)
         {
             return false;
         }
 
-        public override void darTipoDeProducto(Enum unEnum)
+        public override void DarTipoDeProducto(Enum unEnum)
         {
         }
-        public override Enum obtenerTipoDeProducto()
+        public override Enum ObtenerTipoDeProducto()
         {
             return null;
         }
@@ -138,16 +134,16 @@ namespace linway_app
     [Serializable()]
     public class Otros : ProductoL
     {
-        public override bool mismoProductoQue(ProductoL otroProducto)
+        public override bool MismoProductoQue(ProductoL otroProducto)
         {
             return false;
         }
 
-        public override void darTipoDeProducto(Enum unEnum)
+        public override void DarTipoDeProducto(Enum unEnum)
         {
         }
 
-        public override Enum obtenerTipoDeProducto()
+        public override Enum ObtenerTipoDeProducto()
         {
             return null;
         }

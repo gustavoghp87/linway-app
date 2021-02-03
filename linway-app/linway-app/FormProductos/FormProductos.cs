@@ -351,7 +351,7 @@ namespace linway_app
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            productoNuevo.darTipoDeProducto((Enum)comboBox1.SelectedItem);
+            productoNuevo.DarTipoDeProducto((Enum) comboBox1.SelectedItem);
         }
 
         private void agregarPL_Click(object sender, EventArgs e)
