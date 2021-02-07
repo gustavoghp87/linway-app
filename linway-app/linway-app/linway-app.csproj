@@ -61,7 +61,7 @@
     <ManifestCertificateThumbprint>4FC3350944A85FAF10EE3A4349C76810B75B6CF2</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>linway-app_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>clave-linway2021.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -365,6 +365,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="clave-linway2021.pfx" />
+    <None Include="Linway_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

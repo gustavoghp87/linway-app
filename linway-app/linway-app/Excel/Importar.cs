@@ -45,6 +45,7 @@ namespace linway_app
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     if (dt.Rows[i].ItemArray[0].ToString() == "") continue;
+                    //MessageBox.Show(dt.Rows[i].ItemArray[0].ToString() + " | " + dt.Rows[i].ItemArray[1].ToString() + " | " + dt.Rows[i].ItemArray[2].ToString() + " | " + dt.Rows[i].ItemArray[3].ToString() + " | " + dt.Rows[4].ItemArray[0].ToString() + " | " + dt.Rows[i].ItemArray[5].ToString() + " | " + dt.Rows[i].ItemArray[6].ToString());
                     int Numero = Int32.Parse(dt.Rows[i].ItemArray[0].ToString());
                     string Direccion = dt.Rows[i].ItemArray[1].ToString();
                     if (Direccion.Contains("–")) Direccion = Direccion.Replace("–", "-");
@@ -80,6 +81,7 @@ namespace linway_app
                 List<Producto> listaProductos = new List<Producto>();
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
+                    if (dt.Rows[i].ItemArray[0].ToString() == "") continue;
                     //MessageBox.Show(i.ToString() + " - " + dt.Rows[i].ItemArray[0].ToString() + " - " + dt.Rows[i].ItemArray[1].ToString() + " - " + dt.Rows[i].ItemArray[2].ToString());
                     int Codigo = Int32.Parse(dt.Rows[i].ItemArray[0].ToString());
                     string Nombre = dt.Rows[i].ItemArray[1].ToString();
@@ -104,11 +106,13 @@ namespace linway_app
 
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
+                    if (dt.Rows[i].ItemArray[0].ToString() == "") continue;
                     int Codigo = Int32.Parse(dt.Rows[i].ItemArray[0].ToString());
                     string fecha = dt.Rows[i].ItemArray[1].ToString(); // hacer segundo constructor
                     string clie = dt.Rows[i].ItemArray[2].ToString();
-                    char[] separators = new char[] { '.', ' ' };
-                    string[] productos = dt.Rows[i].ItemArray[3].ToString().Split(separators, StringSplitOptions.RemoveEmptyEntries);
+                    //char[] separators = new char[] { '.', ' ' };
+                    string[] productos = dt.Rows[i].ItemArray[3].ToString().Split('.');
+                    if (productos.Length == 0) MessageBox.Show("Es cero: " + i.ToString());
                     int j = 0;
                     List<ProdVendido> listaVendidos = new List<ProdVendido>();
                     int cantidad = 0;
@@ -116,7 +120,13 @@ namespace linway_app
                     {
                         if (j % 2 == 0)
                         {
-                            cantidad = Int32.Parse(producto.Substring(0, producto.IndexOf('x')));
+                            if (producto.IndexOf('x') == -1)
+                            {
+                                MessageBox.Show("No hay x: " + producto + "... en el " + i.ToString());
+                                j++;
+                            }
+                            else
+                                cantidad = Int32.Parse(producto.Substring(0, producto.IndexOf('x')));
                         }
                         else
                         {
