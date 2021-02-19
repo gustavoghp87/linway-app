@@ -15,7 +15,7 @@ namespace linway_app
     public partial class FormClientes : Form
     {
         const string direccionClientes = @"Base de datos\ClientesLinway.bin";
-        const string copiaDeSeguridad = "clientes.xlsx";
+        const string copiaDeSeguridad = "clientes";
         private int codigoParaCliente;
         List<Cliente> listaClientes = new List<Cliente>();
 

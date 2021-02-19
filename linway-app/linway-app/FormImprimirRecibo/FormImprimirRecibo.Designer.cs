@@ -152,7 +152,6 @@ namespace linway_app
             this.Load += new System.EventHandler(this.FormImprimirRecibo_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

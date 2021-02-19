@@ -15,7 +15,7 @@ namespace linway_app
     public partial class FormNotasEnvio : Form
     {
         const string direccion = @"Base de datos\NotasDeEnvio.bin";
-        const string copiaDeSeguridad = "notas.xlsx";
+        const string copiaDeSeguridad = "notas";
         int ultimaNota;
         int primeraNota = 0;
         List<NotaDeEnvio> notasEnvio = new List<NotaDeEnvio>();

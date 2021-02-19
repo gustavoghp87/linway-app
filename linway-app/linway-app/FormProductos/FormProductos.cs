@@ -17,7 +17,7 @@ namespace linway_app
     public partial class FormProductos : Form
     {
         const string direccionProductos = @"Base de datos\ProductosLinway.bin";
-        const string copiaDeSeguridad = "productos.xlsx";
+        const string copiaDeSeguridad = "productos";
         private int ultimoProducto;
         List<Producto> listaProductos = new List<Producto>();
         ProductoL productoNuevo;

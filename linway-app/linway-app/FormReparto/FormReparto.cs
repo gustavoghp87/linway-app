@@ -12,7 +12,7 @@ namespace linway_app
     {
         const string direccionHDR = @"Base de datos\HojaDeReparto.bin";
         const string direccionClientes = @"Base de datos\ClientesLinway.bin";
-        const string copiaDeSeguridad = "repartos.xlsx";
+        const string copiaDeSeguridad = "repartos";
         List<Reparto> listaRepartos = new List<Reparto>();
         List<Reparto> listaRepartos2 = new List<Reparto>();
         List<Destino> listaDestinos = new List<Destino>();

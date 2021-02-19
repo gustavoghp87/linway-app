@@ -13,8 +13,8 @@ namespace linway_app
     {
         const string direccionVentas = @"Base de datos\VentaProductos.bin";
         const string direccionRegistro = @"Base de datos\RegistroVentas.bin";
-        const string copiaDeSeguridad = "ventas.xlsx";
-        const string copiaDeSeguridad2 = "registroVentas.xlsx";
+        const string copiaDeSeguridad = "ventas";
+        const string copiaDeSeguridad2 = "registroVentas";
         List<Venta> listaVentas = new List<Venta>();
         List<RegistroVenta> listaRegistro = new List<RegistroVenta>();
         readonly List<Cliente> listaClientes = new List<Cliente>();

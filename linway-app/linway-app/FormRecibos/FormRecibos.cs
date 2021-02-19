@@ -15,7 +15,7 @@ namespace linway_app
     public partial class FormRecibos : Form
     {
         const string direccionRecibos = @"Base de datos\Recibos.bin";
-        const string copiaDeSeguridad = "recibos.xlsx";
+        const string copiaDeSeguridad = "recibos";
         int primerRecibo = 0;
         int ultimoRecibo;
         List<Recibo> listaRecibos = new List<Recibo>();

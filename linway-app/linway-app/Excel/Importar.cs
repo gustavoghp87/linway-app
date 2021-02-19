@@ -11,6 +11,8 @@ namespace linway_app
     {
         readonly string ruta;
         readonly string archivo;
+        string extension = "xls";
+        //string extension = "xlsx";
         readonly OleDbConnection conn;
         readonly OleDbDataAdapter myDataAdapter;
         readonly DataSet ds;
@@ -20,7 +22,7 @@ namespace linway_app
         {
             try
             {
-                this.archivo = archivo;
+                this.archivo = archivo + "." + extension;
                 ruta = @"Copias de seguridad/" + archivo;
                 //conn = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + ruta + ";Extended Properties='Excel 8.0 Xml;HDR=Yes'");
                 conn = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + ruta + ";Extended Properties='Excel 8.0;HDR=Yes;IMEX=1'");
@@ -108,30 +110,29 @@ namespace linway_app
                 {
                     if (dt.Rows[i].ItemArray[0].ToString() == "") continue;
                     int Codigo = Int32.Parse(dt.Rows[i].ItemArray[0].ToString());
-                    string fecha = dt.Rows[i].ItemArray[1].ToString(); // hacer segundo constructor
+                    string fecha = dt.Rows[i].ItemArray[1].ToString();
                     string clie = dt.Rows[i].ItemArray[2].ToString();
                     //char[] separators = new char[] { '.', ' ' };
                     string[] productos = dt.Rows[i].ItemArray[3].ToString().Split('.');
                     if (productos.Length == 0) MessageBox.Show("Es cero: " + i.ToString());
                     int j = 0;
                     List<ProdVendido> listaVendidos = new List<ProdVendido>();
-                    int cantidad = 0;
                     foreach (string producto in productos)
                     {
-                        if (j % 2 == 0)
+                        try
                         {
-                            if (producto.IndexOf('x') == -1)
-                            {
-                                MessageBox.Show("No hay x: " + producto + "... en el " + i.ToString());
-                                j++;
-                            }
-                            else
-                                cantidad = Int32.Parse(producto.Substring(0, producto.IndexOf('x')));
+                            int cantidad = Int32.Parse(producto.Substring(0, producto.IndexOf('x')));
+                            string detalle = producto.Split('x')[1].Trim();
+                            //MessageBox.Show(producto);
+                            //MessageBox.Show(producto.Substring(0, producto.IndexOf('x')));
+                            //MessageBox.Show(producto.Split('x')[1].Trim());
+                            listaVendidos.Add(new ProdVendido(detalle, cantidad, 0));
                         }
-                        else
+                        catch
                         {
-                            listaVendidos.Add(new ProdVendido(producto, cantidad, 0));
-                        }
+                            //MessageBox.Show("No hay x: " + producto + "... en el " + i.ToString());
+                            //j++;
+                        }   
                         j++;
                     }
                     float total = float.Parse(dt.Rows[i].ItemArray[4].ToString());

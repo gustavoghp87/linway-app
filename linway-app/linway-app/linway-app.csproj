@@ -366,6 +366,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="clave-linway2021.pfx" />
+    <None Include="linway-app_TemporaryKey.pfx" />
     <None Include="Linway_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

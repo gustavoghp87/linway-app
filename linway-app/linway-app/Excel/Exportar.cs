@@ -8,6 +8,8 @@ namespace linway_app
 {
     class Exportar
     {
+        string extension = "xls";
+        //string extension = "xlsx";
         readonly Microsoft.Office.Interop.Excel.Application aplicacion;
         readonly Microsoft.Office.Interop.Excel.Workbook libros_trabajo;
         readonly Microsoft.Office.Interop.Excel.Worksheet hoja_trabajo;
@@ -17,7 +19,7 @@ namespace linway_app
         {
             aplicacion = new Microsoft.Office.Interop.Excel.Application();
             libros_trabajo = aplicacion.Workbooks.Add();
-            hoja_trabajo = (Microsoft.Office.Interop.Excel.Worksheet)libros_trabajo.Worksheets.get_Item(1);
+            hoja_trabajo = (Microsoft.Office.Interop.Excel.Worksheet) libros_trabajo.Worksheets.get_Item(1);
         }
 
         private bool GenerateFile(string path)
@@ -70,7 +72,7 @@ namespace linway_app
                     i++;
                 }
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[listaClientes.Count + 1, 7]];
-                return GenerateFile("/Copias de seguridad/clientes.xlsx");
+                return GenerateFile("/Copias de seguridad/clientes." + extension);
             }
             catch (Exception e)
             {
@@ -100,7 +102,7 @@ namespace linway_app
                     i++;
                 }
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[listaProductos.Count + 1, 3]];
-                return GenerateFile("/Copias de seguridad/productos.xlsx");
+                return GenerateFile("/Copias de seguridad/productos." + extension);
             }
             catch (Exception e)
             {
@@ -139,7 +141,7 @@ namespace linway_app
                     i++;
                 }
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[notasEnvio.Count + 1, 6]];
-                return GenerateFile("/Copias de seguridad/notas.xlsx");
+                return GenerateFile("/Copias de seguridad/notas." + extension);
             }
             catch (Exception e)
             {
@@ -168,7 +170,7 @@ namespace linway_app
                 }
 
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[listaVentas.Count + 1, 2]];
-                return GenerateFile("/Copias de seguridad/ventas.xlsx");
+                return GenerateFile("/Copias de seguridad/ventas." + extension);
             }
             catch (Exception e)
             {
@@ -199,7 +201,7 @@ namespace linway_app
                 }
 
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[listaRegistros.Count + 1, 3]];
-                return GenerateFile("/Copias de seguridad/registroVentas.xlsx");
+                return GenerateFile("/Copias de seguridad/registroVentas." + extension);
             }
             catch (Exception e)
             {
@@ -290,7 +292,7 @@ namespace linway_app
                     }
                 }
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[i + 1, 11]];
-                return GenerateFile("/Copias de seguridad/repartos.xlsx");
+                return GenerateFile("/Copias de seguridad/repartos." + extension);
             }
             catch (Exception e)
             {
@@ -373,7 +375,7 @@ namespace linway_app
                 hoja_trabajo.Cells[reparto.Destinos.Count + 4, 8].Font.Bold = true;
 
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[reparto.Destinos.Count + 4, 8]];
-                return GenerateFile("/Repartos/reparto-" + dia + "-" + reparto.Nombre + ".xlsx");
+                return GenerateFile("/Repartos/reparto-" + dia + "-" + reparto.Nombre + "." + extension);
             }
             catch (Exception e)
             {
@@ -424,7 +426,7 @@ namespace linway_app
                     i++;
                 }
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[listaRecibos.Count + 1, 5]];
-                return GenerateFile("/Copias de seguridad/recibos.xlsx");
+                return GenerateFile("/Copias de seguridad/recibos." + extension);
             }
             catch (Exception e)
             {
