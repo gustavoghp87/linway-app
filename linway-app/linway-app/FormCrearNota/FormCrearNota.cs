@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
 
@@ -227,7 +223,7 @@ namespace linway_app
             fr.Close();
         }
 
-        //private bool esProducto(string nombre)
+        //private bool EsProducto(string nombre)
         //{
         //    bool es = true;
         //    if ((nombre.Contains("pendiente")) || (nombre.Contains("favor")) || (nombre.Contains("actura")) || (nombre.Contains("evoluc")) || (nombre.Contains("cobrar") || (nombre.Contains("BONIFI"))))

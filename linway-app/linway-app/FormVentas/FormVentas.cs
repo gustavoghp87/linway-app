@@ -65,8 +65,9 @@ namespace linway_app
                 {
                     Stream archivo = File.OpenRead(direccionRegistro);
                     BinaryFormatter traductor = new BinaryFormatter();
-                    listaRegistro = (List<RegistroVenta>)traductor.Deserialize(archivo);
+                    listaRegistro = (List<RegistroVenta>) traductor.Deserialize(archivo);
                     archivo.Close();
+                    MessageBox.Show("Registro de ventas: " + listaRegistro.Count.ToString());
 
                     if (listaRegistro.Count > 0)
                         new RegistroVenta(listaRegistro.ElementAt(listaRegistro.Count - 1).Id);
@@ -295,7 +296,7 @@ namespace linway_app
                 label28.Text = "No encontrado";
             }
         }
-        private bool esProducto(string nombre)
+        private bool EsProducto(string nombre)
         {
             bool es = true;
             if ((nombre.Contains("pendiente")) || (nombre.Contains("favor")) || (nombre.Contains("actura")) || (nombre.Contains("evoluc")) || (nombre.Contains("cobrar") || (nombre.Contains("BONIFI"))))
@@ -313,7 +314,7 @@ namespace linway_app
                 nuevoRegistro.RecibirListaVentas(listaAgregarVentas, listaProductos);
                 foreach (Venta vAgregar in listaAgregarVentas)
                 {
-                    if (esProducto(vAgregar.Producto))
+                    if (EsProducto(vAgregar.Producto))
                     {
                         bool existe = false;
                         foreach (Venta vActual in listaVentas)
@@ -451,7 +452,7 @@ namespace linway_app
         }
 
         //recibir ventas
-        public void RecibirProductosVendidos(List<ProdVendido> listaPV, String client)
+        public void RecibirProductosVendidos(List<ProdVendido> listaPV, string client)
         {
             try
             {
@@ -459,7 +460,7 @@ namespace linway_app
                 nuevoRegistro.RecibirProdVendidos(listaPV, client);
                 foreach (ProdVendido pvActual in listaPV)
                 {
-                    if (esProducto(pvActual.Descripcion))
+                    if (EsProducto(pvActual.Descripcion))
                     {
                         bool existe = false;
                         foreach (Venta vActual in listaVentas)
@@ -538,7 +539,7 @@ namespace linway_app
             {
                 RegistroVenta elRegistro = listaRegistro.Find(x => x.Id == uint.Parse(textBox1.Text.ToString()));
                 foreach (ProdVendido pvActual in elRegistro.ObtenerPV())
-                    if (esProducto(pvActual.Descripcion))
+                    if (EsProducto(pvActual.Descripcion))
                         foreach (Venta vActual in listaVentas)
                             if (vActual.Producto.Equals(pvActual.Descripcion))
                                 vActual.RealizarVenta(pvActual.Cantidad * -1);

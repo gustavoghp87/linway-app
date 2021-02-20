@@ -250,18 +250,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Cliente.cs" />
-    <Compile Include="Classes\Destino.cs" />
-    <Compile Include="Classes\DetalleRecibo.cs" />
-    <Compile Include="Classes\DiasReparto.cs" />
-    <Compile Include="Classes\NotaDeEnvio.cs" />
-    <Compile Include="Classes\Producto.cs" />
-    <Compile Include="Classes\ProductoL.cs" />
-    <Compile Include="Classes\ProdVendido.cs" />
-    <Compile Include="Classes\Recibo.cs" />
-    <Compile Include="Classes\RegistroVenta.cs" />
-    <Compile Include="Classes\Reparto.cs" />
-    <Compile Include="Classes\Venta.cs" />
+    <Compile Include="CModels\Cliente.cs" />
+    <Compile Include="CModels\Destino.cs" />
+    <Compile Include="CModels\DetalleRecibo.cs" />
+    <Compile Include="CModels\DiasReparto.cs" />
+    <Compile Include="CModels\NotaDeEnvio.cs" />
+    <Compile Include="CModels\Producto.cs" />
+    <Compile Include="CModels\ProductoL.cs" />
+    <Compile Include="CModels\ProdVendido.cs" />
+    <Compile Include="CModels\Recibo.cs" />
+    <Compile Include="CModels\RegistroVenta.cs" />
+    <Compile Include="CModels\Reparto.cs" />
+    <Compile Include="CModels\Venta.cs" />
     <Compile Include="DBconnection\DBconnection.cs" />
     <Compile Include="Form1\Form1.cs">
       <SubType>Form</SubType>
