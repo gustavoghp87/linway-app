@@ -11,7 +11,7 @@ namespace linway_app
     {
         readonly string ruta;
         readonly string archivo;
-        string extension = "xls";
+        readonly string extension = "xls";
         //string extension = "xlsx";
         readonly OleDbConnection conn;
         readonly OleDbDataAdapter myDataAdapter;
@@ -114,19 +114,21 @@ namespace linway_app
                     string clie = dt.Rows[i].ItemArray[2].ToString();
                     //char[] separators = new char[] { '.', ' ' };
                     string[] productos = dt.Rows[i].ItemArray[3].ToString().Split('.');
+                    string[] precios = dt.Rows[i].ItemArray[3].ToString().Split('&');
                     if (productos.Length == 0) MessageBox.Show("Es cero: " + i.ToString());
-                    int j = 0;
                     List<ProdVendido> listaVendidos = new List<ProdVendido>();
-                    foreach (string producto in productos)
+                    int j = 0;
+                    while (j<productos.Length)
                     {
                         try
                         {
-                            int cantidad = Int32.Parse(producto.Substring(0, producto.IndexOf('x')));
-                            string detalle = producto.Split('x')[1].Trim();
+                            int cantidad = Int32.Parse(productos[j].Substring(0, productos[j].IndexOf('x')));
+                            string detalle = productos[j].Split('x')[1].Trim();
+                            float precio = float.Parse(precios[j+1]);
                             //MessageBox.Show(producto);
                             //MessageBox.Show(producto.Substring(0, producto.IndexOf('x')));
                             //MessageBox.Show(producto.Split('x')[1].Trim());
-                            listaVendidos.Add(new ProdVendido(detalle, cantidad, 0));
+                            listaVendidos.Add(new ProdVendido(detalle, cantidad, precio));
                         }
                         catch
                         {

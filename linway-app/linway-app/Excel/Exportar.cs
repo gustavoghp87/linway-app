@@ -132,6 +132,10 @@ namespace linway_app
                     hoja_trabajo.Cells[i + 2, 1] = notasEnvio[i].Codigo;
                     hoja_trabajo.Cells[i + 2, 2] = notasEnvio[i].Fecha;
                     hoja_trabajo.Cells[i + 2, 3] = notasEnvio[i].Cliente;
+                    foreach (var producto in notasEnvio[i].Productos)
+                    {
+                        notasEnvio[i].Detalle += " &" + producto.Subtotal.ToString();
+                    }
                     hoja_trabajo.Cells[i + 2, 4] = notasEnvio[i].Detalle;
                     hoja_trabajo.Cells[i + 2, 5] = notasEnvio[i].ImporteTotal;
                     if (notasEnvio[i].Impresa == true)

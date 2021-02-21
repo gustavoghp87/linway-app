@@ -247,7 +247,10 @@ namespace linway_app
                 {
                     //FormVentas formVentas = new FormVentas();
                     //formVentas.RecibirProductosVendidos(listaPV, label36.Text);
-                    new FormVentas().RecibirProductosVendidos(listaPV, label36.Text);
+                    FormVentas newFormVentas = new FormVentas();
+                    newFormVentas.CargarVentas();
+                    newFormVentas.CargarRegistros();
+                    newFormVentas.RecibirProductosVendidos(listaPV, label36.Text);
                 }
 
                 if (checkBox1.Checked)

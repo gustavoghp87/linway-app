@@ -38,17 +38,22 @@ namespace linway_app
             {
                 try
                 {
-                    Stream archivoVentas = File.OpenRead(direccionVentas);
+                    Stream archivo = File.OpenRead(direccionVentas);
                     BinaryFormatter traductor = new BinaryFormatter();
-                    listaVentas = (List<Venta>) traductor.Deserialize(archivoVentas);
-                    archivoVentas.Close();
-                    dataGridView3.DataSource = listaVentas.ToArray();
-                    dataGridView3.Columns[1].Width = 40;
+                    listaVentas = (List<Venta>) traductor.Deserialize(archivo);
+                    archivo.Close();
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show("Error al leer las ventas: " + e.Message);
                 }
+                try
+                {
+                    dataGridView3.DataSource = listaVentas.ToArray();
+                    dataGridView3.Columns[1].Width = 40;
+                }
+                catch
+                { }
             }
             else
             {
@@ -67,8 +72,15 @@ namespace linway_app
                     BinaryFormatter traductor = new BinaryFormatter();
                     listaRegistro = (List<RegistroVenta>) traductor.Deserialize(archivo);
                     archivo.Close();
-                    MessageBox.Show("Registro de ventas: " + listaRegistro.Count.ToString());
+                    // MessageBox.Show("Registro de ventas: " + listaRegistro.Count.ToString());
 
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error al leer el registro de ventas: " + e.Message);
+                }
+                try
+                {
                     if (listaRegistro.Count > 0)
                         new RegistroVenta(listaRegistro.ElementAt(listaRegistro.Count - 1).Id);
                     dataGridView1.DataSource = listaRegistro.ToArray();
@@ -76,10 +88,8 @@ namespace linway_app
                     dataGridView1.Columns[1].Width = 67;
                     label1.Text = "Registro de ventas (" + listaRegistro.Count.ToString() + ")";
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Error al leer el registro de ventas: " + e.Message);
-                }
+                catch
+                { }
             }
             else
             {
@@ -480,6 +490,7 @@ namespace linway_app
                     }
                 }
                 GuardarVentas();
+                // MessageBox.Show("Por agregar... " + listaRegistro.Count.ToString());
                 listaRegistro.Add(nuevoRegistro);
                 GuardarRegistros();
             }
