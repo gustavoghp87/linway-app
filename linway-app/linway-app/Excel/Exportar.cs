@@ -8,8 +8,8 @@ namespace linway_app
 {
     class Exportar
     {
-        string extension = "xls";
-        //string extension = "xlsx";
+        readonly string extension = "xls";
+        //readonly string extension = "xlsx";
         readonly Microsoft.Office.Interop.Excel.Application aplicacion;
         readonly Microsoft.Office.Interop.Excel.Workbook libros_trabajo;
         readonly Microsoft.Office.Interop.Excel.Worksheet hoja_trabajo;
@@ -127,21 +127,27 @@ namespace linway_app
                 hoja_trabajo.Cells[1, 6] = "Impresa";
 
                 int i = 0;
-                while (i < notasEnvio.Count)
+                var paraImprimir = new List<NotaDeEnvio>();
+                foreach (var nota in notasEnvio)
                 {
-                    hoja_trabajo.Cells[i + 2, 1] = notasEnvio[i].Codigo;
-                    hoja_trabajo.Cells[i + 2, 2] = notasEnvio[i].Fecha;
-                    hoja_trabajo.Cells[i + 2, 3] = notasEnvio[i].Cliente;
-                    foreach (var producto in notasEnvio[i].Productos)
+                    if (nota.Detalle.Trim() != "") paraImprimir.Add(nota);
+                }
+                foreach (var nota in paraImprimir)
+                {
+                    hoja_trabajo.Cells[i + 2, 1] = nota.Codigo;
+                    hoja_trabajo.Cells[i + 2, 2] = nota.Fecha;
+                    hoja_trabajo.Cells[i + 2, 3] = nota.Cliente;
+                    foreach (var producto in nota.Productos)
                     {
-                        notasEnvio[i].Detalle += " &" + producto.Subtotal.ToString();
+                        nota.Detalle += " &" + producto.Subtotal.ToString();
                     }
-                    hoja_trabajo.Cells[i + 2, 4] = notasEnvio[i].Detalle;
-                    hoja_trabajo.Cells[i + 2, 5] = notasEnvio[i].ImporteTotal;
-                    if (notasEnvio[i].Impresa == true)
+                    hoja_trabajo.Cells[i + 2, 4] = nota.Detalle;
+                    hoja_trabajo.Cells[i + 2, 5] = nota.ImporteTotal;
+                    if (nota.Impresa == true)
                         hoja_trabajo.Cells[i + 2, 6] = "SI";
                     else
                         hoja_trabajo.Cells[i + 2, 6] = "NO";
+
                     i++;
                 }
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[notasEnvio.Count + 1, 6]];
@@ -329,12 +335,12 @@ namespace linway_app
                 hoja_trabajo.Cells[2, 7].Font.Bold = true;
                 hoja_trabajo.Cells[2, 8].Font.Bold = true;
 
-                int i = 0;
                 int sumaA = 0;
                 int sumaE = 0;
                 int sumaD = 0;
                 int sumaT = 0;
                 int sumaAE = 0;
+                int i = 0;
                 while (i < reparto.Destinos.Count)
                 {
                     hoja_trabajo.Cells[i + 3, 1] = reparto.Destinos[i].Direccion;

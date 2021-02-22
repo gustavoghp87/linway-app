@@ -102,8 +102,8 @@ namespace linway_app
             try
             {
                 Stream archivo = File.Create(direccionVentas);
-                BinaryFormatter traductor3 = new BinaryFormatter();
-                traductor3.Serialize(archivo, listaVentas);
+                BinaryFormatter traductor = new BinaryFormatter();
+                traductor.Serialize(archivo, listaVentas);
                 archivo.Close();
             }
             catch (Exception e)
@@ -117,8 +117,8 @@ namespace linway_app
             try
             {
                 Stream archivo = File.Create(direccionRegistro);
-                BinaryFormatter traductor3 = new BinaryFormatter();
-                traductor3.Serialize(archivo, listaRegistro);
+                BinaryFormatter traductor = new BinaryFormatter();
+                traductor.Serialize(archivo, listaRegistro);
                 archivo.Close();
             }
             catch (Exception e)
