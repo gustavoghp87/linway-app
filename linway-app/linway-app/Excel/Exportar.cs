@@ -342,51 +342,48 @@ namespace linway_app
                 int i = 0;
                 foreach (var destino in paraImprimir)
                 {
-                    while (i < reparto.Destinos.Count)
-                    {
-                        hoja_trabajo.Cells[i + 3, 1] = destino.Direccion;
-                        hoja_trabajo.Cells[i + 3, 2] = destino.L;
-                        hoja_trabajo.Cells[i + 3, 3] = destino.Productos;
-                        hoja_trabajo.Cells[i + 3, 4] = destino.A;
-                        hoja_trabajo.Cells[i + 3, 5] = destino.E;
-                        hoja_trabajo.Cells[i + 3, 6] = destino.D;
-                        hoja_trabajo.Cells[i + 3, 7] = destino.T;
-                        hoja_trabajo.Cells[i + 3, 8] = destino.AE;
-                        sumaA += destino.A;
-                        sumaE += destino.E;
-                        sumaD += destino.D;
-                        sumaT += destino.T;
-                        sumaAE += destino.AE;
-                        i++;
-                    }
+                    hoja_trabajo.Cells[i + 3, 1] = destino.Direccion;
+                    hoja_trabajo.Cells[i + 3, 2] = destino.L;
+                    hoja_trabajo.Cells[i + 3, 3] = destino.Productos;
+                    hoja_trabajo.Cells[i + 3, 4] = destino.A;
+                    hoja_trabajo.Cells[i + 3, 5] = destino.E;
+                    hoja_trabajo.Cells[i + 3, 6] = destino.D;
+                    hoja_trabajo.Cells[i + 3, 7] = destino.T;
+                    hoja_trabajo.Cells[i + 3, 8] = destino.AE;
+                    sumaA += destino.A;
+                    sumaE += destino.E;
+                    sumaD += destino.D;
+                    sumaT += destino.T;
+                    sumaAE += destino.AE;
+                    i++;
                 }
 
-                hoja_trabajo.Cells[reparto.Destinos.Count + 3, 1] = "TOTALES:";
-                hoja_trabajo.Cells[reparto.Destinos.Count + 3, 2] = litros;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 3, 1].Font.Bold = true;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 3, 2].Font.Bold = true;
+                hoja_trabajo.Cells[i + 4, 1] = "TOTALES:";
+                hoja_trabajo.Cells[i + 4, 2] = litros;
+                hoja_trabajo.Cells[i + 4, 1].Font.Bold = true;
+                hoja_trabajo.Cells[i + 4, 2].Font.Bold = true;
 
-                hoja_trabajo.Cells[reparto.Destinos.Count + 3, 4] = sumaA;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 3, 5] = sumaE;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 3, 6] = sumaD;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 3, 7] = sumaT;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 3, 8] = sumaAE;
+                hoja_trabajo.Cells[i + 4, 4] = sumaA;
+                hoja_trabajo.Cells[i + 4, 5] = sumaE;
+                hoja_trabajo.Cells[i + 4, 6] = sumaD;
+                hoja_trabajo.Cells[i + 4, 7] = sumaT;
+                hoja_trabajo.Cells[i + 4, 8] = sumaAE;
 
                 string pesoTotal = (Int32.Parse(litros) + Int32.Parse(bolsas)).ToString();
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 3] = " TOTAL PESO: " + pesoTotal + "    Total bolsas: " + bolsas;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 4] = "A";
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 5] = "E";
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 6] = "D";
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 7] = "T";
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 8] = "AE";
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 3].Font.Bold = true;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 4].Font.Bold = true;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 5].Font.Bold = true;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 6].Font.Bold = true;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 7].Font.Bold = true;
-                hoja_trabajo.Cells[reparto.Destinos.Count + 4, 8].Font.Bold = true;
+                hoja_trabajo.Cells[i + 5, 3] = " TOTAL PESO: " + pesoTotal + "    Total bolsas: " + bolsas;
+                hoja_trabajo.Cells[i + 5, 4] = "A";
+                hoja_trabajo.Cells[i + 5, 5] = "E";
+                hoja_trabajo.Cells[i + 5, 6] = "D";
+                hoja_trabajo.Cells[i + 5, 7] = "T";
+                hoja_trabajo.Cells[i + 5, 8] = "AE";
+                hoja_trabajo.Cells[i + 5, 3].Font.Bold = true;
+                hoja_trabajo.Cells[i + 5, 4].Font.Bold = true;
+                hoja_trabajo.Cells[i + 5, 5].Font.Bold = true;
+                hoja_trabajo.Cells[i + 5, 6].Font.Bold = true;
+                hoja_trabajo.Cells[i + 5, 7].Font.Bold = true;
+                hoja_trabajo.Cells[i + 5, 8].Font.Bold = true;
 
-                excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[reparto.Destinos.Count + 4, 8]];
+                excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[i + 5, 8]];
                 return GenerateFile("/Repartos/reparto-" + dia + "-" + reparto.Nombre + "." + extension);
             }
             catch (Exception e)
