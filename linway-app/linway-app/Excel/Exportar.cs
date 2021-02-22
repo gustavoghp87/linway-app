@@ -127,27 +127,21 @@ namespace linway_app
                 hoja_trabajo.Cells[1, 6] = "Impresa";
 
                 int i = 0;
-                var paraImprimir = new List<NotaDeEnvio>();
-                foreach (var nota in notasEnvio)
+                while (i < notasEnvio.Count)
                 {
-                    if (nota.Detalle.Trim() != "") paraImprimir.Add(nota);
-                }
-                foreach (var nota in paraImprimir)
-                {
-                    hoja_trabajo.Cells[i + 2, 1] = nota.Codigo;
-                    hoja_trabajo.Cells[i + 2, 2] = nota.Fecha;
-                    hoja_trabajo.Cells[i + 2, 3] = nota.Cliente;
-                    foreach (var producto in nota.Productos)
+                    hoja_trabajo.Cells[i + 2, 1] = notasEnvio[i].Codigo;
+                    hoja_trabajo.Cells[i + 2, 2] = notasEnvio[i].Fecha;
+                    hoja_trabajo.Cells[i + 2, 3] = notasEnvio[i].Cliente;
+                    foreach (var producto in notasEnvio[i].Productos)
                     {
-                        nota.Detalle += " &" + producto.Subtotal.ToString();
+                        notasEnvio[i].Detalle += " &" + producto.Subtotal.ToString();
                     }
-                    hoja_trabajo.Cells[i + 2, 4] = nota.Detalle;
-                    hoja_trabajo.Cells[i + 2, 5] = nota.ImporteTotal;
-                    if (nota.Impresa == true)
+                    hoja_trabajo.Cells[i + 2, 4] = notasEnvio[i].Detalle;
+                    hoja_trabajo.Cells[i + 2, 5] = notasEnvio[i].ImporteTotal;
+                    if (notasEnvio[i].Impresa == true)
                         hoja_trabajo.Cells[i + 2, 6] = "SI";
                     else
                         hoja_trabajo.Cells[i + 2, 6] = "NO";
-
                     i++;
                 }
                 excelCellrange = hoja_trabajo.Range[hoja_trabajo.Cells[1, 1], hoja_trabajo.Cells[notasEnvio.Count + 1, 6]];
@@ -335,28 +329,36 @@ namespace linway_app
                 hoja_trabajo.Cells[2, 7].Font.Bold = true;
                 hoja_trabajo.Cells[2, 8].Font.Bold = true;
 
+                var paraImprimir = new List<Destino>();
+                foreach (var destino in reparto.Destinos)
+                {
+                    if (destino.Productos.Trim() != "") paraImprimir.Add(destino);
+                }
                 int sumaA = 0;
                 int sumaE = 0;
                 int sumaD = 0;
                 int sumaT = 0;
                 int sumaAE = 0;
                 int i = 0;
-                while (i < reparto.Destinos.Count)
+                foreach (var destino in paraImprimir)
                 {
-                    hoja_trabajo.Cells[i + 3, 1] = reparto.Destinos[i].Direccion;
-                    hoja_trabajo.Cells[i + 3, 2] = reparto.Destinos[i].L;
-                    hoja_trabajo.Cells[i + 3, 3] = reparto.Destinos[i].Productos;
-                    hoja_trabajo.Cells[i + 3, 4] = reparto.Destinos[i].A;
-                    hoja_trabajo.Cells[i + 3, 5] = reparto.Destinos[i].E;
-                    hoja_trabajo.Cells[i + 3, 6] = reparto.Destinos[i].D;
-                    hoja_trabajo.Cells[i + 3, 7] = reparto.Destinos[i].T;
-                    hoja_trabajo.Cells[i + 3, 8] = reparto.Destinos[i].AE;
-                    sumaA += reparto.Destinos[i].A;
-                    sumaE += reparto.Destinos[i].E;
-                    sumaD += reparto.Destinos[i].D;
-                    sumaT += reparto.Destinos[i].T;
-                    sumaAE += reparto.Destinos[i].AE;
-                    i++;
+                    while (i < reparto.Destinos.Count)
+                    {
+                        hoja_trabajo.Cells[i + 3, 1] = destino.Direccion;
+                        hoja_trabajo.Cells[i + 3, 2] = destino.L;
+                        hoja_trabajo.Cells[i + 3, 3] = destino.Productos;
+                        hoja_trabajo.Cells[i + 3, 4] = destino.A;
+                        hoja_trabajo.Cells[i + 3, 5] = destino.E;
+                        hoja_trabajo.Cells[i + 3, 6] = destino.D;
+                        hoja_trabajo.Cells[i + 3, 7] = destino.T;
+                        hoja_trabajo.Cells[i + 3, 8] = destino.AE;
+                        sumaA += destino.A;
+                        sumaE += destino.E;
+                        sumaD += destino.D;
+                        sumaT += destino.T;
+                        sumaAE += destino.AE;
+                        i++;
+                    }
                 }
 
                 hoja_trabajo.Cells[reparto.Destinos.Count + 3, 1] = "TOTALES:";
