@@ -14,7 +14,6 @@ namespace linway_app
         bool impresa;
         const string direccionNotas = @"Base de datos\NotasDeEnvio.bin";
         List<NotaDeEnvio> notasEnvio = new List<NotaDeEnvio>();
-        
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         public static extern long BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
         private Bitmap memoryImage;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,7 +15,7 @@ namespace linway_app
     public partial class FormImprimirRecibo : Form
     {
 
-        const string direccionRecibos = "Recibos.bin";
+        const string direccionRecibos = @"Base de datos\Recibos.bin";
         int CodigoDeLaNota;
         bool impresa;
         List<Recibo> listaRecibos = new List<Recibo>();
@@ -32,7 +32,7 @@ namespace linway_app
         {
         }
 
-        void AbrirRecibos()
+        void CargarRecibos()
         {
             if (File.Exists(direccionRecibos))
             {
@@ -40,12 +40,12 @@ namespace linway_app
                 {
                     Stream archivo = File.OpenRead(direccionRecibos);
                     BinaryFormatter traductor = new BinaryFormatter();
-                    listaRecibos = (List<Recibo>)traductor.Deserialize(archivo);
+                    listaRecibos = (List<Recibo>) traductor.Deserialize(archivo);
                     archivo.Close();
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Error al leer los recibos para imprimir:" + e.Message);
+                    MessageBox.Show("Error al leer los recibos para imprimir: " + e.Message);
                 }
             }
         }
@@ -112,15 +112,39 @@ namespace linway_app
         private void button1_Click(object sender, System.EventArgs e)
         {
             button1.Visible = false;
-            CaptureScreen();
-            PrintDialog printDialog1 = new PrintDialog();
-            printDialog1.Document = printDocument1;
-            DialogResult result = printDialog1.ShowDialog();
-            if (result == DialogResult.OK)
+            try
             {
-                printDocument1.Print();
                 MarcarImpresa();
-                Close();
+            }
+            catch (Exception ee)
+            {
+                MessageBox.Show("Falló marcado como impreso: " + ee.Message);
+            }
+
+            try
+            {
+                CaptureScreen();
+                try
+                {
+                    PrintDialog printDialog1 = new PrintDialog
+                    {
+                        Document = printDocument1
+                    };
+                    DialogResult result = printDialog1.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        printDocument1.Print();
+                        Close();
+                    }
+                }
+                catch (Exception eee)
+                {
+                    MessageBox.Show("Falló impresión: " + eee.Message);
+                }
+            }
+            catch (Exception eeee)
+            {
+                MessageBox.Show("Falló captura de datos: " + eeee.Message);
             }
         }
 
@@ -128,8 +152,12 @@ namespace linway_app
         {
             if (!impresa)
             {
-                AbrirRecibos();
-                listaRecibos.Find(x => x.Codigo == CodigoDeLaNota).Impresa = true;
+                // MessageBox.Show("1 " + listaRecibos.Count.ToString());
+                CargarRecibos();
+                // MessageBox.Show("2");
+                var thisRecibo = listaRecibos.Find(x => x.Codigo == CodigoDeLaNota);
+                thisRecibo.Impresa = true;
+                // MessageBox.Show("3 " + thisRecibo.Cliente + thisRecibo.Fecha + thisRecibo.Impresa.ToString());
                 GuardarRecibos();
             }
         }

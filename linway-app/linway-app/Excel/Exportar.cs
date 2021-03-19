@@ -38,7 +38,7 @@ namespace linway_app
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error exportando (2): " + e.Message);
+                MessageBox.Show("Error exportando (2): " + e.Message + " Ver si el archivo está abierto...");
                 return false;
             }
         }
