@@ -1,5 +1,6 @@
 ﻿using linway_app.Models;
 using linway_app.Repositories.Interfaces;
+using linway_app.Services.Interfaces;
 using System.Collections.Generic;
 
 namespace linway_app.Services

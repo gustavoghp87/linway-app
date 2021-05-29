@@ -16,6 +16,9 @@ namespace linway_app.Forms
         private readonly ServicioNotaDeEnvio _servNotaDeEnvio;
         private readonly ServicioProdVendido _servProdVendido;
         private readonly ServicioProducto _servProducto;
+        private readonly ServicioCliente _servCliente;
+        private readonly ServicioPedido _servPedido;
+        private readonly ServicioDiaReparto _servDiaReparto;
 
         public FormNotasEnvio()
         {
@@ -26,6 +29,9 @@ namespace linway_app.Forms
             _servNotaDeEnvio = new ServicioNotaDeEnvio(new UnitOfWork(new LinwaydbContext()));
             _servProdVendido = new ServicioProdVendido(new UnitOfWork(new LinwaydbContext()));
             _servProducto = new ServicioProducto(new UnitOfWork(new LinwaydbContext()));
+            _servCliente = new ServicioCliente(new UnitOfWork(new LinwaydbContext()));
+            _servPedido = new ServicioPedido(new UnitOfWork(new LinwaydbContext()));
+            _servDiaReparto = new ServicioDiaReparto(new UnitOfWork(new LinwaydbContext()));
         }
 
         private void FormNotas_Load(object sender, EventArgs e)
@@ -68,12 +74,12 @@ namespace linway_app.Forms
         private void GuardarNota(NotaDeEnvio nota)
         {
             bool response = _servNotaDeEnvio.Add(nota);
-            if (!response) Console.WriteLine("Algo falló al guardar Nota de Envío en la base de datos");
+            if (!response) MessageBox.Show("Algo falló al guardar Nota de Envío en la base de datos");
         }
         private void EliminarNotaDeEnvio(NotaDeEnvio nota)
         {
             bool response = _servNotaDeEnvio.Delete(nota);
-            if (!response) Console.WriteLine("Algo falló al eliminar Nota de Envío de la base de datos");
+            if (!response) MessageBox.Show("Algo falló al eliminar Nota de Envío de la base de datos");
             GetNotas();
         }
         private void GetProdVendidos()
@@ -83,12 +89,28 @@ namespace linway_app.Forms
         private void AgregarProductoVendido(ProdVendido nuevoPV)
         {
             bool response = _servProdVendido.Add(nuevoPV);
-            if (!response) Console.WriteLine("Algo falló al agregar Nota de Envío a la base de datos");
+            if (!response) MessageBox.Show("Algo falló al agregar Nota de Envío a la base de datos");
             GetProdVendidos();
         }
         private void GetProductos()
         {
             _lstProductos = _servProducto.GetAll();
+        }
+        private Cliente GetClientePorDireccion(string direccion)
+        {
+            List<Cliente> lstClientes = _servCliente.GetAll();
+            Cliente cliente = lstClientes.Find(x => x.Direccion.Contains(direccion));
+            return cliente;
+        }
+        private void AgregarPedidoDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId)
+        {
+            bool response = _servPedido.AgregarDesdeNota(diaDeReparto, nombreReparto, notaDeEnvioId);
+            if (!response) MessageBox.Show("Algo falló al agregar Nota de Envío a la base de datos");
+        }
+        private DiaReparto GetDiaDeReparto(string diaDeReparto)
+        {
+            List<DiaReparto> dias = _servDiaReparto.GetAll();
+            return dias.Find(x => x.Dia == diaDeReparto);
         }
 
         private void CopiaSeguridad_Click(object sender, EventArgs e)         // quitar diálogo, llevar a Exportar
@@ -494,11 +516,9 @@ namespace linway_app.Forms
             {
                 button6.Enabled = false;
             }
-            FormReparto fr = new FormReparto();
-            //comboBox5.DataSource = fr.DarRepartos(comboBox4.Text);
+            comboBox5.DataSource = GetDiaDeReparto(comboBox4.Text);
             comboBox5.DisplayMember = "Nombre";
             comboBox5.ValueMember = "Nombre";
-            fr.Close();
         }
 
         private void textBox6_Leave(object sender, EventArgs e)
@@ -541,11 +561,12 @@ namespace linway_app.Forms
             label16.Text = "";
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void AgregarPedidoDesdeNota_Click(object sender, EventArgs e)
         {
-            FormReparto fr = new FormReparto();
-            //fr.CargarAHojaDeReparto2(label16.Text, comboBox4.Text, comboBox5.Text, notasEnvio.Find(x => x.Id == int.Parse(textBox6.Text)).ProductosVendidos);
-            fr.Close();
+            string diaDeReparto = comboBox4.Text;
+            string nombreReparto = comboBox5.Text;
+            long notaDeEnvioId = long.Parse(textBox6.Text);
+            AgregarPedidoDesdeNota(diaDeReparto, nombreReparto, notaDeEnvioId);
             comboBox5.Text = "";
             comboBox4.Text = "";
             textBox6.Text = "";

@@ -1,9 +1,9 @@
 ﻿using linway_app.Models;
 using System.Collections.Generic;
 
-namespace linway_app.Services
+namespace linway_app.Services.Interfaces
 {
-    interface IServicioReparto
+    public interface IServicioReparto
     {
         bool Add(Reparto reparto);
         //void AgregarRepartoPorNota(Reparto reparto, List<ProdVendido> lstProdVendidos, string dire);
@@ -13,6 +13,6 @@ namespace linway_app.Services
         Reparto Get(long id);
         List<Reparto> GetAll();
         void LimpiarDatos(Reparto reparto);
-        bool AgregarPedidoARepartoPorNota(Reparto reparto, Cliente cliente, List<ProdVendido> lstProdVendidos);
+        bool AgregarPedidoARepartoFormNota(Reparto reparto, Cliente cliente, List<ProdVendido> lstProdVendidos);
     }
 }

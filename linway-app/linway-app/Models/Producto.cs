@@ -16,7 +16,7 @@ namespace linway_app.Models
             Venta = new HashSet<Venta>();
         }
 
-        [DisplayName("Cod:")]
+        [DisplayName("Cod")]
         public long Id { get; set; }
 
         [DisplayName("Producto")]

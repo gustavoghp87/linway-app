@@ -1,6 +1,7 @@
 ﻿using linway_app.Models;
 using linway_app.Repositories;
 using linway_app.Services;
+using linway_app.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,35 +13,58 @@ namespace linway_app.Forms
     {
         private readonly List<ProdVendido> _lstProdVendidos;
         private readonly IServicioNotaDeEnvio _servNotaDeEnvio;
-        private readonly ServicioCliente _servCliente;
-        private readonly ServicioProducto _servProducto;
-        private readonly ServicioVenta _servVenta;
-        private readonly ServicioRegistroVenta _servRegistroVenta;
-        private readonly ServicioDiaReparto _servDiaReparto;
-        private readonly ServicioReparto _servReparto;
-        public FormCrearNota(IServicioNotaDeEnvio servNotaDeEnvio)
+        private readonly IServicioCliente _servCliente;
+        private readonly IServicioProducto _servProducto;
+        private readonly IServicioVenta _servVenta;
+        private readonly IServicioRegistroVenta _servRegistroVenta;
+        private readonly IServicioDiaReparto _servDiaReparto;
+        private readonly IServicioReparto _servReparto;
+        public FormCrearNota(
+            IServicioNotaDeEnvio servNotaDeEnvio, IServicioCliente servCliente, IServicioProducto servProducto,
+            IServicioVenta servVenta, IServicioRegistroVenta servRegistroVenta, IServicioDiaReparto servDiaReparto,
+            IServicioReparto servReparto
+        )
         {
             InitializeComponent();
             _lstProdVendidos = new List<ProdVendido>();
             _servNotaDeEnvio = servNotaDeEnvio;
-            _servCliente = new ServicioCliente(new UnitOfWork(new LinwaydbContext()));
-            _servProducto = new ServicioProducto(new UnitOfWork(new LinwaydbContext()));
-            _servVenta = new ServicioVenta(new UnitOfWork(new LinwaydbContext()));
-            _servRegistroVenta = new ServicioRegistroVenta(new UnitOfWork(new LinwaydbContext()));
-            _servDiaReparto = new ServicioDiaReparto(new UnitOfWork(new LinwaydbContext()));
-            _servReparto = new ServicioReparto(new UnitOfWork(new LinwaydbContext()));
+            _servCliente = servCliente;
+            _servProducto = servProducto;
+            _servVenta = servVenta;
+            _servRegistroVenta = servRegistroVenta;
+            _servDiaReparto = servDiaReparto;
+            _servReparto = servReparto;
         }
         private void FormCrearNota_Load(object sender, EventArgs e)
         {
-            Actualizar();
+            if (_lstProdVendidos == null || _lstProdVendidos.Count == 0) return;
+            dataGridView4.DataSource = _lstProdVendidos.ToArray();
+            dataGridView4.Columns[0].Visible = false;
+            dataGridView4.Columns[1].Width = 30;
+            dataGridView4.Columns[2].Width = 40;
+            dataGridView4.Columns[3].Width = 25;
+            dataGridView4.Columns[4].Visible = true;
+            dataGridView4.Columns[5].Width = 30;
+            dataGridView4.Columns[6].Visible = false;
+            dataGridView4.Columns[7].Visible = false;
         }
         private void Actualizar()
         {
-            //List<NotaDeEnvio> lstNotas = GetNotas();
-            //if (lstNotas == null || lstNotas.Count == 0) return;
-            //dataGridView4.DataSource = lstNotas.ToArray();
-            //dataGridView4.Columns[0].Width = 35;
-            //dataGridView4.Columns[2].Width = 60;
+            if (_lstProdVendidos == null || _lstProdVendidos.Count == 0) return;
+            dataGridView4.DataSource = _lstProdVendidos.ToArray();
+            dataGridView4.Columns[0].Visible = false;
+            dataGridView4.Columns[1].Width = 30;
+            dataGridView4.Columns[2].Visible = false;
+            dataGridView4.Columns[3].Visible = false;
+            dataGridView4.Columns[4].Visible = false;
+            dataGridView4.Columns[5].Width = 30;
+            dataGridView4.Columns[6].Visible = true;
+            dataGridView4.Columns[7].Visible = true;
+            dataGridView4.Columns[8].Visible = false;
+            dataGridView4.Columns[9].Visible = false;
+            dataGridView4.Columns[10].Visible = false;
+            dataGridView4.Columns[11].Visible = false;
+            //dataGridView4.Columns[12].Visible = false;
         }
 
         private List<NotaDeEnvio> GetNotas()
@@ -91,7 +115,7 @@ namespace linway_app.Forms
         }
         private void AgregarPedidoARepartoPorNota(Reparto reparto, Cliente cliente)
         {
-            bool response = _servReparto.AgregarPedidoARepartoPorNota(reparto, cliente, _lstProdVendidos);
+            bool response = _servReparto.AgregarPedidoARepartoFormNota(reparto, cliente, _lstProdVendidos);
             if (!response) MessageBox.Show("Algo falló al agregar Pedido a Reparto en base de datos");
         }
 
@@ -193,11 +217,11 @@ namespace linway_app.Forms
                 textBox20.Text = "";
                 textBox20.Visible = false;
                 label42.Text = impTotal.ToString();
-                dataGridView4.DataSource = _lstProdVendidos.ToArray();
                 textBox16.Text = "";
                 textBox17.Text = "";
                 label38.Text = "";
                 label40.Text = "";
+                Actualizar(); // dataGridView4.DataSource = _lstProdVendidos.ToArray();
             }
         }
 

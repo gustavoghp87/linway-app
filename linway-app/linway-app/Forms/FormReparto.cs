@@ -320,23 +320,6 @@ namespace linway_app.Forms
         //    return diasDeReparto.Find(x => x.Dia.Contains(dia)).Repartos;
         //}
 
-        public void CargarAHojaDeReparto(string direc, string dia, string reparto, List<Venta> lVentas)
-        {
-            CargarHDR();
-            //listaRepartos = diasDeReparto.Find(x => x.Dia == dia).Repartos;
-            //try
-            //{
-            //    // lista de Venta's
-            //    // cliente
-            //    listaRepartos.Find(x => x.Nombre == reparto).AgregarRepartoPorVenta(lVentas, direc.Substring(0, direc.IndexOf('-')));
-            //    GuardarHDR();
-            //}
-            //catch (Exception exc)
-            //{
-            //    MessageBox.Show(exc.Message);
-            //}
-        }
-
 
         //_LImpiar DATOS_ 
         //todos los dias

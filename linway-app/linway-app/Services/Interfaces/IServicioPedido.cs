@@ -1,7 +1,7 @@
 ﻿using linway_app.Models;
 using System.Collections.Generic;
 
-namespace linway_app.Services
+namespace linway_app.Services.Interfaces
 {
     public interface IServicioPedido
     {

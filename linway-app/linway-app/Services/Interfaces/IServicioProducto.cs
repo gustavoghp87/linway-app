@@ -1,8 +1,7 @@
 ﻿using linway_app.Models;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace linway_app.Services
+namespace linway_app.Services.Interfaces
 {
     public interface IServicioProducto
     {

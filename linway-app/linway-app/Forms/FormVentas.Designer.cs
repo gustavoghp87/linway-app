@@ -67,7 +67,6 @@ namespace linway_app.Forms
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.gbVerRegistro = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.cbSeguro = new System.Windows.Forms.CheckBox();
             this.labelTotal = new System.Windows.Forms.Label();
             this.bDeshacerVenta = new System.Windows.Forms.Button();
@@ -77,6 +76,7 @@ namespace linway_app.Forms
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
@@ -89,6 +89,8 @@ namespace linway_app.Forms
             this.label4 = new System.Windows.Forms.Label();
             this.bCancelarBorrarReg = new System.Windows.Forms.Button();
             this.ImportarBtn = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.labelPrecio = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.gbNuevaVenta.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
@@ -127,6 +129,7 @@ namespace linway_app.Forms
             // 
             // gbNuevaVenta
             // 
+            this.gbNuevaVenta.Controls.Add(this.labelPrecio);
             this.gbNuevaVenta.Controls.Add(this.label20);
             this.gbNuevaVenta.Controls.Add(this.textBox19);
             this.gbNuevaVenta.Controls.Add(this.label15);
@@ -431,6 +434,7 @@ namespace linway_app.Forms
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.label8);
             this.groupBox7.Controls.Add(this.cbSeguroBorrar);
             this.groupBox7.Controls.Add(this.button20);
             this.groupBox7.Controls.Add(this.button19);
@@ -500,7 +504,6 @@ namespace linway_app.Forms
             // 
             // gbVerRegistro
             // 
-            this.gbVerRegistro.Controls.Add(this.label3);
             this.gbVerRegistro.Controls.Add(this.cbSeguro);
             this.gbVerRegistro.Controls.Add(this.labelTotal);
             this.gbVerRegistro.Controls.Add(this.bDeshacerVenta);
@@ -510,6 +513,7 @@ namespace linway_app.Forms
             this.gbVerRegistro.Controls.Add(this.dataGridView2);
             this.gbVerRegistro.Controls.Add(this.textBox1);
             this.gbVerRegistro.Controls.Add(this.label2);
+            this.gbVerRegistro.Controls.Add(this.label3);
             this.gbVerRegistro.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbVerRegistro.Location = new System.Drawing.Point(314, 36);
             this.gbVerRegistro.Name = "gbVerRegistro";
@@ -518,19 +522,6 @@ namespace linway_app.Forms
             this.gbVerRegistro.TabStop = false;
             this.gbVerRegistro.Text = "Ver Registro";
             this.gbVerRegistro.Visible = false;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.Maroon;
-            this.label3.Location = new System.Drawing.Point(9, 324);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(316, 39);
-            this.label3.TabIndex = 27;
-            this.label3.Text = "Al deshacher una venta, se borrara el registro y se descontara del\r\nlistado de ve" +
-    "ntas. Atencion: Si la venta se encuentra en hoja de \r\nreparto no se borrara de l" +
-    "a misma.";
             // 
             // cbSeguro
             // 
@@ -618,6 +609,19 @@ namespace linway_app.Forms
             this.label2.Size = new System.Drawing.Size(25, 15);
             this.label2.TabIndex = 0;
             this.label2.Text = "ID:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.Maroon;
+            this.label3.Location = new System.Drawing.Point(9, 324);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(316, 39);
+            this.label3.TabIndex = 27;
+            this.label3.Text = "Al deshacher una venta, se borrara el registro y se descontara del\r\nlistado de ve" +
+    "ntas. Atencion: Si la venta se encuentra en hoja de \r\nreparto no se borrara de l" +
+    "a misma.";
             // 
             // groupBox1
             // 
@@ -752,15 +756,29 @@ namespace linway_app.Forms
             this.ImportarBtn.UseVisualStyleBackColor = true;
             this.ImportarBtn.Click += new System.EventHandler(this.ImportarBtn_Click);
             // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(3, 17);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(47, 15);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "label8";
+            // 
+            // labelPrecio
+            // 
+            this.labelPrecio.AutoSize = true;
+            this.labelPrecio.Location = new System.Drawing.Point(155, 66);
+            this.labelPrecio.Name = "labelPrecio";
+            this.labelPrecio.Size = new System.Drawing.Size(41, 15);
+            this.labelPrecio.TabIndex = 45;
+            this.labelPrecio.Text = "label9";
+            // 
             // FormVentas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(922, 488);
             this.Controls.Add(this.ImportarBtn);
-            this.Controls.Add(this.gbVerRegistro);
-            this.Controls.Add(this.gbNuevaVenta);
-            this.Controls.Add(this.gbBorrarReg);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridView1);
@@ -770,6 +788,9 @@ namespace linway_app.Forms
             this.Controls.Add(this.label27);
             this.Controls.Add(this.dataGridView3);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.gbNuevaVenta);
+            this.Controls.Add(this.gbBorrarReg);
+            this.Controls.Add(this.gbVerRegistro);
             this.Controls.Add(this.groupBox7);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
@@ -865,5 +886,7 @@ namespace linway_app.Forms
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button bBorrarRegVentas;
         private System.Windows.Forms.Button ImportarBtn;
+        private System.Windows.Forms.Label labelPrecio;
+        private System.Windows.Forms.Label label8;
     }
 }

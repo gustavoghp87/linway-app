@@ -1,6 +1,6 @@
 ﻿using linway_app.Models;
-using linway_app.Repositories;
-using linway_app.Services;
+using linway_app.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -16,13 +16,12 @@ namespace linway_app.Forms
         {
             _servCliente = servCliente;
             _servProducto = servProducto;
-            try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.ToString()); return; }
+            try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.Message); return; }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             Actualizar();
         }
-
         public void Actualizar()
         {
             var lstClientes = GetClientes();
@@ -32,10 +31,17 @@ namespace linway_app.Forms
                 dataGridView1.Columns[0].Width = 40;
                 dataGridView1.Columns[1].Width = 250;
                 dataGridView1.Columns[2].Width = 60;
-                dataGridView1.Columns[3].Width = 60;
-                dataGridView1.Columns[4].Width = 200;
+                dataGridView1.Columns[3].Width = 90;
+                dataGridView1.Columns[4].Width = 90;
                 dataGridView1.Columns[5].Width = 65;
                 dataGridView1.Columns[6].Width = 65;
+                dataGridView1.Columns[7].Visible = false;
+                dataGridView1.Columns[8].Visible = false;
+                dataGridView1.Columns[9].Visible = false;
+                dataGridView1.Columns[10].Visible = false;
+
+                //Columns - in the designer click on the property ColumnHeadersDefaultCellStyle and select Layout, Alignment = MiddleCenter
+                //For the data fields do the same for DefaultCellStyle
             }
             var lstProductos = GetProductos();
             if (lstProductos != null && lstClientes.Count > 0)
@@ -44,6 +50,8 @@ namespace linway_app.Forms
                 dataGridView2.Columns[0].Width = 48;
                 dataGridView2.Columns[1].Width = 220;
                 dataGridView2.Columns[2].Width = 72;
+                dataGridView2.Columns[3].Visible = false;
+                dataGridView2.Columns[4].Visible = false;
             }
         }
         private List<Cliente> GetClientes()
@@ -65,43 +73,44 @@ namespace linway_app.Forms
         }
         private void AbrirClientes_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormClientes form = new FormClientes(new ServicioCliente(new UnitOfWork(new LinwaydbContext())));
+            
+            var form = Program.GetConfig().GetRequiredService<FormClientes>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
         private void AbrirProductos_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormProductos form = new FormProductos(new ServicioProducto(new UnitOfWork(new LinwaydbContext())));
+            var form = Program.GetConfig().GetRequiredService<FormProductos>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
         private void AbrirCrearNotaDeEnvío_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormCrearNota form = new FormCrearNota(new ServicioNotaDeEnvio(new UnitOfWork(new LinwaydbContext())));
+            var form = Program.GetConfig().GetRequiredService<FormCrearNota>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
         private void AbrirNotasDeEnvio_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormNotasEnvio form = new FormNotasEnvio();
+            var form = Program.GetConfig().GetRequiredService<FormNotasEnvio>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
         private void AbrirHojasDeReparto_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormReparto form = new FormReparto();
+            var form = Program.GetConfig().GetRequiredService<FormReparto>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
         private void AbrirRecibos_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormRecibos form = new FormRecibos();
+            var form = Program.GetConfig().GetRequiredService<FormRecibos>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
         private void AbrirVentas_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormVentas form = new FormVentas();
+            var form = Program.GetConfig().GetRequiredService<FormVentas>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }

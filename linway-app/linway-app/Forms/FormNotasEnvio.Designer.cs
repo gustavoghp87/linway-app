@@ -484,7 +484,7 @@ namespace linway_app.Forms
             this.button6.TabIndex = 15;
             this.button6.Text = "Enviar";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.button6.Click += new System.EventHandler(this.AgregarPedidoDesdeNota_Click);
             // 
             // textBox6
             // 

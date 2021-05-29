@@ -19,7 +19,7 @@ namespace linway_app.Models
             RegistroVenta = new HashSet<RegistroVenta>();
         }
 
-        [DisplayName("Cod:")]
+        [DisplayName("Cod")]
         public long Id { get; set; }
 
         [DisplayName("Dirección - Localidad:")]

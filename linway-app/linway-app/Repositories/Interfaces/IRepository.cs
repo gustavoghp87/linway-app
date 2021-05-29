@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace linway_app.Repositories
+namespace linway_app.Repositories.Interfaces
 {
     public interface IRepository<T>
     {

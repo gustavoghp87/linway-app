@@ -402,6 +402,7 @@
     <Compile Include="Services\Interfaces\IServicioReparto.cs" />
     <Compile Include="Services\Interfaces\IServicioPedido.cs" />
     <Compile Include="Services\Interfaces\IServicioProdVendido.cs" />
+    <Compile Include="Services\Interfaces\IServicioRecibo.cs" />
     <Compile Include="Services\ServicioDiaReparto.cs" />
     <Compile Include="Services\ServicioProdVendido.cs" />
     <Compile Include="Services\ServicioRegistroVenta.cs" />

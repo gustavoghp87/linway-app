@@ -1,6 +1,8 @@
 ﻿using linway_app.Models;
 using linway_app.Repositories.Interfaces;
+using linway_app.Services.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace linway_app.Services
 {
@@ -49,6 +51,45 @@ namespace linway_app.Services
         //    pedido.L += cantidad;
         //    return pedido;
         //}
+        public bool AgregarDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId)
+        {
+            NotaDeEnvio nota = _unitOfWork.RepoNotaDeEnvio.Get(notaDeEnvioId);
+            List<DiaReparto> dias = _unitOfWork.RepoDiaReparto.GetAll();
+            DiaReparto dia = dias.Find(x => x.Dia == diaDeReparto);
+            Reparto reparto = dia.Reparto.ToList().Find(x => x.Nombre == nombreReparto);
+            Pedido pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == nota.ClientId);
+
+            if (pedido == null) // no existe pedido para este cliente este día y reparto, se hace pedido
+            {
+                Pedido nuevoPedido = new Pedido
+                {
+                    ClienteId = nota.ClientId,
+                    Cliente = nota.Client,
+                    RepartoId = reparto.Id,
+                    Direccion = nota.Client.Direccion,
+                    Entregar = 1,
+                    Productos = "",
+                    ProdVendidos = nota.ProdVendidos,
+                    Reparto = reparto
+                };
+                foreach (var prodVendido in nota.ProdVendidos)
+                {
+                    nuevoPedido.Productos += prodVendido.Descripcion + " | ";
+                }
+                _unitOfWork.RepoPedido.Add(nuevoPedido);
+            }
+            else
+            {
+                foreach (var prodVendido in nota.ProdVendidos)
+                {
+                    pedido.Productos += prodVendido.Descripcion + " | ";
+                    pedido.ProdVendidos.Add(prodVendido);
+                }
+                _unitOfWork.RepoPedido.Edit(pedido);
+            }
+
+            return true;
+        }
         //public static List<Venta> CargarVentas(Pedido pedido, List<Venta> lstVentas)
         //{
         //    foreach (Venta venta in lstVentas)

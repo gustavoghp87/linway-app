@@ -1,5 +1,6 @@
 ﻿using linway_app.Models;
 using linway_app.Repositories.Interfaces;
+using linway_app.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,7 +75,47 @@ namespace linway_app.Services
         //        ModificarContadores(reparto, venta.Cantidad, prod.Nombre);
         //    }
         //}
-        public bool AgregarPedidoARepartoPorNota(Reparto reparto, Cliente cliente, List<ProdVendido> lstProdVendidos)
+        public bool AgregarPedidoARepartoFormVenta(long clientId, string dia, string reparto, List<ProdVendido> lstProdVendido)
+        {
+            if (lstProdVendido == null || lstProdVendido.Count == 0) return false;
+            Cliente cliente = _unitOfWork.RepoCliente.Get(clientId);
+            if (cliente == null) return false;
+            List<DiaReparto> dias = _unitOfWork.RepoDiaReparto.GetAll();
+            if (dias == null) return false;
+            DiaReparto diaRep = dias.Find(x => x.Dia == dia);
+            if (diaRep == null) return false;
+            Reparto rep = diaRep.Reparto.ToList().Find(x => x.Nombre == reparto);
+            if (rep == null) return false;
+            Pedido pedido = rep.Pedidos.ToList().Find(x => x.ClienteId == cliente.Id);
+
+            if (pedido == null)  // agregar pedido
+            {
+                //Pedido nuevoPedido = new Pedido
+                //{
+                //    ClienteId = cliente.Id,
+                //    Direccion = direccion.Contains("-") ? direccion.Substring(0, direccion.IndexOf('-')) : direccion,
+                //    RepartoId = reparto.Id,
+                //    ProdVendidos = lstProdVendidos,
+                //    Cliente = cliente,
+                //    Reparto = reparto,
+                //    Entregar = 1,
+                //    Productos = "",
+                //    A = 0,
+                //    Ae = 0,
+                //    D = 0,
+                //    E = 0,
+                //    Id = 0,
+                //    L = 0,
+                //    T = 0
+                //};
+            }
+            else                 // editar pedido
+            {
+
+            }
+            return true;
+        }
+        public bool AgregarPedidoARepartoFormNota(Reparto reparto, Cliente cliente, List<ProdVendido> lstProdVendidos)
         {
             Pedido pedidoViejo = reparto.Pedidos.ToList().Find(x => x.ClienteId == cliente.Id);
 
@@ -83,11 +124,10 @@ namespace linway_app.Services
             // no tiene, crear pedido de cero
             if (pedidoViejo == null)
             {
-                string direccion = cliente.Direccion;
                 Pedido nuevoPedido = new Pedido
                 {
                     ClienteId = cliente.Id,
-                    Direccion = direccion.Contains("-") ? direccion.Substring(0, direccion.IndexOf('-')) : direccion,
+                    Direccion = cliente.Direccion,
                     RepartoId = reparto.Id,
                     ProdVendidos = lstProdVendidos,
                     Cliente = cliente,
