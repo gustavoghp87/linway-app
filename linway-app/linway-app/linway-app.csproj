@@ -381,6 +381,7 @@
     <Compile Include="Repositories\DbString.cs" />
     <Compile Include="Repositories\Interfaces\IUnitOfWork.cs" />
     <Compile Include="Repositories\Interfaces\IRepository.cs" />
+    <Compile Include="Repositories\RepositoryDetalleRecibo.cs" />
     <Compile Include="Repositories\RepositoryPedido.cs" />
     <Compile Include="Repositories\RepositoryDiaReparto.cs" />
     <Compile Include="Repositories\RepositoryProdVendido.cs" />
@@ -403,6 +404,8 @@
     <Compile Include="Services\Interfaces\IServicioPedido.cs" />
     <Compile Include="Services\Interfaces\IServicioProdVendido.cs" />
     <Compile Include="Services\Interfaces\IServicioRecibo.cs" />
+    <Compile Include="Services\Interfaces\IServicioDetalleRecibo.cs" />
+    <Compile Include="Services\ServicioDetalleRecibo.cs" />
     <Compile Include="Services\ServicioDiaReparto.cs" />
     <Compile Include="Services\ServicioProdVendido.cs" />
     <Compile Include="Services\ServicioRegistroVenta.cs" />

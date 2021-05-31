@@ -10,5 +10,6 @@ namespace linway_app.Services.Interfaces
         bool Edit(RegistroVenta registroVenta);
         RegistroVenta Get(long id);
         List<RegistroVenta> GetAll();
+        bool ModificarClienteId(long clienteId, RegistroVenta registroVenta);
     }
 }

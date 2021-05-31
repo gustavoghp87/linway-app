@@ -19,6 +19,7 @@ namespace linway_app.Forms
         private readonly IServicioRegistroVenta _servRegistroVenta;
         private readonly IServicioDiaReparto _servDiaReparto;
         private readonly IServicioReparto _servReparto;
+
         public FormCrearNota(
             IServicioNotaDeEnvio servNotaDeEnvio, IServicioCliente servCliente, IServicioProducto servProducto,
             IServicioVenta servVenta, IServicioRegistroVenta servRegistroVenta, IServicioDiaReparto servDiaReparto,
@@ -64,9 +65,7 @@ namespace linway_app.Forms
             dataGridView4.Columns[9].Visible = false;
             dataGridView4.Columns[10].Visible = false;
             dataGridView4.Columns[11].Visible = false;
-            //dataGridView4.Columns[12].Visible = false;
         }
-
         private List<NotaDeEnvio> GetNotas()
         {
             return _servNotaDeEnvio.GetAll();
@@ -115,7 +114,7 @@ namespace linway_app.Forms
         }
         private void AgregarPedidoARepartoPorNota(Reparto reparto, Cliente cliente)
         {
-            bool response = _servReparto.AgregarPedidoARepartoFormNota(reparto, cliente, _lstProdVendidos);
+            bool response = _servReparto.AgregarPedidoAReparto(cliente.Id, reparto.DiaReparto.Dia, reparto.Nombre, _lstProdVendidos);
             if (!response) MessageBox.Show("Algo falló al agregar Pedido a Reparto en base de datos");
         }
 

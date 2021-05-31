@@ -32,5 +32,12 @@ namespace linway_app.Services
         {
             return _unitOfWork.RepoRegistroVenta.GetAll();
         }
+
+        public bool ModificarClienteId(long clienteId, RegistroVenta registroVenta)
+        {
+            registroVenta.ClienteId = clienteId;
+            bool response = Edit(registroVenta);
+            return response;
+        }
     }
 }

@@ -33,7 +33,6 @@ namespace linway_app.Forms
             _servPedido = new ServicioPedido(new UnitOfWork(new LinwaydbContext()));
             _servDiaReparto = new ServicioDiaReparto(new UnitOfWork(new LinwaydbContext()));
         }
-
         private void FormNotas_Load(object sender, EventArgs e)
         {
             GetNotas();
@@ -61,7 +60,6 @@ namespace linway_app.Forms
                 dataGridView2.Columns[2].Width = 40;
             }
         }
-
         private void GetNotas()
         {
             var notas = _servNotaDeEnvio.GetAll();
@@ -134,25 +132,7 @@ namespace linway_app.Forms
         }
 
         public void ImportarNotasDeEnvio_Click(object sender, EventArgs e)
-        {
-            //notasEnvio.Clear();
-            //GetNotas();
-            //DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de notas de envío por el contenido del Excel notas.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Notas de Envío desde Excel", MessageBoxButtons.YesNo);
-            //if (dialogResult == DialogResult.Yes)
-            //{
-                //notasEnvio = new Importar("notas").ImportarNotas();
-                //if (notasEnvio != null)
-                //{
-                //    GuardarNotas();
-                //    MessageBox.Show("Terminado");
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Falló Notas; cancelado");
-                //}
-                //CargarNotas();
-            //}
-        }
+        {}
 
         public void RecibirProductos(List<Producto> productos)
         {

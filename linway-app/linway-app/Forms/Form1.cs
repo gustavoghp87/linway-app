@@ -43,6 +43,18 @@ namespace linway_app.Forms
                 //Columns - in the designer click on the property ColumnHeadersDefaultCellStyle and select Layout, Alignment = MiddleCenter
                 //For the data fields do the same for DefaultCellStyle
             }
+            else
+            {
+                try
+                {
+                    _servCliente.Add(new Cliente { Name = "Cliente Particular X" , Direccion = "-" });
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
+            }
+
             var lstProductos = GetProductos();
             if (lstProductos != null && lstClientes.Count > 0)
             {
@@ -73,7 +85,6 @@ namespace linway_app.Forms
         }
         private void AbrirClientes_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
             var form = Program.GetConfig().GetRequiredService<FormClientes>();
             form.FormClosing += Frm_FormClosing;
             form.Show();

@@ -17,20 +17,20 @@ namespace linway_app.Repositories
         {
             string p1 = "INSERT INTO ProdVendido(ProductoId, Cantidad, Descripcion, Precio";
             string p2 = $"VALUES ({prodVendido.ProductoId}, {prodVendido.Cantidad}, '{prodVendido.Descripcion}','{prodVendido.Precio}'";
-            if (prodVendido.NotaDeEnvioId != 0)
+            if (prodVendido.NotaDeEnvioId != null)
             {
                 p1 += $", NotaDeEnvioId";
-                p2 += $" {prodVendido.NotaDeEnvioId}";
+                p2 += $", {prodVendido.NotaDeEnvioId}";
             }
-            if (prodVendido.RegistroVentaId != 0)
+            if (prodVendido.RegistroVentaId != null)
             {
                 p1 += $", RegistroVentaId";
-                p2 += $" {prodVendido.RegistroVentaId}";
+                p2 += $", {prodVendido.RegistroVentaId}";
             }
-            if (prodVendido.PedidoId != 0)
+            if (prodVendido.PedidoId != null)
             {
                 p1 += $", PedidoId";
-                p2 += $" {prodVendido.PedidoId}";
+                p2 += $", {prodVendido.PedidoId}";
             }
             p1 += ") ";
             p2 += ")";

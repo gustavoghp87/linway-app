@@ -17,7 +17,6 @@ namespace linway_app.Repositories
         {
             string commandText = $"INSERT INTO RegistroVenta(ClienteId, NombreCliente, Fecha) " +
                                  $"VALUES ({registroVenta.ClienteId}, '{registroVenta.NombreCliente}', '{registroVenta.Fecha}')";
-
             return SQLiteCommands.Execute(commandText);
         }
         public bool Delete(RegistroVenta registroVenta)

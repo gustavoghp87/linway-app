@@ -34,7 +34,7 @@ namespace linway_app.Services
             return _unitOfWork.RepoRecibo.GetAll();
         }
 
-        public void CalcularImporteTotal(Recibo recibo)
+        public double CalcularImporteTotal(Recibo recibo)
         {
             double subTo = 0;
             if (recibo.DetalleRecibos != null && recibo.DetalleRecibos.Count != 0)
@@ -42,7 +42,7 @@ namespace linway_app.Services
                 {
                     subTo += detalle.Importe;
                 }
-            recibo.ImporteTotal = subTo;
+            return subTo;
         }
     }
 }

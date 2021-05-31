@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.

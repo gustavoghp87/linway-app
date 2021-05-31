@@ -16,6 +16,7 @@ namespace linway_app.Repositories.Interfaces
         IRepository<Reparto> RepoReparto { get; }
         IRepository<DiaReparto> RepoDiaReparto { get; }
         IRepository<Pedido> RepoPedido{ get; }
+        IRepository<DetalleRecibo> RepoDetalleRecibo { get; }
 
         void SaveChanges();
         Task SaveChangesAsync();

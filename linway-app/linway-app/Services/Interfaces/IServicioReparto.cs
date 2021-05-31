@@ -13,6 +13,6 @@ namespace linway_app.Services.Interfaces
         Reparto Get(long id);
         List<Reparto> GetAll();
         void LimpiarDatos(Reparto reparto);
-        bool AgregarPedidoARepartoFormNota(Reparto reparto, Cliente cliente, List<ProdVendido> lstProdVendidos);
+        bool AgregarPedidoAReparto(long clientId, string dia, string repartoNombre, List<ProdVendido> lstProdVendidos);
     }
 }

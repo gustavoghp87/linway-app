@@ -255,7 +255,7 @@ namespace linway_app.Forms
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 10;
-            this.dataGridView1.Size = new System.Drawing.Size(898, 204);
+            this.dataGridView1.Size = new System.Drawing.Size(898, 315);
             this.dataGridView1.TabIndex = 1;
             // 
             // label11
@@ -328,7 +328,7 @@ namespace linway_app.Forms
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(925, 623);
+            this.ClientSize = new System.Drawing.Size(925, 743);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.BuscadorClientes);

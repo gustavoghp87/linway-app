@@ -32,6 +32,7 @@ namespace linway_app.Forms
             this.label27 = new System.Windows.Forms.Label();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.gbNuevaVenta = new System.Windows.Forms.GroupBox();
+            this.labelPrecio = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.textBox19 = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
@@ -61,6 +62,7 @@ namespace linway_app.Forms
             this.bActualizar = new System.Windows.Forms.Button();
             this.bCopiaSeguridad = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.cbSeguroBorrar = new System.Windows.Forms.CheckBox();
             this.button20 = new System.Windows.Forms.Button();
             this.button19 = new System.Windows.Forms.Button();
@@ -89,8 +91,6 @@ namespace linway_app.Forms
             this.label4 = new System.Windows.Forms.Label();
             this.bCancelarBorrarReg = new System.Windows.Forms.Button();
             this.ImportarBtn = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
-            this.labelPrecio = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.gbNuevaVenta.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
@@ -157,6 +157,15 @@ namespace linway_app.Forms
             this.gbNuevaVenta.TabStop = false;
             this.gbNuevaVenta.Text = "Nueva venta";
             this.gbNuevaVenta.Visible = false;
+            // 
+            // labelPrecio
+            // 
+            this.labelPrecio.AutoSize = true;
+            this.labelPrecio.Location = new System.Drawing.Point(224, 26);
+            this.labelPrecio.Name = "labelPrecio";
+            this.labelPrecio.Size = new System.Drawing.Size(41, 15);
+            this.labelPrecio.TabIndex = 45;
+            this.labelPrecio.Text = "label9";
             // 
             // label20
             // 
@@ -346,7 +355,7 @@ namespace linway_app.Forms
             this.textBox12.Size = new System.Drawing.Size(57, 21);
             this.textBox12.TabIndex = 3;
             this.textBox12.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
-            this.textBox12.Leave += new System.EventHandler(this.textBox12_Leave);
+            this.textBox12.Leave += new System.EventHandler(this.InputProductoId_Leave);
             // 
             // menuStrip1
             // 
@@ -446,6 +455,14 @@ namespace linway_app.Forms
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "¿Seguro desea borrar la lista de ventas?";
             this.groupBox7.Visible = false;
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(3, 17);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(47, 15);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "label8";
             // 
             // cbSeguroBorrar
             // 
@@ -755,23 +772,6 @@ namespace linway_app.Forms
             this.ImportarBtn.Text = "Importar";
             this.ImportarBtn.UseVisualStyleBackColor = true;
             this.ImportarBtn.Click += new System.EventHandler(this.ImportarBtn_Click);
-            // 
-            // label8
-            // 
-            this.label8.Location = new System.Drawing.Point(3, 17);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(47, 15);
-            this.label8.TabIndex = 0;
-            this.label8.Text = "label8";
-            // 
-            // labelPrecio
-            // 
-            this.labelPrecio.AutoSize = true;
-            this.labelPrecio.Location = new System.Drawing.Point(155, 66);
-            this.labelPrecio.Name = "labelPrecio";
-            this.labelPrecio.Size = new System.Drawing.Size(41, 15);
-            this.labelPrecio.TabIndex = 45;
-            this.labelPrecio.Text = "label9";
             // 
             // FormVentas
             // 

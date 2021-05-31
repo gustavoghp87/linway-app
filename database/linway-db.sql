@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS "Reparto" (
 );
 CREATE TABLE IF NOT EXISTS "RegistroVenta" (
 	"Id"	INTEGER NOT NULL UNIQUE,
-	"ClienteId"	INTEGER NOT NULL,
+	"ClienteId"	INTEGER NULL UNIQUE,
 	"NombreCliente"	TEXT NOT NULL,
 	"Fecha"	TEXT NOT NULL,
 	FOREIGN KEY("ClienteId") REFERENCES "Cliente"("Id"),

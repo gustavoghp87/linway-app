@@ -334,7 +334,7 @@ namespace linway_app.Forms
             this.button6.TabIndex = 19;
             this.button6.Text = "Crear Recibo";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.Annadir_btn6_Click);
+            this.button6.Click += new System.EventHandler(this.AnyadirRecibo_Click);
             // 
             // label18
             // 
@@ -406,7 +406,7 @@ namespace linway_app.Forms
             this.button2.TabIndex = 18;
             this.button2.Text = "Añadir";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.AgregarDetalle_btn2_Click);
+            this.button2.Click += new System.EventHandler(this.AgregarDetalle_Click);
             // 
             // textBox8
             // 
@@ -490,7 +490,7 @@ namespace linway_app.Forms
             this.textBox6.Size = new System.Drawing.Size(49, 20);
             this.textBox6.TabIndex = 10;
             this.textBox6.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumeros);
-            this.textBox6.Leave += new System.EventHandler(this.textBox6_Leave);
+            this.textBox6.Leave += new System.EventHandler(this.ClienteId_Leave);
             // 
             // label15
             // 
@@ -747,7 +747,7 @@ namespace linway_app.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Recibos";
             this.TopMost = true;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.formRecibos_FormClosing);
+            //this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.formRecibos_FormClosing);
             this.Load += new System.EventHandler(this.FormRecibos_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox2.ResumeLayout(false);

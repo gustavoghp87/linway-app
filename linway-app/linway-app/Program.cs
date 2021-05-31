@@ -22,6 +22,7 @@ namespace linway_app
             services.AddScoped<IProducto, Producto>();
             services.AddScoped<IProdVendido, ProdVendido>();
             services.AddScoped<IRecibo, Recibo>();
+            services.AddScoped<IDetalleRecibo, DetalleRecibo>();
             services.AddScoped<IRegistroVenta, RegistroVenta>();
             services.AddScoped<IReparto, Reparto>();
             services.AddScoped<IVenta, Venta>();
@@ -42,6 +43,7 @@ namespace linway_app
             services.AddScoped<IServicioProducto, ServicioProducto>();
             services.AddScoped<IServicioProdVendido, ServicioProdVendido>();
             services.AddScoped<IServicioRecibo, ServicioRecibo>();
+            services.AddScoped<IServicioDetalleRecibo, ServicioDetalleRecibo>();
             services.AddScoped<IServicioRegistroVenta, ServicioRegistroVenta>();
             services.AddScoped<IServicioReparto, ServicioReparto>();
             services.AddScoped<IServicioVenta, ServicioVenta>();
