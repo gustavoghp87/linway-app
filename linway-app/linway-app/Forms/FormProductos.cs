@@ -30,6 +30,10 @@ namespace linway_app.Forms
         {
             return GetProductos().Find(x => x.Nombre.ToLower().Contains(nombre.ToLower()));
         }
+        private Producto GetProductoPorNombreExacto(string nombre)
+        {
+            return GetProductos().Find(x => x.Nombre.Contains(nombre));
+        }
         private void GuardarProducto(Producto nuevoProducto)
         {
             bool response = _servProducto.Add(nuevoProducto);
@@ -48,48 +52,10 @@ namespace linway_app.Forms
 
 
         private void CrearCopiaSeguridad_Click(object sender, EventArgs e)
-        {
-            GetProductos();
-            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel productos.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Productos a Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                //bool success = new Exportar().ExportarAExcel(listaProductos);
-                //if (success)
-                //{
-                //    bCopiaSeguridad.ForeColor = Color.Green;
-                //    bCopiaSeguridad.Enabled = false;
-                //    bCopiaSeguridad.Text = "Creacion exitosa";
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Hubo un error al guardar los cambios.");
-                //}
-            }
-            else if (dialogResult == DialogResult.No)
-            {
-                return;
-            }
-        }
+        {}
 
         private void ImportarBtn(object sender, EventArgs e)
-        {
-            GetProductos();
-            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de productos por el contenido del Excel productos.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Productos desde Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                //listaProductos = new Importar("productos").ImportarProductos();
-                //if (listaProductos != null)
-                //{
-                //    GuardarProductos();
-                //    MessageBox.Show("Terminado");
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Falló Productos; cancelado");
-                //}
-                //CargarProductos();
-            }
-        }
+        {}
 
         private void Limpiar_Click(object sender, EventArgs e)
         {
@@ -98,7 +64,7 @@ namespace linway_app.Forms
             textBox7.Text = "";
             textBox8.Text = "";
             textBox9.Text = "";
-            label18.Text = "";
+            textBox2.Text = "";
             label19.Text = "";
             label46.Text = "";
             cbSeguroBorrar.Checked = false;
@@ -175,35 +141,45 @@ namespace linway_app.Forms
                 return;
             }
         }
-
-        private void textBox8_Leave(object sender, EventArgs e)
+        private void textBox8_TextChanged(object sender, EventArgs e)   // buscar por id
         {
-            List<Producto> lstProductos = GetProductos();
-            bool encontrado = false;
             if (textBox8.Text != "")
             {
-                foreach (Producto producto in lstProductos)
+                try { long.Parse(textBox8.Text); } catch { return; };
+                Producto producto = GetProducto(long.Parse(textBox8.Text));
+                if (producto != null)
                 {
-                    if (producto.Id == int.Parse(textBox8.Text))
-                    {
-                        encontrado = true;
-                        label18.Text = producto.Nombre;
-                        label19.Text = "" + producto.Precio;
-                        textBox9.Text = producto.Precio.ToString();        // campo de edición
-                    }
+                    label19.Text = producto.Nombre;
+                    textBox9.Text = producto.Precio.ToString();        // campo de edición
+                }
+                else
+                {
+                    label19.Text = "No encontrado";
+                    textBox9.Text = "";
                 }
             }
-            if (!encontrado)
+        }
+        private void textBox2_TextChanged(object sender, EventArgs e)  // buscar por nombre
+        {
+            if (textBox2.Text != "")
             {
-                label18.Text = "No encontrado";
-                label19.Text = "No encontrado";
-                textBox9.Text = "";
+                Producto producto = GetProductoPorNombre(textBox2.Text);
+                if (producto != null)
+                {
+                    label19.Text = producto.Nombre;
+                    textBox9.Text = producto.Precio.ToString();        // campo de edición
+                }
+                else
+                {
+                    label19.Text = "No encontrado";
+                    textBox9.Text = "";
+                }
             }
         }
 
         bool TodoOKmodificarP()
         {
-            if ((label18.Text != "No encontrado") && (textBox8.Text != "") && (textBox9.Text != ""))
+            if (label19.Text != "No encontrado" && textBox8.Text != "" && textBox9.Text != "")
             {
                 return true;
             }
@@ -217,16 +193,11 @@ namespace linway_app.Forms
         {
             if (TodoOKmodificarP())
             {
-                List<Producto> lstProductos = GetProductos();
-                foreach (Producto prodEditar in lstProductos)
-                {
-                    if (prodEditar.Nombre.Equals(label18.Text))
-                    {
-                        prodEditar.Precio = float.Parse(textBox9.Text);
-                        EditarProducto(prodEditar);
-                        button6.PerformClick();
-                    }
-                }
+                Producto producto = GetProductoPorNombreExacto(label19.Text);
+                if (producto == null) return;
+                producto.Precio = double.Parse(textBox9.Text);
+                EditarProducto(producto);
+                button6.PerformClick();
             }
             else
             {
@@ -288,8 +259,7 @@ namespace linway_app.Forms
         {
             if (cbSeguroBorrar.Checked)
             {
-                List<Producto> lstProductos = GetProductos();
-                Producto producto = lstProductos.Find(x => x.Nombre.Equals(label46.Text));
+                Producto producto = GetProductoPorNombreExacto(label46.Text);
                 button22.Enabled = false;
                 EliminarProducto(producto);
                 textBox21.Text = "";

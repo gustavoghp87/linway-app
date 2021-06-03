@@ -49,11 +49,12 @@
             this.label9 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.gbModificar = new System.Windows.Forms.GroupBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.textBox8 = new System.Windows.Forms.TextBox();
@@ -283,11 +284,12 @@
             // 
             // gbModificar
             // 
+            this.gbModificar.Controls.Add(this.textBox2);
+            this.gbModificar.Controls.Add(this.label1);
             this.gbModificar.Controls.Add(this.label19);
             this.gbModificar.Controls.Add(this.label14);
             this.gbModificar.Controls.Add(this.label18);
             this.gbModificar.Controls.Add(this.label13);
-            this.gbModificar.Controls.Add(this.label17);
             this.gbModificar.Controls.Add(this.textBox9);
             this.gbModificar.Controls.Add(this.label16);
             this.gbModificar.Controls.Add(this.textBox8);
@@ -301,10 +303,27 @@
             this.gbModificar.TabStop = false;
             this.gbModificar.Text = "Modificar Producto";
             // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(144, 60);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(94, 21);
+            this.textBox2.TabIndex = 12;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(24, 60);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(103, 15);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Nombre producto";
+            // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(114, 84);
+            this.label19.Location = new System.Drawing.Point(114, 94);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(0, 15);
             this.label19.TabIndex = 10;
@@ -337,15 +356,6 @@
             this.label13.TabIndex = 2;
             this.label13.Text = "Nuevo Precio";
             // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(24, 108);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(84, 15);
-            this.label17.TabIndex = 8;
-            this.label17.Text = "Precio actual: ";
-            // 
             // textBox9
             // 
             this.textBox9.Location = new System.Drawing.Point(138, 137);
@@ -357,7 +367,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(24, 86);
+            this.label16.Location = new System.Drawing.Point(24, 96);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(62, 15);
             this.label16.TabIndex = 7;
@@ -369,8 +379,8 @@
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(94, 21);
             this.textBox8.TabIndex = 3;
+            this.textBox8.TextChanged += new System.EventHandler(this.textBox8_TextChanged);
             this.textBox8.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumeros_KeyPress);
-            this.textBox8.Leave += new System.EventHandler(this.textBox8_Leave);
             // 
             // button6
             // 
@@ -440,7 +450,6 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox textBox9;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox textBox8;
@@ -454,5 +463,7 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label BusqNombreLabel;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label1;
     }
 }
