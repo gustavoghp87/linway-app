@@ -16,5 +16,6 @@ namespace linway_app.Models
         long Tl { get; set; }
         long TotalB { get; set; }
         long Tt { get; set; }
+        string Estado { get; set; }
     }
 }

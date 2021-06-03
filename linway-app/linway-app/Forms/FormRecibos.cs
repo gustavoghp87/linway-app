@@ -1,8 +1,10 @@
 ﻿using linway_app.Models;
+using linway_app.Models.Internals;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -24,7 +26,6 @@ namespace linway_app.Forms
             _servRecibo = servRecibo;
             _servDetalleRecibo = servDetalleRecibo;
         }
-
         private void FormRecibos_Load(object sender, EventArgs e)
         {
             Actualizar();
@@ -33,25 +34,37 @@ namespace linway_app.Forms
         {
             CargarRecibos();
             CargarClientes();
+            ActualizarGridRecibos(_lstRecibos);
         }
         private void CargarRecibos()
         {
             _lstRecibos = _servRecibo.GetAll();
-            if (_lstRecibos != null)
-            {
-                dataGridView1.DataSource = _lstRecibos.ToArray();
-                dataGridView1.Columns[0].Width = 30;
-                dataGridView1.Columns[1].Width = 50;
-                dataGridView1.Columns[3].Width = 45;
-                dataGridView1.Columns[4].Width = 50;
-            }
-            lCantRecibos.Text = _lstRecibos.Count.ToString() + " recibos.";
         }
         private void CargarClientes()
         {
             _lstClientes = _servCliente.GetAll();
         }
-        private void CargarDetalles()
+        private void ActualizarGridRecibos(List<Recibo> recibos)
+        {
+            if (recibos != null)
+            {
+                List<ReciboFiltrado> grid1 = new List<ReciboFiltrado>();
+                foreach (Recibo recibo in recibos)
+                {
+                    grid1.Add(new ReciboFiltrado
+                    {
+                        Id = recibo.Id,
+                        Fecha = recibo.Fecha,
+                        Cliente = recibo.DireccionCliente,
+                        Total = recibo.ImporteTotal,
+                        Impresa = recibo.Impresa == 0 ? "No" : "Sí"
+                    });
+                }
+                dataGridView1.DataSource = grid1.ToArray();
+            }
+            lCantRecibos.Text = recibos.Count.ToString() + " recibos.";
+        }
+        private void ActualizarGridDetalles()
         {
             if (_lstDetallesAAgregar != null)
             {
@@ -67,20 +80,15 @@ namespace linway_app.Forms
             var last = response1[response1.Count - 1];
             return last.Id;
         }
-        private void GuardarDetalle(DetalleRecibo detalle)
-        {
-            bool response = _servDetalleRecibo.Add(detalle);
-            if (!response) MessageBox.Show("Algo falló al guardar el Detalle de Recibo en la base de datos");
-        }
         private void EliminarRecibo(Recibo recibo)
         {
-            bool response = _servRecibo.Add(recibo);
+            bool response = _servRecibo.Delete(recibo);
             if (!response) MessageBox.Show("Algo falló al eliminar el Recibo de la base de datos");
         }
         private void AgregarDetalle(DetalleRecibo detalle)
         {
             bool response = _servDetalleRecibo.Add(detalle);
-            if (!response) MessageBox.Show("Algo falló al agregar Detalle a la base de datos");
+            if (!response) MessageBox.Show("Algo falló al guardar el Detalle de Recibo en la base de datos");
         }
         private void AbrirFormImprimirRecibo(Recibo recibo)
         {
@@ -138,8 +146,6 @@ namespace linway_app.Forms
         }
         void LimpiarCampos()
         {
-            _lstDetallesAAgregar.Clear();
-            dataGridView2.DataSource = _lstDetallesAAgregar.ToArray();
             radioButton1.Checked = false;
             radioButton2.Checked = false;
             radioButton3.Checked = false;
@@ -149,11 +155,12 @@ namespace linway_app.Forms
         }
         private void button8_Click(object sender, EventArgs e)
         {
-            _lstDetallesAAgregar.Clear();
             LimpiarCampos();
             button6.Enabled = false;
             label18.Text = "0";
-            dataGridView2.DataSource = _lstDetallesAAgregar.ToArray();
+            MessageBox.Show("button8");
+            //_lstDetallesAAgregar.Clear();
+            ActualizarGridDetalles();
         }
         private bool AlgunDetSeleccionado()
         {
@@ -195,7 +202,7 @@ namespace linway_app.Forms
                         lstRecibosFiltrados.Add(recibo);
                     }
                 }
-                dataGridView1.DataSource = lstRecibosFiltrados.ToArray();
+                ActualizarGridRecibos(lstRecibosFiltrados);
             }
 
             if (comboBox1.SelectedItem.ToString() == "Todas")
@@ -203,7 +210,7 @@ namespace linway_app.Forms
                 label2.Text = "";
                 textBox1.Text = "";
                 textBox1.Visible = false;
-                dataGridView1.DataSource = _lstRecibos.ToArray();
+                ActualizarGridRecibos(_lstRecibos);
             }
 
             if (comboBox1.SelectedItem.ToString() == "Impresas")
@@ -218,7 +225,7 @@ namespace linway_app.Forms
                         lstRecibosFiltrados.Add(recibo);
                     }
                 }
-                dataGridView1.DataSource = lstRecibosFiltrados.ToArray();
+                ActualizarGridRecibos(lstRecibosFiltrados);
             }
 
             if (comboBox1.SelectedItem.ToString() == "No impresas")
@@ -233,7 +240,7 @@ namespace linway_app.Forms
                         lstRecibosFiltrados.Add(recibo);
                     }
                 }
-                dataGridView1.DataSource = lstRecibosFiltrados.ToArray();
+                ActualizarGridRecibos(lstRecibosFiltrados);
             }
 
             if (comboBox1.SelectedItem.ToString() == "Cliente")
@@ -259,7 +266,7 @@ namespace linway_app.Forms
             {
                 if (x == 'c')
                 {
-                    if (recibo.DireccionCliente.Contains(texto))
+                    if (recibo.DireccionCliente.ToLower().Contains(texto.ToLower()))
                     {
                         lstFiltrados.Add(recibo);
                     }
@@ -272,7 +279,7 @@ namespace linway_app.Forms
                     }
                 }
             }
-            dataGridView1.DataSource = lstFiltrados.ToArray();
+            ActualizarGridRecibos(lstFiltrados);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -343,7 +350,7 @@ namespace linway_app.Forms
             {
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Fecha == DateTime.Today.ToString().Substring(0, 10))
+                    if (recibo.Fecha == DateTime.Now.ToString("yyy-MM-dd"))
                     {
                         listaAImprimir.Add(recibo);
                     }
@@ -381,7 +388,9 @@ namespace linway_app.Forms
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((comboBox2.SelectedItem.ToString() == "No impresas") || ((comboBox2.SelectedItem.ToString() == "Hoy")))
+            if (comboBox2.SelectedItem.ToString() == "No impresas"
+                || (comboBox2.SelectedItem.ToString() == "Hoy")
+            )
             {
                 textBox2.Visible = false;
                 textBox3.Visible = false;
@@ -460,13 +469,11 @@ namespace linway_app.Forms
                     }
                 }
             }
-
-            if (comboBox3.SelectedItem.ToString() == "Todas")
+            else if (comboBox3.SelectedItem.ToString() == "Todas")
             {
                 listaABorrar.AddRange(_lstRecibos);
             }
-
-            if (comboBox3.SelectedItem.ToString() == "Impresas")
+            else if (comboBox3.SelectedItem.ToString() == "Impresas")
             {
                 foreach (Recibo recibo in _lstRecibos)
                 {
@@ -476,7 +483,6 @@ namespace linway_app.Forms
                     }
                 }
             }
-
             return listaABorrar;
         }
 
@@ -515,7 +521,7 @@ namespace linway_app.Forms
             button5.Visible = false;
             button3.Visible = true;
             lCantRecibos.Text = _lstRecibos.Count.ToString() + " recibos.";
-            dataGridView1.DataSource = _lstRecibos.ToArray();
+            ActualizarGridRecibos(_lstRecibos);
         }
 
         // NUEVO RECIBO
@@ -579,6 +585,7 @@ namespace linway_app.Forms
                     nuevoDetalle.Importe = importe;
                 }
                 _lstDetallesAAgregar.Add(nuevoDetalle);
+                ActualizarGridDetalles();
 
                 _subTo = 0;
                 foreach (DetalleRecibo recibo in _lstDetallesAAgregar)
@@ -587,8 +594,7 @@ namespace linway_app.Forms
                 }
                 label18.Text = _subTo.ToString();
                 LimpiarCampos();
-                dataGridView2.DataSource = _lstDetallesAAgregar.ToArray();
-                
+
                 if ((label15.Text != "") && (label15.Text != "No encontrado"))
                 {
                     button6.Enabled = true;
@@ -600,15 +606,15 @@ namespace linway_app.Forms
             }
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void Limpiar_Click(object sender, EventArgs e)
         {
             LimpiarCampos();
-            _lstDetallesAAgregar.Clear();
             textBox6.Text = "";
             label15.Text = "";
             button6.Enabled = false;
-            dataGridView2.DataSource = _lstDetallesAAgregar.ToArray();
             label18.Text = "0";
+            _lstDetallesAAgregar.Clear();
+            ActualizarGridDetalles();
         }
 
         private void AnyadirRecibo_Click(object sender, EventArgs e)
@@ -640,18 +646,6 @@ namespace linway_app.Forms
             label18.Text = "0";
             _lstDetallesAAgregar.Clear();
             Actualizar();
-        }
-
-        private void button9_Click(object sender, EventArgs e)
-        {
-            CargarRecibos();
-            dataGridView1.DataSource = _lstRecibos.ToArray();
-        }
-
-        //Exportar
-        private void bExportar_Click(object sender, EventArgs e)
-        {
-            // anulado
         }
     }
 }

@@ -29,6 +29,10 @@ namespace linway_app.Forms
             Cliente cliente = _servCliente.Get(id);
             return cliente;
         }
+        private Cliente GetClientePorDireccion(string direccion)
+        {
+            return GetClientes().Find(x => x.Direccion.ToLower().Contains(direccion.ToLower()));
+        }
         private void GuardarCliente(Cliente cliente)
         {
             bool response = _servCliente.Add(cliente);
@@ -46,52 +50,10 @@ namespace linway_app.Forms
         }
 
         private void bCopiaSeguridad_Click(object sender, EventArgs e)
-        {
-            //GetClientes();
-            //DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel clientes.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Clientes a Excel", MessageBoxButtons.YesNo);
-            //if (dialogResult == DialogResult.Yes)
-            //{
-            //    bool success = new Exportar().ExportarAExcel(listaClientes);
-            //    if (success)
-            //    {
-            //        //MessageBox.Show("Exportado Clientes con éxito a Copias de seguridad");
-            //        bCopiaSeguridad.ForeColor = Color.Green;
-            //        bCopiaSeguridad.Enabled = false;
-            //        bCopiaSeguridad.Text = "Creacion exitosa";
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("Hubo un error al guardar los cambios.");
-            //    }
-            //}
-            //else if (dialogResult == DialogResult.No)
-            //{
-            //    return;
-            //}
-        }
+        {}
 
         public void ImportarClientes_Click(object sender, EventArgs e)
-        {
-            //listaClientes.Clear();
-            //GetClientes();
-            //DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de clientes por el contenido del Excel clientes.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Clientes desde Excel", MessageBoxButtons.YesNo);
-            //if (dialogResult == DialogResult.Yes)
-            //{
-            //    listaClientes = new Importar("clientes").ImportarClientes();
-            //    if (listaClientes != null)
-            //    {
-            //        GuardarClientes();
-            //        MessageBox.Show("Terminado");
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("Falló Clientes; cancelado");
-            //    }
-            //    GetClientes();
-            //}
-        }
-
-
+        {}
 
 
 
@@ -124,7 +86,8 @@ namespace linway_app.Forms
                     Telefono = textBox5.Text,
                     Name = textBox1.Text,
                     Cuit = textBox3.Text,
-                    Tipo = tipo.ToString()
+                    Tipo = tipo.ToString(),
+                    Estado = "Activo"
                 };
                 GuardarCliente(nuevoCliente);
                 button2.PerformClick();
@@ -154,7 +117,6 @@ namespace linway_app.Forms
             radioButton3.Checked = false;
             radioButton4.Checked = false;
         }
-
         //private void keyPress_SoloLetras(object sender, KeyPressEventArgs e)
         //{
         //    if (Char.IsLetter(e.KeyChar))
@@ -196,12 +158,12 @@ namespace linway_app.Forms
             }
             return correcto;
         }
-
-        private void PrepararEditar_Leave(object sender, EventArgs e)
+        private void textBox14_TextChanged(object sender, EventArgs e)
         {
             bool encontrado = false;
             if (textBox14.Text != "")
             {
+                try { long.Parse(textBox14.Text); } catch { return; };
                 Cliente cliente = GetCliente(long.Parse(textBox14.Text));
                 if (cliente == null) return;
                 if (cliente.Id == int.Parse(textBox14.Text))
@@ -235,6 +197,8 @@ namespace linway_app.Forms
                 radioButton4.Checked = false;
             }
         }
+        private void PrepararEditar_Leave(object sender, EventArgs e)
+        {}
         private void Editar_Click(object sender, EventArgs e)
         {
             if (TodoOkModificarC())
@@ -274,8 +238,30 @@ namespace linway_app.Forms
 
         private void MostrarClienteEliminar_Leave(object sender, EventArgs e)
         {
+        }
+        private void EliminarCliente_Click(object sender, EventArgs e)
+        {
+            if (cbSeguroBorrar.Checked)
+            {
+                var cliente = GetClientePorDireccion(label47.Text);
+                EliminarCliente(cliente);
+                cbSeguroBorrar.Checked = false;
+                label47.Text = "";
+                textBox22.Text = "";
+            }
+        }
+        private void SalirBtn_Click(object sender, EventArgs e)
+        {
+        }
+        private void label6_Click(object sender, EventArgs e)
+        {
+        }
+        private void BorrarPorId_textBox_TextChanged(object sender, EventArgs e)
+        {
             if (textBox22.Text != "")
             {
+                try { long.Parse(textBox22.Text); } catch { return; };
+                label47.Visible = true;
                 Cliente cliente = GetCliente(long.Parse(textBox22.Text));
                 if (cliente == null)
                 {
@@ -286,24 +272,34 @@ namespace linway_app.Forms
                 label47.Text = cliente.Direccion;
                 button23.Enabled = true;
             }
-        }
-
-        private void EliminarCliente_Click(object sender, EventArgs e)
-        {
-            if (cbSeguroBorrar.Checked)
+            else
             {
-                List<Cliente> lstClientes = GetClientes();
-                var cliente = lstClientes.Find(x => x.Direccion == label47.Text);
-                EliminarCliente(cliente);
-                cbSeguroBorrar.Checked = false;
+                label47.Visible = false;
                 label47.Text = "";
-                textBox22.Text = "";
+                button23.Enabled = false;
             }
         }
-
-        private void SalirBtn_Click(object sender, EventArgs e)
+        private void BorrarPorDire_textBox_TextChanged(object sender, EventArgs e)
         {
-            Close();
+            if (textBoxDireEnBorrar.Text != "")
+            {
+                label47.Visible = true;
+                Cliente cliente = GetClientePorDireccion(textBoxDireEnBorrar.Text);
+                if (cliente == null)
+                {
+                    label47.Text = "No encontrado";
+                    button23.Enabled = false;
+                    return;
+                }
+                label47.Text = cliente.Direccion;
+                button23.Enabled = true;
+            }
+            else
+            {
+                label47.Visible = false;
+                label47.Text = "";
+                button23.Enabled = false;
+            }
         }
     }
 }

@@ -7,5 +7,6 @@
         double Importe { get; set; }
         Recibo Recibo { get; set; }
         long ReciboId { get; set; }
+        string Estado { get; set; }
     }
 }

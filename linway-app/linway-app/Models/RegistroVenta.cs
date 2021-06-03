@@ -24,6 +24,8 @@ namespace linway_app.Models
         [DisplayName("FECHA")]
         public string Fecha { get; set; }
 
+        public string Estado { get; set; }
+
         public virtual Cliente Cliente { get; set; }
         public virtual ICollection<ProdVendido> ProdVendido { get; set; }
     }

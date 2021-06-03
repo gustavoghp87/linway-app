@@ -13,25 +13,25 @@ namespace linway_app.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public bool Add(Reparto reparto)
+        public bool Add(Pedido pedido)
         {
-            return _unitOfWork.RepoReparto.Add(reparto);
+            return _unitOfWork.RepoPedido.Add(pedido);
         }
-        public bool Delete(Reparto reparto)
+        public bool Delete(Pedido pedido)
         {
-            return _unitOfWork.RepoReparto.Delete(reparto);
+            return _unitOfWork.RepoPedido.Delete(pedido);
         }
-        public bool Edit(Reparto reparto)
+        public bool Edit(Pedido pedido)
         {
-            return _unitOfWork.RepoReparto.Edit(reparto);
+            return _unitOfWork.RepoPedido.Edit(pedido);
         }
-        public Reparto Get(long id)
+        public Pedido Get(long id)
         {
-            return _unitOfWork.RepoReparto.Get(id);
+            return _unitOfWork.RepoPedido.Get(id);
         }
-        public List<Reparto> GetAll()
+        public List<Pedido> GetAll()
         {
-            return _unitOfWork.RepoReparto.GetAll();
+            return _unitOfWork.RepoPedido.GetAll();
         }
 
         //public static Pedido Limpiar(Pedido pedido)

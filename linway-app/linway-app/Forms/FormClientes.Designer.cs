@@ -30,6 +30,8 @@ namespace linway_app.Forms
         private void InitializeComponent()
         {
             this.gbBorrar = new System.Windows.Forms.GroupBox();
+            this.textBoxDireEnBorrar = new System.Windows.Forms.TextBox();
+            this.BusqPorDireLabel = new System.Windows.Forms.Label();
             this.cbSeguroBorrar = new System.Windows.Forms.CheckBox();
             this.button23 = new System.Windows.Forms.Button();
             this.label47 = new System.Windows.Forms.Label();
@@ -70,9 +72,6 @@ namespace linway_app.Forms
             this.button9 = new System.Windows.Forms.Button();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
-            this.bCopiaSeguridad = new System.Windows.Forms.Button();
-            this.bSalir = new System.Windows.Forms.Button();
-            this.ImportarClientes = new System.Windows.Forms.Button();
             this.gbBorrar.SuspendLayout();
             this.gbAgregar.SuspendLayout();
             this.gbModificar.SuspendLayout();
@@ -80,6 +79,8 @@ namespace linway_app.Forms
             // 
             // gbBorrar
             // 
+            this.gbBorrar.Controls.Add(this.textBoxDireEnBorrar);
+            this.gbBorrar.Controls.Add(this.BusqPorDireLabel);
             this.gbBorrar.Controls.Add(this.cbSeguroBorrar);
             this.gbBorrar.Controls.Add(this.button23);
             this.gbBorrar.Controls.Add(this.label47);
@@ -88,16 +89,34 @@ namespace linway_app.Forms
             this.gbBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbBorrar.Location = new System.Drawing.Point(592, 12);
             this.gbBorrar.Name = "gbBorrar";
-            this.gbBorrar.Size = new System.Drawing.Size(277, 164);
+            this.gbBorrar.Size = new System.Drawing.Size(277, 267);
             this.gbBorrar.TabIndex = 42;
             this.gbBorrar.TabStop = false;
             this.gbBorrar.Text = "Borrar Cliente";
+            // 
+            // textBoxDireEnBorrar
+            // 
+            this.textBoxDireEnBorrar.Location = new System.Drawing.Point(159, 63);
+            this.textBoxDireEnBorrar.Name = "textBoxDireEnBorrar";
+            this.textBoxDireEnBorrar.Size = new System.Drawing.Size(100, 24);
+            this.textBoxDireEnBorrar.TabIndex = 7;
+            this.textBoxDireEnBorrar.TextChanged += new System.EventHandler(this.BorrarPorDire_textBox_TextChanged);
+            // 
+            // BusqPorDireLabel
+            // 
+            this.BusqPorDireLabel.AutoSize = true;
+            this.BusqPorDireLabel.Location = new System.Drawing.Point(9, 66);
+            this.BusqPorDireLabel.Name = "BusqPorDireLabel";
+            this.BusqPorDireLabel.Size = new System.Drawing.Size(71, 18);
+            this.BusqPorDireLabel.TabIndex = 6;
+            this.BusqPorDireLabel.Text = "Dirección";
+            this.BusqPorDireLabel.Click += new System.EventHandler(this.label6_Click);
             // 
             // cbSeguroBorrar
             // 
             this.cbSeguroBorrar.AutoSize = true;
             this.cbSeguroBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbSeguroBorrar.Location = new System.Drawing.Point(9, 95);
+            this.cbSeguroBorrar.Location = new System.Drawing.Point(12, 176);
             this.cbSeguroBorrar.Name = "cbSeguroBorrar";
             this.cbSeguroBorrar.Size = new System.Drawing.Size(259, 19);
             this.cbSeguroBorrar.TabIndex = 5;
@@ -107,7 +126,7 @@ namespace linway_app.Forms
             // button23
             // 
             this.button23.Enabled = false;
-            this.button23.Location = new System.Drawing.Point(169, 119);
+            this.button23.Location = new System.Drawing.Point(107, 216);
             this.button23.Name = "button23";
             this.button23.Size = new System.Drawing.Size(75, 29);
             this.button23.TabIndex = 4;
@@ -118,7 +137,7 @@ namespace linway_app.Forms
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(6, 55);
+            this.label47.Location = new System.Drawing.Point(8, 105);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(0, 18);
             this.label47.TabIndex = 2;
@@ -127,10 +146,9 @@ namespace linway_app.Forms
             // 
             this.textBox22.Location = new System.Drawing.Point(159, 30);
             this.textBox22.Name = "textBox22";
-            this.textBox22.Size = new System.Drawing.Size(85, 24);
+            this.textBox22.Size = new System.Drawing.Size(100, 24);
             this.textBox22.TabIndex = 1;
-            //this.textBox22.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keyPress_SoloNumeros);
-            this.textBox22.Leave += new System.EventHandler(this.MostrarClienteEliminar_Leave);
+            this.textBox22.TextChanged += new System.EventHandler(this.BorrarPorId_textBox_TextChanged);
             // 
             // label48
             // 
@@ -191,7 +209,6 @@ namespace linway_app.Forms
             this.textBox18.Name = "textBox18";
             this.textBox18.Size = new System.Drawing.Size(131, 21);
             this.textBox18.TabIndex = 4;
-            //this.textBox18.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keyPress_SoloLetras);
             // 
             // textBox1
             // 
@@ -199,11 +216,10 @@ namespace linway_app.Forms
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(131, 21);
             this.textBox1.TabIndex = 2;
-            //this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keyPress_SoloLetras);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(148, 222);
+            this.button2.Location = new System.Drawing.Point(148, 225);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 20;
@@ -235,7 +251,6 @@ namespace linway_app.Forms
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(131, 21);
             this.textBox3.TabIndex = 5;
-            //this.textBox3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keyPress_SoloNumeros);
             // 
             // radioButton1
             // 
@@ -254,7 +269,6 @@ namespace linway_app.Forms
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(131, 21);
             this.textBox4.TabIndex = 6;
-            //this.textBox4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keyPress_SoloNumeros);
             // 
             // label2
             // 
@@ -271,7 +285,6 @@ namespace linway_app.Forms
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(131, 21);
             this.textBox5.TabIndex = 7;
-            //this.textBox5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keyPress_SoloNumeros);
             // 
             // label3
             // 
@@ -286,7 +299,7 @@ namespace linway_app.Forms
             // 
             this.button1.Location = new System.Drawing.Point(60, 222);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(75, 26);
             this.button1.TabIndex = 16;
             this.button1.Text = "Agregar";
             this.button1.UseVisualStyleBackColor = true;
@@ -412,6 +425,7 @@ namespace linway_app.Forms
             this.textBox14.Name = "textBox14";
             this.textBox14.Size = new System.Drawing.Size(100, 21);
             this.textBox14.TabIndex = 2;
+            this.textBox14.TextChanged += new System.EventHandler(this.textBox14_TextChanged);
             this.textBox14.Leave += new System.EventHandler(this.PrepararEditar_Leave);
             // 
             // radioButton4
@@ -486,50 +500,14 @@ namespace linway_app.Forms
             this.label21.TabIndex = 11;
             this.label21.Text = "CUIT:";
             // 
-            // bCopiaSeguridad
-            // 
-            this.bCopiaSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bCopiaSeguridad.Location = new System.Drawing.Point(614, 185);
-            this.bCopiaSeguridad.Name = "bCopiaSeguridad";
-            this.bCopiaSeguridad.Size = new System.Drawing.Size(120, 49);
-            this.bCopiaSeguridad.TabIndex = 45;
-            this.bCopiaSeguridad.Text = "Crear copia de seguridad";
-            this.bCopiaSeguridad.UseVisualStyleBackColor = true;
-            this.bCopiaSeguridad.Click += new System.EventHandler(this.bCopiaSeguridad_Click);
-            // 
-            // bSalir
-            // 
-            this.bSalir.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bSalir.Location = new System.Drawing.Point(614, 240);
-            this.bSalir.Name = "bSalir";
-            this.bSalir.Size = new System.Drawing.Size(244, 39);
-            this.bSalir.TabIndex = 46;
-            this.bSalir.Text = "Salir";
-            this.bSalir.UseVisualStyleBackColor = true;
-            this.bSalir.Click += new System.EventHandler(this.SalirBtn_Click);
-            // 
-            // ImportarClientes
-            // 
-            this.ImportarClientes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ImportarClientes.Location = new System.Drawing.Point(738, 185);
-            this.ImportarClientes.Name = "ImportarClientes";
-            this.ImportarClientes.Size = new System.Drawing.Size(120, 49);
-            this.ImportarClientes.TabIndex = 47;
-            this.ImportarClientes.Text = "Importar";
-            this.ImportarClientes.UseVisualStyleBackColor = true;
-            this.ImportarClientes.Click += new System.EventHandler(this.ImportarClientes_Click);
-            // 
             // FormClientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 291);
-            this.Controls.Add(this.ImportarClientes);
-            this.Controls.Add(this.bSalir);
-            this.Controls.Add(this.bCopiaSeguridad);
+            this.Controls.Add(this.gbBorrar);
             this.Controls.Add(this.gbModificar);
             this.Controls.Add(this.gbAgregar);
-            this.Controls.Add(this.gbBorrar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -593,8 +571,7 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.CheckBox cbSeguroBorrar;
-        private System.Windows.Forms.Button bCopiaSeguridad;
-        private System.Windows.Forms.Button bSalir;
-        private System.Windows.Forms.Button ImportarClientes;
+        private System.Windows.Forms.Label BusqPorDireLabel;
+        private System.Windows.Forms.TextBox textBoxDireEnBorrar;
     }
 }

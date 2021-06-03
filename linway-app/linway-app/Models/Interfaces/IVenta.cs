@@ -6,5 +6,6 @@
         long Id { get; set; }
         Producto Producto { get; set; }
         long ProductoId { get; set; }
+        string Estado { get; set; }
     }
 }

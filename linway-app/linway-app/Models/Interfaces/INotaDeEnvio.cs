@@ -11,6 +11,7 @@ namespace linway_app.Models
         long Id { get; set; }
         double ImporteTotal { get; set; }
         long Impresa { get; set; }
+        string Estado { get; set; }
         ICollection<ProdVendido> ProdVendidos { get; set; }
     }
 }

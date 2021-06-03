@@ -15,5 +15,6 @@ namespace linway_app.Models
         ICollection<RegistroVenta> RegistroVenta { get; set; }
         string Telefono { get; set; }
         string Tipo { get; set; }
+        string Estado { get; set; }
     }
 }

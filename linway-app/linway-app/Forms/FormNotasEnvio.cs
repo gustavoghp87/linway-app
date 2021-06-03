@@ -1,6 +1,7 @@
 ﻿using linway_app.Models;
-using linway_app.Repositories;
 using linway_app.Services;
+using linway_app.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,30 +14,31 @@ namespace linway_app.Forms
         private List<NotaDeEnvio> _lstNotaDeEnvios;
         private List<ProdVendido> _lstProdVendidos;
         private List<Producto> _lstProductos;
-        private readonly ServicioNotaDeEnvio _servNotaDeEnvio;
-        private readonly ServicioProdVendido _servProdVendido;
-        private readonly ServicioProducto _servProducto;
-        private readonly ServicioCliente _servCliente;
-        private readonly ServicioPedido _servPedido;
-        private readonly ServicioDiaReparto _servDiaReparto;
+        private readonly IServicioNotaDeEnvio _servNotaDeEnvio;
+        private readonly IServicioProdVendido _servProdVendido;
+        private readonly IServicioProducto _servProducto;
+        private readonly IServicioCliente _servCliente;
+        private readonly IServicioPedido _servPedido;
+        private readonly IServicioDiaReparto _servDiaReparto;
 
-        public FormNotasEnvio()
+        public FormNotasEnvio(IServicioNotaDeEnvio servNotaDeEnvio, IServicioCliente servCliente, IServicioProducto servProducto,
+            IServicioDiaReparto servDiaReparto, IServicioProdVendido servProdVendido, IServicioPedido servPedido)
         {
             InitializeComponent();
             _lstNotaDeEnvios = new List<NotaDeEnvio>();
             _lstProdVendidos = new List<ProdVendido>();
             _lstProductos = new List<Producto>();
-            _servNotaDeEnvio = new ServicioNotaDeEnvio(new UnitOfWork(new LinwaydbContext()));
-            _servProdVendido = new ServicioProdVendido(new UnitOfWork(new LinwaydbContext()));
-            _servProducto = new ServicioProducto(new UnitOfWork(new LinwaydbContext()));
-            _servCliente = new ServicioCliente(new UnitOfWork(new LinwaydbContext()));
-            _servPedido = new ServicioPedido(new UnitOfWork(new LinwaydbContext()));
-            _servDiaReparto = new ServicioDiaReparto(new UnitOfWork(new LinwaydbContext()));
+            
+            _servNotaDeEnvio = servNotaDeEnvio;
+            _servProdVendido = servProdVendido;
+            _servProducto = servProducto;
+            _servCliente = servCliente;
+            _servPedido = servPedido;
+            _servDiaReparto = servDiaReparto;
         }
         private void FormNotas_Load(object sender, EventArgs e)
         {
             GetNotas();
-            GetProdVendidos();
             GetProductos();
             if (_lstNotaDeEnvios != null)
             {
@@ -49,16 +51,19 @@ namespace linway_app.Forms
                 dataGridView1.Columns[5].Width = 40;
                 dataGridView1.Columns[6].Visible = false;
                 dataGridView1.Columns[7].Visible = false;
+                dataGridView1.Columns[8].Visible = false;
 
             }
             comboBox1.SelectedItem = "Todas";
             comboBox3.SelectedItem = "(Seleccionar)";
-            if (_lstProdVendidos != null)
-            {
-                dataGridView2.DataSource = _lstProdVendidos.ToArray();
-                dataGridView2.Columns[0].Width = 30;
-                dataGridView2.Columns[2].Width = 40;
-            }
+            
+        }
+        private void ActualizarGrid2(List<ProdVendido> lstProdVendidos)
+        {
+            dataGridView2.DataSource = _lstProdVendidos.ToArray();
+            dataGridView2.Columns[0].Width = 30;
+            //dataGridView2.Columns[1].Width = 30;
+            dataGridView2.Columns[2].Width = 40;
         }
         private void GetNotas()
         {
@@ -88,7 +93,6 @@ namespace linway_app.Forms
         {
             bool response = _servProdVendido.Add(nuevoPV);
             if (!response) MessageBox.Show("Algo falló al agregar Nota de Envío a la base de datos");
-            GetProdVendidos();
         }
         private void GetProductos()
         {
@@ -97,7 +101,7 @@ namespace linway_app.Forms
         private Cliente GetClientePorDireccion(string direccion)
         {
             List<Cliente> lstClientes = _servCliente.GetAll();
-            Cliente cliente = lstClientes.Find(x => x.Direccion.Contains(direccion));
+            Cliente cliente = lstClientes.Find(x => x.Direccion.ToLower().Contains(direccion.ToLower()));
             return cliente;
         }
         private void AgregarPedidoDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId)
@@ -221,7 +225,7 @@ namespace linway_app.Forms
             {
                 if (x == 'c')
                 {
-                    if (nota.Client.Name.Contains(texto))
+                    if (nota.Client != null && nota.Client.Name.Contains(texto))
                     {
                         ListaFiltrada.Add(nota);
                     }
@@ -259,9 +263,9 @@ namespace linway_app.Forms
             {
                 try
                 {
-                    FormImprimirNota vistaPrevia = new FormImprimirNota();
-                    vistaPrevia.Rellenar_Datos(nota);
-                    vistaPrevia.Show();
+                    var form = Program.GetConfig().GetRequiredService<FormImprimirNota>();
+                    form.Rellenar_Datos(nota);
+                    form.Show();
                 }
                 catch (Exception g)
                 {
@@ -554,19 +558,20 @@ namespace linway_app.Forms
             label16.Text = "";
         }
 
+
         //Modificar nota de envio
-        private void textBox7_Leave(object sender, EventArgs e)
+        private void textBox7_TextChanged(object sender, EventArgs e)
         {
             if (textBox7.Text != "")
             {
                 try
                 {
                     long id = long.Parse(textBox7.Text);
-                    if (_lstNotaDeEnvios.Exists(x => x.Id == id))
+                    NotaDeEnvio notaDeEnvio = _lstNotaDeEnvios.Find(x => x.Id == id);
+                    if (notaDeEnvio != null)
                     {
-                        _lstProdVendidos = _lstNotaDeEnvios.Find(x => x.Id == id).ProdVendidos.ToList();
-                        label18.Text = _lstNotaDeEnvios.Find(x => x.Id == id).Client.ToString();
-                        dataGridView2.DataSource = _lstProdVendidos.ToArray();
+                        _lstProdVendidos = notaDeEnvio.ProdVendidos.ToList();
+                        ActualizarGrid2(_lstProdVendidos);
                         double impTotal = 0;
                         foreach (ProdVendido nota in _lstProdVendidos)
                         {
@@ -574,19 +579,30 @@ namespace linway_app.Forms
                         }
                         label20.Text = impTotal.ToString();
                         button10.Enabled = true;
+
+                        if (notaDeEnvio.Client != null && notaDeEnvio.Client.Direccion != null)
+                        {
+                            label18.Text = notaDeEnvio.Client.Direccion.ToString() + " - " + notaDeEnvio.ClientId.ToString();
+                        }
                     }
                     else
                     {
                         label18.Text = "No encontrado";
-                        _lstProdVendidos.Clear();
-                        dataGridView2.DataSource = _lstProdVendidos.ToArray();
                         label20.Text = "0";
                         button10.Enabled = false;
+                        _lstProdVendidos.Clear();
+                        ActualizarGrid2(_lstProdVendidos);
                     }
                 }
-                catch (Exception)
-                {
-                }
+                catch {}
+            }
+            else
+            {
+                label18.Text = "";
+                label20.Text = "0";
+                button10.Enabled = false;
+                _lstProdVendidos.Clear();
+                ActualizarGrid2(_lstProdVendidos);
             }
         }
 
@@ -595,7 +611,7 @@ namespace linway_app.Forms
             if (_lstProdVendidos.Count != 0)
             {
                 GetNotas();
-                NotaDeEnvio nota = _lstNotaDeEnvios.Find(x => x.Id == int.Parse(textBox7.Text));
+                NotaDeEnvio nota = _lstNotaDeEnvios.Find(x => x.Id == long.Parse(textBox7.Text));
                 nota = ServicioNotaDeEnvio.Modificar(nota, _lstProdVendidos);
                 GuardarNota(nota);
                 textBox7.Text = "";
@@ -646,7 +662,7 @@ namespace linway_app.Forms
                 textBox8.Text = "";
                 label22.Text = "";
                 button8.Enabled = false;
-                dataGridView2.DataSource = _lstProdVendidos.ToArray();
+                ActualizarGrid2(_lstProdVendidos);
             }
         }
 
@@ -726,7 +742,7 @@ namespace linway_app.Forms
                     ProductoId = prod.Id, Descripcion = prod.Nombre, Cantidad = int.Parse(textBox10.Text), Precio = prod.Precio
                 };
             AgregarProductoVendido(nuevoPV);
-            dataGridView2.DataSource = _lstProdVendidos.ToArray();
+            ActualizarGrid2(_lstProdVendidos);
             double impTotal = 0;
             foreach (ProdVendido prodVendido in _lstProdVendidos)
             {

@@ -1,5 +1,6 @@
 ﻿using linway_app.Models;
 using linway_app.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,21 +10,17 @@ namespace linway_app.Repositories
     public class RepositoryDiaReparto : IRepository<DiaReparto>
     {
         private readonly LinwaydbContext _context;
+        private readonly DbSet<DiaReparto> _entities;
         public RepositoryDiaReparto(LinwaydbContext context)
         {
             _context = context;
+            _entities = context.Set<DiaReparto>();
         }
         public bool Add(DiaReparto diaReparto)
         {
-            string commandText = $"INSERT INTO DiaReparto(Dia) " +
-                                 $"VALUES ('{diaReparto.Dia}')";
-            return SQLiteCommands.Execute(commandText);
-        }
-        public bool Delete(DiaReparto diaReparto)
-        {
             try
             {
-                _context.DiaReparto.Remove(diaReparto);
+                _context.DiaReparto.Add(diaReparto);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -32,6 +29,10 @@ namespace linway_app.Repositories
                 Console.WriteLine(e.Message);
                 return false;
             }
+        }
+        public bool Delete(DiaReparto diaReparto)
+        {
+            return true;
         }
         public bool Edit(DiaReparto diaReparto)
         {
@@ -49,11 +50,12 @@ namespace linway_app.Repositories
         }
         public DiaReparto Get(long id)
         {
-            return _context.DiaReparto.Find(id);
+            var response = _entities.Find(id);
+            return response;
         }
         public List<DiaReparto> GetAll()
         {
-            return _context.DiaReparto.ToList();
+            return _entities.ToList();
         }
     }
 }

@@ -2,6 +2,7 @@
 using linway_app.Repositories.Interfaces;
 using linway_app.Services.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace linway_app.Services
 {
@@ -33,6 +34,13 @@ namespace linway_app.Services
             return _unitOfWork.RepoRegistroVenta.GetAll();
         }
 
+        public long AddAndGetId(RegistroVenta registroVenta)
+        {
+            bool response = Add(registroVenta);
+            if (!response) return 0;
+            var lst = GetAll();
+            return lst.Last().Id;
+        }
         public bool ModificarClienteId(long clienteId, RegistroVenta registroVenta)
         {
             registroVenta.ClienteId = clienteId;

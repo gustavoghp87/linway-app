@@ -1,5 +1,7 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using linway_app.Models;
+using Microsoft.Data.Sqlite;
 using System;
+using System.Collections.Generic;
 
 namespace linway_app.Repositories
 {
@@ -14,7 +16,7 @@ namespace linway_app.Repositories
                     connection.Open();
                     var command = connection.CreateCommand();
                     command.CommandText = commandText;
-                    command.ExecuteNonQuery();
+                    command.ExecuteNonQueryAsync();
                 }
                 return true;
             }
@@ -24,5 +26,11 @@ namespace linway_app.Repositories
                 return false;
             }
         }
+
+        //string commandText = $"INSERT INTO Cliente(Direccion, CodigoPostal, Telefono, Name, CUIT, Tipo, Estado) " +
+        //                     $"VALUES ('{cliente.Direccion}', '{cliente.CodigoPostal}', '{cliente.Telefono}', " +
+        //                             $"'{cliente.Name}', '{cliente.Cuit}', '{cliente.Tipo}', 'Activo')";
+        //return SQLiteCommands.Execute(commandText);
+
     }
 }

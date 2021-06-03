@@ -2,6 +2,7 @@
 using linway_app.Repositories.Interfaces;
 using linway_app.Services.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace linway_app.Services
 {
@@ -33,6 +34,19 @@ namespace linway_app.Services
             return _unitOfWork.RepoNotaDeEnvio.GetAll();
         }
 
+        public long AddAndGetId(NotaDeEnvio notaDeEnvio)
+        {
+            try
+            {
+                Add(notaDeEnvio);
+                List<NotaDeEnvio> lst = GetAll();
+                return lst.Last().Id;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
         public static double ExtraerImporte(List<ProdVendido> lstProdVendidos)
         {
             double subTo = 0;

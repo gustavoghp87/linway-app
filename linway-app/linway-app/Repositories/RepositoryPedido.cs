@@ -1,5 +1,6 @@
 ﻿using linway_app.Models;
 using linway_app.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,23 +10,17 @@ namespace linway_app.Repositories
     public class RepositoryPedido : IRepository<Pedido>
     {
         private readonly LinwaydbContext _context;
+        private readonly DbSet<Pedido> _entities;
         public RepositoryPedido(LinwaydbContext context)
         {
             _context = context;
+            _entities = context.Set<Pedido>();
         }
         public bool Add(Pedido pedido)
         {
-            string commandText = $"INSERT INTO Pedido(Direccion, ClienteId, RepartoId, Entregar, L, A, E, D, T, Ae, Productos) " +
-                                 $"VALUES ('{pedido.Direccion}', {pedido.ClienteId}, {pedido.RepartoId}, {pedido.Entregar}, " +
-                                          $"'{pedido.L}', '{pedido.A}', '{pedido.E}', '{pedido.D}', '{pedido.T}', '{pedido.Ae}', " +
-                                          $"'{pedido.Productos}')";
-            return SQLiteCommands.Execute(commandText);
-        }
-        public bool Delete(Pedido pedido)
-        {
             try
             {
-                _context.Pedido.Remove(pedido);
+                _context.Pedido.Add(pedido);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -34,6 +29,16 @@ namespace linway_app.Repositories
                 Console.WriteLine(e.Message);
                 return false;
             }
+            //string commandText = $"INSERT INTO Pedido(Direccion, ClienteId, RepartoId, Entregar, L, A, E, D, T, Ae, Productos, Estado) " +
+            //                     $"VALUES ('{pedido.Direccion}', {pedido.ClienteId}, {pedido.RepartoId}, {pedido.Entregar}, " +
+            //                              $"'{pedido.L}', '{pedido.A}', '{pedido.E}', '{pedido.D}', '{pedido.T}', '{pedido.Ae}', " +
+            //                              $"'{pedido.Productos}', 'Activo')";
+            //return SQLiteCommands.Execute(commandText);
+        }
+        public bool Delete(Pedido pedido)
+        {
+            pedido.Estado = "Eliminado";
+            return Edit(pedido);
         }
         public bool Edit(Pedido pedido)
         {
@@ -51,11 +56,15 @@ namespace linway_app.Repositories
         }
         public Pedido Get(long id)
         {
-            return _context.Pedido.Find(id);
+            var response = _entities.Find(id);
+            if (response == null || response.Estado == null || response.Estado == "Eliminado") return null;
+            return response;
         }
         public List<Pedido> GetAll()
         {
-            return _context.Pedido.ToList();
+            var lstSinFiltr = _entities.ToList();
+            var lst = lstSinFiltr.Where(x => x.Estado != null && x.Estado != "Eliminado").ToList();
+            return lst;
         }
     }
 }

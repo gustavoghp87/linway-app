@@ -10,5 +10,6 @@ namespace linway_app.Services.Interfaces
         bool Edit(NotaDeEnvio notaDeEnvio);
         NotaDeEnvio Get(long id);
         List<NotaDeEnvio> GetAll();
+        long AddAndGetId(NotaDeEnvio notaDeEnvio);
     }
 }

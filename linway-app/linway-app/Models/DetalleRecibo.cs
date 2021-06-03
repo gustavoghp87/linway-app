@@ -13,6 +13,7 @@ namespace linway_app.Models
         public long ReciboId { get; set; }
         public string Detalle { get; set; }
         public double Importe { get; set; }
+        public string Estado { get; set; }
 
         public virtual Recibo Recibo { get; set; }
     }

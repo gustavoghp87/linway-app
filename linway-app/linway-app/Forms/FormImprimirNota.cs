@@ -1,6 +1,6 @@
 ﻿using linway_app.Models;
+using linway_app.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -8,61 +8,63 @@ namespace linway_app.Forms
 {
     public partial class FormImprimirNota : Form
     {
-        private int CodigoDeLaNota;
         private bool impresa;
-        List<NotaDeEnvio> notasEnvio = new List<NotaDeEnvio>();
+        private NotaDeEnvio NotaDeEnvio = new NotaDeEnvio();
+        private readonly IServicioNotaDeEnvio _servNotaDeEnvio;
+
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        public static extern long BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
+        public static extern long BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth,
+            int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
+        
         private Bitmap memoryImage;
 
-        public FormImprimirNota()
+        public FormImprimirNota(IServicioNotaDeEnvio servNotaDeEnvio)
         {
             InitializeComponent();
+            _servNotaDeEnvio = servNotaDeEnvio;
         }
-
         private void FormImprimirNota_Load(object sender, EventArgs e)
         {
-            CargarNotas();
         }
-
-        void CargarNotas()
+        private void EditarNota()
         {
-            //notasEnvio = GetData.GetNotes();
+            bool response = _servNotaDeEnvio.Edit(NotaDeEnvio);
+            if (!response) MessageBox.Show("Algo falló al marcar Nota de Envío como impresa en la base de datos");
         }
-
-        void GuardarNotas()
+        void MarcarImpresa()
         {
-            //SetData.SetNotes(notasEnvio);
+            if (!impresa)
+            {
+                NotaDeEnvio.Impresa = 1;
+                EditarNota();
+            }
         }
-
-        public void Rellenar_Datos(NotaDeEnvio laNota)
+        public void Rellenar_Datos(NotaDeEnvio notaDeEnvio)
         {
+            NotaDeEnvio = notaDeEnvio;
             try
             {
-                //if (laNota.Cliente.Contains("–")) laNota.Cliente = laNota.Cliente.Replace("–", "-");
-                ////MessageBox.Show(laNota.Cliente);
-                ////MessageBox.Show(laNota.Cliente.IndexOf('-').ToString());
-                //lFecha.Text = laNota.Fecha;
-                //CodigoDeLaNota = laNota.Id;
-                //string elcodigo = laNota.Id.ToString();
-                //for (int i = laNota.Id.ToString().Length; i < 5; i++)
-                //{
-                //    elcodigo = "0" + elcodigo;
-                //}
+                lFecha.Text = notaDeEnvio.Fecha;
+                string elcodigo = notaDeEnvio.Id.ToString();
+                for (int i = elcodigo.Length; i < 5; i++)
+                {
+                    elcodigo = "0" + elcodigo;
+                }
+                lCodigo.Text = elcodigo;
+                int separador = notaDeEnvio.Client.Direccion.IndexOf('-');
+                lCalle.Text = notaDeEnvio.Client.Direccion.Substring(0, separador);
+                lLocalidad.Text = notaDeEnvio.Client.Direccion.Substring(separador + 1);
+                lTotal.Text = "$ " + notaDeEnvio.ImporteTotal.ToString(".00");
+                if (notaDeEnvio.Client.Direccion.Contains("–"))
+                    notaDeEnvio.Client.Direccion = notaDeEnvio.Client.Direccion.Replace("–", "-");
 
-                //lCodigo.Text = elcodigo;
-                //int separador = laNota.Cliente.IndexOf('-');
-                //lCalle.Text = laNota.Cliente.Substring(0, separador);
-                //lLocalidad.Text = laNota.Cliente.Substring(separador + 1);
-                //lTotal.Text = "$ " + laNota.ImporteTotal.ToString(".00");
-
-                //foreach (ProdVendido pvActual in laNota.ProductosVendidos)
-                //{
-                //    label1.Text = label1.Text + pvActual.Cantidad.ToString() + Environment.NewLine;
-                //    label2.Text = label2.Text + pvActual.Descripcion + Environment.NewLine;
-                //    label3.Text = label3.Text + pvActual.Precio.ToString(".00") + Environment.NewLine;
-                //}
-                //impresa = laNota.Impresa;
+                foreach (ProdVendido pvActual in notaDeEnvio.ProdVendidos)
+                {
+                    label1.Text = label1.Text + pvActual.Cantidad.ToString() + Environment.NewLine;
+                    label2.Text = label2.Text + pvActual.Descripcion + Environment.NewLine;
+                    label3.Text = label3.Text + pvActual.Precio.ToString(".00") + Environment.NewLine;
+                }
+                impresa = notaDeEnvio.Impresa != 0;
             }
             catch (Exception exc)
             {
@@ -72,18 +74,17 @@ namespace linway_app.Forms
 
 
         /// IMPRIMIR
-
         private void CaptureScreen()
         {
             try
             {
-                Graphics mygraphics = this.CreateGraphics();
-                Size s = this.Size;
+                Graphics mygraphics = CreateGraphics();
+                Size s = Size;
                 memoryImage = new Bitmap(s.Width, s.Height, mygraphics);
                 Graphics memoryGraphics = Graphics.FromImage(memoryImage);
                 IntPtr dc1 = mygraphics.GetHdc();
                 IntPtr dc2 = memoryGraphics.GetHdc();
-                BitBlt(dc2, 0, 0, this.ClientRectangle.Width, this.ClientRectangle.Height, dc1, 0, 0, 13369376);
+                BitBlt(dc2, 0, 0, ClientRectangle.Width, ClientRectangle.Height, dc1, 0, 0, 13369376);
                 mygraphics.ReleaseHdc(dc1);
                 memoryGraphics.ReleaseHdc(dc2);
             }
@@ -92,19 +93,16 @@ namespace linway_app.Forms
                 MessageBox.Show("Error al capturar pantalla para imprimir: " + e.Message);
             }
         }
-
         private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             e.Graphics.DrawImage(memoryImage, 0, 0);
         }
-
-        private void button1_Click(object sender, System.EventArgs e)
+        private void Imprimir_Click(object sender, System.EventArgs e)
         {
             button1.Visible = false;
             try
             {
                 CaptureScreen();
-                //MessageBox.Show("Pantalla capturada");
             }
             catch (Exception h)
             {
@@ -117,16 +115,6 @@ namespace linway_app.Forms
                 printDocument1.Print();
                 Close();
                 MarcarImpresa();
-            }
-        }
-
-        void MarcarImpresa()
-        {
-            if (!impresa)
-            {
-                CargarNotas();
-                notasEnvio.Find(x => x.Id == CodigoDeLaNota).Impresa = 1;
-                GuardarNotas();
             }
         }
     }

@@ -368,6 +368,7 @@
     <Compile Include="Models\Enums\TipoLiquido.cs" />
     <Compile Include="Models\Enums\TipoPolvo.cs" />
     <Compile Include="Models\Enums\TipoR.cs" />
+    <Compile Include="Models\Internals\ReciboFiltrado.cs" />
     <Compile Include="Models\LinwaydbContext.cs" />
     <Compile Include="Models\NotaDeEnvio.cs" />
     <Compile Include="Models\Pedido.cs" />
@@ -486,6 +487,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormClientes.resx">
       <DependentUpon>FormClientes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCrearNota.resx">
+      <DependentUpon>FormCrearNota.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormImprimirNota.resx">
       <DependentUpon>FormImprimirNota.cs</DependentUpon>

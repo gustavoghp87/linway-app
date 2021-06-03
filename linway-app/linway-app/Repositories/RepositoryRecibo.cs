@@ -1,5 +1,6 @@
 ﻿using linway_app.Models;
 using linway_app.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,22 +10,17 @@ namespace linway_app.Repositories
     public class RepositoryRecibo : IRepository<Recibo>
     {
         private readonly LinwaydbContext _context;
+        private readonly DbSet<Recibo> _entities;
         public RepositoryRecibo(LinwaydbContext context)
         {
             _context = context;
+            _entities = context.Set<Recibo>();
         }
         public bool Add(Recibo recibo)
         {
-            string commandText = $"INSERT INTO Recibo(ClienteId, DireccionCliente, Fecha, ImporteTotal, Impresa) " +
-                                 $"VALUES ({recibo.ClienteId}, '{recibo.DireccionCliente}', '{recibo.Fecha}', " +
-                                        $"'{recibo.ImporteTotal}', {recibo.Impresa})";
-            return SQLiteCommands.Execute(commandText);
-        }
-        public bool Delete(Recibo recibo)
-        {
             try
             {
-                _context.Recibo.Remove(recibo);
+                _context.Recibo.Add(recibo);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -33,6 +29,11 @@ namespace linway_app.Repositories
                 Console.WriteLine(e.Message);
                 return false;
             }
+        }
+        public bool Delete(Recibo recibo)
+        {
+            recibo.Estado = "Eliminado";
+            return Edit(recibo);
         }
         public bool Edit(Recibo recibo)
         {
@@ -50,11 +51,15 @@ namespace linway_app.Repositories
         }
         public Recibo Get(long id)
         {
-            return _context.Recibo.Find(id);
+            var response = _entities.Find(id);
+            if (response == null || response.Estado == null || response.Estado == "Eliminado") return null;
+            return response;
         }
         public List<Recibo> GetAll()
         {
-            return _context.Recibo.ToList();
+            var lstSinFiltr = _entities.ToList();
+            var lst = lstSinFiltr.Where(x => x.Estado != null && x.Estado != "Eliminado").ToList();
+            return lst;
         }
     }
 }

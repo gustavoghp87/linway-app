@@ -14,5 +14,6 @@
         long ProductoId { get; set; }
         RegistroVenta RegistroVenta { get; set; }
         long? RegistroVentaId { get; set; }
+        string Estado { get; set; }
     }
 }

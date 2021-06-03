@@ -1,145 +1,189 @@
 ﻿using linway_app.Excel;
 using linway_app.Models;
+using linway_app.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
 {
     public partial class FormReparto : Form
     {
-        const string copiaDeSeguridad = "repartos";
-        List<Reparto> listaRepartos = new List<Reparto>();
-        List<Reparto> listaRepartos2 = new List<Reparto>();
-        List<Pedido> listaDestinos = new List<Pedido>();
-        List<DiaReparto> diasDeReparto = new List<DiaReparto>();
+        private List<Reparto> _lstRepartos = new List<Reparto>();
+        private List<Reparto> _lstRepartosFiltrada = new List<Reparto>();
+        private List<Pedido> _lstPedidos = new List<Pedido>();
+        private List<DiaReparto> _lstDiaRepartos = new List<DiaReparto>();
+        private IServicioCliente _servCliente;
+        private IServicioDiaReparto _servDiaReparto;
+        private IServicioReparto _servReparto;
+        private IServicioPedido _servPedido;
 
-        public FormReparto()
+        public FormReparto(IServicioCliente servCliente, IServicioDiaReparto servDiaReparto,
+            IServicioReparto servReparto, IServicioPedido servPedido)
         {
             InitializeComponent();
+            _servCliente = servCliente;
+            _servDiaReparto = servDiaReparto;
+            _servReparto = servReparto;
+            _servPedido = servPedido;
         }
 
         private void FormReparto_Load(object sender, EventArgs e)
         {
-            CargarHDR();
-
+            Actualizar();
+        }
+        private void Actualizar()
+        {
+            CargarDiaRepartos();
+            CargarRepartos();
+            RenderizarRepartos();
+        }
+        private void CargarDiaRepartos()
+        {
+            _lstDiaRepartos = _servDiaReparto.GetAll();
+            if (_lstDiaRepartos.Count == 0 || _lstDiaRepartos == null)
+            {
+                CrearDias();
+            }
+        }
+        private void CrearDias()
+        {
+            AgregarDiaReparto(new DiaReparto { Dia = "Lunes" });
+            AgregarDiaReparto(new DiaReparto { Dia = "Martes" });
+            AgregarDiaReparto(new DiaReparto { Dia = "Miercoles" });
+            AgregarDiaReparto(new DiaReparto { Dia = "Jueves" });
+            AgregarDiaReparto(new DiaReparto { Dia = "Viernes" });
+            AgregarDiaReparto(new DiaReparto { Dia = "Sabado" });
+            _lstDiaRepartos = _servDiaReparto.GetAll();
+        }
+        private void CargarRepartos()
+        {
+            _lstRepartos = _servReparto.GetAll();
+        }
+        private void RenderizarRepartos()
+        {
+            dataGridView1.DataSource = _lstPedidos.ToArray();
             dataGridView1.Columns[0].Width = 25;
             dataGridView1.Columns[1].Width = 100;
             dataGridView1.Columns[2].Width = 30;
-            //dataGridView1.Columns[3].Width = 400;
+            dataGridView1.Columns[3].Width = 400;
             dataGridView1.Columns[4].Width = 30;
             dataGridView1.Columns[5].Width = 30;
             dataGridView1.Columns[6].Width = 30;
             dataGridView1.Columns[7].Width = 30;
             dataGridView1.Columns[8].Width = 60;
         }
-
-        void CargarHDR()
+        private void AgregarDiaReparto(DiaReparto diaReparto)
         {
-            //diasDeReparto = GetData.GetDDR();
-            //if (diasDeReparto.Count == 0 || diasDeReparto == null)
-            //{
-            //    diasDeReparto.Add(new DiaReparto { Dia = "Lunes" });
-            //    diasDeReparto.Add(new DiaReparto { Dia = "Martes" });
-            //    diasDeReparto.Add(new DiaReparto { Dia = "Miercoles" });
-            //    diasDeReparto.Add(new DiaReparto { Dia = "Jueves" });
-            //    diasDeReparto.Add(new DiaReparto { Dia = "Viernes" });
-            //    diasDeReparto.Add(new DiaReparto { Dia = "Sabado" });
-            //}
-            //dataGridView1.DataSource = listaDestinos.ToArray();
+            bool response = _servDiaReparto.Add(diaReparto);
+            if (!response) MessageBox.Show("Algo falló al agregar nuevo Día de Reparto a la base de datos");
+        }
+        private void AgregarReparto(Reparto reparto)
+        {
+            bool response = _servReparto.Add(reparto);
+            if (!response) MessageBox.Show("Algo falló al agregar nuevo Reparto a la base de datos");
+        }
+        private void AgregarPedido(Pedido pedido)
+        {
+            bool response = _servPedido.Add(pedido);
+            if (!response) MessageBox.Show("Algo falló al agregar nuevo Pedido a la base de datos");
+        }
+        private List<Cliente> GetClientes()
+        {
+            return _servCliente.GetAll();
+        }
+        private void EditarPedido(Pedido pedido)
+        {
+            bool response = _servPedido.Edit(pedido);
+            if (!response) MessageBox.Show("Algo falló al editar el Reparto en la base de datos");
+        }
+        private void EditarReparto(Reparto reparto)
+        {
+            bool response = _servReparto.Edit(reparto);
+            if (!response) MessageBox.Show("Algo falló al editar el Reparto en la base de datos");
+        }
+        private void EliminarPedido(Pedido pedido)
+        {
+            bool response = _servPedido.Delete(pedido);
+            if (!response) MessageBox.Show("Algo falló al eliminar el Pedido de la base de datos");
+        }
+        public void LimpiarReparto(Reparto reparto)
+        {
+            reparto.Ta = 0;
+            reparto.Te = 0;
+            reparto.Td = 0;
+            reparto.Tt = 0;
+            reparto.Tae = 0;
+            reparto.TotalB = 0;
+            reparto.Tl = 0;
+            foreach (Pedido pedido in reparto.Pedidos)
+            {
+                pedido.Entregar = 0;
+                pedido.L = 0;
+                pedido.Productos = "";
+                pedido.A = 0;
+                pedido.E = 0;
+                pedido.D = 0;
+                pedido.T = 0;
+                pedido.Ae = 0;
+                EditarPedido(pedido);
+            }
+            EditarReparto(reparto);
         }
 
-        void GuardarHDR()
-        {
-            //SetData.SetDDR(diasDeReparto);
-        }
+
 
         private void CrearCopiaDeSeguridad_Click(object sender, EventArgs e)
         {
-            //checkBox1.Checked = true;
-            CargarHDR();
-            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará al actual Excel repartos.xlsx y demorará 15 segundos. ¿Confirmar?", "Exportar Repartos a Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                //bool success = new Exportar().ExportarAExcel(diasDeReparto);
-                //if (success)
-                //{
-                //    bCopiaSeguridad.ForeColor = Color.Green;
-                //    bCopiaSeguridad.Enabled = false;
-                //    bCopiaSeguridad.Text = "Creacion exitosa";
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Hubo un error al guardar los cambios.");
-                //}
-            }
         }
-
-        private void ExportarButton_Click(object sender, EventArgs e)
+        private void Exportar_Click(object sender, EventArgs e)
         {
-            CargarHDR();
-            if (comboBox1.Text == "" || comboBox2.Text == "") return;
-            DialogResult dialogResult = MessageBox.Show("Exportar " + comboBox1.Text + " - " + comboBox2.Text + " ¿Confirmar?", "Exportar Reparto a Excel", MessageBoxButtons.YesNo);
+            CargarDiaRepartos();
+            string dia = comboBox1.Text;
+            string nombreReparto = comboBox2.Text;
+            if (dia == "" || nombreReparto == "") return;
+            DialogResult dialogResult = MessageBox.Show("Exportar " + dia + " - "
+                + nombreReparto + " ¿Confirmar?", "Exportar Reparto a Excel", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                //Reparto reparto = diasDeReparto.Find(x => x.Dia == comboBox1.Text).Repartos.Find(x => x.Nombre == comboBox2.Text);
-                //string litros = label22.Text;
-                //string bolsas = label21.Text;
-
-                //bool success = new Exportar().ExportarAExcel(reparto, comboBox1.Text, litros, bolsas);
-                //if (success)
-                //{
-                //    MessageBox.Show("Terminado");
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Hubo un error al guardar los cambios.");
-                //}
+                Reparto reparto = _lstDiaRepartos.Find(x => x.Dia == dia)
+                    .Reparto.ToList().Find(x => x.Nombre == nombreReparto);
+                string litros = label22.Text;
+                string bolsas = label21.Text;
+                bool success = new Exportar().ExportarAExcel(reparto, dia, litros, bolsas);
+                if (success)
+                {
+                    MessageBox.Show("Terminado");
+                }
+                else
+                {
+                    MessageBox.Show("Hubo un error al guardar los cambios.");
+                }
             }
         }
 
         private void ImportarButton_Click(object sender, EventArgs e)
         {
-            diasDeReparto.Clear();
-            CargarHDR();
-            DialogResult dialogResult = MessageBox.Show("Esta acción reemplazará definitivamente el listado actual de hojas de reparto por el contenido del Excel repartos.xlsx en la carpeta Copias de seguridad. ¿Confirmar?", "Importar Repartos desde Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                //diasDeReparto = new Importar(copiaDeSeguridad).ImportarHojaDeRepartos();
-                //if (diasDeReparto != null)
-                //{
-                //    GuardarHDR();
-                //    MessageBox.Show("Terminado");
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Falló Repartos; cancelado");
-                //}
-                //CargarHDR();
-            }
         }
 
-        void ActualizarHDR(string elDia, string elReparto)
+        private void ActualizarHDR(string elDia, string elReparto)
         {
-            CargarHDR();
-            //diasDeReparto.Find(x => x.Dia == elDia).Repartos.Find(x => x.Nombre == elReparto).Destinos = listaDestinos;
+            CargarDiaRepartos();
+            _lstDiaRepartos.Find(x => x.Dia == elDia).Reparto.ToList().Find(x => x.Nombre == elReparto).Pedidos = _lstPedidos;
         }
 
-        void ReCargarHDR(string elDia, string elReparto)
+        private void ReCargarHDR(string elDia, string elReparto)
         {
-            CargarHDR();
-            //listaRepartos = diasDeReparto.Find(x => x.Dia == elDia).Repartos;
-            //listaDestinos = listaRepartos.Find(x => x.Nombre == elReparto).Destinos;
+            CargarDiaRepartos();
+            _lstRepartos = _lstDiaRepartos.Find(x => x.Dia == elDia).Reparto.ToList();
+            _lstPedidos = _lstRepartos.Find(x => x.Nombre == elReparto).Pedidos.ToList();
         }
 
         private void formReparto_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            CargarHDR();
-            GuardarHDR();
-        }
+        {}
 
-        void LimpiarPantalla()
+        private void LimpiarPantalla()
         {
             gpNuevoReparto.Visible = false;
             groupBox2.Visible = false;
@@ -168,54 +212,54 @@ namespace linway_app.Forms
             label36.Text = "";
         }
 
+
         //____________________Ejegir Hoja de Reparto______________________________
 
         private void VerDatos(Reparto reparto)
         {
-            //label14.Text = reparto.TA.ToString();
-            //label15.Text = reparto.TE.ToString();
-            //label16.Text = reparto.TD.ToString();
-            //label17.Text = reparto.TT.ToString();
-            //label18.Text = reparto.TAE.ToString();
-            //label21.Text = reparto.TotalB.ToString();
-            //label22.Text = reparto.TL.ToString();
+            label14.Text = reparto.Ta.ToString();
+            label15.Text = reparto.Te.ToString();
+            label16.Text = reparto.Td.ToString();
+            label17.Text = reparto.Tt.ToString();
+            label18.Text = reparto.Tae.ToString();
+            label21.Text = reparto.TotalB.ToString();
+            label22.Text = reparto.Tl.ToString();
         }
-
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBox2.Visible = true;
             label2.Visible = true;
-            //listaRepartos = diasDeReparto.Find(x => x.Dia == comboBox1.SelectedItem.ToString()).Repartos;
-            //comboBox2.DataSource = listaRepartos;
+            _lstRepartos = _lstDiaRepartos.Find(x => x.Dia == comboBox1.SelectedItem.ToString()).Reparto.ToList();
+            comboBox2.DataSource = _lstRepartos;
             comboBox2.DisplayMember = "Nombre";
             comboBox2.ValueMember = "Nombre";
         }
-        private void button3_Click(object sender, EventArgs e)
+        private void Ver_Click(object sender, EventArgs e)
         {
             if (comboBox1.Text != "")
             {
                 try
                 {
-                    //listaDestinos = listaRepartos.Find(x => x.Nombre.Equals(comboBox2.Text)).Destinos;
-                    VerDatos(listaRepartos.Find(x => x.Nombre.Equals(comboBox2.Text)));
+                    _lstPedidos = _lstRepartos.Find(x => x.Nombre.Equals(comboBox2.Text)).Pedidos.ToList();
+                    VerDatos(_lstRepartos.Find(x => x.Nombre.Equals(comboBox2.Text)));
                 }
                 catch
                 { }
             }
-            dataGridView1.DataSource = listaDestinos.ToArray();
+            dataGridView1.DataSource = _lstPedidos.ToArray();
         }
 
         // MENUES
-        private void agregarRepartoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AgregarReparto_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
             gpNuevoReparto.Visible = true;
-            comboBox3.DataSource = diasDeReparto;
+            comboBox3.DataSource = _lstDiaRepartos;
             comboBox3.DisplayMember = "Dia";
             comboBox3.ValueMember = "Dia";
         }
 
-        private void agregarDestinoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AgregarDestino_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
             groupBox2.Visible = true;
@@ -224,17 +268,18 @@ namespace linway_app.Forms
         //_______________AGREGAR Reparto A DIA______________________________-
         private void AgregarRepartoADIA_btn2_Click(object sender, EventArgs e)
         {
-            CargarHDR();
-            if ((textBox1.Text != ""))
+            CargarDiaRepartos();
+            if (textBox1.Text != "")
             {
-                DiaReparto diaRep = diasDeReparto.Find(x => x.Dia.Contains(comboBox3.Text));
-                // Reparto nReparto = new Reparto(textBox1.Text, diaRep.Id);
-                Reparto nReparto = new Reparto { Nombre = textBox1.Text, DiaRepartoId = diaRep.Id };
-                //diaRep.Repartos.Add(nReparto);
+                DiaReparto diaRep = _lstDiaRepartos.Find(x => x.Dia.Contains(comboBox3.Text));
+                Reparto nuevoReparto = new Reparto
+                {
+                    Nombre = textBox1.Text,
+                    DiaRepartoId = diaRep.Id
+                };
+                AgregarReparto(nuevoReparto);
             }
-            GuardarHDR();
             LimpiarPantalla();
-            CargarHDR();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -245,17 +290,15 @@ namespace linway_app.Forms
         //__________________________AGREGAR DESTINO--_____________________
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //listaRepartos2 = diasDeReparto.Find(x => x.Dia == comboBox4.SelectedItem.ToString()).Repartos;
-            //comboBox5.DataSource = listaRepartos2;
-            //comboBox5.DisplayMember = "Nombre";
-            //comboBox5.ValueMember = "Nombre";
+            _lstRepartosFiltrada = _lstDiaRepartos.Find(x => x.Dia == comboBox4.SelectedItem.ToString()).Reparto.ToList();
+            comboBox5.DataSource = _lstRepartosFiltrada;
+            comboBox5.DisplayMember = "Nombre";
+            comboBox5.ValueMember = "Nombre";
         }
-
         private void button4_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
         }
-
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
@@ -264,48 +307,52 @@ namespace linway_app.Forms
                 return;
             }
         }
-
         private void textBox2_Leave(object sender, EventArgs e)  // Agregar a destino a recorrido
         {
-            //List<Cliente> listaClientes = GetData.GetClients();
-
-            //if (textBox2.Text != "")
-            //{
-            //    if (listaClientes.Exists(x => x.Id == int.Parse(textBox2.Text)))
-            //    {
-            //        label8.Text = listaClientes.Find(x => x.Id == int.Parse(textBox2.Text)).Direccion;
-            //    }
-            //    else
-            //    {
-            //        label8.Text = "no encontrado";
-            //    }
-            //}
-            //else
-            //{
-            //    label8.Text = "no encontrado";
-            //}
+            List<Cliente> listaClientes = GetClientes();
+            if (textBox2.Text != "")
+            {
+                long clientId = long.Parse(textBox2.Text);
+                Cliente cliente = listaClientes.Find(x => x.Id == clientId);
+                if (cliente != null)
+                {
+                    label8.Text = cliente.Direccion;
+                }
+                else
+                {
+                    label8.Text = "no encontrado";
+                }
+            }
+            else
+            {
+                label8.Text = "no encontrado";
+            }
         }
-
         private void AgregarDestinoAReparto_btn1_Click(object sender, EventArgs e)
         {
-            if ((label8.Text != "No encontrado") && (comboBox4.Text != ""))
+            if (label8.Text != "No encontrado" && comboBox4.Text != "")
             {
-                //ReCargarHDR(comboBox4.Text, comboBox5.Text);                // día y reparto
-                //comboBox1.SelectedIndex = comboBox4.SelectedIndex;
-                //comboBox2.SelectedIndex = comboBox5.SelectedIndex;
-                //Cliente cliente = GetData.GetClients().Find(x => x.Direccion == label8.Text);
-                //Reparto reparto = listaRepartos.Find(x => x.Nombre.Contains(comboBox5.Text));
-                //if (cliente == null || reparto == null) { MessageBox.Show("Falló algo, código 44"); return; };
-                //// este agrega Destino sin productos
-                //// Destino nDestino = new Destino(cliente.Id, cliente.Direccion, reparto.Id);
-                //Destino nDestino = new Destino { ClienteId = cliente.Id, Direccion = cliente.Direccion, RepartoId = reparto.Id };
-                //// corroborar que no esté antes de agregar   <----------
-                //if (listaDestinos.Exists(x => x.ClienteId == nDestino.ClienteId && x.RepartoId == nDestino.RepartoId))
-                //    { MessageBox.Show("Ese cliente ya estaba en el reparto"); return; };
-                //reparto.Destinos.Add(nDestino);
-                //GuardarHDR();
-                //LimpiarPantalla();
-                //CargarHDR();
+                ReCargarHDR(comboBox4.Text, comboBox5.Text);                // día y reparto
+                comboBox1.SelectedIndex = comboBox4.SelectedIndex;
+                comboBox2.SelectedIndex = comboBox5.SelectedIndex;
+                Cliente cliente = GetClientes().Find(x => x.Direccion == label8.Text);
+                Reparto reparto = _lstRepartos.Find(x => x.Nombre.Contains(comboBox5.Text));
+                if (cliente == null || reparto == null) { MessageBox.Show("Falló algo, código 44"); return; };
+                // este agrega Destino sin productos
+                Pedido nuevoPedido = new Pedido
+                {
+                    ClienteId = cliente.Id,
+                    Direccion = cliente.Direccion,
+                    RepartoId = reparto.Id
+                };
+                // corroborar que no esté antes de agregar   <----------
+                if (_lstPedidos.Exists(x => x.ClienteId == nuevoPedido.ClienteId && x.RepartoId == nuevoPedido.RepartoId))
+                {
+                    MessageBox.Show("Ese cliente ya estaba en el reparto");
+                    return;
+                };
+                AgregarPedido(nuevoPedido);
+                LimpiarPantalla();
             }
             else
             {
@@ -314,11 +361,11 @@ namespace linway_app.Forms
         }
 
         ///DATOS PARA FORMULARIO 1
-        //public List<Reparto> DarRepartos(string dia)
-        //{
-        //    CargarHDR();
-        //    return diasDeReparto.Find(x => x.Dia.Contains(dia)).Repartos;
-        //}
+        public List<Reparto> DarRepartos(string dia)
+        {
+            CargarDiaRepartos();
+            return _lstDiaRepartos.Find(x => x.Dia.Contains(dia)).Reparto.ToList();
+        }
 
 
         //_LImpiar DATOS_ 
@@ -328,20 +375,18 @@ namespace linway_app.Forms
             LimpiarPantalla();
             groupBox4.Visible = true;
         }
-
-        private void button6_Click(object sender, EventArgs e)
+        private void LimpiarRepartos_Click(object sender, EventArgs e)
         {
-            CargarHDR();
-            foreach (DiaReparto dActual in diasDeReparto)
+            foreach (DiaReparto diaReparto in _lstDiaRepartos)
             {
-                //foreach (Reparto rActual in dActual.Repartos)
-                //{
-                //    rActual.LimpiarDatos();
-                //}
+                foreach (Reparto reparto in diaReparto.Reparto)
+                {
+                    LimpiarReparto(reparto);
+                    EditarReparto(reparto);
+                }
             }
-            GuardarHDR();
             LimpiarPantalla();
-            CargarHDR();
+            Actualizar();
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -355,24 +400,22 @@ namespace linway_app.Forms
             LimpiarPantalla();
             groupBox5.Visible = true;
         }
-
         private void button8_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
         }
-
         private void button9_Click(object sender, EventArgs e)
         {
             if (comboBox6.Text != "")
             {
-                CargarHDR();
-                //foreach (Reparto rActual in diasDeReparto.Find(x => x.Dia == comboBox6.Text).Repartos)
-                //{
-                //    //rActual.LimpiarDatos();
-                //}
-                GuardarHDR();
+                CargarDiaRepartos();
+                string dia = comboBox6.Text;
+                foreach (Reparto reparto in _lstDiaRepartos.Find(x => x.Dia == dia).Reparto)
+                {
+                    LimpiarReparto(reparto);
+                }
                 LimpiarPantalla();
-                CargarHDR();
+                CargarDiaRepartos();
             }
             else
             {
@@ -389,8 +432,9 @@ namespace linway_app.Forms
 
         private void comboBox8_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //listaRepartos2 = diasDeReparto.Find(x => x.Dia == comboBox8.SelectedItem.ToString()).Repartos;
-            comboBox7.DataSource = listaRepartos2;
+            string dia = comboBox8.SelectedItem.ToString();
+            _lstRepartosFiltrada = _lstDiaRepartos.Find(x => x.Dia == dia).Reparto.ToList();
+            comboBox7.DataSource = _lstRepartosFiltrada;
             comboBox7.DisplayMember = "Nombre";
             comboBox7.ValueMember = "Nombre";
         }
@@ -399,15 +443,15 @@ namespace linway_app.Forms
         {
             if (comboBox8.Text != "")
             {
-                CargarHDR();
+                string dia = comboBox8.Text;
+                string nombre = comboBox7.Text;
+                Reparto reparto = _lstDiaRepartos.Find(x => x.Dia == dia).Reparto.ToList().Find(x => x.Nombre == nombre);
                 comboBox1.SelectedIndex = comboBox8.SelectedIndex;
                 comboBox2.SelectedIndex = comboBox7.SelectedIndex;
-                //diasDeReparto.Find(x => x.Dia == comboBox8.Text).Repartos.Find(x => x.Nombre == comboBox7.Text).LimpiarDatos();
-                //VerDatos(diasDeReparto.Find(x => x.Dia == comboBox8.Text).Repartos.Find(x => x.Nombre == comboBox7.Text));
-                dataGridView1.DataSource = listaDestinos.ToArray();
-                GuardarHDR();
+                LimpiarReparto(reparto);
+                VerDatos(reparto);
                 LimpiarPantalla();
-                CargarHDR();
+                Actualizar();
             }
             else
             {
@@ -422,41 +466,43 @@ namespace linway_app.Forms
             groupBox7.Visible = true;
             label27.Text = "Día " + comboBox1.Text + " -> Reparto: " + comboBox2.Text;
         }
-
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
-            if (listaDestinos.Exists(x => x.Direccion.Contains(textBox3.Text)))
+            if (_lstPedidos.Exists(x => x.Direccion.Contains(textBox3.Text)))
             {
-                label30.Text = listaDestinos.Find(x => x.Direccion.Contains(textBox3.Text)).Direccion;
+                label30.Text = _lstPedidos.Find(x => x.Direccion.Contains(textBox3.Text)).Direccion;
             }
             else
             {
                 label30.Text = "No encontrado";
             }
         }
-
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
-            if (listaDestinos.Exists(x => x.Direccion.Contains(textBox4.Text)))
+            if (_lstPedidos.Exists(x => x.Direccion.Contains(textBox4.Text)))
             {
-                label31.Text = listaDestinos.Find(x => x.Direccion.Contains(textBox4.Text)).Direccion;
+                label31.Text = _lstPedidos.Find(x => x.Direccion.Contains(textBox4.Text)).Direccion;
             }
             else
             {
                 label31.Text = "No encontrado";
             }
         }
-
         private void button14_Click(object sender, EventArgs e)
         {
-            if ((label30.Text != "No encontrado") && (label31.Text != "No encontrado") && (label30.Text != "") && (label31.Text != ""))
+            if (
+                label30.Text != "No encontrado"
+                && label31.Text != "No encontrado"
+                && label30.Text != ""
+                && label31.Text != ""
+            )
             {
                 if (label30.Text != label31.Text)
                 {
                     ReCargarHDR(comboBox1.Text, comboBox2.Text);
                     bool despues;
-                    int aMover = listaDestinos.IndexOf(listaDestinos.Find(x => x.Direccion == label30.Text));
-                    int aDejarAtras = listaDestinos.IndexOf(listaDestinos.Find(x => x.Direccion == label31.Text));
+                    int aMover = _lstPedidos.IndexOf(_lstPedidos.Find(x => x.Direccion == label30.Text));
+                    int aDejarAtras = _lstPedidos.IndexOf(_lstPedidos.Find(x => x.Direccion == label31.Text));
 
                     if (aMover > aDejarAtras)
                     {
@@ -467,20 +513,20 @@ namespace linway_app.Forms
                         despues = false;
                     }
                     
-                    listaDestinos.Insert(listaDestinos.IndexOf(listaDestinos.Find(x => x.Direccion == label31.Text)) + 1, listaDestinos.Find(x => x.Direccion == label30.Text));
+                    _lstPedidos.Insert(aDejarAtras + 1, _lstPedidos.Find(x => x.Direccion == label30.Text));
                     
                     if (despues)
                     {
-                        listaDestinos.RemoveAt(aMover + 1);
+                        _lstPedidos.RemoveAt(aMover + 1);
                     }
                     else
                     {
-                        listaDestinos.RemoveAt(aMover);
+                        _lstPedidos.RemoveAt(aMover);
                     }
 
-                    GuardarHDR();
+                    
                     LimpiarPantalla();
-                    CargarHDR();
+                    CargarDiaRepartos();
                 }
                 else
                 {
@@ -493,70 +539,63 @@ namespace linway_app.Forms
             }
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
             {
-                //List<Destino> ldFiltrada = new List<Destino>();
-                //foreach (Destino dActual in listaDestinos)
-                //{
-                //    if (dActual.Entregar)
-                //    {
-                //        ldFiltrada.Add(dActual);
-                //    }
-                //}
-                //dataGridView1.DataSource = ldFiltrada.ToArray();
+                List<Pedido> ldFiltrada = new List<Pedido>();
+                foreach (Pedido pedido in _lstPedidos)
+                {
+                    if (pedido.Entregar == 1)
+                    {
+                        ldFiltrada.Add(pedido);
+                    }
+                }
+                dataGridView1.DataSource = ldFiltrada.ToArray();
             }
             else
             {
-                dataGridView1.DataSource = listaDestinos.ToArray();
-
+                dataGridView1.DataSource = _lstPedidos.ToArray();
             }
         }
 
 
         // BORRAR DESTINO //
-        private void comboBox10_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox10_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //listaRepartos2 = diasDeReparto.Find(x => x.Dia == comboBox10.SelectedItem.ToString()).Repartos;
-            //comboBox9.DataSource = listaRepartos2;
+            _lstRepartosFiltrada = _lstDiaRepartos.Find(x => x.Dia == comboBox10.SelectedItem.ToString()).Reparto.ToList();
+            comboBox9.DataSource = _lstRepartosFiltrada;
             comboBox9.DisplayMember = "Nombre";
             comboBox9.ValueMember = "Nombre";
         }
-
-        private void textBox5_TextChanged(object sender, EventArgs e)
+        private void TextBox5_TextChanged(object sender, EventArgs e)
         {
-            if (listaDestinos.Exists(x => x.Direccion.Contains(textBox5.Text)))
+            if (_lstPedidos.Exists(x => x.Direccion.Contains(textBox5.Text)))
             {
-                label32.Text = listaDestinos.Find(x => x.Direccion.Contains(textBox5.Text)).Direccion;
+                label32.Text = _lstPedidos.Find(x => x.Direccion.Contains(textBox5.Text)).Direccion;
             }
             else
             {
                 label32.Text = "No encontrado";
             }
         }
-
-        private void button16_Click(object sender, EventArgs e)
+        private void Button16_Click(object sender, EventArgs e)
         {
             ReCargarHDR(comboBox10.Text, comboBox9.Text);
-            listaDestinos.Remove(listaDestinos.Find(x => x.Direccion == label32.Text));
-            dataGridView1.DataSource = listaDestinos.ToArray();
-            GuardarHDR();
-            CargarHDR();
+            Pedido pedido = _lstPedidos.Find(x => x.Direccion == label32.Text);
+            EliminarPedido(pedido);
+            Actualizar();
             LimpiarPantalla();
         }
-
         private void button15_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
         }
-
         private void borrarUnDestinoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
             groupBox8.Visible = true;
         }
-
         //limpiar un destino
         private void destinoToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -564,45 +603,46 @@ namespace linway_app.Forms
             groupBox9.Visible = true;
             label39.Text = "Día " + comboBox1.Text + " -> Reparto: " + comboBox2.Text;
         }
-
         private void textBox7_TextChanged(object sender, EventArgs e)
         {
-            if (listaDestinos.Exists(x => x.Direccion.Contains(textBox7.Text)))
+            if (_lstPedidos.Exists(x => x.Direccion.Contains(textBox7.Text)))
             {
-                label36.Text = listaDestinos.Find(x => x.Direccion.Contains(textBox7.Text)).Direccion;
+                label36.Text = _lstPedidos.Find(x => x.Direccion.Contains(textBox7.Text)).Direccion;
             }
             else
             {
                 label36.Text = "No encontrado";
             }
         }
-
-        void RestarContadores()
-        {
-            //listaRepartos.Find(x => x.Nombre == comboBox2.Text).TL -= listaDestinos.Find(x => x.Direccion == label36.Text).L;
-            //listaRepartos.Find(x => x.Nombre == comboBox2.Text).TA -= listaDestinos.Find(x => x.Direccion == label36.Text).A;
-            //listaRepartos.Find(x => x.Nombre == comboBox2.Text).TotalB -= listaDestinos.Find(x => x.Direccion == label36.Text).A;
-            //listaRepartos.Find(x => x.Nombre == comboBox2.Text).TE -= listaDestinos.Find(x => x.Direccion == label36.Text).E;
-            //listaRepartos.Find(x => x.Nombre == comboBox2.Text).TotalB -= listaDestinos.Find(x => x.Direccion == label36.Text).E;
-            //listaRepartos.Find(x => x.Nombre == comboBox2.Text).TT -= listaDestinos.Find(x => x.Direccion == label36.Text).T;
-            //listaRepartos.Find(x => x.Nombre == comboBox2.Text).TotalB -= listaDestinos.Find(x => x.Direccion == label36.Text).T;
-            //listaRepartos.Find(x => x.Nombre == comboBox2.Text).TAE -= listaDestinos.Find(x => x.Direccion == label36.Text).AE;
-            //listaRepartos.Find(x => x.Nombre == comboBox2.Text).TotalB -= listaDestinos.Find(x => x.Direccion == label36.Text).AE;
-            //listaRepartos.Find(x => x.Nombre == comboBox2.Text).TD -= listaDestinos.Find(x => x.Direccion == label36.Text).D;
-            //listaRepartos.Find(x => x.Nombre == comboBox2.Text).TotalB -= listaDestinos.Find(x => x.Direccion == label36.Text).D;
-        }
-
         private void button18_Click(object sender, EventArgs e)
         {
-            if (listaDestinos.Exists(x => x.Direccion == label36.Text))
+            if (_lstPedidos.Exists(x => x.Direccion == label36.Text))
             {
+                string direcCliente = label36.Text;
                 ReCargarHDR(comboBox1.Text, comboBox2.Text);
-                RestarContadores();
-                VerDatos(listaRepartos.Find(x => x.Nombre.Equals(comboBox2.Text)));
-                //listaDestinos.Find(x => x.Direccion == label36.Text).Limpiar();
-                GuardarHDR();
+                string nombreRep = comboBox2.Text;
+                string direccion = label36.Text;
+                Reparto reparto = _lstRepartos.Find(x => x.Nombre == nombreRep);
+                Pedido pedido = _lstPedidos.Find(x => x.Direccion == direccion);
+
+                reparto.Tl -= pedido.L;
+                reparto.Ta -= pedido.A;
+                reparto.TotalB -= pedido.A;
+                reparto.Te -= pedido.E;
+                reparto.TotalB -= pedido.E;
+                reparto.Tt -= pedido.T;
+                reparto.TotalB -= pedido.T;
+                reparto.Tae -= pedido.Ae;
+                reparto.TotalB -= pedido.Ae;
+                reparto.Td -= pedido.D;
+                reparto.TotalB -= pedido.D;
+
+                VerDatos(reparto);
+                EditarReparto(reparto);
+                // EliminarPedido(pedido);   ??
+                LimpiarReparto(reparto);
                 LimpiarPantalla();
-                CargarHDR();
+                Actualizar();
             }
             else
             {

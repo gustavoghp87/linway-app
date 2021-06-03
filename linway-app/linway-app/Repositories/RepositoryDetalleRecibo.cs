@@ -1,5 +1,6 @@
 ﻿using linway_app.Models;
 using linway_app.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,21 +10,17 @@ namespace linway_app.Repositories
     public class RepositoryDetalleRecibo : IRepository<DetalleRecibo>
     {
         private readonly LinwaydbContext _context;
+        private readonly DbSet<DetalleRecibo> _entities;
         public RepositoryDetalleRecibo(LinwaydbContext context)
         {
             _context = context;
+            _entities = context.Set<DetalleRecibo>();
         }
         public bool Add(DetalleRecibo detalleRecibo)
         {
-            string commandText = $"INSERT INTO DetalleRecibo(ReciboId, Detalle, Importe) " +
-                                 $"VALUES ({detalleRecibo.ReciboId}, '{detalleRecibo.Detalle}', '{detalleRecibo.Importe}')";
-            return SQLiteCommands.Execute(commandText);
-        }
-        public bool Delete(DetalleRecibo detalleRecibo)
-        {
             try
             {
-                _context.DetalleRecibo.Remove(detalleRecibo);
+                _context.DetalleRecibo.Add(detalleRecibo);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -33,15 +30,18 @@ namespace linway_app.Repositories
                 return false;
             }
         }
+        public bool Delete(DetalleRecibo detalleRecibo)
+        {
+            detalleRecibo.Estado = "Eliminado";
+            return Edit(detalleRecibo);
+        }
         public bool Edit(DetalleRecibo detalleRecibo)
         {
             try
             {
-                string commandText = $"UPDATE DetalleRecibo " +
-                                     $"SET ReciboId='{detalleRecibo.ReciboId}', Detalle='{detalleRecibo.Detalle}', " +
-                                          $"Importe='{detalleRecibo.Importe}' " +
-                                     $"WHERE Id={detalleRecibo.Id}";
-                return SQLiteCommands.Execute(commandText);
+                _context.DetalleRecibo.Update(detalleRecibo);
+                _context.SaveChangesAsync();
+                return true;
             }
             catch (Exception e)
             {
@@ -51,11 +51,15 @@ namespace linway_app.Repositories
         }
         public DetalleRecibo Get(long id)
         {
-            return _context.DetalleRecibo.Find(id);
+            var response = _entities.Find(id);
+            if (response == null || response.Estado == null || response.Estado == "Eliminado") return null;
+            return response;
         }
         public List<DetalleRecibo> GetAll()
         {
-            return _context.DetalleRecibo.ToList();
+            var lstSinFiltr = _entities.ToList();
+            var lst = lstSinFiltr.Where(x => x.Estado != null && x.Estado != "Eliminado").ToList();
+            return lst;
         }
     }
 }

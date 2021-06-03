@@ -1,5 +1,6 @@
 ﻿using linway_app.Models;
 using linway_app.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,22 +10,17 @@ namespace linway_app.Repositories
     public class RepositoryNotaDeEnvio : IRepository<NotaDeEnvio>
     {
         private readonly LinwaydbContext _context;
+        private readonly DbSet<NotaDeEnvio> _entities;
         public RepositoryNotaDeEnvio(LinwaydbContext context)
         {
             _context = context;
+            _entities = context.Set<NotaDeEnvio>();
         }
         public bool Add(NotaDeEnvio notaDeEnvio)
         {
-            string commandText = $"INSERT INTO NotaDeEnvio(ClientId, Fecha, Impresa, Detalle, ImporteTotal) " +
-                                 $"VALUES ('{notaDeEnvio.ClientId}', '{notaDeEnvio.Fecha}', {notaDeEnvio.Impresa}, " +
-                                 $"'{notaDeEnvio.Detalle}', '{notaDeEnvio.ImporteTotal}')";
-            return SQLiteCommands.Execute(commandText);
-        }
-        public bool Delete(NotaDeEnvio notaDeEnvio)
-        {
             try
             {
-                _context.NotaDeEnvio.Remove(notaDeEnvio);
+                _context.NotaDeEnvio.Add(notaDeEnvio);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -33,6 +29,11 @@ namespace linway_app.Repositories
                 Console.WriteLine(e.Message);
                 return false;
             }
+        }
+        public bool Delete(NotaDeEnvio notaDeEnvio)
+        {
+            notaDeEnvio.Estado = "Eliminado";
+            return Edit(notaDeEnvio);
         }
         public bool Edit(NotaDeEnvio notaDeEnvio)
         {
@@ -50,11 +51,15 @@ namespace linway_app.Repositories
         }
         public NotaDeEnvio Get(long id)
         {
-            return _context.NotaDeEnvio.Find(id);
+            var response = _entities.Find(id);
+            if (response == null || response.Estado == null || response.Estado == "Eliminado") return null;
+            return response;
         }
         public List<NotaDeEnvio> GetAll()
         {
-            return _context.NotaDeEnvio.ToList();
+            var lstSinFiltr = _entities.ToList();
+            var lst = lstSinFiltr.Where(x => x.Estado != null && x.Estado != "Eliminado").ToList();
+            return lst;
         }
 
     }

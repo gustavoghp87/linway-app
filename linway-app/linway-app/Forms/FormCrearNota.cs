@@ -1,7 +1,7 @@
 ﻿using linway_app.Models;
-using linway_app.Repositories;
 using linway_app.Services;
 using linway_app.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +19,12 @@ namespace linway_app.Forms
         private readonly IServicioRegistroVenta _servRegistroVenta;
         private readonly IServicioDiaReparto _servDiaReparto;
         private readonly IServicioReparto _servReparto;
+        private readonly IServicioProdVendido _servProdVendido;
 
         public FormCrearNota(
             IServicioNotaDeEnvio servNotaDeEnvio, IServicioCliente servCliente, IServicioProducto servProducto,
             IServicioVenta servVenta, IServicioRegistroVenta servRegistroVenta, IServicioDiaReparto servDiaReparto,
-            IServicioReparto servReparto
+            IServicioReparto servReparto, IServicioProdVendido servProdVendido
         )
         {
             InitializeComponent();
@@ -35,19 +36,21 @@ namespace linway_app.Forms
             _servRegistroVenta = servRegistroVenta;
             _servDiaReparto = servDiaReparto;
             _servReparto = servReparto;
+            _servProdVendido = servProdVendido;
         }
         private void FormCrearNota_Load(object sender, EventArgs e)
         {
-            if (_lstProdVendidos == null || _lstProdVendidos.Count == 0) return;
-            dataGridView4.DataSource = _lstProdVendidos.ToArray();
-            dataGridView4.Columns[0].Visible = false;
-            dataGridView4.Columns[1].Width = 30;
-            dataGridView4.Columns[2].Width = 40;
-            dataGridView4.Columns[3].Width = 25;
-            dataGridView4.Columns[4].Visible = true;
-            dataGridView4.Columns[5].Width = 30;
-            dataGridView4.Columns[6].Visible = false;
-            dataGridView4.Columns[7].Visible = false;
+            //if (_lstProdVendidos == null || _lstProdVendidos.Count == 0) return;
+            //dataGridView4.DataSource = _lstProdVendidos.ToArray();
+            //dataGridView4.Columns[0].Visible = false;
+            //dataGridView4.Columns[1].Width = 30;
+            //dataGridView4.Columns[2].Width = 40;
+            //dataGridView4.Columns[3].Width = 25;
+            //dataGridView4.Columns[4].Visible = true;
+            //dataGridView4.Columns[5].Width = 30;
+            //dataGridView4.Columns[6].Visible = false;
+            //dataGridView4.Columns[7].Visible = false;
+            Actualizar();
         }
         private void Actualizar()
         {
@@ -65,33 +68,58 @@ namespace linway_app.Forms
             dataGridView4.Columns[9].Visible = false;
             dataGridView4.Columns[10].Visible = false;
             dataGridView4.Columns[11].Visible = false;
+            dataGridView4.Columns[12].Visible = false;
         }
-        private List<NotaDeEnvio> GetNotas()
+        private long AgregarNota(NotaDeEnvio notaDeEnvio)
         {
-            return _servNotaDeEnvio.GetAll();
-        }
-        private bool AgregarNota(NotaDeEnvio notaDeEnvio)
-        {
-            bool response = _servNotaDeEnvio.Add(notaDeEnvio);
-            if (!response) MessageBox.Show("Algo falló al agregar Nota de Envío a base de datos");
+            long response = _servNotaDeEnvio.AddAndGetId(notaDeEnvio);
+            if (response == 0) MessageBox.Show("Algo falló al agregar Nota de Envío a base de datos");
             return response;
         }
         private Cliente GetCliente(long id)
         {
             return _servCliente.Get(id);
         }
+        private Cliente GetClientePorDire(string dire)
+        {
+            var lst = _servCliente.GetAll();
+            if (lst == null || lst.Count == 0) return null;
+            var cliente = lst.Find(x => x.Direccion.ToLower().Contains(dire.ToLower()));
+            return cliente;
+        }
+        private Cliente GetClientePorDireExacta(string dire)
+        {
+            var lst = _servCliente.GetAll();
+            if (lst == null || lst.Count == 0) return null;
+            var cliente = lst.Find(x => x.Direccion.Equals(dire));
+            return cliente;
+        }
         private Producto GetProducto(long id)
         {
             return _servProducto.Get(id);
+        }
+        private Producto GetProductoPorNombre(string nombre)
+        {
+            var lst = _servProducto.GetAll();
+            if (lst == null || lst.Count == 0) return null;
+            var producto = lst.Find(x => x.Nombre.ToLower().Contains(nombre.ToLower()));
+            return producto;
+        }
+        private Producto GetProductoPorNombreExacto(string nombre)
+        {
+            var lst = _servProducto.GetAll();
+            if (lst == null || lst.Count == 0) return null;
+            var producto = lst.Find(x => x.Nombre.Equals(nombre));
+            return producto;
         }
         private List<Venta> GetVentas()
         {
             return _servVenta.GetAll();
         }
-        private bool AgregarRegistroVenta(RegistroVenta registroVenta)
+        private long AgregarRegistroVenta(RegistroVenta registroVenta)
         {
-            bool response = _servRegistroVenta.Add(registroVenta);
-            if (!response) MessageBox.Show("Algo falló al agregar Registro de Venta a base de datos");
+            long response = _servRegistroVenta.AddAndGetId(registroVenta);
+            if (response == 0) MessageBox.Show("Algo falló al agregar Registro de Venta a base de datos");
             return response;
         }
         private bool EditarVenta(Venta venta)
@@ -117,7 +145,11 @@ namespace linway_app.Forms
             bool response = _servReparto.AgregarPedidoAReparto(cliente.Id, reparto.DiaReparto.Dia, reparto.Nombre, _lstProdVendidos);
             if (!response) MessageBox.Show("Algo falló al agregar Pedido a Reparto en base de datos");
         }
-
+        private void AgregarProductoVendido(ProdVendido prodVendido)
+        {
+            bool response = _servProdVendido.Add(prodVendido);
+            if (!response) MessageBox.Show("Algo falló al agregar Producto Vendido a base de datos");
+        }
         private void SoloNumero_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
@@ -126,100 +158,175 @@ namespace linway_app.Forms
                 return;
             }
         }
-        private void CargarCliente_Leave(object sender, EventArgs e)
+
+
+        private void textBox15_TextChanged(object sender, EventArgs e)
         {
+            textBox1.Text = "";
             if (textBox15.Text != "")
             {
                 Cliente cliente = GetCliente(long.Parse(textBox15.Text));
                 if (cliente == null)
                 {
                     label36.Text = "No encontrado";
+                    labelClienteId.Text = "";
                     return;
                 }
                 label36.Text = cliente.Direccion;
+                labelClienteId.Text = cliente.Id.ToString();
+            }
+            else
+            {
+                label36.Text = "";
+                labelClienteId.Text = "";
             }
         }
-        private void CargarProducto_Leave(object sender, EventArgs e)
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox1.Text != "")
+            {
+                Cliente cliente = GetClientePorDire(textBox1.Text);
+                if (cliente == null)
+                {
+                    label36.Text = "No encontrado";
+                    labelClienteId.Text = "";
+                    return;
+                }
+                label36.Text = cliente.Direccion;
+                labelClienteId.Text = cliente.Id.ToString();
+            }
+            else
+            {
+                label36.Text = "";
+                labelClienteId.Text = "";
+            }
+        }
+        private void CargarCliente_Leave(object sender, EventArgs e)
+        {}
+        private void textBox16_TextChanged(object sender, EventArgs e)
         {
             if (textBox16.Text != "")
             {
+                try { long.Parse(textBox16.Text); } catch { };
                 var producto = GetProducto(long.Parse(textBox16.Text));
                 if (producto == null)
                 {
                     label38.Text = "No encontrado";
+                    labelProductoId.Text = "";
                     return;
                 }
                 label38.Text = producto.Nombre;
+                labelProductoId.Text = producto.Id.ToString();
                 if (label38.Text.Contains("actura")) textBox20.Visible = true;
                 else textBox20.Visible = false;
             }
-        }
-        private void CargarSubtotal_Leave(object sender, EventArgs e)
-        {
-            if ((label38.Text != "No encontrado") && (textBox16.Text != "") && (textBox17.Text != ""))
+            else
             {
-                Producto producto = GetProducto(long.Parse(textBox16.Text));
-                if (producto == null) return;
-                label40.Text = ( producto.Precio * int.Parse(textBox17.Text) ).ToString();   // subtotal
+                label38.Text = "";
+                labelProductoId.Text = "";
             }
         }
+        private void textBox2_TextChanged(object sender, EventArgs e)  // prod x nombr
+        {
+            if (textBox2.Text != "")
+            {
+                var producto = GetProductoPorNombre(textBox2.Text);
+                if (producto == null)
+                {
+                    label38.Text = "No encontrado";
+                    labelProductoId.Text = "";
+                    return;
+                }
+                label38.Text = producto.Nombre;
+                labelProductoId.Text = producto.Id.ToString();
+                if (label38.Text.Contains("actura")) textBox20.Visible = true;
+                else textBox20.Visible = false;
+            }
+            else
+            {
+                label38.Text = "";
+                labelProductoId.Text = "";
+            }
+        }
+        private void CargarProducto_Leave(object sender, EventArgs e)
+        {}
+        private void textBox17_TextChanged(object sender, EventArgs e)
+        {
+            if (labelProductoId.Text != "")
+            {
+                try { long.Parse(labelProductoId.Text); } catch { return; };
+                Producto producto = GetProducto(long.Parse(labelProductoId.Text));
+                if (producto == null || labelProductoId.Text == "" || textBox17.Text == "")
+                {
+                    label40.Text = "";
+                    return;
+                }
+                label40.Text = (producto.Precio * long.Parse(textBox17.Text)).ToString();   // subtotal
+            }
+            else
+            {
+                label40.Text = "";
+            }
+        }
+        private void CargarSubtotal_Leave(object sender, EventArgs e)
+        {}
         private void LimpiarLista_Click(object sender, EventArgs e)
         {
             _lstProdVendidos.Clear();
             dataGridView4.DataSource = _lstProdVendidos.ToArray();
             label42.Text = "";
         }
-        private void NuevoProdVendido_btn13_Click(object sender, EventArgs e)
+
+
+        private void NuevoProdVendidos_btn13_Click(object sender, EventArgs e)
         {
-            if ((label38.Text != "No encontrado") && (textBox16.Text != "") && (textBox17.Text != "") && (label40.Text != ""))
+            if (labelClienteId.Text != "" && labelProductoId.Text != "")
             {
-                Producto producto = GetProducto(long.Parse(textBox16.Text));
-                ProdVendido nuevoPV;
-                if (producto.Nombre.Contains("pendiente"))
-                    nuevoPV = new ProdVendido
-                    {
-                        ProductoId = producto.Id,
-                        Descripcion = label38.Text,
-                        Cantidad = 1,
-                        Precio = producto.Precio
-                    };
-                else if (producto.Nombre.Contains("favor") || producto.Nombre.Contains("devoluci") || producto.Nombre.Contains("BONIF"))
-                    nuevoPV = new ProdVendido
-                    {
-                        ProductoId = producto.Id,
-                        Descripcion = label38.Text,
-                        Cantidad = 1,
-                        Precio = producto.Precio * -1
-                    };
-                else if (producto.Nombre.Contains("actura"))
-                    nuevoPV = new ProdVendido
-                    {
-                        ProductoId = producto.Id,
-                        Descripcion = label38.Text + textBox20.Text,
-                        Cantidad = 1,
-                        Precio = producto.Precio
-                    };
-                else
-                    nuevoPV = new ProdVendido
-                    {
-                        ProductoId = producto.Id,
-                        Descripcion = label38.Text,
-                        Cantidad = int.Parse(textBox17.Text),
-                        Precio = producto.Precio
-                    };
-                _lstProdVendidos.Add(nuevoPV);
-                double impTotal = 0;
-                foreach (ProdVendido vActual in _lstProdVendidos)
+                try { long.Parse(labelProductoId.Text); } catch { return; };
+                var producto = GetProducto(long.Parse(labelProductoId.Text));
+                var cantidad = long.Parse(labelProductoId.Text);
+
+                for (int i = 0; i < cantidad; i++)
                 {
-                    impTotal += vActual.Precio;
+                    ProdVendido nuevoPV = new ProdVendido
+                    {
+                        ProductoId = producto.Id,
+                        Descripcion = label38.Text,
+                        Cantidad = 1,
+                        Precio = producto.Precio,
+                        Estado = "Activo"
+                    };
+                    if (producto.Nombre.Contains("pendiente"))
+                    {
+
+                    }
+                    else if (producto.Nombre.Contains("favor")
+                          || producto.Nombre.Contains("devoluci")
+                          || producto.Nombre.Contains("BONIF")
+                    )
+                        nuevoPV.Precio = producto.Precio * -1;
+                    else if (producto.Nombre.Contains("actura"))
+                        nuevoPV.Descripcion = label38.Text + textBox20.Text;
+                    else
+                        nuevoPV.Cantidad = int.Parse(textBox17.Text);
+                    _lstProdVendidos.Add(nuevoPV);
                 }
+
+                double impTotal = 0;
+                foreach (ProdVendido prodVendido in _lstProdVendidos)
+                {
+                    impTotal += prodVendido.Precio;
+                }
+                label42.Text = impTotal.ToString();
+
                 textBox20.Text = "";
                 textBox20.Visible = false;
-                label42.Text = impTotal.ToString();
                 textBox16.Text = "";
                 textBox17.Text = "";
+                textBox2.Text = "";
                 label38.Text = "";
                 label40.Text = "";
+                labelProductoId.Text = "";
                 Actualizar(); // dataGridView4.DataSource = _lstProdVendidos.ToArray();
             }
         }
@@ -256,38 +363,47 @@ namespace linway_app.Forms
 
         private void ConfirmarCrearNota_Click(object sender, EventArgs e)
         {
-            if ((label36.Text != "No encontrado") && (textBox15.Text != ""))
+            if (labelClienteId.Text != "" && labelClienteId.Text != "No encontrado")
             {
-                var cliente = GetCliente(long.Parse(textBox15.Text));
+                var cliente = GetClientePorDireExacta(label36.Text);
                 if (cliente == null) return;
 
                 NotaDeEnvio nuevaNota = new NotaDeEnvio
                 {
-                    ProdVendidos = _lstProdVendidos,
                     ClientId = cliente.Id,
+                    Client = cliente,
                     Fecha = DateTime.Now.ToString("yyyy-MM-dd"),
                     Impresa = 0,
                     Detalle = ServicioNotaDeEnvio.ExtraerDetalle(_lstProdVendidos),
-                    ImporteTotal = ServicioNotaDeEnvio.ExtraerImporte(_lstProdVendidos)
+                    ImporteTotal = ServicioNotaDeEnvio.ExtraerImporte(_lstProdVendidos),
+                    Estado = "Activo"
                 };
-                bool response = AgregarNota(nuevaNota);
-                if (!response) return;
+                long notaId = AgregarNota(nuevaNota);
+                if (notaId == 0)
+                {
+                    MessageBox.Show("Falló al procesar Nota nueva");
+                    return;
+                }
+                foreach (var prodVendido in _lstProdVendidos)
+                {
+                    prodVendido.NotaDeEnvioId = notaId;
+                    AgregarProductoVendido(prodVendido);
+                }
 
                 if (checkBox4.Checked)      // agregar productos vendidos a lista de registros y a lista de ventas
                 {
-                    RegistroVenta nuevoRegistro = new RegistroVenta()
+                    RegistroVenta nuevoRegistro = new RegistroVenta
                     {
-                        Cliente = cliente,
                         ClienteId = cliente.Id,
+                        Cliente = cliente,
                         Fecha = DateTime.Now.ToString(),
                         NombreCliente = cliente.Direccion,
-                        ProdVendido = _lstProdVendidos
+                        Estado = "Activo"
                     };
-                    AgregarRegistroVenta(nuevoRegistro);
-
-
+                    long registroId = AgregarRegistroVenta(nuevoRegistro);
                     foreach (var prodVendido in _lstProdVendidos)
                     {
+                        prodVendido.RegistroVentaId = registroId;
                         if (EsProducto(prodVendido.Producto.Nombre))
                         {
                             List<Venta> lstVentas = GetVentas();
@@ -315,11 +431,17 @@ namespace linway_app.Forms
                     }
                 }
 
+                foreach (var prodVendido in _lstProdVendidos)
+                {
+                    prodVendido.NotaDeEnvioId = notaId;
+                    AgregarProductoVendido(prodVendido);
+                }
+
                 if (checkBox1.Checked)      // imprimir checkbox
                 {
-                    FormImprimirNota formimprimir = new FormImprimirNota();
-                    formimprimir.Rellenar_Datos(nuevaNota);
-                    formimprimir.Show();
+                    var form = Program.GetConfig().GetRequiredService<FormImprimirNota>();
+                    form.Rellenar_Datos(nuevaNota);
+                    form.Show();
                 }
 
                 if (checkBox3.Checked)     // enviar a hoja de reparto como pedido nuevo para X reparto

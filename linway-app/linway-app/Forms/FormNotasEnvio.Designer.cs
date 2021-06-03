@@ -92,10 +92,7 @@ namespace linway_app.Forms
             this.label17 = new System.Windows.Forms.Label();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.bExportar = new System.Windows.Forms.Button();
-            this.bCopiaSeguridad = new System.Windows.Forms.Button();
             this.lCantNotas = new System.Windows.Forms.Label();
-            this.button11 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -119,7 +116,7 @@ namespace linway_app.Forms
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 10;
-            this.dataGridView1.Size = new System.Drawing.Size(729, 150);
+            this.dataGridView1.Size = new System.Drawing.Size(729, 319);
             this.dataGridView1.TabIndex = 0;
             // 
             // button1
@@ -533,7 +530,8 @@ namespace linway_app.Forms
             "Martes",
             "Miercoles",
             "Jueves",
-            "Viernes"});
+            "Viernes",
+            "Sabado"});
             this.comboBox4.Location = new System.Drawing.Point(19, 47);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(85, 21);
@@ -547,7 +545,7 @@ namespace linway_app.Forms
             this.tabControl1.Location = new System.Drawing.Point(747, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(360, 337);
+            this.tabControl1.Size = new System.Drawing.Size(360, 506);
             this.tabControl1.TabIndex = 8;
             // 
             // tabPage1
@@ -564,7 +562,7 @@ namespace linway_app.Forms
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(352, 311);
+            this.tabPage1.Size = new System.Drawing.Size(352, 480);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Modificar";
             // 
@@ -572,9 +570,9 @@ namespace linway_app.Forms
             // 
             this.button10.Enabled = false;
             this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button10.Location = new System.Drawing.Point(138, 282);
+            this.button10.Location = new System.Drawing.Point(128, 422);
             this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(75, 23);
+            this.button10.Size = new System.Drawing.Size(108, 52);
             this.button10.TabIndex = 26;
             this.button10.Text = "Modificar";
             this.button10.UseVisualStyleBackColor = true;
@@ -585,7 +583,7 @@ namespace linway_app.Forms
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.ForeColor = System.Drawing.Color.Red;
-            this.label20.Location = new System.Drawing.Point(66, 290);
+            this.label20.Location = new System.Drawing.Point(66, 420);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(0, 18);
             this.label20.TabIndex = 25;
@@ -594,7 +592,7 @@ namespace linway_app.Forms
             // 
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(12, 292);
+            this.label19.Location = new System.Drawing.Point(9, 422);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(48, 16);
             this.label19.TabIndex = 24;
@@ -724,7 +722,7 @@ namespace linway_app.Forms
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(226, 94);
+            this.tabPage4.Size = new System.Drawing.Size(338, 94);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Quitar producto";
             // 
@@ -772,8 +770,9 @@ namespace linway_app.Forms
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(58, 20);
             this.textBox7.TabIndex = 13;
+            this.textBox7.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
             this.textBox7.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
-            this.textBox7.Leave += new System.EventHandler(this.textBox7_Leave);
+            //this.textBox7.Leave += new System.EventHandler(this.textBox7_Leave);
             // 
             // label18
             // 
@@ -806,7 +805,7 @@ namespace linway_app.Forms
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowHeadersWidth = 10;
-            this.dataGridView2.Size = new System.Drawing.Size(346, 112);
+            this.dataGridView2.Size = new System.Drawing.Size(346, 239);
             this.dataGridView2.TabIndex = 9;
             // 
             // tabPage2
@@ -827,64 +826,27 @@ namespace linway_app.Forms
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(234, 311);
+            this.tabPage2.Size = new System.Drawing.Size(352, 480);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Borrar";
-            // 
-            // bExportar
-            // 
-            this.bExportar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bExportar.Location = new System.Drawing.Point(12, 355);
-            this.bExportar.Name = "bExportar";
-            this.bExportar.Size = new System.Drawing.Size(75, 34);
-            this.bExportar.TabIndex = 9;
-            this.bExportar.Text = "Exportar";
-            this.bExportar.UseVisualStyleBackColor = true;
-            this.bExportar.Visible = false;
-            this.bExportar.Click += new System.EventHandler(this.bExportar_Click);
-            // 
-            // bCopiaSeguridad
-            // 
-            this.bCopiaSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bCopiaSeguridad.Location = new System.Drawing.Point(117, 355);
-            this.bCopiaSeguridad.Name = "bCopiaSeguridad";
-            this.bCopiaSeguridad.Size = new System.Drawing.Size(160, 34);
-            this.bCopiaSeguridad.TabIndex = 10;
-            this.bCopiaSeguridad.Text = "Crear copia de seguridad";
-            this.bCopiaSeguridad.UseVisualStyleBackColor = true;
-            this.bCopiaSeguridad.Click += new System.EventHandler(this.CopiaSeguridad_Click);
             // 
             // lCantNotas
             // 
             this.lCantNotas.AutoSize = true;
             this.lCantNotas.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lCantNotas.ForeColor = System.Drawing.Color.Red;
-            this.lCantNotas.Location = new System.Drawing.Point(592, 362);
+            this.lCantNotas.Location = new System.Drawing.Point(592, 525);
             this.lCantNotas.Name = "lCantNotas";
             this.lCantNotas.Size = new System.Drawing.Size(118, 18);
             this.lCantNotas.TabIndex = 11;
             this.lCantNotas.Text = "notas de envio";
             // 
-            // button11
-            // 
-            this.button11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button11.Location = new System.Drawing.Point(311, 355);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(75, 34);
-            this.button11.TabIndex = 12;
-            this.button11.Text = "Importar";
-            this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.ImportarNotasDeEnvio_Click);
-            // 
             // FormNotasEnvio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1119, 392);
-            this.Controls.Add(this.button11);
+            this.ClientSize = new System.Drawing.Size(1119, 552);
             this.Controls.Add(this.lCantNotas);
-            this.Controls.Add(this.bCopiaSeguridad);
-            this.Controls.Add(this.bExportar);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
@@ -988,9 +950,6 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Button bExportar;
-        private System.Windows.Forms.Button bCopiaSeguridad;
         private System.Windows.Forms.Label lCantNotas;
-        private System.Windows.Forms.Button button11;
     }
 }

@@ -14,14 +14,21 @@ namespace linway_app.Forms
             InitializeComponent();
             _servProducto = servProducto;
         }
-
-        private void FormProductos_Load(object sender, EventArgs e) {}
-
-        public List<Producto> GetProductos()
+        private void FormProductos_Load(object sender, EventArgs e)
+        {}
+        private List<Producto> GetProductos()
         {
             List<Producto> lstProductos = _servProducto.GetAll();
             Console.WriteLine(lstProductos);
             return lstProductos;
+        }
+        private Producto GetProducto(long id)
+        {
+            return _servProducto.Get(id);
+        }
+        private Producto GetProductoPorNombre(string nombre)
+        {
+            return GetProductos().Find(x => x.Nombre.ToLower().Contains(nombre.ToLower()));
         }
         private void GuardarProducto(Producto nuevoProducto)
         {
@@ -117,7 +124,8 @@ namespace linway_app.Forms
             {
                 Producto nuevoProducto = new Producto {
                     Nombre = textBox6.Text,
-                    Precio = float.Parse(textBox7.Text)
+                    Precio = float.Parse(textBox7.Text),
+                    Estado = "Activo"
                 };
                 GuardarProducto(nuevoProducto);
                 limpiarBtn.PerformClick();
@@ -226,15 +234,20 @@ namespace linway_app.Forms
             }
         }
 
+
+
         //Borrar
         private void textBox21_Leave(object sender, EventArgs e)
+        {}
+        private void textBox21_TextChanged(object sender, EventArgs e)  // por id
         {
             if (textBox21.Text != "")
             {
-                List<Producto> lstProductos = GetProductos();
-                if (lstProductos.Exists(x => x.Id == int.Parse(textBox21.Text)))
+                try { long.Parse(textBox21.Text); } catch { return; };
+                Producto producto = GetProducto(long.Parse(textBox21.Text));
+                if (producto != null)
                 {
-                    label46.Text = lstProductos.Find(x => x.Id == int.Parse(textBox21.Text)).Nombre;
+                    label46.Text = producto.Nombre;
                     button22.Enabled = true;
                 }
                 else
@@ -243,8 +256,34 @@ namespace linway_app.Forms
                     button22.Enabled = false;
                 }
             }
+            else
+            {
+                label46.Text = "";
+                button22.Enabled = false;
+            }
         }
-
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox1.Text != "")
+            {
+                Producto producto = GetProductoPorNombre(textBox1.Text);
+                if (producto != null)
+                {
+                    label46.Text = producto.Nombre;
+                    button22.Enabled = true;
+                }
+                else
+                {
+                    label46.Text = "No encontrado";
+                    button22.Enabled = false;
+                }
+            }
+            else
+            {
+                label46.Text = "";
+                button22.Enabled = false;
+            }
+        }
         private void Eliminar_Click(object sender, EventArgs e)
         {
             if (cbSeguroBorrar.Checked)
@@ -254,6 +293,8 @@ namespace linway_app.Forms
                 button22.Enabled = false;
                 EliminarProducto(producto);
                 textBox21.Text = "";
+                textBox1.Text = "";
+                label46.Text = "";
                 cbSeguroBorrar.Checked = false;
             }
             else

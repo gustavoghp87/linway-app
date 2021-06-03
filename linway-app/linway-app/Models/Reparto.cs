@@ -24,6 +24,7 @@ namespace linway_app.Models
         public long Tae { get; set; }
         public long TotalB { get; set; }
         public long Tl { get; set; }
+        public string Estado { get; set; }
 
         public virtual DiaReparto DiaReparto { get; set; }
         public virtual ICollection<Pedido> Pedidos { get; set; }

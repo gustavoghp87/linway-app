@@ -233,13 +233,13 @@ namespace linway_app.Forms
             "Martes",
             "Miercoles",
             "Jueves",
-            "Viernes"});
+            "Viernes", "Sabado"});
             this.comboBox1.Location = new System.Drawing.Point(41, 292);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(99, 23);
             this.comboBox1.TabIndex = 23;
             this.comboBox1.Visible = false;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.AgregarAReparto_SelectedIndexChanged);
             // 
             // checkBox2
             // 

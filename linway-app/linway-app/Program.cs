@@ -19,6 +19,7 @@ namespace linway_app
             services.AddScoped<ICliente, Cliente>();
             services.AddScoped<IDiaReparto, DiaReparto>();
             services.AddScoped<INotaDeEnvio, NotaDeEnvio>();
+            services.AddScoped<IPedido, Pedido>();
             services.AddScoped<IProducto, Producto>();
             services.AddScoped<IProdVendido, ProdVendido>();
             services.AddScoped<IRecibo, Recibo>();
@@ -30,6 +31,7 @@ namespace linway_app
             services.AddScoped<IRepository<Cliente>, RepositoryCliente>();
             services.AddScoped<IRepository<DiaReparto>, RepositoryDiaReparto>();
             services.AddScoped<IRepository<NotaDeEnvio>, RepositoryNotaDeEnvio>();
+            services.AddScoped<IRepository<Pedido>, RepositoryPedido>();
             services.AddScoped<IRepository<Producto>, RepositoryProducto>();
             services.AddScoped<IRepository<ProdVendido>, RepositoryProdVendido>();
             services.AddScoped<IRepository<Recibo>, RepositoryRecibo>();
@@ -40,6 +42,7 @@ namespace linway_app
             services.AddScoped<IServicioCliente, ServicioCliente>();
             services.AddScoped<IServicioDiaReparto, ServicioDiaReparto>();
             services.AddScoped<IServicioNotaDeEnvio, ServicioNotaDeEnvio>();
+            services.AddScoped<IServicioPedido, ServicioPedido>();
             services.AddScoped<IServicioProducto, ServicioProducto>();
             services.AddScoped<IServicioProdVendido, ServicioProdVendido>();
             services.AddScoped<IServicioRecibo, ServicioRecibo>();

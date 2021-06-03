@@ -12,6 +12,7 @@ namespace linway_app.Services
         {
             _unitOfWork = unitOfWork;
         }
+
         public bool Add(Cliente cliente)
         {
             return _unitOfWork.RepoCliente.Add(cliente);

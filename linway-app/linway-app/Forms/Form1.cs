@@ -3,6 +3,7 @@ using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -39,20 +40,12 @@ namespace linway_app.Forms
                 dataGridView1.Columns[8].Visible = false;
                 dataGridView1.Columns[9].Visible = false;
                 dataGridView1.Columns[10].Visible = false;
-
-                //Columns - in the designer click on the property ColumnHeadersDefaultCellStyle and select Layout, Alignment = MiddleCenter
-                //For the data fields do the same for DefaultCellStyle
+                dataGridView1.Columns[11].Visible = false;
             }
             else
             {
-                try
-                {
-                    _servCliente.Add(new Cliente { Name = "Cliente Particular X" , Direccion = "-" });
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine(exception.Message);
-                }
+                CrearPrimerCliente();
+                Actualizar();
             }
 
             var lstProductos = GetProductos();
@@ -64,17 +57,38 @@ namespace linway_app.Forms
                 dataGridView2.Columns[2].Width = 72;
                 dataGridView2.Columns[3].Visible = false;
                 dataGridView2.Columns[4].Visible = false;
+                dataGridView2.Columns[5].Visible = false;
+            }
+        }
+        private void CrearPrimerCliente()
+        {
+            try
+            {
+                bool response = _servCliente.Add(new Cliente
+                {
+                    Name = "Cliente Particular X",
+                    Direccion = "Cliente Particular X",
+                    Estado = "Activo"
+                });
+                if (!response)
+                {
+                    MessageBox.Show("Hay problemas con la base de datos y no se puede seguir");
+                    Close();
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Hay problemas con la base de datos y no se puede seguir: " + exception.Message);
+                Close();
             }
         }
         private List<Cliente> GetClientes()
         {
-            List<Cliente> lstClientes = _servCliente.GetAll();
-            return lstClientes;
+             return _servCliente.GetAll();
         }
         private List<Producto> GetProductos()
         {
-            List<Producto> lstProductos = _servProducto.GetAll();
-            return lstProductos;
+            return _servProducto.GetAll();
         }
 
 

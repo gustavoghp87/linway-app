@@ -1,4 +1,5 @@
-﻿using System;
+﻿using linway_app.Repositories;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -24,6 +25,8 @@ namespace linway_app.Models
 
         [DisplayName("Total")]
         public double ImporteTotal { get; set; }
+
+        public string Estado { get; set; }
 
         public virtual Cliente Client { get; set; }
         public virtual ICollection<ProdVendido> ProdVendidos { get; set; }

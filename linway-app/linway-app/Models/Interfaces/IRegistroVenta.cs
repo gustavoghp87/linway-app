@@ -10,5 +10,6 @@ namespace linway_app.Models
         long Id { get; set; }
         string NombreCliente { get; set; }
         ICollection<ProdVendido> ProdVendido { get; set; }
+        string Estado { get; set; }
     }
 }

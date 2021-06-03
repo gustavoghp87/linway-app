@@ -19,5 +19,6 @@ namespace linway_app.Models
         Reparto Reparto { get; set; }
         long RepartoId { get; set; }
         long T { get; set; }
+        string Estado { get; set; }
     }
 }

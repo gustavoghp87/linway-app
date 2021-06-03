@@ -37,7 +37,7 @@ namespace linway_app.Models
             if (!optionsBuilder.IsConfigured)
             {
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlite("DataSource=C:\\Users\\g\\Documents\\github\\linway-app\\linway-app\\linway-app\\bin\\Debug\\linway-db.db");
+                optionsBuilder.UseSqlite(@"DataSource=linway-db.db");
             }
         }
 
@@ -45,10 +45,7 @@ namespace linway_app.Models
         {
             modelBuilder.Entity<Cliente>(entity =>
             {
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Cuit).HasColumnName("CUIT");
 
@@ -57,10 +54,7 @@ namespace linway_app.Models
 
             modelBuilder.Entity<DetalleRecibo>(entity =>
             {
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Detalle).IsRequired();
 
@@ -72,20 +66,14 @@ namespace linway_app.Models
 
             modelBuilder.Entity<DiaReparto>(entity =>
             {
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Dia).IsRequired();
             });
 
             modelBuilder.Entity<NotaDeEnvio>(entity =>
             {
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Detalle).IsRequired();
 
@@ -99,10 +87,7 @@ namespace linway_app.Models
 
             modelBuilder.Entity<Pedido>(entity =>
             {
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Ae).HasColumnName("AE");
 
@@ -121,10 +106,7 @@ namespace linway_app.Models
 
             modelBuilder.Entity<ProdVendido>(entity =>
             {
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Descripcion).IsRequired();
 
@@ -148,20 +130,16 @@ namespace linway_app.Models
 
             modelBuilder.Entity<Producto>(entity =>
             {
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Nombre).IsRequired();
+
+                entity.Property(e => e.Estado);
             });
 
             modelBuilder.Entity<Recibo>(entity =>
             {
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.DireccionCliente).IsRequired();
 
@@ -175,10 +153,7 @@ namespace linway_app.Models
 
             modelBuilder.Entity<RegistroVenta>(entity =>
             {
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Fecha).IsRequired();
 
@@ -192,10 +167,7 @@ namespace linway_app.Models
 
             modelBuilder.Entity<Reparto>(entity =>
             {
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Nombre).IsRequired();
 
@@ -219,10 +191,7 @@ namespace linway_app.Models
 
             modelBuilder.Entity<Venta>(entity =>
             {
-                entity.HasIndex(e => e.Id)
-                    .IsUnique();
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.Id);
 
                 entity.HasOne(d => d.Producto)
                     .WithMany(p => p.Venta)

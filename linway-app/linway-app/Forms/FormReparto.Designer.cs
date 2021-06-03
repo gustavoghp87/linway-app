@@ -79,7 +79,6 @@ namespace linway_app.Forms
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.bCopiaSeguridad = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
@@ -124,7 +123,6 @@ namespace linway_app.Forms
             this.button18 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.exportarButton = new System.Windows.Forms.Button();
-            this.ImportarButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.gpNuevoReparto.SuspendLayout();
@@ -168,7 +166,7 @@ namespace linway_app.Forms
             "Martes",
             "Miercoles",
             "Jueves",
-            "Viernes"});
+            "Viernes", "Sabado"});
             this.comboBox1.Location = new System.Drawing.Point(64, 34);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 26);
@@ -207,7 +205,7 @@ namespace linway_app.Forms
             this.button3.TabIndex = 4;
             this.button3.Text = "Ver";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Ver_Click);
             // 
             // menuStrip1
             // 
@@ -236,14 +234,14 @@ namespace linway_app.Forms
             this.agregarRepartoToolStripMenuItem.Name = "agregarRepartoToolStripMenuItem";
             this.agregarRepartoToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.agregarRepartoToolStripMenuItem.Text = "Agregar Reparto a día";
-            this.agregarRepartoToolStripMenuItem.Click += new System.EventHandler(this.agregarRepartoToolStripMenuItem_Click);
+            this.agregarRepartoToolStripMenuItem.Click += new System.EventHandler(this.AgregarReparto_ToolStripMenuItem_Click);
             // 
             // agregarDestinoToolStripMenuItem
             // 
             this.agregarDestinoToolStripMenuItem.Name = "agregarDestinoToolStripMenuItem";
             this.agregarDestinoToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.agregarDestinoToolStripMenuItem.Text = "Agregar Destino a reparto";
-            this.agregarDestinoToolStripMenuItem.Click += new System.EventHandler(this.agregarDestinoToolStripMenuItem_Click);
+            this.agregarDestinoToolStripMenuItem.Click += new System.EventHandler(this.AgregarDestino_ToolStripMenuItem_Click);
             // 
             // limpiarPlanillaToolStripMenuItem
             // 
@@ -437,7 +435,7 @@ namespace linway_app.Forms
             "Martes",
             "Miercoles",
             "Jueves",
-            "Viernes"});
+            "Viernes", "Sabado"});
             this.comboBox4.Location = new System.Drawing.Point(41, 33);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(88, 26);
@@ -649,17 +647,6 @@ namespace linway_app.Forms
             this.label9.TabIndex = 0;
             this.label9.Text = "TA:";
             // 
-            // bCopiaSeguridad
-            // 
-            this.bCopiaSeguridad.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bCopiaSeguridad.Location = new System.Drawing.Point(187, 244);
-            this.bCopiaSeguridad.Name = "bCopiaSeguridad";
-            this.bCopiaSeguridad.Size = new System.Drawing.Size(137, 50);
-            this.bCopiaSeguridad.TabIndex = 16;
-            this.bCopiaSeguridad.Text = "Crear copia de seguridad";
-            this.bCopiaSeguridad.UseVisualStyleBackColor = true;
-            this.bCopiaSeguridad.Click += new System.EventHandler(this.CrearCopiaDeSeguridad_Click);
-            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.button7);
@@ -691,7 +678,7 @@ namespace linway_app.Forms
             this.button6.TabIndex = 0;
             this.button6.Text = "Aceptar";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.button6.Click += new System.EventHandler(this.LimpiarRepartos_Click);
             // 
             // groupBox5
             // 
@@ -715,7 +702,7 @@ namespace linway_app.Forms
             "Martes",
             "Miercoles",
             "Jueves",
-            "Viernes"});
+            "Viernes", "Sabado"});
             this.comboBox6.Location = new System.Drawing.Point(74, 26);
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(121, 24);
@@ -795,7 +782,7 @@ namespace linway_app.Forms
             "Martes",
             "Miercoles",
             "Jueves",
-            "Viernes"});
+            "Viernes", "Sabado"});
             this.comboBox8.Location = new System.Drawing.Point(41, 40);
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(88, 26);
@@ -936,7 +923,7 @@ namespace linway_app.Forms
             this.checkBox1.TabIndex = 16;
             this.checkBox1.Text = "Destinos a entregar/Todos";
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
             // 
             // groupBox8
             // 
@@ -1005,12 +992,12 @@ namespace linway_app.Forms
             "Martes",
             "Miercoles",
             "Jueves",
-            "Viernes"});
+            "Viernes", "Sabado"});
             this.comboBox10.Location = new System.Drawing.Point(41, 33);
             this.comboBox10.Name = "comboBox10";
             this.comboBox10.Size = new System.Drawing.Size(88, 26);
             this.comboBox10.TabIndex = 9;
-            this.comboBox10.SelectedIndexChanged += new System.EventHandler(this.comboBox10_SelectedIndexChanged);
+            this.comboBox10.SelectedIndexChanged += new System.EventHandler(this.ComboBox10_SelectedIndexChanged);
             // 
             // label34
             // 
@@ -1027,7 +1014,7 @@ namespace linway_app.Forms
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(124, 24);
             this.textBox5.TabIndex = 7;
-            this.textBox5.TextChanged += new System.EventHandler(this.textBox5_TextChanged);
+            this.textBox5.TextChanged += new System.EventHandler(this.TextBox5_TextChanged);
             // 
             // label35
             // 
@@ -1047,7 +1034,7 @@ namespace linway_app.Forms
             this.button16.TabIndex = 5;
             this.button16.Text = "Borrar";
             this.button16.UseVisualStyleBackColor = true;
-            this.button16.Click += new System.EventHandler(this.button16_Click);
+            this.button16.Click += new System.EventHandler(this.Button16_Click);
             // 
             // groupBox9
             // 
@@ -1130,11 +1117,11 @@ namespace linway_app.Forms
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 300);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 302);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 10;
-            this.dataGridView1.Size = new System.Drawing.Size(858, 201);
+            this.dataGridView1.Size = new System.Drawing.Size(858, 364);
             this.dataGridView1.TabIndex = 5;
             // 
             // exportarButton
@@ -1146,27 +1133,14 @@ namespace linway_app.Forms
             this.exportarButton.TabIndex = 19;
             this.exportarButton.Text = "Exportar este";
             this.exportarButton.UseVisualStyleBackColor = true;
-            this.exportarButton.Click += new System.EventHandler(this.ExportarButton_Click);
-            // 
-            // ImportarButton
-            // 
-            this.ImportarButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ImportarButton.Location = new System.Drawing.Point(733, 244);
-            this.ImportarButton.Name = "ImportarButton";
-            this.ImportarButton.Size = new System.Drawing.Size(137, 50);
-            this.ImportarButton.TabIndex = 20;
-            this.ImportarButton.Text = "Importar";
-            this.ImportarButton.UseVisualStyleBackColor = true;
-            this.ImportarButton.Click += new System.EventHandler(this.ImportarButton_Click);
+            this.exportarButton.Click += new System.EventHandler(this.Exportar_Click);
             // 
             // FormReparto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(882, 513);
-            this.Controls.Add(this.ImportarButton);
+            this.ClientSize = new System.Drawing.Size(882, 676);
             this.Controls.Add(this.exportarButton);
-            this.Controls.Add(this.bCopiaSeguridad);
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.gpNuevoReparto);
             this.Controls.Add(this.groupBox2);
@@ -1280,7 +1254,6 @@ namespace linway_app.Forms
         private System.Windows.Forms.ComboBox comboBox8;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Button bCopiaSeguridad;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Label label27;
@@ -1314,6 +1287,5 @@ namespace linway_app.Forms
         private System.Windows.Forms.Button button18;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button exportarButton;
-        private System.Windows.Forms.Button ImportarButton;
     }
 }

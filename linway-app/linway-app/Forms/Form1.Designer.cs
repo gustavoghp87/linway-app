@@ -192,7 +192,7 @@ namespace linway_app.Forms
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(12, 388);
+            this.label10.Location = new System.Drawing.Point(12, 397);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(69, 18);
             this.label10.TabIndex = 21;
@@ -212,7 +212,7 @@ namespace linway_app.Forms
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button5.Location = new System.Drawing.Point(104, 383);
+            this.button5.Location = new System.Drawing.Point(104, 397);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(29, 23);
             this.button5.TabIndex = 22;
@@ -251,17 +251,17 @@ namespace linway_app.Forms
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridView1.Location = new System.Drawing.Point(15, 416);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 427);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 10;
-            this.dataGridView1.Size = new System.Drawing.Size(898, 315);
+            this.dataGridView1.Size = new System.Drawing.Size(898, 304);
             this.dataGridView1.TabIndex = 1;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(139, 388);
+            this.label11.Location = new System.Drawing.Point(139, 401);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(107, 13);
             this.label11.TabIndex = 23;
@@ -270,7 +270,7 @@ namespace linway_app.Forms
             // 
             // BuscadorClientes
             // 
-            this.BuscadorClientes.Location = new System.Drawing.Point(252, 383);
+            this.BuscadorClientes.Location = new System.Drawing.Point(252, 398);
             this.BuscadorClientes.Name = "BuscadorClientes";
             this.BuscadorClientes.Size = new System.Drawing.Size(110, 20);
             this.BuscadorClientes.TabIndex = 20;
@@ -346,7 +346,7 @@ namespace linway_app.Forms
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Sistema Linway 2021";
+            this.Text = "Sistema Linway 11";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

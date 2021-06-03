@@ -20,6 +20,7 @@ namespace linway_app.Models
         [DisplayName("Detalle")]
         public string Descripcion { get; set; }
         public double Precio { get; set; }
+        public string Estado { get; set; }
 
         public virtual NotaDeEnvio NotaDeEnvio { get; set; }
         public virtual Pedido Pedido { get; set; }

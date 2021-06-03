@@ -1,5 +1,6 @@
 ﻿using linway_app.Models;
 using linway_app.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -377,14 +378,13 @@ namespace linway_app.Forms
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void AgregarAReparto_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-            FormReparto fr = new FormReparto();
+            var form = Program.GetConfig().GetRequiredService<FormReparto>();
             comboBox2.DataSource = GetRepartosPordia(comboBox1.Text);
             comboBox2.DisplayMember = "Nombre";
             comboBox2.ValueMember = "Nombre";
-            fr.Close();
+            form.Close();
         }
 
         private void textBox19_Leave(object sender, EventArgs e)
