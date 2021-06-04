@@ -16,18 +16,41 @@ namespace linway_app
         {
             services.AddDbContext<LinwaydbContext>();
 
-            services.AddScoped<ICliente, Cliente>();
-            services.AddScoped<IDiaReparto, DiaReparto>();
-            services.AddScoped<INotaDeEnvio, NotaDeEnvio>();
-            services.AddScoped<IPedido, Pedido>();
-            services.AddScoped<IProducto, Producto>();
-            services.AddScoped<IProdVendido, ProdVendido>();
-            services.AddScoped<IRecibo, Recibo>();
-            services.AddScoped<IDetalleRecibo, DetalleRecibo>();
-            services.AddScoped<IRegistroVenta, RegistroVenta>();
-            services.AddScoped<IReparto, Reparto>();
-            services.AddScoped<IVenta, Venta>();
+            //services.AddScoped<ICliente, Cliente>();
+            //services.AddScoped<IDiaReparto, DiaReparto>();
+            //services.AddScoped<INotaDeEnvio, NotaDeEnvio>();
+            //services.AddScoped<IPedido, Pedido>();
+            //services.AddScoped<IProducto, Producto>();
+            //services.AddScoped<IProdVendido, ProdVendido>();
+            //services.AddScoped<IRecibo, Recibo>();
+            //services.AddScoped<IDetalleRecibo, DetalleRecibo>();
+            //services.AddScoped<IRegistroVenta, RegistroVenta>();
+            //services.AddScoped<IReparto, Reparto>();
+            //services.AddScoped<IVenta, Venta>();
 
+            services.AddTransient<Form1>();
+            services.AddTransient<FormClientes>();
+            services.AddTransient<FormCrearNota>();
+            services.AddTransient<FormImprimirNota>();
+            services.AddTransient<FormImprimirRecibo>();
+            services.AddTransient<FormNotasEnvio>();
+            services.AddTransient<FormProductos>();
+            services.AddTransient<FormRecibos>();
+            services.AddTransient<FormReparto>();
+            services.AddTransient<FormVentas>();
+
+            services.AddTransient<IServicioCliente, ServicioCliente>();
+            services.AddTransient<IServicioDiaReparto, ServicioDiaReparto>();
+            services.AddTransient<IServicioNotaDeEnvio, ServicioNotaDeEnvio>();
+            services.AddTransient<IServicioPedido, ServicioPedido>();
+            services.AddTransient<IServicioProducto, ServicioProducto>();
+            services.AddTransient<IServicioProdVendido, ServicioProdVendido>();
+            services.AddTransient<IServicioRecibo, ServicioRecibo>();
+            services.AddTransient<IServicioDetalleRecibo, ServicioDetalleRecibo>();
+            services.AddTransient<IServicioRegistroVenta, ServicioRegistroVenta>();
+            services.AddTransient<IServicioReparto, ServicioReparto>();
+            services.AddTransient<IServicioVenta, ServicioVenta>();
+            
             services.AddScoped<IRepository<Cliente>, RepositoryCliente>();
             services.AddScoped<IRepository<DiaReparto>, RepositoryDiaReparto>();
             services.AddScoped<IRepository<NotaDeEnvio>, RepositoryNotaDeEnvio>();
@@ -39,32 +62,16 @@ namespace linway_app
             services.AddScoped<IRepository<Reparto>, RepositoryReparto>();
             services.AddScoped<IRepository<Venta>, RepositoryVenta>();
 
-            services.AddScoped<IServicioCliente, ServicioCliente>();
-            services.AddScoped<IServicioDiaReparto, ServicioDiaReparto>();
-            services.AddScoped<IServicioNotaDeEnvio, ServicioNotaDeEnvio>();
-            services.AddScoped<IServicioPedido, ServicioPedido>();
-            services.AddScoped<IServicioProducto, ServicioProducto>();
-            services.AddScoped<IServicioProdVendido, ServicioProdVendido>();
-            services.AddScoped<IServicioRecibo, ServicioRecibo>();
-            services.AddScoped<IServicioDetalleRecibo, ServicioDetalleRecibo>();
-            services.AddScoped<IServicioRegistroVenta, ServicioRegistroVenta>();
-            services.AddScoped<IServicioReparto, ServicioReparto>();
-            services.AddScoped<IServicioVenta, ServicioVenta>();
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            services.AddScoped<Form1>();
-            services.AddScoped<FormClientes>();
-            services.AddScoped<FormCrearNota>();
-            services.AddScoped<FormImprimirNota>();
-            services.AddScoped<FormImprimirRecibo>();
-            services.AddScoped<FormNotasEnvio>();
-            services.AddScoped<FormProductos>();
-            services.AddScoped<FormRecibos>();
-            services.AddScoped<FormReparto>();
-            services.AddScoped<FormVentas>();
+            // services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+
+            // Transient objects are always different; a new instance is provided to every controller
+            //    and every service.
+            // Scoped objects are the same within a request, but different across different requests.
+            // Singleton objects are the same for every object and every request.
+
+            // Transient para Servicios y UnitOfWork, Scoped para Repository
         }
 
         public static ServiceProvider GetConfig()

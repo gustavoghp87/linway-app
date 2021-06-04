@@ -20,7 +20,7 @@ namespace linway_app.Repositories
         {
             try
             {
-                _context.DiaReparto.Add(diaReparto);
+                _entities.Add(diaReparto);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -38,7 +38,7 @@ namespace linway_app.Repositories
         {
             try
             {
-                _context.DiaReparto.Update(diaReparto);
+                _entities.Update(diaReparto);
                 _context.SaveChangesAsync();
                 return true;
             }

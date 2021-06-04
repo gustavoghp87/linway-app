@@ -21,7 +21,7 @@ namespace linway_app.Repositories
             try
             {
                 producto.Precio = Math.Truncate(producto.Precio * 100) / 100;
-                _context.Producto.Add(producto);
+                _entities.Add(producto);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -41,8 +41,11 @@ namespace linway_app.Repositories
             try
             {
                 producto.Precio = Math.Truncate(producto.Precio * 100) / 100;
-                _context.Producto.Update(producto);
-                _context.SaveChangesAsync();
+                using (var context = new LinwaydbContext())
+                {
+                    context.Producto.Update(producto);
+                    context.SaveChanges();
+                }
                 return true;
             }
             catch (Exception e)
@@ -60,14 +63,16 @@ namespace linway_app.Repositories
         }
         public List<Producto> GetAll()
         {
-            // var lstSinFiltr = _context.Producto.ToList();
-            var lstSinFiltr = _entities.ToList();
-            var lst = lstSinFiltr.Where(x => x.Estado != null && x.Estado != "Eliminado").ToList();
-            foreach (var producto in lst)
+            using (var context = new LinwaydbContext())
             {
-                producto.Precio = Math.Truncate(producto.Precio * 100) / 100;
+                var lstSinFiltr = context.Producto.ToList();
+                var lst = lstSinFiltr.Where(x => x.Estado != null && x.Estado != "Eliminado").ToList();
+                foreach (var producto in lst)
+                {
+                    producto.Precio = Math.Truncate(producto.Precio * 100) / 100;
+                }
+                return lst;
             }
-            return lst;
         }
     }
 }

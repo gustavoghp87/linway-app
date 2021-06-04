@@ -20,7 +20,7 @@ namespace linway_app.Repositories
         {
             try
             {
-                _context.Pedido.Add(pedido);
+                _entities.Add(pedido);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -44,7 +44,7 @@ namespace linway_app.Repositories
         {
             try
             {
-                _context.Pedido.Update(pedido);
+                _entities.Update(pedido);
                 _context.SaveChangesAsync();
                 return true;
             }

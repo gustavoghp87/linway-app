@@ -42,7 +42,7 @@ namespace linway_app.Repositories
         }
         public void SaveChanges()
         {
-            _context.SaveChanges();
+            _context.SaveChangesAsync();
         }
         public async Task SaveChangesAsync()
         {

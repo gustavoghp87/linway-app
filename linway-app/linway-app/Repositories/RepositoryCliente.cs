@@ -20,7 +20,7 @@ namespace linway_app.Repositories
         {
             try
             {
-                _context.Cliente.Add(cliente);
+                _entities.Add(cliente);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -39,9 +39,12 @@ namespace linway_app.Repositories
         {
             try
             {
-                _context.Cliente.Update(cliente);
-                _context.SaveChangesAsync();
-                return true;
+                using (var context = new LinwaydbContext())
+                {
+                    context.Cliente.Update(cliente);
+                    context.SaveChangesAsync();
+                    return true;
+                }
             }
             catch (Exception e)
             {
@@ -57,11 +60,14 @@ namespace linway_app.Repositories
         }
         public List<Cliente> GetAll()
         {
-            var resp = _entities;
-            if (resp == null) return null;
-            var lstSinFiltr = _entities.ToList();
-            var lst = lstSinFiltr.Where(x => x.Estado != null && x.Estado != "Eliminado").ToList();
-            return lst;
+            using (var context = new LinwaydbContext())
+            {
+                var resp = context.Cliente;
+                if (resp == null) return null;
+                var lstSinFiltr = resp.ToList();
+                var lst = lstSinFiltr.Where(x => x.Estado != null && x.Estado != "Eliminado").ToList();
+                return lst;
+            }
         }
     }
 }

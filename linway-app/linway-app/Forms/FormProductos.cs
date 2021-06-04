@@ -179,13 +179,13 @@ namespace linway_app.Forms
 
         bool TodoOKmodificarP()
         {
-            if (label19.Text != "No encontrado" && textBox8.Text != "" && textBox9.Text != "")
+            if (label19.Text == "No encontrado" || label19.Text == "" || textBox9.Text == "")
             {
-                return true;
+                return false;
             }
             else
             {
-                return false;
+                return true;
             }
         }
 

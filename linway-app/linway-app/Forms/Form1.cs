@@ -12,7 +12,6 @@ namespace linway_app.Forms
     {
         private readonly IServicioCliente _servCliente;
         private readonly IServicioProducto _servProducto;
-
         public Form1(IServicioCliente servCliente, IServicioProducto servProducto)
         {
             _servCliente = servCliente;
@@ -26,6 +25,12 @@ namespace linway_app.Forms
         public void Actualizar()
         {
             var lstClientes = GetClientes();
+            CargarGrid1(lstClientes);
+            var lstProductos = GetProductos();
+            CargarGrid2(lstProductos);
+        }
+        private void CargarGrid1(List<Cliente> lstClientes)
+        {
             if (lstClientes != null && lstClientes.Count > 0)
             {
                 dataGridView1.DataSource = lstClientes.ToArray();
@@ -47,9 +52,10 @@ namespace linway_app.Forms
                 CrearPrimerCliente();
                 Actualizar();
             }
-
-            var lstProductos = GetProductos();
-            if (lstProductos != null && lstClientes.Count > 0)
+        }
+        private void CargarGrid2(List<Producto> lstProductos)
+        {
+            if (lstProductos != null && lstProductos.Count > 0)
             {
                 dataGridView2.DataSource = lstProductos.ToArray();
                 dataGridView2.Columns[0].Width = 48;
@@ -146,7 +152,7 @@ namespace linway_app.Forms
         void FiltrarDatosC(string texto)  // filtra por dirección de clientes
         {
             var lstClientes = GetClientes();
-            var lstClientesFiltrados = new List<ICliente>();
+            var lstClientesFiltrados = new List<Cliente>();
             foreach (var cliente in lstClientes)
             {
                 if (cliente.Direccion.ToLower().Contains(texto.ToLower()))
@@ -154,7 +160,7 @@ namespace linway_app.Forms
                     lstClientesFiltrados.Add(cliente);
                 }
             }
-            dataGridView1.DataSource = lstClientesFiltrados.ToArray();
+            CargarGrid1(lstClientesFiltrados);
         }
 
         private void textBox8_TextChanged(object sender, EventArgs e)
@@ -192,7 +198,7 @@ namespace linway_app.Forms
                     lstProductosFilstrados.Add(producto);
                 }
             }
-            dataGridView2.DataSource = lstProductosFilstrados.ToArray();
+            CargarGrid2(lstProductosFilstrados);
         }
 
         private void Button10_Click(object sender, EventArgs e)
