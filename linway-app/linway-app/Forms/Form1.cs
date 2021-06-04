@@ -3,8 +3,8 @@ using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using static linway_app.Forms.StaticCalls;
 
 namespace linway_app.Forms
 {
@@ -24,9 +24,9 @@ namespace linway_app.Forms
         }
         public void Actualizar()
         {
-            var lstClientes = GetClientes();
+            var lstClientes = getClientes();
             CargarGrid1(lstClientes);
-            var lstProductos = GetProductos();
+            var lstProductos = getProductos();
             CargarGrid2(lstProductos);
         }
         private void CargarGrid1(List<Cliente> lstClientes)
@@ -70,7 +70,7 @@ namespace linway_app.Forms
         {
             try
             {
-                bool response = _servCliente.Add(new Cliente
+                bool response = addCliente(new Cliente
                 {
                     Name = "Cliente Particular X",
                     Direccion = "Cliente Particular X",
@@ -87,14 +87,6 @@ namespace linway_app.Forms
                 MessageBox.Show("Hay problemas con la base de datos y no se puede seguir: " + exception.Message);
                 Close();
             }
-        }
-        private List<Cliente> GetClientes()
-        {
-             return _servCliente.GetAll();
-        }
-        private List<Producto> GetProductos()
-        {
-            return _servProducto.GetAll();
         }
 
 
@@ -151,7 +143,7 @@ namespace linway_app.Forms
         //BUSCAR CLIENTE
         void FiltrarDatosC(string texto)  // filtra por dirección de clientes
         {
-            var lstClientes = GetClientes();
+            var lstClientes = getClientes();
             var lstClientesFiltrados = new List<Cliente>();
             foreach (var cliente in lstClientes)
             {
@@ -189,7 +181,7 @@ namespace linway_app.Forms
         //BUSCAR PRODUCTO
         void FiltrarDatosP(string texto)
         {
-            List<Producto> lstProductos = GetProductos();
+            List<Producto> lstProductos = getProductos();
             List<Producto> lstProductosFilstrados = new List<Producto>();
             foreach (var producto in lstProductos)
             {

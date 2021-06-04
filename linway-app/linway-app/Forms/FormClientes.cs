@@ -2,37 +2,30 @@
 using linway_app.Models.Enums;
 using linway_app.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
+using static linway_app.Forms.StaticCalls;
 
 namespace linway_app.Forms
 {
     public partial class FormClientes : Form
     {
         private readonly IServicioCliente _servCliente;
-
         public FormClientes(IServicioCliente servCliente)
         {
             InitializeComponent();
             _servCliente = servCliente;
         }
 
-        private void FormClientes_Load(object sender, EventArgs e) {}
-
-        private List<Cliente> GetClientes()
-        {
-            List<Cliente> lstClientes = _servCliente.GetAll();
-            return lstClientes;
-        }
+        private void FormClientes_Load(object sender, EventArgs e) { }
         private Cliente GetCliente(long id)
         {
             Cliente cliente = _servCliente.Get(id);
             return cliente;
         }
-        private Cliente GetClientePorDireccion(string direccion)
-        {
-            return GetClientes().Find(x => x.Direccion.ToLower().Contains(direccion.ToLower()));
-        }
+        //private Cliente GetClientePorDireccion(string direccion)
+        //{
+        //    return getClientePorDireccion(direccion);
+        //}
         private void GuardarCliente(Cliente cliente)
         {
             bool response = _servCliente.Add(cliente);
@@ -171,8 +164,8 @@ namespace linway_app.Forms
                     encontrado = true;
                     label23.Text = cliente.Direccion;
                     textBox23.Text = cliente.Direccion;
-                    textBox24.Text = cliente.Telefono.ToString();
-                    textBox25.Text = cliente.CodigoPostal.ToString();
+                    textBox24.Text = cliente.Telefono?.ToString();
+                    textBox25.Text = cliente.CodigoPostal?.ToString();
                     textBox11.Text = cliente.Name;
                     textBox10.Text = cliente.Cuit;
                     if (cliente.Tipo == TipoR.Inscripto.ToString())
@@ -203,27 +196,22 @@ namespace linway_app.Forms
         {
             if (TodoOkModificarC())
             {
-                List<Cliente> lstClientes = GetClientes();
-                foreach (Cliente cliente in lstClientes)
+                Cliente cliente = getClientePorDireccion(label23.Text);
+                if (cliente == null) return;
+                cliente.Direccion = textBox23.Text;
+                cliente.Telefono = textBox24.Text;
+                cliente.CodigoPostal = textBox25.Text;
+                cliente.Name = textBox11.Text;
+                cliente.Cuit = textBox10.Text;
+                if (radioButton3.Checked)
                 {
-                    if (cliente.Direccion.Equals(label23.Text))
-                    {
-                        cliente.Direccion = textBox23.Text;
-                        cliente.Telefono = textBox24.Text;
-                        cliente.CodigoPostal = textBox25.Text;
-                        cliente.Name = textBox11.Text;
-                        cliente.Cuit = textBox10.Text;
-                        if (radioButton3.Checked)
-                        {
-                            cliente.Tipo = TipoR.Inscripto.ToString();
-                        }
-                        else
-                        {
-                            cliente.Tipo = TipoR.Monotributo.ToString();
-                        }
-                        EditarCliente(cliente);
-                    }
+                    cliente.Tipo = TipoR.Inscripto.ToString();
                 }
+                else
+                {
+                    cliente.Tipo = TipoR.Monotributo.ToString();
+                }
+                EditarCliente(cliente);
                 button8.PerformClick();
             }
             else
@@ -243,7 +231,7 @@ namespace linway_app.Forms
         {
             if (cbSeguroBorrar.Checked)
             {
-                var cliente = GetClientePorDireccion(label47.Text);
+                var cliente = getClientePorDireccion(label47.Text);
                 EliminarCliente(cliente);
                 cbSeguroBorrar.Checked = false;
                 label47.Text = "";
@@ -284,7 +272,7 @@ namespace linway_app.Forms
             if (textBoxDireEnBorrar.Text != "")
             {
                 label47.Visible = true;
-                Cliente cliente = GetClientePorDireccion(textBoxDireEnBorrar.Text);
+                Cliente cliente = getClientePorDireccion(textBoxDireEnBorrar.Text);
                 if (cliente == null)
                 {
                     label47.Text = "No encontrado";

@@ -358,6 +358,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\StaticCalls.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\DetalleRecibo.cs" />
     <Compile Include="Models\DiaReparto.cs" />
