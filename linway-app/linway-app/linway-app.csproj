@@ -358,7 +358,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\StaticCalls.cs" />
+    <Compile Include="Forms\Delegates\DDiaReparto.cs" />
+    <Compile Include="Forms\Delegates\DNotaDeEnvio.cs" />
+    <Compile Include="Forms\Delegates\DPedido.cs" />
+    <Compile Include="Forms\Delegates\DProductos.cs" />
+    <Compile Include="Forms\Delegates\DClientes.cs" />
+    <Compile Include="Forms\Delegates\DProdVendido.cs" />
+    <Compile Include="Forms\Delegates\DRegistroVenta.cs" />
+    <Compile Include="Forms\Delegates\DReparto.cs" />
+    <Compile Include="Forms\Delegates\DVentas.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\DetalleRecibo.cs" />
     <Compile Include="Models\DiaReparto.cs" />

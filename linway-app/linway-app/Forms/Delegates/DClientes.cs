@@ -1,34 +1,34 @@
 ﻿using linway_app.Models;
-using linway_app.Repositories;
-using linway_app.Services;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace linway_app.Forms.Delegates
 {
-    public static class StaticCalls
+    public static class DClientes
     {
         public delegate List<Cliente> DGetClientes();
+        public delegate Cliente DGetCliente(long clientId);
         public delegate Cliente DGetClientePorDireccion(string direccion);
         public delegate Cliente DGetClientePorDireccionExacta(string direccion);
         public delegate bool DAddCliente(Cliente cliente);
-        public delegate List<Producto> DGetProductos();
+        public delegate void DEditCliente(Cliente cliente);
 
-        public readonly static DGetClientes getClientes = new DGetClientes(GetClientes);
         public readonly static DAddCliente addCliente = new DAddCliente(AddCliente);
-        public readonly static DGetProductos getProductos = new DGetProductos(GetProductos);
+        public readonly static DEditCliente editCliente = new DEditCliente(EditCliente);
+        public readonly static DGetClientes getClientes = new DGetClientes(GetClientes);
+        public readonly static DGetCliente getCliente = new DGetCliente(GetCliente);
         public readonly static DGetClientePorDireccion getClientePorDireccion
             = new DGetClientePorDireccion(GetClientePorDireccion);
         public readonly static DGetClientePorDireccionExacta getClientePorDireccionExacta
             = new DGetClientePorDireccionExacta(GetClientePorDireccionExacta);
 
-        private static readonly ServicioCliente ServCliente
-            = new ServicioCliente(new UnitOfWork(new LinwaydbContext()));
-        private static readonly ServicioProducto ServProducto
-            = new ServicioProducto(new UnitOfWork(new LinwaydbContext()));
-        
         public static List<Cliente> GetClientes()
         {
-            return ServCliente.GetAll();
+            return Form1._servCliente.GetAll();
+        }
+        public static Cliente GetCliente(long clientId)
+        {
+            return Form1._servCliente.Get(clientId);
         }
         public static Cliente GetClientePorDireccion(string direccion)
         {
@@ -40,12 +40,18 @@ namespace linway_app.Forms
         }
         public static bool AddCliente(Cliente cliente)
         {
-            return ServCliente.Add(cliente);
+            return Form1._servCliente.Add(cliente);
+        }
+        public static void EditCliente(Cliente cliente)
+        {
+            bool response = Form1._servCliente.Edit(cliente);
+            if (!response) MessageBox.Show("Falló editando Cliente en base de datos");
+        }
+        public static void DeleteCliente(Cliente cliente)
+        {
+            bool response = Form1._servCliente.Delete(cliente);
+            if (!response) MessageBox.Show("Falló guardado Cliente en base de datos");
         }
 
-        public static List<Producto> GetProductos()
-        {
-            return ServProducto.GetAll();
-        }
     }
 }

@@ -4,18 +4,49 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using static linway_app.Forms.StaticCalls;
+using static linway_app.Forms.Delegates.DClientes;
+using static linway_app.Forms.Delegates.DProductos;
 
 namespace linway_app.Forms
 {
     public partial class Form1 : Form
     {
-        private readonly IServicioCliente _servCliente;
-        private readonly IServicioProducto _servProducto;
-        public Form1(IServicioCliente servCliente, IServicioProducto servProducto)
+        public static IServicioCliente _servCliente;
+        public static IServicioDetalleRecibo _servDetalleRecibo;
+        public static IServicioDiaReparto _servDiaReparto;
+        public static IServicioNotaDeEnvio _servNotaDeEnvio;
+        public static IServicioPedido _servPedido;
+        public static IServicioProducto _servProducto;
+        public static IServicioProdVendido _servProdVendido;
+        public static IServicioRecibo _servRecibo;
+        public static IServicioRegistroVenta _servRegistroVenta;
+        public static IServicioReparto _servReparto;
+        public static IServicioVenta _servVenta;
+        public Form1(
+            IServicioCliente servCliente,
+            IServicioDetalleRecibo servDetalleRecibo,
+            IServicioDiaReparto servDiaReparto,
+            IServicioNotaDeEnvio servNotaDeEnvio,
+            IServicioPedido servPedido,
+            IServicioProducto servProducto,
+            IServicioProdVendido servProdVendido,
+            IServicioRecibo servRecibo,
+            IServicioRegistroVenta servRegistroVenta,
+            IServicioReparto servReparto,
+            IServicioVenta servVenta
+            )
         {
             _servCliente = servCliente;
+            _servDetalleRecibo = servDetalleRecibo;
+            _servDiaReparto = servDiaReparto;
+            _servNotaDeEnvio = servNotaDeEnvio;
+            _servPedido = servPedido;
             _servProducto = servProducto;
+            _servProdVendido = servProdVendido;
+            _servRecibo = servRecibo;
+            _servRegistroVenta = servRegistroVenta;
+            _servReparto = servReparto;
+            _servVenta = servVenta;
             try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.Message); return; }
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -24,9 +55,9 @@ namespace linway_app.Forms
         }
         public void Actualizar()
         {
-            var lstClientes = getClientes();
+            List<Cliente> lstClientes = getClientes();
             CargarGrid1(lstClientes);
-            var lstProductos = getProductos();
+            List<Producto> lstProductos = getProductos();
             CargarGrid2(lstProductos);
         }
         private void CargarGrid1(List<Cliente> lstClientes)

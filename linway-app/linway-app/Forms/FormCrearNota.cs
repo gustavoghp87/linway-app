@@ -1,55 +1,30 @@
 ﻿using linway_app.Models;
 using linway_app.Services;
-using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
+using static linway_app.Forms.Delegates.DClientes;
+using static linway_app.Forms.Delegates.DDiaReparto;
+using static linway_app.Forms.Delegates.DNotaDeEnvio;
+using static linway_app.Forms.Delegates.DProductos;
+using static linway_app.Forms.Delegates.DProdVendido;
+using static linway_app.Forms.Delegates.DRegistroVenta;
+using static linway_app.Forms.Delegates.DReparto;
+using static linway_app.Forms.Delegates.DVentas;
 
 namespace linway_app.Forms
 {
     public partial class FormCrearNota : Form
     {
         private readonly List<ProdVendido> _lstProdVendidos;
-        private readonly IServicioNotaDeEnvio _servNotaDeEnvio;
-        private readonly IServicioCliente _servCliente;
-        private readonly IServicioProducto _servProducto;
-        private readonly IServicioVenta _servVenta;
-        private readonly IServicioRegistroVenta _servRegistroVenta;
-        private readonly IServicioDiaReparto _servDiaReparto;
-        private readonly IServicioReparto _servReparto;
-        private readonly IServicioProdVendido _servProdVendido;
-
-        public FormCrearNota(
-            IServicioNotaDeEnvio servNotaDeEnvio, IServicioCliente servCliente, IServicioProducto servProducto,
-            IServicioVenta servVenta, IServicioRegistroVenta servRegistroVenta, IServicioDiaReparto servDiaReparto,
-            IServicioReparto servReparto, IServicioProdVendido servProdVendido
-        )
+        public FormCrearNota()
         {
             InitializeComponent();
             _lstProdVendidos = new List<ProdVendido>();
-            _servNotaDeEnvio = servNotaDeEnvio;
-            _servCliente = servCliente;
-            _servProducto = servProducto;
-            _servVenta = servVenta;
-            _servRegistroVenta = servRegistroVenta;
-            _servDiaReparto = servDiaReparto;
-            _servReparto = servReparto;
-            _servProdVendido = servProdVendido;
         }
         private void FormCrearNota_Load(object sender, EventArgs e)
         {
-            //if (_lstProdVendidos == null || _lstProdVendidos.Count == 0) return;
-            //dataGridView4.DataSource = _lstProdVendidos.ToArray();
-            //dataGridView4.Columns[0].Visible = false;
-            //dataGridView4.Columns[1].Width = 30;
-            //dataGridView4.Columns[2].Width = 40;
-            //dataGridView4.Columns[3].Width = 25;
-            //dataGridView4.Columns[4].Visible = true;
-            //dataGridView4.Columns[5].Width = 30;
-            //dataGridView4.Columns[6].Visible = false;
-            //dataGridView4.Columns[7].Visible = false;
             Actualizar();
         }
         private void Actualizar()
@@ -70,86 +45,6 @@ namespace linway_app.Forms
             dataGridView4.Columns[11].Visible = false;
             dataGridView4.Columns[12].Visible = false;
         }
-        private long AgregarNota(NotaDeEnvio notaDeEnvio)
-        {
-            long response = _servNotaDeEnvio.AddAndGetId(notaDeEnvio);
-            if (response == 0) MessageBox.Show("Algo falló al agregar Nota de Envío a base de datos");
-            return response;
-        }
-        private Cliente GetCliente(long id)
-        {
-            return _servCliente.Get(id);
-        }
-        private Cliente GetClientePorDire(string dire)
-        {
-            var lst = _servCliente.GetAll();
-            if (lst == null || lst.Count == 0) return null;
-            var cliente = lst.Find(x => x.Direccion.ToLower().Contains(dire.ToLower()));
-            return cliente;
-        }
-        private Cliente GetClientePorDireExacta(string dire)
-        {
-            var lst = _servCliente.GetAll();
-            if (lst == null || lst.Count == 0) return null;
-            var cliente = lst.Find(x => x.Direccion.Equals(dire));
-            return cliente;
-        }
-        private Producto GetProducto(long id)
-        {
-            return _servProducto.Get(id);
-        }
-        private Producto GetProductoPorNombre(string nombre)
-        {
-            var lst = _servProducto.GetAll();
-            if (lst == null || lst.Count == 0) return null;
-            var producto = lst.Find(x => x.Nombre.ToLower().Contains(nombre.ToLower()));
-            return producto;
-        }
-        private Producto GetProductoPorNombreExacto(string nombre)
-        {
-            var lst = _servProducto.GetAll();
-            if (lst == null || lst.Count == 0) return null;
-            var producto = lst.Find(x => x.Nombre.Equals(nombre));
-            return producto;
-        }
-        private List<Venta> GetVentas()
-        {
-            return _servVenta.GetAll();
-        }
-        private long AgregarRegistroVenta(RegistroVenta registroVenta)
-        {
-            long response = _servRegistroVenta.AddAndGetId(registroVenta);
-            if (response == 0) MessageBox.Show("Algo falló al agregar Registro de Venta a base de datos");
-            return response;
-        }
-        private bool EditarVenta(Venta venta)
-        {
-            bool response = _servVenta.Edit(venta);
-            if (!response) MessageBox.Show("Algo falló al editar Venta en base de datos");
-            return response;
-        }
-        private bool AgregarVenta(Venta venta)
-        {
-            bool response = _servVenta.Add(venta);
-            if (!response) MessageBox.Show("Algo falló al agregar Venta a base de datos");
-            return response;
-        }
-        private List<Reparto> GetRepartosPorDia(string diaReparto)
-        {
-            List<DiaReparto> lstDiasRep = _servDiaReparto.GetAll();
-            List<Reparto> lstRepartos = lstDiasRep.Find(x => x.Dia == diaReparto).Reparto.ToList();
-            return lstRepartos;
-        }
-        private void AgregarPedidoARepartoPorNota(Reparto reparto, Cliente cliente)
-        {
-            bool response = _servReparto.AgregarPedidoAReparto(cliente.Id, reparto.DiaReparto.Dia, reparto.Nombre, _lstProdVendidos);
-            if (!response) MessageBox.Show("Algo falló al agregar Pedido a Reparto en base de datos");
-        }
-        private void AgregarProductoVendido(ProdVendido prodVendido)
-        {
-            bool response = _servProdVendido.Add(prodVendido);
-            if (!response) MessageBox.Show("Algo falló al agregar Producto Vendido a base de datos");
-        }
         private void SoloNumero_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
@@ -158,14 +53,13 @@ namespace linway_app.Forms
                 return;
             }
         }
-
-
         private void textBox15_TextChanged(object sender, EventArgs e)
         {
             textBox1.Text = "";
             if (textBox15.Text != "")
             {
-                Cliente cliente = GetCliente(long.Parse(textBox15.Text));
+                try { long.Parse(textBox15.Text); } catch { return; };
+                Cliente cliente = getCliente(long.Parse(textBox15.Text));
                 if (cliente == null)
                 {
                     label36.Text = "No encontrado";
@@ -185,7 +79,7 @@ namespace linway_app.Forms
         {
             if (textBox1.Text != "")
             {
-                Cliente cliente = GetClientePorDire(textBox1.Text);
+                Cliente cliente = getClientePorDireccion(textBox1.Text);
                 if (cliente == null)
                 {
                     label36.Text = "No encontrado";
@@ -365,7 +259,7 @@ namespace linway_app.Forms
         {
             if (labelClienteId.Text != "" && labelClienteId.Text != "No encontrado")
             {
-                var cliente = GetClientePorDireExacta(label36.Text);
+                var cliente = getClientePorDireccionExacta(label36.Text);
                 if (cliente == null) return;
 
                 NotaDeEnvio nuevaNota = new NotaDeEnvio
@@ -378,7 +272,7 @@ namespace linway_app.Forms
                     ImporteTotal = ServicioNotaDeEnvio.ExtraerImporte(_lstProdVendidos),
                     Estado = "Activo"
                 };
-                long notaId = AgregarNota(nuevaNota);
+                long notaId = addNotaDeEnvioReturnId(nuevaNota);
                 if (notaId == 0)
                 {
                     MessageBox.Show("Falló al procesar Nota nueva");
@@ -387,7 +281,7 @@ namespace linway_app.Forms
                 foreach (var prodVendido in _lstProdVendidos)
                 {
                     prodVendido.NotaDeEnvioId = notaId;
-                    AgregarProductoVendido(prodVendido);
+                    addProdVendido(prodVendido);
                 }
 
                 if (checkBox4.Checked)      // agregar productos vendidos a lista de registros y a lista de ventas
@@ -400,13 +294,13 @@ namespace linway_app.Forms
                         NombreCliente = cliente.Direccion,
                         Estado = "Activo"
                     };
-                    long registroId = AgregarRegistroVenta(nuevoRegistro);
+                    long registroId = addRegistroVenta(nuevoRegistro);
                     foreach (var prodVendido in _lstProdVendidos)
                     {
                         prodVendido.RegistroVentaId = registroId;
                         if (EsProducto(prodVendido.Producto.Nombre))
                         {
-                            List<Venta> lstVentas = GetVentas();
+                            List<Venta> lstVentas = getVentas();
                             bool exists = false;
                             foreach (var venta in lstVentas)
                             {
@@ -414,7 +308,7 @@ namespace linway_app.Forms
                                 {
                                     exists = true;
                                     venta.Cantidad += prodVendido.Cantidad;
-                                    EditarVenta(venta);
+                                    editVenta(venta);
                                 }
                             }
                             if (!exists)
@@ -425,7 +319,7 @@ namespace linway_app.Forms
                                     Cantidad = prodVendido.Cantidad,
                                     Producto = GetProducto(prodVendido.ProductoId)
                                 };
-                                AgregarVenta(nuevaVenta);
+                                addVenta(nuevaVenta);
                             }
                         }
                     }
@@ -434,7 +328,7 @@ namespace linway_app.Forms
                 foreach (var prodVendido in _lstProdVendidos)
                 {
                     prodVendido.NotaDeEnvioId = notaId;
-                    AgregarProductoVendido(prodVendido);
+                    addProdVendido(prodVendido);
                 }
 
                 if (checkBox1.Checked)      // imprimir checkbox
@@ -446,9 +340,9 @@ namespace linway_app.Forms
 
                 if (checkBox3.Checked)     // enviar a hoja de reparto como pedido nuevo para X reparto
                 {
-                    List<Reparto> repartos = GetRepartosPorDia(comboBox4.Text);
+                    List<Reparto> repartos = getRepartosPorDia(comboBox4.Text);
                     Reparto reparto = repartos.Find(x => x.Nombre == comboBox3.Text);
-                    AgregarPedidoARepartoPorNota(reparto, cliente);
+                    addPedidoARepartoPorNota(reparto, cliente, _lstProdVendidos);
                 }
                 Close();
             }
@@ -457,16 +351,14 @@ namespace linway_app.Forms
                 MessageBox.Show("Verifique los campos");
             }
         }
-
         private void EnviarA_HDR_SelectedIndexChanged(object sender, EventArgs e)
         {
             string diaDeReparto = comboBox4.Text;
-            List<Reparto> repartos = GetRepartosPorDia(diaDeReparto);  // partiendo del día seleccionado, buscar sus repartos
+            List<Reparto> repartos = getRepartosPorDia(diaDeReparto);  // partiendo del día seleccionado, buscar sus repartos
             comboBox3.DataSource = repartos;                           // combobox "día", necesito la lista de dias de rep
             comboBox3.DisplayMember = "Nombre";
             comboBox3.ValueMember = "Nombre";
         }
-
         private void CerrarBtn_Click(object sender, EventArgs e)
         {
             Close();

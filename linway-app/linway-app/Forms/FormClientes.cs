@@ -1,63 +1,30 @@
 ﻿using linway_app.Models;
 using linway_app.Models.Enums;
-using linway_app.Services.Interfaces;
 using System;
 using System.Windows.Forms;
-using static linway_app.Forms.StaticCalls;
+using static linway_app.Forms.Delegates.DClientes;
 
 namespace linway_app.Forms
 {
     public partial class FormClientes : Form
     {
-        private readonly IServicioCliente _servCliente;
-        public FormClientes(IServicioCliente servCliente)
+        public FormClientes()
         {
             InitializeComponent();
-            _servCliente = servCliente;
         }
-
         private void FormClientes_Load(object sender, EventArgs e) { }
-        private Cliente GetCliente(long id)
-        {
-            Cliente cliente = _servCliente.Get(id);
-            return cliente;
-        }
-        //private Cliente GetClientePorDireccion(string direccion)
-        //{
-        //    return getClientePorDireccion(direccion);
-        //}
-        private void GuardarCliente(Cliente cliente)
-        {
-            bool response = _servCliente.Add(cliente);
-            if (!response) MessageBox.Show("Falló guardado en base de datos");
-        }
-        private void EditarCliente(Cliente cliente)
-        {
-            bool response = _servCliente.Edit(cliente);
-            if (!response) MessageBox.Show("Falló guardado en base de datos");
-        }
-        private void EliminarCliente(Cliente cliente)
-        {
-            bool response = _servCliente.Delete(cliente);
-            if (!response) MessageBox.Show("Falló guardado en base de datos");
-        }
-
-        private void bCopiaSeguridad_Click(object sender, EventArgs e)
-        {}
-
-        public void ImportarClientes_Click(object sender, EventArgs e)
-        {}
-
-
+        private void bCopiaSeguridad_Click(object sender, EventArgs e) {}
+        public void ImportarClientes_Click(object sender, EventArgs e) {}
 
         // agregar Cliente
-
         public bool TodoOKagregarC()
         {
             bool correcto = false;
-            if ((textBox1.Text != "") && (textBox2.Text != "") && (textBox3.Text != "") && (textBox4.Text != "") && (textBox5.Text != "") && (textBox18.Text != ""))
+            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != ""
+                && textBox4.Text != "" && textBox5.Text != "" && textBox18.Text != ""
+            )
             {
-                if ((radioButton1.Checked) || (radioButton2.Checked))
+                if (radioButton1.Checked || radioButton2.Checked)
                 {
                     correcto = true;
                 }
@@ -82,7 +49,7 @@ namespace linway_app.Forms
                     Tipo = tipo.ToString(),
                     Estado = "Activo"
                 };
-                GuardarCliente(nuevoCliente);
+                addCliente(nuevoCliente);
                 button2.PerformClick();
             }
             else
@@ -143,44 +110,75 @@ namespace linway_app.Forms
         bool TodoOkModificarC()
         {
             bool correcto = false;
-            if ((label23.Text != "No encontrado") && (textBox10.Text != "") && (textBox11.Text != "")
-                && (textBox14.Text != "") && (textBox23.Text != "") && (textBox24.Text != "") && (textBox25.Text != "")
+            if (label23.Text != "No encontrado" && textBox10.Text != "" && textBox11.Text != ""
+                && textBox14.Text != "" && textBox23.Text != "" && textBox24.Text != "" && textBox25.Text != ""
             )
             {
                 correcto = true;
             }
             return correcto;
         }
+        private void DoIt(Cliente cliente)
+        {
+            if (cliente != null)
+            {
+                label23.Text = cliente.Direccion;                 // label 23
+                textBox23.Text = cliente.Direccion;
+                textBox24.Text = cliente.Telefono?.ToString();
+                textBox25.Text = cliente.CodigoPostal?.ToString();
+                textBox11.Text = cliente.Name;
+                textBox10.Text = cliente.Cuit;
+                if (cliente.Tipo == TipoR.Inscripto.ToString())
+                {
+                    radioButton3.Checked = true;
+                }
+                else
+                {
+                    radioButton4.Checked = true;
+                }
+            }
+            else
+            {
+                label23.Text = "No encontrado";
+                textBox11.Text = "";
+                textBox10.Text = "";
+                textBox23.Text = "";
+                textBox24.Text = "";
+                textBox25.Text = "";
+                radioButton3.Checked = false;
+                radioButton4.Checked = false;
+            }
+        }
         private void textBox14_TextChanged(object sender, EventArgs e)
         {
-            bool encontrado = false;
             if (textBox14.Text != "")
             {
                 try { long.Parse(textBox14.Text); } catch { return; };
-                Cliente cliente = GetCliente(long.Parse(textBox14.Text));
-                if (cliente == null) return;
-                if (cliente.Id == int.Parse(textBox14.Text))
-                {
-                    encontrado = true;
-                    label23.Text = cliente.Direccion;
-                    textBox23.Text = cliente.Direccion;
-                    textBox24.Text = cliente.Telefono?.ToString();
-                    textBox25.Text = cliente.CodigoPostal?.ToString();
-                    textBox11.Text = cliente.Name;
-                    textBox10.Text = cliente.Cuit;
-                    if (cliente.Tipo == TipoR.Inscripto.ToString())
-                    {
-                        radioButton3.Checked = true;
-                    }
-                    else
-                    {
-                        radioButton4.Checked = true;
-                    }
-                }
+                Cliente cliente = getCliente(long.Parse(textBox14.Text));
+                DoIt(cliente);
             }
-            if (!encontrado)
+            else
             {
-                label23.Text = "No encontrado";
+                label23.Text = "";
+                textBox11.Text = "";
+                textBox10.Text = "";
+                textBox23.Text = "";
+                textBox24.Text = "";
+                textBox25.Text = "";
+                radioButton3.Checked = false;
+                radioButton4.Checked = false;
+            }
+        }
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox6.Text != "")
+            {
+                Cliente cliente = getClientePorDireccion(textBox6.Text);
+                DoIt(cliente);
+            }
+            else
+            {
+                label23.Text = "";
                 textBox11.Text = "";
                 textBox10.Text = "";
                 textBox23.Text = "";
@@ -196,7 +194,7 @@ namespace linway_app.Forms
         {
             if (TodoOkModificarC())
             {
-                Cliente cliente = getClientePorDireccion(label23.Text);
+                Cliente cliente = getClientePorDireccionExacta(label23.Text);
                 if (cliente == null) return;
                 cliente.Direccion = textBox23.Text;
                 cliente.Telefono = textBox24.Text;
@@ -211,7 +209,7 @@ namespace linway_app.Forms
                 {
                     cliente.Tipo = TipoR.Monotributo.ToString();
                 }
-                EditarCliente(cliente);
+                editCliente(cliente);
                 button8.PerformClick();
             }
             else
@@ -232,7 +230,7 @@ namespace linway_app.Forms
             if (cbSeguroBorrar.Checked)
             {
                 var cliente = getClientePorDireccion(label47.Text);
-                EliminarCliente(cliente);
+                DeleteCliente(cliente);
                 cbSeguroBorrar.Checked = false;
                 label47.Text = "";
                 textBox22.Text = "";

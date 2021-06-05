@@ -1,8 +1,8 @@
 ﻿using linway_app.Models;
-using linway_app.Services.Interfaces;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using static linway_app.Forms.Delegates.DNotaDeEnvio;
 
 namespace linway_app.Forms
 {
@@ -10,7 +10,6 @@ namespace linway_app.Forms
     {
         private bool impresa;
         private NotaDeEnvio NotaDeEnvio = new NotaDeEnvio();
-        private readonly IServicioNotaDeEnvio _servNotaDeEnvio;
 
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         public static extern long BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth,
@@ -18,25 +17,16 @@ namespace linway_app.Forms
         
         private Bitmap memoryImage;
 
-        public FormImprimirNota(IServicioNotaDeEnvio servNotaDeEnvio)
+        public FormImprimirNota()
         {
             InitializeComponent();
-            _servNotaDeEnvio = servNotaDeEnvio;
-        }
-        private void FormImprimirNota_Load(object sender, EventArgs e)
-        {
-        }
-        private void EditarNota()
-        {
-            bool response = _servNotaDeEnvio.Edit(NotaDeEnvio);
-            if (!response) MessageBox.Show("Algo falló al marcar Nota de Envío como impresa en la base de datos");
         }
         void MarcarImpresa()
         {
             if (!impresa)
             {
                 NotaDeEnvio.Impresa = 1;
-                EditarNota();
+                editNotaDeEnvio(NotaDeEnvio);
             }
         }
         public void Rellenar_Datos(NotaDeEnvio notaDeEnvio)

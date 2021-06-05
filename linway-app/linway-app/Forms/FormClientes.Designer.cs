@@ -72,6 +72,8 @@ namespace linway_app.Forms
             this.button9 = new System.Windows.Forms.Button();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.gbBorrar.SuspendLayout();
             this.gbAgregar.SuspendLayout();
             this.gbModificar.SuspendLayout();
@@ -89,7 +91,7 @@ namespace linway_app.Forms
             this.gbBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbBorrar.Location = new System.Drawing.Point(592, 12);
             this.gbBorrar.Name = "gbBorrar";
-            this.gbBorrar.Size = new System.Drawing.Size(277, 267);
+            this.gbBorrar.Size = new System.Drawing.Size(277, 290);
             this.gbBorrar.TabIndex = 42;
             this.gbBorrar.TabStop = false;
             this.gbBorrar.Text = "Borrar Cliente";
@@ -126,7 +128,7 @@ namespace linway_app.Forms
             // button23
             // 
             this.button23.Enabled = false;
-            this.button23.Location = new System.Drawing.Point(107, 216);
+            this.button23.Location = new System.Drawing.Point(107, 238);
             this.button23.Name = "button23";
             this.button23.Size = new System.Drawing.Size(75, 29);
             this.button23.TabIndex = 4;
@@ -180,7 +182,7 @@ namespace linway_app.Forms
             this.gbAgregar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbAgregar.Location = new System.Drawing.Point(12, 12);
             this.gbAgregar.Name = "gbAgregar";
-            this.gbAgregar.Size = new System.Drawing.Size(270, 267);
+            this.gbAgregar.Size = new System.Drawing.Size(270, 290);
             this.gbAgregar.TabIndex = 43;
             this.gbAgregar.TabStop = false;
             this.gbAgregar.Text = "Agregar nuevo cliente";
@@ -219,7 +221,7 @@ namespace linway_app.Forms
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(148, 225);
+            this.button2.Location = new System.Drawing.Point(148, 238);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 20;
@@ -237,7 +239,7 @@ namespace linway_app.Forms
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(59, 191);
+            this.radioButton2.Location = new System.Drawing.Point(59, 194);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(83, 19);
             this.radioButton2.TabIndex = 19;
@@ -255,7 +257,7 @@ namespace linway_app.Forms
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(148, 191);
+            this.radioButton1.Location = new System.Drawing.Point(148, 194);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(103, 19);
             this.radioButton1.TabIndex = 18;
@@ -297,7 +299,7 @@ namespace linway_app.Forms
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(60, 222);
+            this.button1.Location = new System.Drawing.Point(59, 235);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 26);
             this.button1.TabIndex = 16;
@@ -325,6 +327,8 @@ namespace linway_app.Forms
             // 
             // gbModificar
             // 
+            this.gbModificar.Controls.Add(this.label6);
+            this.gbModificar.Controls.Add(this.textBox6);
             this.gbModificar.Controls.Add(this.textBox25);
             this.gbModificar.Controls.Add(this.label50);
             this.gbModificar.Controls.Add(this.textBox24);
@@ -345,38 +349,38 @@ namespace linway_app.Forms
             this.gbModificar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbModificar.Location = new System.Drawing.Point(288, 12);
             this.gbModificar.Name = "gbModificar";
-            this.gbModificar.Size = new System.Drawing.Size(298, 267);
+            this.gbModificar.Size = new System.Drawing.Size(298, 290);
             this.gbModificar.TabIndex = 44;
             this.gbModificar.TabStop = false;
             this.gbModificar.Text = "Modificar Cliente";
             // 
             // textBox25
             // 
-            this.textBox25.Location = new System.Drawing.Point(114, 173);
+            this.textBox25.Location = new System.Drawing.Point(69, 218);
             this.textBox25.Name = "textBox25";
-            this.textBox25.Size = new System.Drawing.Size(104, 21);
+            this.textBox25.Size = new System.Drawing.Size(91, 21);
             this.textBox25.TabIndex = 7;
             // 
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(22, 176);
+            this.label50.Location = new System.Drawing.Point(37, 221);
             this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(86, 15);
+            this.label50.Size = new System.Drawing.Size(26, 15);
             this.label50.TabIndex = 23;
-            this.label50.Text = "Codigo Postal:";
+            this.label50.Text = "CP:";
             // 
             // textBox24
             // 
-            this.textBox24.Location = new System.Drawing.Point(81, 92);
+            this.textBox24.Location = new System.Drawing.Point(81, 128);
             this.textBox24.Name = "textBox24";
-            this.textBox24.Size = new System.Drawing.Size(100, 21);
+            this.textBox24.Size = new System.Drawing.Size(198, 21);
             this.textBox24.TabIndex = 4;
             // 
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(15, 95);
+            this.label49.Location = new System.Drawing.Point(11, 131);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(58, 15);
             this.label49.TabIndex = 22;
@@ -384,14 +388,14 @@ namespace linway_app.Forms
             // 
             // textBox23
             // 
-            this.textBox23.Location = new System.Drawing.Point(81, 65);
+            this.textBox23.Location = new System.Drawing.Point(81, 100);
             this.textBox23.Name = "textBox23";
             this.textBox23.Size = new System.Drawing.Size(198, 21);
             this.textBox23.TabIndex = 3;
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(161, 225);
+            this.button8.Location = new System.Drawing.Point(165, 257);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(75, 23);
             this.button8.TabIndex = 20;
@@ -402,16 +406,16 @@ namespace linway_app.Forms
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(53, 24);
+            this.label25.Location = new System.Drawing.Point(11, 27);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(102, 15);
+            this.label25.Size = new System.Drawing.Size(105, 15);
             this.label25.TabIndex = 7;
-            this.label25.Text = "Codigo de cliente";
+            this.label25.Text = "Código de cliente:";
             // 
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(65, 200);
+            this.radioButton3.Location = new System.Drawing.Point(176, 188);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(83, 19);
             this.radioButton3.TabIndex = 19;
@@ -421,9 +425,9 @@ namespace linway_app.Forms
             // 
             // textBox14
             // 
-            this.textBox14.Location = new System.Drawing.Point(165, 24);
+            this.textBox14.Location = new System.Drawing.Point(134, 24);
             this.textBox14.Name = "textBox14";
-            this.textBox14.Size = new System.Drawing.Size(100, 21);
+            this.textBox14.Size = new System.Drawing.Size(131, 21);
             this.textBox14.TabIndex = 2;
             this.textBox14.TextChanged += new System.EventHandler(this.textBox14_TextChanged);
             this.textBox14.Leave += new System.EventHandler(this.PrepararEditar_Leave);
@@ -431,7 +435,7 @@ namespace linway_app.Forms
             // radioButton4
             // 
             this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(176, 200);
+            this.radioButton4.Location = new System.Drawing.Point(176, 217);
             this.radioButton4.Name = "radioButton4";
             this.radioButton4.Size = new System.Drawing.Size(103, 19);
             this.radioButton4.TabIndex = 18;
@@ -441,15 +445,15 @@ namespace linway_app.Forms
             // 
             // textBox11
             // 
-            this.textBox11.Location = new System.Drawing.Point(81, 119);
+            this.textBox11.Location = new System.Drawing.Point(81, 156);
             this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(202, 21);
+            this.textBox11.Size = new System.Drawing.Size(198, 21);
             this.textBox11.TabIndex = 5;
             // 
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(11, 69);
+            this.label24.Location = new System.Drawing.Point(8, 103);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(62, 15);
             this.label24.TabIndex = 8;
@@ -457,9 +461,9 @@ namespace linway_app.Forms
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(81, 146);
+            this.textBox10.Location = new System.Drawing.Point(69, 188);
             this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(104, 21);
+            this.textBox10.Size = new System.Drawing.Size(91, 21);
             this.textBox10.TabIndex = 6;
             // 
             // label23
@@ -467,16 +471,16 @@ namespace linway_app.Forms
             this.label23.AutoSize = true;
             this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label23.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label23.Location = new System.Drawing.Point(26, 47);
+            this.label23.Location = new System.Drawing.Point(39, 76);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(0, 15);
             this.label23.TabIndex = 9;
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(80, 225);
+            this.button9.Location = new System.Drawing.Point(39, 257);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(75, 23);
+            this.button9.Size = new System.Drawing.Size(101, 23);
             this.button9.TabIndex = 16;
             this.button9.Text = "Modificar";
             this.button9.UseVisualStyleBackColor = true;
@@ -485,7 +489,7 @@ namespace linway_app.Forms
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(18, 122);
+            this.label22.Location = new System.Drawing.Point(15, 157);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(55, 15);
             this.label22.TabIndex = 10;
@@ -494,17 +498,34 @@ namespace linway_app.Forms
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(36, 149);
+            this.label21.Location = new System.Drawing.Point(26, 191);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(37, 15);
             this.label21.TabIndex = 11;
             this.label21.Text = "CUIT:";
             // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(134, 49);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(131, 21);
+            this.textBox6.TabIndex = 24;
+            this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(49, 50);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(62, 15);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "Dirección:";
+            // 
             // FormClientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(881, 291);
+            this.ClientSize = new System.Drawing.Size(881, 314);
             this.Controls.Add(this.gbBorrar);
             this.Controls.Add(this.gbModificar);
             this.Controls.Add(this.gbAgregar);
@@ -573,5 +594,7 @@ namespace linway_app.Forms
         private System.Windows.Forms.CheckBox cbSeguroBorrar;
         private System.Windows.Forms.Label BusqPorDireLabel;
         private System.Windows.Forms.TextBox textBoxDireEnBorrar;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBox6;
     }
 }

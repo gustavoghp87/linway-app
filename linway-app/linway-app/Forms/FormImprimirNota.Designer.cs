@@ -172,7 +172,7 @@ namespace linway_app.Forms
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Vista Previa";
-            this.Load += new System.EventHandler(this.FormImprimirNota_Load);
+            //this.Load += new System.EventHandler(this.FormImprimirNota_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
