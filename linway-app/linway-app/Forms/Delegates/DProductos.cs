@@ -38,7 +38,7 @@ namespace linway_app.Forms.Delegates
         }
         public static Producto GetProductoPorNombreExacto(string nombre)
         {
-            return GetProductos().Find(x => x.Nombre.Contains(nombre));
+            return GetProductos().Find(x => x.Nombre.Equals(nombre));
         }
         public static void AddProducto(Producto producto)
         {

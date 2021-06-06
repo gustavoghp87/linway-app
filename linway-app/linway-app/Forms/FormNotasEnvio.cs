@@ -64,6 +64,7 @@ namespace linway_app.Forms
             dataGridView2.DataSource = lstProdVendidos.ToArray();
             if (lstProdVendidos != null)
             {
+                dataGridView2.Columns[0].Visible = false;
                 dataGridView2.Columns[2].Visible = false;
                 dataGridView2.Columns[3].Visible = false;
                 dataGridView2.Columns[4].Visible = false;
@@ -668,6 +669,8 @@ namespace linway_app.Forms
             nuevoPV.Descripcion = prod.Nombre;
             nuevoPV.Cantidad = 1;
             nuevoPV.Precio = prod.Precio;
+            nuevoPV.Estado = "Activo";
+            nuevoPV.ProductoId = prod.Id;
             if (prod == null) return;
             if (prod.Nombre.Contains("pendiente")) { }
             //
@@ -684,8 +687,10 @@ namespace linway_app.Forms
                 nuevoPV.Cantidad = int.Parse(textBox10.Text);
             }
             addProdVendido(nuevoPV);
-            _lstProdVendidos.Clear();
+            _lstProdVendidos = getNotaDeEnvio(long.Parse(textBox7.Text)).ProdVendidos.ToList();
             ActualizarGrid2(_lstProdVendidos);
+            ActualizarNotas();
+            ActualizarGrid1(_lstNotaDeEnvios);
             double impTotal = 0;
             foreach (ProdVendido prodVendido in _lstProdVendidos)
             {

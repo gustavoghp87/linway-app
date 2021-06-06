@@ -384,9 +384,9 @@
     <Compile Include="Models\Enums\TipoLiquido.cs" />
     <Compile Include="Models\Enums\TipoPolvo.cs" />
     <Compile Include="Models\Enums\TipoR.cs" />
-    <Compile Include="Models\Entity\Model.cs" />
     <Compile Include="Models\LinwaydbContext.cs" />
     <Compile Include="Models\NotaDeEnvio.cs" />
+    <Compile Include="Models\OModel\ObjModel.cs" />
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Producto.cs" />
     <Compile Include="Models\ProdVendido.cs" />

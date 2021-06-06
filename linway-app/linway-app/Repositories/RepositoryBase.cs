@@ -1,5 +1,5 @@
 ﻿using linway_app.Models;
-using linway_app.Models.Interfaces;
+using linway_app.Models.OModel;
 using linway_app.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace linway_app.Repositories
 {
-    public class RepositoryBase<T> : IRepository<T> where T : Model
+    public class RepositoryBase<T> : IRepository<T> where T : ObjModel
     {
         private readonly LinwaydbContext _context;
         private readonly DbSet<T> _entities;
@@ -37,30 +37,41 @@ namespace linway_app.Repositories
         }
         public bool Edit(T t)
         {
-            try
+            using (var context = new LinwaydbContext())
             {
-                _entities.Update(t);
-                _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
+                try
+                {
+                    _entities.Update(t);
+                    _context.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return false;
+                }
             }
         }
         public T Get(long id)
         {
-            using (var context = new LinwaydbContext())
+            try
             {
-                return context.Set<T>()?.Find(id);
+                return _entities.Find(id);
+            }
+            catch
+            {
+                return null;
             }
         }
         public List<T> GetAll()
         {
-            using (var context = new LinwaydbContext())
+            try
             {
-                return context.Set<T>()?.ToList();
+                return _entities.ToList();
+            }
+            catch
+            {
+                return null;
             }
         }
     }

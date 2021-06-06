@@ -1,4 +1,5 @@
 ﻿using linway_app.Models.Interfaces;
+using linway_app.Models.OModel;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -8,7 +9,7 @@ using System.ComponentModel;
 
 namespace linway_app.Models
 {
-    public partial class Recibo : Model, IRecibo
+    public partial class Recibo : ObjModel
     {
         public Recibo()
         {

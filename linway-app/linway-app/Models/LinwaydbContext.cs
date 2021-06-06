@@ -51,6 +51,8 @@ namespace linway_app.Models
                 entity.Property(e => e.Cuit).HasColumnName("CUIT");
 
                 entity.Property(e => e.Direccion).IsRequired();
+
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             modelBuilder.Entity<DetalleRecibo>(entity =>
@@ -63,6 +65,8 @@ namespace linway_app.Models
                     .WithMany(p => p.DetalleRecibos)
                     .HasForeignKey(d => d.ReciboId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             modelBuilder.Entity<DiaReparto>(entity =>
@@ -70,6 +74,8 @@ namespace linway_app.Models
                 entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Dia).IsRequired();
+
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             modelBuilder.Entity<NotaDeEnvio>(entity =>
@@ -84,6 +90,8 @@ namespace linway_app.Models
                     .WithMany(p => p.NotaDeEnvio)
                     .HasForeignKey(d => d.ClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             modelBuilder.Entity<Pedido>(entity =>
@@ -103,6 +111,8 @@ namespace linway_app.Models
                     .WithMany(p => p.Pedidos)
                     .HasForeignKey(d => d.RepartoId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             modelBuilder.Entity<ProdVendido>(entity =>
@@ -127,6 +137,8 @@ namespace linway_app.Models
                 entity.HasOne(d => d.RegistroVenta)
                     .WithMany(p => p.ProdVendido)
                     .HasForeignKey(d => d.RegistroVentaId);
+
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             modelBuilder.Entity<Producto>(entity =>
@@ -134,6 +146,10 @@ namespace linway_app.Models
                 entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Nombre).IsRequired();
+
+                entity.Property(e => e.Estado);
+
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             modelBuilder.Entity<Recibo>(entity =>
@@ -148,6 +164,8 @@ namespace linway_app.Models
                     .WithMany(p => p.Recibo)
                     .HasForeignKey(d => d.ClienteId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             modelBuilder.Entity<RegistroVenta>(entity =>
@@ -162,6 +180,8 @@ namespace linway_app.Models
                     .WithMany(p => p.RegistroVenta)
                     .HasForeignKey(d => d.ClienteId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             modelBuilder.Entity<Reparto>(entity =>
@@ -186,6 +206,8 @@ namespace linway_app.Models
                     .WithMany(p => p.Reparto)
                     .HasForeignKey(d => d.DiaRepartoId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             modelBuilder.Entity<Venta>(entity =>
@@ -196,6 +218,8 @@ namespace linway_app.Models
                     .WithMany(p => p.Venta)
                     .HasForeignKey(d => d.ProductoId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.Property(e => e.Estado).IsRequired();
             });
 
             OnModelCreatingPartial(modelBuilder);

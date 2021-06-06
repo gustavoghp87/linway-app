@@ -35,6 +35,7 @@ namespace linway_app.Services
         public List<Cliente> GetAll()
         {
             List<Cliente> lst = _unitOfWork.RepoCliente.GetAll();
+            if (lst == null || lst.Count == 0) return null;
             lst = (from x
                    in lst                                   
                    where x.Estado != null && x.Estado != "Eliminado"

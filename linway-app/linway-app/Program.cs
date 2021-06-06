@@ -16,17 +16,6 @@ namespace linway_app
         {
             services.AddDbContext<LinwaydbContext>();
 
-            services.AddTransient<Form1>();
-            services.AddTransient<FormClientes>();
-            services.AddTransient<FormCrearNota>();
-            services.AddTransient<FormImprimirNota>();
-            services.AddTransient<FormImprimirRecibo>();
-            services.AddTransient<FormNotasEnvio>();
-            services.AddTransient<FormProductos>();
-            services.AddTransient<FormRecibos>();
-            services.AddTransient<FormReparto>();
-            services.AddTransient<FormVentas>();
-
             //services.AddScoped<ICliente, Cliente>();
             //services.AddScoped<IDiaReparto, DiaReparto>();
             //services.AddScoped<INotaDeEnvio, NotaDeEnvio>();
@@ -38,6 +27,17 @@ namespace linway_app
             //services.AddScoped<IRegistroVenta, RegistroVenta>();
             //services.AddScoped<IReparto, Reparto>();
             //services.AddScoped<IVenta, Venta>();
+
+            services.AddTransient<Form1>();
+            services.AddTransient<FormClientes>();
+            services.AddTransient<FormCrearNota>();
+            services.AddTransient<FormImprimirNota>();
+            services.AddTransient<FormImprimirRecibo>();
+            services.AddTransient<FormNotasEnvio>();
+            services.AddTransient<FormProductos>();
+            services.AddTransient<FormRecibos>();
+            services.AddTransient<FormReparto>();
+            services.AddTransient<FormVentas>();
 
             services.AddTransient<IServicioCliente, ServicioCliente>();
             services.AddTransient<IServicioDiaReparto, ServicioDiaReparto>();
@@ -51,6 +51,16 @@ namespace linway_app
             services.AddTransient<IServicioReparto, ServicioReparto>();
             services.AddTransient<IServicioVenta, ServicioVenta>();
 
+            //services.AddScoped<IRepository<Cliente>, RepositoryCliente>();
+            //services.AddScoped<IRepository<DiaReparto>, RepositoryDiaReparto>();
+            //services.AddScoped<IRepository<NotaDeEnvio>, RepositoryNotaDeEnvio>();
+            //services.AddScoped<IRepository<Pedido>, RepositoryPedido>();
+            //services.AddScoped<IRepository<Producto>, RepositoryProducto>();
+            //services.AddScoped<IRepository<ProdVendido>, RepositoryProdVendido>();
+            //services.AddScoped<IRepository<Recibo>, RepositoryRecibo>();
+            //services.AddScoped<IRepository<RegistroVenta>, RepositoryRegistroVenta>();
+            //services.AddScoped<IRepository<Reparto>, RepositoryReparto>();
+            //services.AddScoped<IRepository<Venta>, RepositoryVenta>();
             services.AddScoped(typeof(IRepository<>), typeof(RepositoryBase<>));
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
