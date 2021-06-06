@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using linway_app.Models.Interfaces;
 using System.ComponentModel;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
@@ -8,7 +7,7 @@ using System.ComponentModel;
 
 namespace linway_app.Models
 {
-    public partial class ProdVendido : IProdVendido
+    public partial class ProdVendido : Model, IProdVendido
     {
         public long Id { get; set; }
         public long ProductoId { get; set; }

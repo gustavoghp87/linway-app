@@ -2,6 +2,7 @@
 using linway_app.Repositories.Interfaces;
 using linway_app.Services.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace linway_app.Services
 {
@@ -19,7 +20,8 @@ namespace linway_app.Services
         }
         public bool Delete(Recibo recibo)
         {
-            return _unitOfWork.RepoRecibo.Delete(recibo);
+            recibo.Estado = "Eliminado";
+            return _unitOfWork.RepoRecibo.Edit(recibo);
         }
         public bool Edit(Recibo recibo)
         {
@@ -27,18 +29,24 @@ namespace linway_app.Services
         }
         public Recibo Get(long id)
         {
-            return _unitOfWork.RepoRecibo.Get(id);
+            Recibo recibo = _unitOfWork.RepoRecibo.Get(id);
+            return recibo == null || recibo.Estado == null || recibo.Estado == "Eliminado" ? null : recibo;
         }
         public List<Recibo> GetAll()
         {
-            return _unitOfWork.RepoRecibo.GetAll();
+            List<Recibo> lst = _unitOfWork.RepoRecibo.GetAll();
+            lst = (from x
+                   in lst
+                   where x.Estado != null && x.Estado != "Eliminado"
+                   select x).ToList();
+            return lst;
         }
 
         public double CalcularImporteTotal(Recibo recibo)
         {
             double subTo = 0;
             if (recibo.DetalleRecibos != null && recibo.DetalleRecibos.Count != 0)
-                foreach (IDetalleRecibo detalle in recibo.DetalleRecibos)
+                foreach (DetalleRecibo detalle in recibo.DetalleRecibos)
                 {
                     subTo += detalle.Importe;
                 }

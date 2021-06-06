@@ -19,7 +19,8 @@ namespace linway_app.Services
         }
         public bool Delete(NotaDeEnvio notaDeEnvio)
         {
-            return _unitOfWork.RepoNotaDeEnvio.Delete(notaDeEnvio);
+            notaDeEnvio.Estado = "Eliminado";
+            return _unitOfWork.RepoNotaDeEnvio.Edit(notaDeEnvio);
         }
         public bool Edit(NotaDeEnvio notaDeEnvio)
         {
@@ -27,11 +28,18 @@ namespace linway_app.Services
         }
         public NotaDeEnvio Get(long id)
         {
-            return _unitOfWork.RepoNotaDeEnvio.Get(id);
+            NotaDeEnvio notaDeEnvio = _unitOfWork.RepoNotaDeEnvio.Get(id);
+            return notaDeEnvio == null || notaDeEnvio.Estado == null || notaDeEnvio.Estado == "Eliminado"
+                ? null : notaDeEnvio;
         }
         public List<NotaDeEnvio> GetAll()
         {
-            return _unitOfWork.RepoNotaDeEnvio.GetAll();
+            List<NotaDeEnvio> lst = _unitOfWork.RepoNotaDeEnvio.GetAll();
+            lst = (from x
+                   in lst
+                   where x.Estado != null && x.Estado != "Eliminado"
+                   select x).ToList();
+            return lst;
         }
 
         public long AddAndGetId(NotaDeEnvio notaDeEnvio)
@@ -76,7 +84,7 @@ namespace linway_app.Services
             notaDeEnvio.ProdVendidos = listaP;
             double subTo = 0;
             string deta = "";
-            foreach (IProdVendido vActual in listaP)
+            foreach (ProdVendido vActual in listaP)
             {
                 subTo += vActual.Precio;
                 deta = deta + vActual.Cantidad.ToString() + "x " + vActual.Descripcion + ". ";

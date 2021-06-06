@@ -1,4 +1,4 @@
-﻿using System;
+﻿using linway_app.Models.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -8,14 +8,13 @@ using System.ComponentModel;
 
 namespace linway_app.Models
 {
-    public partial class Recibo : IRecibo
+    public partial class Recibo : Model, IRecibo
     {
         public Recibo()
         {
             DetalleRecibos = new HashSet<DetalleRecibo>();
         }
 
-        [DisplayName("N°:")]
         public long Id { get; set; }
         public long ClienteId { get; set; }
         public string Fecha { get; set; }
@@ -24,9 +23,7 @@ namespace linway_app.Models
 
         [DisplayName("Total")]
         public double ImporteTotal { get; set; }
-
         public string Estado { get; set; }
-
         public virtual Cliente Cliente { get; set; }
         public virtual ICollection<DetalleRecibo> DetalleRecibos { get; set; }
     }

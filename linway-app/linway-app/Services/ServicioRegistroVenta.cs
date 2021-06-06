@@ -19,7 +19,8 @@ namespace linway_app.Services
         }
         public bool Delete(RegistroVenta registroVenta)
         {
-            return _unitOfWork.RepoRegistroVenta.Delete(registroVenta);
+            registroVenta.Estado = "Eliminado";
+            return _unitOfWork.RepoRegistroVenta.Edit(registroVenta);
         }
         public bool Edit(RegistroVenta registroVenta)
         {
@@ -27,11 +28,18 @@ namespace linway_app.Services
         }
         public RegistroVenta Get(long id)
         {
-            return _unitOfWork.RepoRegistroVenta.Get(id);
+            RegistroVenta registroVenta = _unitOfWork.RepoRegistroVenta.Get(id);
+            return registroVenta == null || registroVenta.Estado == null || registroVenta.Estado == "Eliminado"
+                ? null : registroVenta;
         }
         public List<RegistroVenta> GetAll()
         {
-            return _unitOfWork.RepoRegistroVenta.GetAll();
+            List<RegistroVenta> lst = _unitOfWork.RepoRegistroVenta.GetAll();
+            lst = (from x
+                   in lst
+                   where x.Estado != null && x.Estado != "Eliminado"
+                   select x).ToList();
+            return lst;
         }
 
         public long AddAndGetId(RegistroVenta registroVenta)

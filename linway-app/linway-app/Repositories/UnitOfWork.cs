@@ -24,17 +24,28 @@ namespace linway_app.Repositories
             _context = context;
         }
 
-        public IRepository<Cliente> RepoCliente => _repoCliente ?? new RepositoryCliente(_context);
-        public IRepository<Producto> RepoProducto => _repoProducto ?? new RepositoryProducto(_context);
-        public IRepository<ProdVendido> RepoProdVendido => _repoProdVendido ?? new RepositoryProdVendido(_context);
-        public IRepository<NotaDeEnvio> RepoNotaDeEnvio => _repoNotaDeEnvio ?? new RepositoryNotaDeEnvio (_context);
-        public IRepository<Reparto> RepoReparto => _repoReparto ?? new RepositoryReparto(_context);
-        public IRepository<DiaReparto> RepoDiaReparto => _repoDiaReparto ?? new RepositoryDiaReparto(_context);
-        public IRepository<Venta> RepoVenta => _repoVenta ?? new RepositoryVenta(_context);
-        public IRepository<RegistroVenta> RepoRegistroVenta => _repoRegistroVenta ?? new RepositoryRegistroVenta(_context);
-        public IRepository<Recibo> RepoRecibo => _repoRecibo ?? new RepositoryRecibo(_context);
-        public IRepository<Pedido> RepoPedido => _repoPedido ?? new RepositoryPedido(_context);
-        public IRepository<DetalleRecibo> RepoDetalleRecibo => _repoDetalleRecibo ?? new RepositoryDetalleRecibo(_context);
+        public IRepository<Cliente> RepoCliente =>
+            _repoCliente ?? new RepositoryBase<Cliente>(_context);
+        public IRepository<Producto> RepoProducto =>
+            _repoProducto ?? new RepositoryBase<Producto>(_context);
+        public IRepository<ProdVendido> RepoProdVendido =>
+            _repoProdVendido ?? new RepositoryBase<ProdVendido>(_context);
+        public IRepository<NotaDeEnvio> RepoNotaDeEnvio =>
+            _repoNotaDeEnvio ?? new RepositoryBase<NotaDeEnvio>(_context);
+        public IRepository<Reparto> RepoReparto =>
+            _repoReparto ?? new RepositoryBase<Reparto>(_context);
+        public IRepository<DiaReparto> RepoDiaReparto =>
+            _repoDiaReparto ?? new RepositoryBase<DiaReparto>(_context);
+        public IRepository<Venta> RepoVenta =>
+            _repoVenta ?? new RepositoryBase<Venta>(_context);
+        public IRepository<RegistroVenta> RepoRegistroVenta =>
+            _repoRegistroVenta ?? new RepositoryBase<RegistroVenta>(_context);
+        public IRepository<Recibo> RepoRecibo =>
+            _repoRecibo ?? new RepositoryBase<Recibo>(_context);
+        public IRepository<Pedido> RepoPedido =>
+            _repoPedido ?? new RepositoryBase<Pedido>(_context);
+        public IRepository<DetalleRecibo> RepoDetalleRecibo =>
+            _repoDetalleRecibo ?? new RepositoryBase<DetalleRecibo>(_context);
 
         public void Dispose()
         {

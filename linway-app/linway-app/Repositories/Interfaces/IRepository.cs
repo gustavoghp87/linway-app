@@ -4,11 +4,11 @@ namespace linway_app.Repositories.Interfaces
 {
     public interface IRepository<T>
     {
-        List<T> GetAll();
-        T Get(long id);
         bool Add(T t);
         bool Delete(T t);
         bool Edit(T t);
+        T Get(long id);
+        List<T> GetAll();
 
         //Task<IEnumerable<T>> GetAll();
         //Task<T> GetById(int id);

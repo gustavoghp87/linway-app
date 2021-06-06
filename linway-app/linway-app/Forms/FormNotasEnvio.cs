@@ -34,7 +34,7 @@ namespace linway_app.Forms
         }
         private void ActualizarNotas()
         {
-            _lstNotaDeEnvios = getNotadeEnvios();
+            _lstNotaDeEnvios = getNotaDeEnvios();
             if (_lstNotaDeEnvios != null)
             {
                 lCantNotas.Text = _lstNotaDeEnvios.Count.ToString() + " notas de envio.";
@@ -64,9 +64,14 @@ namespace linway_app.Forms
             dataGridView2.DataSource = lstProdVendidos.ToArray();
             if (lstProdVendidos != null)
             {
-                dataGridView2.Columns[0].Width = 30;
-                //dataGridView2.Columns[1].Width = 30;
-                dataGridView2.Columns[2].Width = 40;
+                dataGridView2.Columns[2].Visible = false;
+                dataGridView2.Columns[3].Visible = false;
+                dataGridView2.Columns[4].Visible = false;
+                dataGridView2.Columns[8].Visible = false;
+                dataGridView2.Columns[9].Visible = false;
+                dataGridView2.Columns[10].Visible = false;
+                dataGridView2.Columns[11].Visible = false;
+                dataGridView2.Columns[12].Visible = false;
             }
         }
 
@@ -148,18 +153,20 @@ namespace linway_app.Forms
 
         void FiltrarDatos(string texto, char x)                             // c de cliente
         {
+            ActualizarNotas();
             List<NotaDeEnvio> lstFiltrada = new List<NotaDeEnvio>();
-
             foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
             {
                 if (x == 'c')
                 {
-                    if (nota.Client != null && nota.Client.Direccion.ToLower().Contains(texto.ToLower()))
+                    if (nota.Client != null
+                        && nota.Client.Direccion != null
+                        && nota.Client.Direccion.ToLower().Contains(texto.ToLower())
+                    )
                     {
                         lstFiltrada.Add(nota);
                     }
                 }
-
                 if (x == 'f')
                 {
                     if (nota.Fecha.Contains(texto))
@@ -272,7 +279,7 @@ namespace linway_app.Forms
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((comboBox2.SelectedItem.ToString() == "No impresas") || ((comboBox2.SelectedItem.ToString() == "Hoy")))
+            if (comboBox2.SelectedItem.ToString() == "No impresas" || comboBox2.SelectedItem.ToString() == "Hoy")
             {
                 textBox2.Visible = false;
                 textBox3.Visible = false;
@@ -419,7 +426,7 @@ namespace linway_app.Forms
         //enviar a hoja de reparto
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((label16.Text != "") && (label16.Text != "No encontrado"))
+            if (label16.Text != "" && label16.Text != "No encontrado")
             {
                 button6.Enabled = true;
             }
@@ -432,38 +439,31 @@ namespace linway_app.Forms
             comboBox5.DisplayMember = "Nombre";
             comboBox5.ValueMember = "Nombre";
         }
-
-        private void textBox6_Leave(object sender, EventArgs e)
+        private void textBox6_TextChanged(object sender, EventArgs e)    // búsqueda por id de la nota de envío para agregar a pedido
         {
             if (textBox6.Text != "")
             {
-                try
+                try { long.Parse(textBox6.Text); } catch { return; };
+                long id = long.Parse(textBox6.Text);
+                NotaDeEnvio nota = _lstNotaDeEnvios.Find(x => x.Id == id);
+                if (nota != null)
                 {
-                    long id = int.Parse(textBox6.Text);
-                    if (_lstNotaDeEnvios.Exists(x => x.Id == id))
-                    {
-                        label16.Text = _lstNotaDeEnvios.Find(x => x.Id == id).Client.Direccion;
-                        if (comboBox5.Text != "")
-                        {
-                            button6.Enabled = true;
-                        }
-                        else
-                        {
-                            button6.Enabled = false;
-                        }
-                    }
-                    else
-                    {
-                        label16.Text = "No encontrado";
-                        button6.Enabled = false;
-                    }
+                    label16.Text = nota.Client.Direccion;
+                    if (comboBox5.Text != "") button6.Enabled = true;
+                    else button6.Enabled = false;
                 }
-                catch
+                else
                 {
+                    label16.Text = "No encontrado";
+                    button6.Enabled = false;
                 }
             }
+            else
+            {
+                label16.Text = "";
+                button6.Enabled = false;
+            }
         }
-
         private void button7_Click(object sender, EventArgs e)
         {
             comboBox5.Text = "";
@@ -472,11 +472,11 @@ namespace linway_app.Forms
             button6.Enabled = false;
             label16.Text = "";
         }
-
         private void AgregarPedidoDesdeNota_Click(object sender, EventArgs e)
         {
             string diaDeReparto = comboBox4.Text;
             string nombreReparto = comboBox5.Text;
+            try { long.Parse(textBox6.Text); } catch { return; };
             long notaDeEnvioId = long.Parse(textBox6.Text);
             addPedidoDesdeNota(diaDeReparto, nombreReparto, notaDeEnvioId);
             comboBox5.Text = "";
@@ -492,37 +492,34 @@ namespace linway_app.Forms
         {
             if (textBox7.Text != "")
             {
-                try
+                try { long.Parse(textBox7.Text); } catch { return; };
+                NotaDeEnvio notaDeEnvio = getNotaDeEnvio(long.Parse(textBox7.Text));
+                if (notaDeEnvio != null)
                 {
-                    long id = long.Parse(textBox7.Text);
-                    NotaDeEnvio notaDeEnvio = _lstNotaDeEnvios.Find(x => x.Id == id);
-                    if (notaDeEnvio != null)
+                    if (notaDeEnvio.ProdVendidos == null) return;
+                    _lstProdVendidos = notaDeEnvio.ProdVendidos.ToList();
+                    ActualizarGrid2(_lstProdVendidos);
+                    double impTotal = 0;
+                    foreach (ProdVendido nota in _lstProdVendidos)
                     {
-                        _lstProdVendidos = notaDeEnvio.ProdVendidos.ToList();
-                        ActualizarGrid2(_lstProdVendidos);
-                        double impTotal = 0;
-                        foreach (ProdVendido nota in _lstProdVendidos)
-                        {
-                            impTotal += nota.Precio;
-                        }
-                        label20.Text = impTotal.ToString();
-                        button10.Enabled = true;
-
-                        if (notaDeEnvio.Client != null && notaDeEnvio.Client.Direccion != null)
-                        {
-                            label18.Text = notaDeEnvio.Client.Direccion.ToString() + " - " + notaDeEnvio.ClientId.ToString();
-                        }
+                        impTotal += nota.Precio;
                     }
-                    else
+                    label20.Text = impTotal.ToString();
+                    button10.Enabled = true;
+                    if (notaDeEnvio.Client != null && notaDeEnvio.Client.Direccion != null)
                     {
-                        label18.Text = "No encontrado";
-                        label20.Text = "0";
-                        button10.Enabled = false;
-                        _lstProdVendidos.Clear();
-                        ActualizarGrid2(_lstProdVendidos);
+                        label18.Text = notaDeEnvio.Client.Direccion.ToString() +
+                            " - " + notaDeEnvio.ClientId.ToString();
                     }
                 }
-                catch {}
+                else
+                {
+                    label18.Text = "No encontrado";
+                    label20.Text = "0";
+                    button10.Enabled = false;
+                    _lstProdVendidos.Clear();
+                    ActualizarGrid2(_lstProdVendidos);
+                }
             }
             else
             {
@@ -533,7 +530,6 @@ namespace linway_app.Forms
                 ActualizarGrid2(_lstProdVendidos);
             }
         }
-
         private void button10_Click(object sender, EventArgs e)
         {
             if (_lstProdVendidos.Count != 0)
@@ -561,9 +557,10 @@ namespace linway_app.Forms
         {
             if (textBox8.Text != "")
             {
-                if (_lstProdVendidos.Exists(x => x.Descripcion.Contains(textBox8.Text)))
+                ProdVendido prodVendido = getProdVendidoPorNombre(textBox8.Text);
+                if (prodVendido != null)
                 {
-                    label22.Text = _lstProdVendidos.Find(x => x.Descripcion.Contains(textBox8.Text)).Descripcion;
+                    label22.Text = prodVendido.Descripcion;
                     button8.Enabled = true;
                     button10.Enabled = true;
                 }
@@ -574,13 +571,19 @@ namespace linway_app.Forms
                     button10.Enabled = false;
                 }
             }
+            else
+            {
+                label22.Text = "";
+                button8.Enabled = false;
+                button10.Enabled = false;
+            }
         }
-
         private void button8_Click(object sender, EventArgs e)
         {
             if (label18.Text != "" && label18.Text != "No encontrado" && textBox7.Text != "")
             {
-                _lstProdVendidos.Remove(_lstProdVendidos.Find(x => x.Descripcion == label22.Text));
+                ProdVendido prodVendido = getProdVendidoPorNombreExacto(label22.Text);
+                deleteProdVendido(prodVendido);
                 double impTotal = 0;
                 foreach (ProdVendido producto in _lstProdVendidos)
                 {
@@ -595,26 +598,19 @@ namespace linway_app.Forms
         }
 
         //agregar
-        private void textBox9_Leave(object sender, EventArgs e)
+        private void textBox9_TextChanged(object sender, EventArgs e)     // id producto
         {
+            label26.Text = "";
             if (textBox9.Text != "")
             {
-                Producto producto = _lstProductos.Find(x => x.Id == int.Parse(textBox9.Text));
+                try { long.Parse(textBox9.Text); } catch { return; };
+                Producto producto = getProducto(long.Parse(textBox9.Text));
                 if (producto != null)
                 {
                     label25.Text = producto.Nombre;
-                    if (textBox10.Text != "")
-                    {
-                        button9.Enabled = true;
-                    }
-                    if (label25.Text.Contains("actura"))
-                    {
-                        textBox11.Visible = true;
-                    }
-                    else
-                    {
-                        textBox11.Visible = false;
-                    }
+                    if (textBox10.Text != "") button9.Enabled = true;
+                    if (label25.Text.Contains("actura")) textBox11.Visible = true;
+                    else textBox11.Visible = false;
                 }
                 else
                 {
@@ -622,54 +618,73 @@ namespace linway_app.Forms
                     button9.Enabled = true;
                 }
             }
-        }
-
-        private void textBox10_Leave(object sender, EventArgs e)
-        {
-            if ((textBox9.Text != "") && (label25.Text != "No encontrado"))
+            else
             {
-                if (textBox10.Text != "")
+                label25.Text = "";
+                button9.Enabled = true;
+            }
+        }
+        private void textBox12_TextChanged(object sender, EventArgs e)     // producto por nombre
+        {
+            label26.Text = "";
+            if (textBox12.Text != "")
+            {
+                Producto producto = getProductoPorNombre(textBox12.Text);
+                if (producto != null)
                 {
-                    label26.Text = (_lstProductos.Find(x => x.Nombre == label25.Text).Precio * int.Parse(textBox10.Text)).ToString();
+                    label25.Text = producto.Nombre;
+                    if (textBox10.Text != "") button9.Enabled = true;
+                    if (label25.Text.Contains("actura")) textBox11.Visible = true;
+                    else textBox11.Visible = false;
+                }
+                else
+                {
+                    label25.Text = "No encontrado";
                     button9.Enabled = true;
                 }
             }
+            else
+            {
+                label25.Text = "";
+                button9.Enabled = true;
+            }
         }
-
+        private void textBox10_TextChanged(object sender, EventArgs e)     // cantidad a agregar
+        {
+            if (label25.Text != "No encontrado" && textBox10.Text != "")
+            {
+                try { int.Parse(textBox10.Text); } catch { return; };
+                label26.Text = (getProductoPorNombreExacto(label25.Text).Precio * int.Parse(textBox10.Text))
+                    .ToString();
+                button9.Enabled = true;
+            }
+        }
         private void AgregarProductoVendido_btn9_Click(object sender, EventArgs e)
         {
-            ProdVendido nuevoPV;
-            Producto prod = _lstProductos.Find(x => x.Nombre == label25.Text);
-            if (prod.Nombre.Contains("pendiente"))
-                nuevoPV = new ProdVendido
-                {
-                    ProductoId = prod.Id,
-                    Descripcion = prod.Nombre,
-                    Cantidad = 1,
-                    Precio = prod.Precio
-                };
-            else if ((prod.Nombre.Contains("favor")) || (prod.Nombre.Contains("devoluci")) || (prod.Nombre.Contains("BONIF")))
-                nuevoPV = new ProdVendido
-                {
-                    ProductoId = prod.Id,
-                    Descripcion = prod.Nombre,
-                    Cantidad = 1,
-                    Precio = prod.Precio * -1
-                };
+            try { long.Parse(textBox7.Text); } catch { return; };
+            Producto prod = getProductoPorNombreExacto(label25.Text);
+            ProdVendido nuevoPV = new ProdVendido();
+            nuevoPV.NotaDeEnvioId = getNotaDeEnvio(long.Parse(textBox7.Text)).Id;
+            nuevoPV.Descripcion = prod.Nombre;
+            nuevoPV.Cantidad = 1;
+            nuevoPV.Precio = prod.Precio;
+            if (prod == null) return;
+            if (prod.Nombre.Contains("pendiente")) { }
+            //
+            else if (prod.Nombre.Contains("favor")
+                    || prod.Nombre.Contains("devoluci")
+                    || prod.Nombre.Contains("BONIF")
+            )
+                nuevoPV.Precio = prod.Precio * -1;
             else if ((prod.Nombre.Contains("actura")))
-                nuevoPV = new ProdVendido
-                {
-                    ProductoId = prod.Id,
-                    Descripcion = prod.Nombre + textBox11.Text,
-                    Cantidad = 1,
-                    Precio = prod.Precio
-                };
+                nuevoPV.Descripcion = prod.Nombre + textBox11.Text;
             else
-                nuevoPV = new ProdVendido
-                {
-                    ProductoId = prod.Id, Descripcion = prod.Nombre, Cantidad = int.Parse(textBox10.Text), Precio = prod.Precio
-                };
+            {
+                try { int.Parse(textBox10.Text); } catch { return; };
+                nuevoPV.Cantidad = int.Parse(textBox10.Text);
+            }
             addProdVendido(nuevoPV);
+            _lstProdVendidos.Clear();
             ActualizarGrid2(_lstProdVendidos);
             double impTotal = 0;
             foreach (ProdVendido prodVendido in _lstProdVendidos)
@@ -685,7 +700,5 @@ namespace linway_app.Forms
             textBox11.Visible = false;
             button9.Enabled = false;
         }
-
-        private void bExportar_Click(object sender, EventArgs e) {}
     }
 }

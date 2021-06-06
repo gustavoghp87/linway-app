@@ -1,5 +1,4 @@
-﻿using linway_app.Repositories;
-using System;
+﻿using linway_app.Models.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -9,14 +8,13 @@ using System.ComponentModel;
 
 namespace linway_app.Models
 {
-    public partial class NotaDeEnvio : INotaDeEnvio
+    public partial class NotaDeEnvio : Model, INotaDeEnvio
     {
         public NotaDeEnvio()
         {
             ProdVendidos = new HashSet<ProdVendido>();
         }
 
-        [DisplayName("N°:")]
         public long Id { get; set; }
         public long ClientId { get; set; }
         public string Fecha { get; set; }
@@ -25,9 +23,7 @@ namespace linway_app.Models
 
         [DisplayName("Total")]
         public double ImporteTotal { get; set; }
-
         public string Estado { get; set; }
-
         public virtual Cliente Client { get; set; }
         public virtual ICollection<ProdVendido> ProdVendidos { get; set; }
     }

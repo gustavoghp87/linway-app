@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using linway_app.Models.Interfaces;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -7,14 +6,13 @@ using System.Collections.Generic;
 
 namespace linway_app.Models
 {
-    public partial class DetalleRecibo : IDetalleRecibo
+    public partial class DetalleRecibo : Model, IDetalleRecibo
     {
         public long Id { get; set; }
         public long ReciboId { get; set; }
         public string Detalle { get; set; }
         public double Importe { get; set; }
         public string Estado { get; set; }
-
         public virtual Recibo Recibo { get; set; }
     }
 }

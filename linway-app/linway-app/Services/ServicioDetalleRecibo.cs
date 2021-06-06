@@ -2,6 +2,7 @@
 using linway_app.Repositories.Interfaces;
 using linway_app.Services.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace linway_app.Services
 {
@@ -18,7 +19,8 @@ namespace linway_app.Services
         }
         public bool Delete(DetalleRecibo detalleRecibo)
         {
-            return _unitOfWork.RepoDetalleRecibo.Delete(detalleRecibo);
+            detalleRecibo.Estado = "Eliminado";
+            return _unitOfWork.RepoDetalleRecibo.Edit(detalleRecibo);
         }
         public bool Edit(DetalleRecibo detalleRecibo)
         {
@@ -26,11 +28,18 @@ namespace linway_app.Services
         }
         public DetalleRecibo Get(long id)
         {
-            return _unitOfWork.RepoDetalleRecibo.Get(id);
+            DetalleRecibo detalleRecibo = _unitOfWork.RepoDetalleRecibo.Get(id);
+            return detalleRecibo == null || detalleRecibo.Estado == null || detalleRecibo.Estado == "Eliminado"
+                ? null : detalleRecibo;
         }
         public List<DetalleRecibo> GetAll()
         {
-            return _unitOfWork.RepoDetalleRecibo.GetAll();
+            List<DetalleRecibo> lst = _unitOfWork.RepoDetalleRecibo.GetAll();
+            lst = (from x
+                   in lst
+                   where x.Estado != null && x.Estado != "Eliminado"
+                   select x).ToList();
+            return lst;
         }
     }
 }

@@ -21,7 +21,8 @@ namespace linway_app.Services
         }
         public bool Delete(Reparto reparto)
         {
-            return _unitOfWork.RepoReparto.Delete(reparto);
+            reparto.Estado = "Eliminado";
+            return _unitOfWork.RepoReparto.Edit(reparto);
         }
         public bool Edit(Reparto reparto)
         {
@@ -29,11 +30,18 @@ namespace linway_app.Services
         }
         public Reparto Get(long id)
         {
-            return _unitOfWork.RepoReparto.Get(id);
+            Reparto reparto = _unitOfWork.RepoReparto.Get(id);
+            return reparto == null || reparto.Estado == null || reparto.Estado == "Eliminado"
+                ? null : reparto;
         }
         public List<Reparto> GetAll()
         {
-            return _unitOfWork.RepoReparto.GetAll();
+            List<Reparto> lst = _unitOfWork.RepoReparto.GetAll();
+            lst = (from x
+                   in lst
+                   where x.Estado != null && x.Estado != "Eliminado"
+                   select x).ToList();
+            return lst;
         }
 
         public void LimpiarDatos(Reparto reparto)

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace linway_app.Models
+namespace linway_app.Models.Interfaces
 {
     public interface ICliente
     {

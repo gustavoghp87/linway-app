@@ -1,4 +1,4 @@
-﻿using System;
+﻿using linway_app.Models.Interfaces;
 using System.Collections.Generic;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace linway_app.Models
 {
-    public partial class DiaReparto : IDiaReparto
+    public partial class DiaReparto : Model, IDiaReparto
     {
         public DiaReparto()
         {
@@ -16,7 +16,7 @@ namespace linway_app.Models
 
         public long Id { get; set; }
         public string Dia { get; set; }
-
+        public string Estado { get; set; }
         public virtual ICollection<Reparto> Reparto { get; set; }
     }
 }

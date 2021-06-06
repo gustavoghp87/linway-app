@@ -1,4 +1,4 @@
-﻿using System;
+﻿using linway_app.Models.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace linway_app.Models
 {
-    public partial class Producto : IProducto
+    public partial class Producto : Model, IProducto
     {
         public Producto()
         {
@@ -16,7 +16,6 @@ namespace linway_app.Models
             Venta = new HashSet<Venta>();
         }
 
-        [DisplayName("Cod")]
         public long Id { get; set; }
 
         [DisplayName("Producto")]
@@ -24,7 +23,6 @@ namespace linway_app.Models
 
         [DisplayName("Precio($)")]
         public double Precio { get; set; }
-
         public string Estado { get; set; }
 
         public virtual ICollection<ProdVendido> ProdVendido { get; set; }

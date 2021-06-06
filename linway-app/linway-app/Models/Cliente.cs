@@ -1,5 +1,4 @@
-﻿using linway_app.Repositories;
-using System;
+﻿using linway_app.Models.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -9,7 +8,7 @@ using System.ComponentModel;
 
 namespace linway_app.Models
 {
-    public partial class Cliente : ICliente    // service change "–" to "-"
+    public partial class Cliente : Model, ICliente
     {
         public Cliente()
         {
@@ -19,7 +18,7 @@ namespace linway_app.Models
             RegistroVenta = new HashSet<RegistroVenta>();
         }
 
-        [DisplayName("Cod")]
+        [DisplayName("Cod:")]
         public long Id { get; set; }
 
         [DisplayName("Dirección - Localidad:")]

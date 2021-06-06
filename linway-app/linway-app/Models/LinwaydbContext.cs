@@ -134,8 +134,6 @@ namespace linway_app.Models
                 entity.HasIndex(e => e.Id);
 
                 entity.Property(e => e.Nombre).IsRequired();
-
-                entity.Property(e => e.Estado);
             });
 
             modelBuilder.Entity<Recibo>(entity =>

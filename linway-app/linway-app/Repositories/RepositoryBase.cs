@@ -1,4 +1,5 @@
 ﻿using linway_app.Models;
+using linway_app.Models.Interfaces;
 using linway_app.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,20 +8,20 @@ using System.Linq;
 
 namespace linway_app.Repositories
 {
-    public class RepositoryVenta : IRepository<Venta>
+    public class RepositoryBase<T> : IRepository<T> where T : Model
     {
         private readonly LinwaydbContext _context;
-        private readonly DbSet<Venta> _entities;
-        public RepositoryVenta(LinwaydbContext context)
+        private readonly DbSet<T> _entities;
+        public RepositoryBase(LinwaydbContext context)
         {
             _context = context;
-            _entities = context.Set<Venta>();
+            _entities = context.Set<T>();
         }
-        public bool Add(Venta venta)
+        public bool Add(T t)
         {
             try
             {
-                _entities.Add(venta);
+                _entities.Add(t);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -30,16 +31,15 @@ namespace linway_app.Repositories
                 return false;
             }
         }
-        public bool Delete(Venta venta)
+        public bool Delete(T t)
         {
-            venta.Estado = "Eliminado";
-            return Edit(venta);
+            return Edit(t);
         }
-        public bool Edit(Venta venta)
+        public bool Edit(T t)
         {
             try
             {
-                _entities.Update(venta);
+                _entities.Update(t);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -49,17 +49,19 @@ namespace linway_app.Repositories
                 return false;
             }
         }
-        public Venta Get(long id)
+        public T Get(long id)
         {
-            var response = _entities.Find(id);
-            if (response == null || response.Estado == null || response.Estado == "Eliminado") return null;
-            return response;
+            using (var context = new LinwaydbContext())
+            {
+                return context.Set<T>()?.Find(id);
+            }
         }
-        public List<Venta> GetAll()
+        public List<T> GetAll()
         {
-            var lstSinFiltr = _entities.ToList();
-            var lst = lstSinFiltr.Where(x => x.Estado != null && x.Estado != "Eliminado").ToList();
-            return lst;
+            using (var context = new LinwaydbContext())
+            {
+                return context.Set<T>()?.ToList();
+            }
         }
     }
 }

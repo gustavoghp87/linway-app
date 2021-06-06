@@ -1,5 +1,4 @@
 ﻿using linway_app.Models;
-using linway_app.Models.Internals;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -48,16 +47,17 @@ namespace linway_app.Forms
         {
             if (recibos != null)
             {
-                List<ReciboFiltrado> grid1 = new List<ReciboFiltrado>();
+                List<Recibo> grid1 = new List<Recibo>();
                 foreach (Recibo recibo in recibos)
                 {
-                    grid1.Add(new ReciboFiltrado
+                    grid1.Add(new Recibo
                     {
                         Id = recibo.Id,
                         Fecha = recibo.Fecha,
-                        Cliente = recibo.DireccionCliente,
-                        Total = recibo.ImporteTotal,
-                        Impresa = recibo.Impresa == 0 ? "No" : "Sí"
+                        DireccionCliente = recibo.DireccionCliente,
+                        ImporteTotal = recibo.ImporteTotal,
+                        Impresa = recibo.Impresa
+                        //== 0 ? "No" : "Sí"
                     });
                 }
                 dataGridView1.DataSource = grid1.ToArray();

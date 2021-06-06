@@ -19,7 +19,8 @@ namespace linway_app.Services
         }
         public bool Delete(Pedido pedido)
         {
-            return _unitOfWork.RepoPedido.Delete(pedido);
+            pedido.Estado = "Eliminado";
+            return _unitOfWork.RepoPedido.Edit(pedido);
         }
         public bool Edit(Pedido pedido)
         {
@@ -27,11 +28,18 @@ namespace linway_app.Services
         }
         public Pedido Get(long id)
         {
-            return _unitOfWork.RepoPedido.Get(id);
+            Pedido pedido = _unitOfWork.RepoPedido.Get(id);
+            return pedido == null || pedido.Estado == null || pedido.Estado == "Eliminado"
+                ? null : pedido;
         }
         public List<Pedido> GetAll()
         {
-            return _unitOfWork.RepoPedido.GetAll();
+            List<Pedido> lst = _unitOfWork.RepoPedido.GetAll();
+            lst = (from x
+                   in lst
+                   where x.Estado != null && x.Estado != "Eliminado"
+                   select x).ToList();
+            return lst;
         }
 
         //public static Pedido Limpiar(Pedido pedido)

@@ -65,6 +65,7 @@ namespace linway_app.Forms
             textBox3.Text = "";
             textBox4.Text = "";
             textBox5.Text = "";
+            textBox6.Text = "";
             textBox18.Text = "";
             textBox14.Text = "";
             textBox10.Text = "";
@@ -111,7 +112,7 @@ namespace linway_app.Forms
         {
             bool correcto = false;
             if (label23.Text != "No encontrado" && textBox10.Text != "" && textBox11.Text != ""
-                && textBox14.Text != "" && textBox23.Text != "" && textBox24.Text != "" && textBox25.Text != ""
+                && textBox23.Text != "" && textBox24.Text != "" && textBox25.Text != ""
             )
             {
                 correcto = true;

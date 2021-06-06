@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using linway_app.Models.Interfaces;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
@@ -7,14 +8,13 @@ using System.ComponentModel;
 
 namespace linway_app.Models
 {
-    public partial class RegistroVenta : IRegistroVenta
+    public partial class RegistroVenta : Model, IRegistroVenta
     {
         public RegistroVenta()
         {
             ProdVendido = new HashSet<ProdVendido>();
         }
 
-        [DisplayName("ID:")]
         public long Id { get; set; }
         public long ClienteId { get; set; }
 
@@ -23,7 +23,6 @@ namespace linway_app.Models
 
         [DisplayName("FECHA")]
         public string Fecha { get; set; }
-
         public string Estado { get; set; }
 
         public virtual Cliente Cliente { get; set; }

@@ -6,12 +6,14 @@ namespace linway_app.Forms.Delegates
 {
     public static class DNotaDeEnvio
     {
-        public delegate List<NotaDeEnvio> DGetNotadeEnvios();
+        public delegate List<NotaDeEnvio> DGetNotaDeEnvios();
+        public delegate NotaDeEnvio DGetNotaDeEnvio(long id);
         public delegate long DAddNotaDeEnvioReturnId(NotaDeEnvio notaDeEnvio);
         public delegate void DDeleteNotaDeEnvio(NotaDeEnvio notaDeEnvio);
         public delegate void DEditNotaDeEnvio(NotaDeEnvio notaDeEnvio);
 
-        public readonly static DGetNotadeEnvios getNotadeEnvios = new DGetNotadeEnvios(GetNotaDeEnvios);
+        public readonly static DGetNotaDeEnvios getNotaDeEnvios = new DGetNotaDeEnvios(GetNotaDeEnvios);
+        public readonly static DGetNotaDeEnvio getNotaDeEnvio = new DGetNotaDeEnvio(GetNotaDeEnvio);
         public readonly static DAddNotaDeEnvioReturnId addNotaDeEnvioReturnId
             = new DAddNotaDeEnvioReturnId(AddNotaDeEnvioReturnId);
         public readonly static DDeleteNotaDeEnvio deleteNotaDeEnvio = new DDeleteNotaDeEnvio(DeleteNotaDeEnvio);
@@ -20,6 +22,10 @@ namespace linway_app.Forms.Delegates
         private static List<NotaDeEnvio> GetNotaDeEnvios()
         {
             return Form1._servNotaDeEnvio.GetAll();
+        }
+        private static NotaDeEnvio GetNotaDeEnvio(long id)
+        {
+            return Form1._servNotaDeEnvio.Get(id);
         }
         public static long AddNotaDeEnvioReturnId(NotaDeEnvio notaDeEnvio)
         {

@@ -229,6 +229,7 @@ namespace linway_app.Forms
         {
             comboBox2.Visible = true;
             label2.Visible = true;
+            if (_lstDiaRepartos.Count == 0) return;
             _lstRepartos = _lstDiaRepartos.Find(x => x.Dia == comboBox1.SelectedItem.ToString()).Reparto.ToList();
             comboBox2.DataSource = _lstRepartos;
             comboBox2.DisplayMember = "Nombre";

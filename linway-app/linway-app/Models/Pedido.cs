@@ -1,4 +1,4 @@
-﻿using System;
+﻿using linway_app.Models.Interfaces;
 using System.Collections.Generic;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace linway_app.Models
 {
-    public partial class Pedido : IPedido
+    public partial class Pedido : Model, IPedido
     {
         public Pedido()
         {

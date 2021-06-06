@@ -1,4 +1,4 @@
-﻿namespace linway_app.Models
+﻿namespace linway_app.Models.Interfaces
 {
     public interface IProdVendido
     {
