@@ -1,5 +1,5 @@
 ﻿using linway_app.Forms;
-using linway_app.Models;
+using linway_app.Models.DbContexts;
 using linway_app.Repositories;
 using linway_app.Repositories.Interfaces;
 using linway_app.Services;
@@ -14,7 +14,7 @@ namespace linway_app
     {
         public static void ConfigureServices(ServiceCollection services)
         {
-            services.AddDbContext<LinwaydbContext>();
+            services.AddDbContext<LinwayDbContext>();
 
             //services.AddScoped<ICliente, Cliente>();
             //services.AddScoped<IDiaReparto, DiaReparto>();

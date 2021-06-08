@@ -23,26 +23,26 @@ namespace linway_app.Forms.Delegates
         public readonly static DDeleteProdVendido deleteProdVendido
             = new DDeleteProdVendido(DeleteProdVendido);
 
-        public static void AddProdVendido(ProdVendido prodVendido)
+        private static void AddProdVendido(ProdVendido prodVendido)
         {
             bool response = Form1._servProdVendido.Add(prodVendido);
             if (!response) MessageBox.Show("Algo falló al agregar Producto Vendido a base de datos");
         }
-        public static List<ProdVendido> GetProdVendidos()
+        private static List<ProdVendido> GetProdVendidos()
         {
             return Form1._servProdVendido.GetAll();
         }
-        public static ProdVendido GetProdVendidoPorNombre(string descripcion)
+        private static ProdVendido GetProdVendidoPorNombre(string descripcion)
         {
             List<ProdVendido> lst = GetProdVendidos();
             return lst.Find(x => x.Descripcion.ToLower().Contains(descripcion.ToLower()));
         }
-        public static ProdVendido GetProdVendidoPorNombreExacto(string descripcion)
+        private static ProdVendido GetProdVendidoPorNombreExacto(string descripcion)
         {
             List<ProdVendido> lst = GetProdVendidos();
             return lst.Find(x => x.Descripcion.Contains(descripcion));
         }
-        public static void DeleteProdVendido(ProdVendido prodVendido)
+        private static void DeleteProdVendido(ProdVendido prodVendido)
         {
             bool response = Form1._servProdVendido.Delete(prodVendido);
             if (!response) MessageBox.Show("Algo falló al eliminar Producto Vendido de la base de datos");

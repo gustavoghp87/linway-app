@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using static linway_app.Forms.Delegates.DDiaReparto;
+using static linway_app.Forms.Delegates.DReparto;
 using static linway_app.Forms.Delegates.DNotaDeEnvio;
 using static linway_app.Forms.Delegates.DPedido;
 using static linway_app.Forms.Delegates.DProductos;

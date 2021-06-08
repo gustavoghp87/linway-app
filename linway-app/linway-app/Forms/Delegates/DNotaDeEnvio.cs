@@ -27,18 +27,18 @@ namespace linway_app.Forms.Delegates
         {
             return Form1._servNotaDeEnvio.Get(id);
         }
-        public static long AddNotaDeEnvioReturnId(NotaDeEnvio notaDeEnvio)
+        private static long AddNotaDeEnvioReturnId(NotaDeEnvio notaDeEnvio)
         {
             long response = Form1._servNotaDeEnvio.AddAndGetId(notaDeEnvio);
             if (response == 0) MessageBox.Show("Algo falló al agregar Nota de Envío a base de datos");
             return response;
         }
-        public static void DeleteNotaDeEnvio(NotaDeEnvio notaDeEnvio)
+        private static void DeleteNotaDeEnvio(NotaDeEnvio notaDeEnvio)
         {
             bool response = Form1._servNotaDeEnvio.Delete(notaDeEnvio);
             if (!response) MessageBox.Show("Algo falló al eliminar Nota de Envío de la base de datos");
         }
-        public static void EditNotaDeEnvio(NotaDeEnvio notaDeEnvio)
+        private static void EditNotaDeEnvio(NotaDeEnvio notaDeEnvio)
         {
             bool response = Form1._servNotaDeEnvio.Edit(notaDeEnvio);
             if (!response) MessageBox.Show("Algo falló al editar Nota de Envío en base de datos");

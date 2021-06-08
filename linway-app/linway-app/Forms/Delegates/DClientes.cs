@@ -12,6 +12,7 @@ namespace linway_app.Forms.Delegates
         public delegate Cliente DGetClientePorDireccionExacta(string direccion);
         public delegate bool DAddCliente(Cliente cliente);
         public delegate void DEditCliente(Cliente cliente);
+        public delegate void DDeleteCliente(Cliente cliente);
 
         public readonly static DAddCliente addCliente = new DAddCliente(AddCliente);
         public readonly static DEditCliente editCliente = new DEditCliente(EditCliente);
@@ -21,33 +22,34 @@ namespace linway_app.Forms.Delegates
             = new DGetClientePorDireccion(GetClientePorDireccion);
         public readonly static DGetClientePorDireccionExacta getClientePorDireccionExacta
             = new DGetClientePorDireccionExacta(GetClientePorDireccionExacta);
+        public readonly static DDeleteCliente deleteCliente = new DDeleteCliente(DeleteCliente);
 
-        public static List<Cliente> GetClientes()
+        private static List<Cliente> GetClientes()
         {
             return Form1._servCliente.GetAll();
         }
-        public static Cliente GetCliente(long clientId)
+        private static Cliente GetCliente(long clientId)
         {
             return Form1._servCliente.Get(clientId);
         }
-        public static Cliente GetClientePorDireccion(string direccion)
+        private static Cliente GetClientePorDireccion(string direccion)
         {
             return GetClientes().Find(x => x.Direccion.ToLower().Contains(direccion.ToLower()));
         }
-        public static Cliente GetClientePorDireccionExacta(string direccion)
+        private static Cliente GetClientePorDireccionExacta(string direccion)
         {
             return GetClientes().Find(x => x.Direccion.Contains(direccion));
         }
-        public static bool AddCliente(Cliente cliente)
+        private static bool AddCliente(Cliente cliente)
         {
             return Form1._servCliente.Add(cliente);
         }
-        public static void EditCliente(Cliente cliente)
+        private static void EditCliente(Cliente cliente)
         {
             bool response = Form1._servCliente.Edit(cliente);
             if (!response) MessageBox.Show("Falló editando Cliente en base de datos");
         }
-        public static void DeleteCliente(Cliente cliente)
+        private static void DeleteCliente(Cliente cliente)
         {
             bool response = Form1._servCliente.Delete(cliente);
             if (!response) MessageBox.Show("Falló guardado Cliente en base de datos");

@@ -7,15 +7,15 @@ using Microsoft.EntityFrameworkCore.Metadata;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace linway_app.Models
+namespace linway_app.Models.DbContexts
 {
-    public partial class LinwaydbContext : DbContext
+    public partial class LinwayDbContext : DbContext
     {
-        public LinwaydbContext()
+        public LinwayDbContext()
         {
         }
 
-        public LinwaydbContext(DbContextOptions<LinwaydbContext> options)
+        public LinwayDbContext(DbContextOptions<LinwayDbContext> options)
             : base(options)
         {
         }

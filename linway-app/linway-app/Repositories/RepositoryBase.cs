@@ -1,4 +1,4 @@
-﻿using linway_app.Models;
+﻿using linway_app.Models.DbContexts;
 using linway_app.Models.OModel;
 using linway_app.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +10,9 @@ namespace linway_app.Repositories
 {
     public class RepositoryBase<T> : IRepository<T> where T : ObjModel
     {
-        private readonly LinwaydbContext _context;
+        private readonly LinwayDbContext _context;
         private readonly DbSet<T> _entities;
-        public RepositoryBase(LinwaydbContext context)
+        public RepositoryBase(LinwayDbContext context)
         {
             _context = context;
             _entities = context.Set<T>();
@@ -37,7 +37,7 @@ namespace linway_app.Repositories
         }
         public bool Edit(T t)
         {
-            using (var context = new LinwaydbContext())
+            using (var context = new LinwayDbContext())
             {
                 try
                 {

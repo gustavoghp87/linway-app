@@ -1,4 +1,5 @@
 ﻿using linway_app.Models;
+using linway_app.Models.OModel;
 using System;
 using System.Threading.Tasks;
 
@@ -17,7 +18,6 @@ namespace linway_app.Repositories.Interfaces
         IRepository<DiaReparto> RepoDiaReparto { get; }
         IRepository<Pedido> RepoPedido{ get; }
         IRepository<DetalleRecibo> RepoDetalleRecibo { get; }
-
         void SaveChanges();
         Task SaveChangesAsync();
     }

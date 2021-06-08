@@ -417,7 +417,7 @@ namespace linway_app.Forms
             this.bExportar.Text = "Exportar";
             this.bExportar.UseVisualStyleBackColor = true;
             this.bExportar.Visible = false;
-            this.bExportar.Click += new System.EventHandler(this.exportarAExcel_Click);
+            //this.bExportar.Click += new System.EventHandler(this.exportarAExcel_Click);
             // 
             // bActualizar
             // 
@@ -428,7 +428,7 @@ namespace linway_app.Forms
             this.bActualizar.TabIndex = 40;
             this.bActualizar.Text = "Actualizar";
             this.bActualizar.UseVisualStyleBackColor = true;
-            this.bActualizar.Click += new System.EventHandler(this.ActualizarListas_Click);
+            //this.bActualizar.Click += new System.EventHandler(this.ActualizarListas_Click);
             // 
             // bCopiaSeguridad
             // 
@@ -439,7 +439,7 @@ namespace linway_app.Forms
             this.bCopiaSeguridad.TabIndex = 41;
             this.bCopiaSeguridad.Text = "Crear copia de seguridad";
             this.bCopiaSeguridad.UseVisualStyleBackColor = true;
-            this.bCopiaSeguridad.Click += new System.EventHandler(this.bCopiaSeguridad_Click);
+            //this.bCopiaSeguridad.Click += new System.EventHandler(this.bCopiaSeguridad_Click);
             // 
             // groupBox7
             // 
@@ -771,7 +771,7 @@ namespace linway_app.Forms
             this.ImportarBtn.TabIndex = 48;
             this.ImportarBtn.Text = "Importar";
             this.ImportarBtn.UseVisualStyleBackColor = true;
-            this.ImportarBtn.Click += new System.EventHandler(this.ImportarBtn_Click);
+            //this.ImportarBtn.Click += new System.EventHandler(this.ImportarBtn_Click);
             // 
             // FormVentas
             // 

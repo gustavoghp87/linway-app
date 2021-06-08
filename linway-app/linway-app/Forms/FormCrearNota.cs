@@ -102,7 +102,7 @@ namespace linway_app.Forms
             if (textBox16.Text != "")
             {
                 try { long.Parse(textBox16.Text); } catch { };
-                var producto = GetProducto(long.Parse(textBox16.Text));
+                var producto = getProducto(long.Parse(textBox16.Text));
                 if (producto == null)
                 {
                     label38.Text = "No encontrado";
@@ -124,7 +124,7 @@ namespace linway_app.Forms
         {
             if (textBox2.Text != "")
             {
-                var producto = GetProductoPorNombre(textBox2.Text);
+                var producto = getProductoPorNombre(textBox2.Text);
                 if (producto == null)
                 {
                     label38.Text = "No encontrado";
@@ -149,13 +149,13 @@ namespace linway_app.Forms
             if (labelProductoId.Text != "")
             {
                 try { long.Parse(labelProductoId.Text); } catch { return; };
-                Producto producto = GetProducto(long.Parse(labelProductoId.Text));
+                Producto producto = getProducto(long.Parse(labelProductoId.Text));
                 if (producto == null || labelProductoId.Text == "" || textBox17.Text == "")
                 {
                     label40.Text = "";
                     return;
                 }
-                label40.Text = (producto.Precio * long.Parse(textBox17.Text)).ToString();   // subtotal
+                label40.Text = (producto.Precio * int.Parse(textBox17.Text)).ToString();   // subtotal
             }
             else
             {
@@ -177,8 +177,8 @@ namespace linway_app.Forms
             if (labelClienteId.Text != "" && labelProductoId.Text != "")
             {
                 try { long.Parse(labelProductoId.Text); } catch { return; };
-                var producto = GetProducto(long.Parse(labelProductoId.Text));
-                var cantidad = long.Parse(labelProductoId.Text);
+                var producto = getProducto(long.Parse(labelProductoId.Text));
+                var cantidad = int.Parse(textBox17.Text);
 
                 for (int i = 0; i < cantidad; i++)
                 {
@@ -294,7 +294,7 @@ namespace linway_app.Forms
                         NombreCliente = cliente.Direccion,
                         Estado = "Activo"
                     };
-                    long registroId = addRegistroVenta(nuevoRegistro);
+                    long registroId = addRegistroVentaReturnId(nuevoRegistro);
                     foreach (var prodVendido in _lstProdVendidos)
                     {
                         prodVendido.RegistroVentaId = registroId;
@@ -317,7 +317,7 @@ namespace linway_app.Forms
                                 {
                                     ProductoId = prodVendido.ProductoId,
                                     Cantidad = prodVendido.Cantidad,
-                                    Producto = GetProducto(prodVendido.ProductoId)
+                                    Producto = getProducto(prodVendido.ProductoId)
                                 };
                                 addVenta(nuevaVenta);
                             }

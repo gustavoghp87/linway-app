@@ -1,4 +1,5 @@
 ﻿using linway_app.Models;
+using linway_app.Models.DbContexts;
 using linway_app.Repositories.Interfaces;
 using System.Threading.Tasks;
 
@@ -6,7 +7,7 @@ namespace linway_app.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly LinwaydbContext _context;
+        private readonly LinwayDbContext _context;
         private readonly IRepository<Cliente> _repoCliente;
         private readonly IRepository<Producto> _repoProducto;
         private readonly IRepository<ProdVendido> _repoProdVendido;
@@ -19,7 +20,7 @@ namespace linway_app.Repositories
         private readonly IRepository<Pedido> _repoPedido;
         private readonly IRepository<DetalleRecibo> _repoDetalleRecibo;
 
-        public UnitOfWork(LinwaydbContext context)
+        public UnitOfWork(LinwayDbContext context)
         {
             _context = context;
         }

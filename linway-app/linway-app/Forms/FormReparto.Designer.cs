@@ -458,7 +458,7 @@ namespace linway_app.Forms
             this.textBox2.Size = new System.Drawing.Size(45, 24);
             this.textBox2.TabIndex = 7;
             this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
-            this.textBox2.Leave += new System.EventHandler(this.textBox2_Leave);
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label6
             // 
@@ -1163,7 +1163,7 @@ namespace linway_app.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hojas de Reparto";
             this.TopMost = true;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.formReparto_FormClosing);
+            //this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.formReparto_FormClosing);
             this.Load += new System.EventHandler(this.FormReparto_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

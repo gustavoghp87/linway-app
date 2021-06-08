@@ -1,34 +1,30 @@
 ﻿using linway_app.Excel;
 using linway_app.Models;
-using linway_app.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using static linway_app.Forms.Delegates.DClientes;
+using static linway_app.Forms.Delegates.DDiaReparto;
+using static linway_app.Forms.Delegates.DPedido;
+using static linway_app.Forms.Delegates.DReparto;
 
 namespace linway_app.Forms
 {
     public partial class FormReparto : Form
     {
-        private List<Reparto> _lstRepartos = new List<Reparto>();
-        private List<Reparto> _lstRepartosFiltrada = new List<Reparto>();
-        private List<Pedido> _lstPedidos = new List<Pedido>();
-        private List<DiaReparto> _lstDiaRepartos = new List<DiaReparto>();
-        private IServicioCliente _servCliente;
-        private IServicioDiaReparto _servDiaReparto;
-        private IServicioReparto _servReparto;
-        private IServicioPedido _servPedido;
-
-        public FormReparto(IServicioCliente servCliente, IServicioDiaReparto servDiaReparto,
-            IServicioReparto servReparto, IServicioPedido servPedido)
+        private List<Reparto> _lstRepartos;
+        private List<Reparto> _lstRepartosFiltrada;
+        private List<Pedido> _lstPedidos;
+        private List<DiaReparto> _lstDiaRepartos;
+        public FormReparto()
         {
+            _lstRepartos = new List<Reparto>();
+            _lstRepartosFiltrada = new List<Reparto>();
+            _lstPedidos = new List<Pedido>();
+            _lstDiaRepartos = new List<DiaReparto>();
             InitializeComponent();
-            _servCliente = servCliente;
-            _servDiaReparto = servDiaReparto;
-            _servReparto = servReparto;
-            _servPedido = servPedido;
         }
-
         private void FormReparto_Load(object sender, EventArgs e)
         {
             Actualizar();
@@ -36,30 +32,28 @@ namespace linway_app.Forms
         private void Actualizar()
         {
             CargarDiaRepartos();
-            CargarRepartos();
+            _lstRepartos = getRepartos();
             RenderizarRepartos();
         }
         private void CargarDiaRepartos()
         {
-            _lstDiaRepartos = _servDiaReparto.GetAll();
-            if (_lstDiaRepartos.Count == 0 || _lstDiaRepartos == null)
-            {
-                CrearDias();
-            }
+            _lstDiaRepartos = getDiaRepartos();
+            if (_lstDiaRepartos.Count == 0 || _lstDiaRepartos == null) CrearDias();
         }
         private void CrearDias()
         {
-            AgregarDiaReparto(new DiaReparto { Dia = "Lunes" });
-            AgregarDiaReparto(new DiaReparto { Dia = "Martes" });
-            AgregarDiaReparto(new DiaReparto { Dia = "Miercoles" });
-            AgregarDiaReparto(new DiaReparto { Dia = "Jueves" });
-            AgregarDiaReparto(new DiaReparto { Dia = "Viernes" });
-            AgregarDiaReparto(new DiaReparto { Dia = "Sabado" });
-            _lstDiaRepartos = _servDiaReparto.GetAll();
-        }
-        private void CargarRepartos()
-        {
-            _lstRepartos = _servReparto.GetAll();
+            addDiaReparto(new DiaReparto { Dia = "Lunes" });
+            addDiaReparto(new DiaReparto { Dia = "Martes" });
+            addDiaReparto(new DiaReparto { Dia = "Miércoles" });
+            addDiaReparto(new DiaReparto { Dia = "Jueves" });
+            addDiaReparto(new DiaReparto { Dia = "Viernes" });
+            addDiaReparto(new DiaReparto { Dia = "Sábado" });
+            _lstDiaRepartos = getDiaRepartos();
+            if (_lstDiaRepartos == null | _lstDiaRepartos.Count == 0)
+            {
+                MessageBox.Show("Algo falla con la base de datos");
+                Close();
+            }
         }
         private void RenderizarRepartos()
         {
@@ -73,40 +67,6 @@ namespace linway_app.Forms
             dataGridView1.Columns[6].Width = 30;
             dataGridView1.Columns[7].Width = 30;
             dataGridView1.Columns[8].Width = 60;
-        }
-        private void AgregarDiaReparto(DiaReparto diaReparto)
-        {
-            bool response = _servDiaReparto.Add(diaReparto);
-            if (!response) MessageBox.Show("Algo falló al agregar nuevo Día de Reparto a la base de datos");
-        }
-        private void AgregarReparto(Reparto reparto)
-        {
-            bool response = _servReparto.Add(reparto);
-            if (!response) MessageBox.Show("Algo falló al agregar nuevo Reparto a la base de datos");
-        }
-        private void AgregarPedido(Pedido pedido)
-        {
-            bool response = _servPedido.Add(pedido);
-            if (!response) MessageBox.Show("Algo falló al agregar nuevo Pedido a la base de datos");
-        }
-        private List<Cliente> GetClientes()
-        {
-            return _servCliente.GetAll();
-        }
-        private void EditarPedido(Pedido pedido)
-        {
-            bool response = _servPedido.Edit(pedido);
-            if (!response) MessageBox.Show("Algo falló al editar el Reparto en la base de datos");
-        }
-        private void EditarReparto(Reparto reparto)
-        {
-            bool response = _servReparto.Edit(reparto);
-            if (!response) MessageBox.Show("Algo falló al editar el Reparto en la base de datos");
-        }
-        private void EliminarPedido(Pedido pedido)
-        {
-            bool response = _servPedido.Delete(pedido);
-            if (!response) MessageBox.Show("Algo falló al eliminar el Pedido de la base de datos");
         }
         public void LimpiarReparto(Reparto reparto)
         {
@@ -127,15 +87,9 @@ namespace linway_app.Forms
                 pedido.D = 0;
                 pedido.T = 0;
                 pedido.Ae = 0;
-                EditarPedido(pedido);
+                editPedido(pedido);
             }
-            EditarReparto(reparto);
-        }
-
-
-
-        private void CrearCopiaDeSeguridad_Click(object sender, EventArgs e)
-        {
+            editReparto(reparto);
         }
         private void Exportar_Click(object sender, EventArgs e)
         {
@@ -162,27 +116,18 @@ namespace linway_app.Forms
                 }
             }
         }
-
-        private void ImportarButton_Click(object sender, EventArgs e)
-        {
-        }
-
         private void ActualizarHDR(string elDia, string elReparto)
         {
             CargarDiaRepartos();
-            _lstDiaRepartos.Find(x => x.Dia == elDia).Reparto.ToList().Find(x => x.Nombre == elReparto).Pedidos = _lstPedidos;
+            _lstDiaRepartos.Find(x => x.Dia == elDia).Reparto.ToList().Find(x => x.Nombre == elReparto).Pedidos
+                = _lstPedidos;
         }
-
         private void ReCargarHDR(string elDia, string elReparto)
         {
             CargarDiaRepartos();
             _lstRepartos = _lstDiaRepartos.Find(x => x.Dia == elDia).Reparto.ToList();
             _lstPedidos = _lstRepartos.Find(x => x.Nombre == elReparto).Pedidos.ToList();
         }
-
-        private void formReparto_FormClosing(object sender, FormClosingEventArgs e)
-        {}
-
         private void LimpiarPantalla()
         {
             gpNuevoReparto.Visible = false;
@@ -214,7 +159,6 @@ namespace linway_app.Forms
 
 
         //____________________Ejegir Hoja de Reparto______________________________
-
         private void VerDatos(Reparto reparto)
         {
             label14.Text = reparto.Ta.ToString();
@@ -247,7 +191,7 @@ namespace linway_app.Forms
                 catch
                 { }
             }
-            dataGridView1.DataSource = _lstPedidos.ToArray();
+            RenderizarRepartos();
         }
 
         // MENUES
@@ -276,9 +220,11 @@ namespace linway_app.Forms
                 Reparto nuevoReparto = new Reparto
                 {
                     Nombre = textBox1.Text,
-                    DiaRepartoId = diaRep.Id
+                    DiaRepartoId = diaRep.Id,
+                    Estado = "Activado",
+                    Ta=0, Tae=0, Td=0, Te=0, Tl=0, TotalB=0, Tt=0
                 };
-                AgregarReparto(nuevoReparto);
+                addReparto(nuevoReparto);
             }
             LimpiarPantalla();
         }
@@ -308,9 +254,9 @@ namespace linway_app.Forms
                 return;
             }
         }
-        private void textBox2_Leave(object sender, EventArgs e)  // Agregar a destino a recorrido
+        private void textBox2_TextChanged(object sender, EventArgs e)  // Agregar a destino a recorrido
         {
-            List<Cliente> listaClientes = GetClientes();
+            List<Cliente> listaClientes = getClientes();
             if (textBox2.Text != "")
             {
                 long clientId = long.Parse(textBox2.Text);
@@ -336,8 +282,8 @@ namespace linway_app.Forms
                 ReCargarHDR(comboBox4.Text, comboBox5.Text);                // día y reparto
                 comboBox1.SelectedIndex = comboBox4.SelectedIndex;
                 comboBox2.SelectedIndex = comboBox5.SelectedIndex;
-                Cliente cliente = GetClientes().Find(x => x.Direccion == label8.Text);
-                Reparto reparto = _lstRepartos.Find(x => x.Nombre.Contains(comboBox5.Text));
+                Cliente cliente = getClientePorDireccionExacta(label8.Text);
+                Reparto reparto = _lstRepartos.Find(x => x.Nombre.Equals(comboBox5.Text));
                 if (cliente == null || reparto == null) { MessageBox.Show("Falló algo, código 44"); return; };
                 // este agrega Destino sin productos
                 Pedido nuevoPedido = new Pedido
@@ -352,7 +298,7 @@ namespace linway_app.Forms
                     MessageBox.Show("Ese cliente ya estaba en el reparto");
                     return;
                 };
-                AgregarPedido(nuevoPedido);
+                addPedido(nuevoPedido);
                 LimpiarPantalla();
             }
             else
@@ -383,7 +329,7 @@ namespace linway_app.Forms
                 foreach (Reparto reparto in diaReparto.Reparto)
                 {
                     LimpiarReparto(reparto);
-                    EditarReparto(reparto);
+                    editReparto(reparto);
                 }
             }
             LimpiarPantalla();
@@ -584,7 +530,7 @@ namespace linway_app.Forms
         {
             ReCargarHDR(comboBox10.Text, comboBox9.Text);
             Pedido pedido = _lstPedidos.Find(x => x.Direccion == label32.Text);
-            EliminarPedido(pedido);
+            deletePedido(pedido);
             Actualizar();
             LimpiarPantalla();
         }
@@ -639,7 +585,7 @@ namespace linway_app.Forms
                 reparto.TotalB -= pedido.D;
 
                 VerDatos(reparto);
-                EditarReparto(reparto);
+                editReparto(reparto);
                 // EliminarPedido(pedido);   ??
                 LimpiarReparto(reparto);
                 LimpiarPantalla();

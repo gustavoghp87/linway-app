@@ -102,7 +102,7 @@ namespace linway_app.Forms
             if (textBox8.Text != "")
             {
                 try { long.Parse(textBox8.Text); } catch { return; };
-                Producto producto = GetProducto(long.Parse(textBox8.Text));
+                Producto producto = getProducto(long.Parse(textBox8.Text));
                 if (producto != null)
                 {
                     label19.Text = producto.Nombre;
@@ -124,7 +124,7 @@ namespace linway_app.Forms
         {
             if (textBox2.Text != "")
             {
-                Producto producto = GetProductoPorNombre(textBox2.Text);
+                Producto producto = getProductoPorNombre(textBox2.Text);
                 if (producto != null)
                 {
                     label19.Text = producto.Nombre;
@@ -157,7 +157,7 @@ namespace linway_app.Forms
         {
             if (TodoOKmodificarP())
             {
-                Producto producto = GetProductoPorNombreExacto(label19.Text);
+                Producto producto = getProductoPorNombreExacto(label19.Text);
                 if (producto == null) return;
                 try { double.Parse(textBox9.Text); } catch { return; };
                 producto.Precio = double.Parse(textBox9.Text);
@@ -180,7 +180,7 @@ namespace linway_app.Forms
             if (textBox21.Text != "")
             {
                 try { long.Parse(textBox21.Text); } catch { return; };
-                Producto producto = GetProducto(long.Parse(textBox21.Text));
+                Producto producto = getProducto(long.Parse(textBox21.Text));
                 if (producto != null)
                 {
                     label46.Text = producto.Nombre;
@@ -202,7 +202,7 @@ namespace linway_app.Forms
         {
             if (textBox1.Text != "")
             {
-                Producto producto = GetProductoPorNombre(textBox1.Text);
+                Producto producto = getProductoPorNombre(textBox1.Text);
                 if (producto != null)
                 {
                     label46.Text = producto.Nombre;
@@ -224,7 +224,7 @@ namespace linway_app.Forms
         {
             if (cbSeguroBorrar.Checked)
             {
-                Producto producto = GetProductoPorNombreExacto(label46.Text);
+                Producto producto = getProductoPorNombreExacto(label46.Text);
                 button22.Enabled = false;
                 deleteProducto(producto);
                 textBox21.Text = "";

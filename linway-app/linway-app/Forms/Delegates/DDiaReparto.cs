@@ -1,23 +1,27 @@
 ﻿using linway_app.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Windows.Forms;
 
 namespace linway_app.Forms.Delegates
 {
     public static class DDiaReparto
     {
-        public delegate List<Reparto> DGetRepartosPorDia(string diaReparto);
+        public delegate void DAddDiaReparto(DiaReparto diaReparto);
+        public delegate List<DiaReparto> DGetDiaRepartos();
 
-        public readonly static DGetRepartosPorDia getRepartosPorDia
-            = new DGetRepartosPorDia(GetRepartosPorDia);
+        public readonly static DAddDiaReparto addDiaReparto
+            = new DAddDiaReparto(AddDiaReparto);
+        public readonly static DGetDiaRepartos getDiaRepartos
+            = new DGetDiaRepartos(GetDiaRepartos);
 
-        private static List<Reparto> GetRepartosPorDia(string diaReparto)
+        private static void AddDiaReparto(DiaReparto diaReparto)
         {
-            List<DiaReparto> lstDiasRep = Form1._servDiaReparto.GetAll();
-            if (lstDiasRep == null || lstDiasRep.Count == 0) return null;
-            List<Reparto> lstRepartos = lstDiasRep.Find(x => x.Dia == diaReparto).Reparto.ToList();
-            return lstRepartos;
+            bool response = Form1._servDiaReparto.Add(diaReparto);
+            if (!response) MessageBox.Show("Algo falló al agregar nuevo Día de Reparto a la base de datos");
+        }
+        private static List<DiaReparto> GetDiaRepartos()
+        {
+            return Form1._servDiaReparto.GetAll();
         }
     }
 }

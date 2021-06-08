@@ -112,7 +112,7 @@ namespace linway_app.Forms
             this.BusqPorDireLabel.Size = new System.Drawing.Size(71, 18);
             this.BusqPorDireLabel.TabIndex = 6;
             this.BusqPorDireLabel.Text = "Dirección";
-            this.BusqPorDireLabel.Click += new System.EventHandler(this.label6_Click);
+            //this.BusqPorDireLabel.Click += new System.EventHandler(this.label6_Click);
             // 
             // cbSeguroBorrar
             // 
@@ -430,7 +430,7 @@ namespace linway_app.Forms
             this.textBox14.Size = new System.Drawing.Size(131, 21);
             this.textBox14.TabIndex = 2;
             this.textBox14.TextChanged += new System.EventHandler(this.textBox14_TextChanged);
-            this.textBox14.Leave += new System.EventHandler(this.PrepararEditar_Leave);
+            //this.textBox14.Leave += new System.EventHandler(this.PrepararEditar_Leave);
             // 
             // radioButton4
             // 

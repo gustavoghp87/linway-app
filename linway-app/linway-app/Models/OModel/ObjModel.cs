@@ -2,5 +2,6 @@
 {
     abstract public class ObjModel
     {
+        //public string Estado { get; set; }
     }
 }

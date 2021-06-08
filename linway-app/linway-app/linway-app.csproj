@@ -384,7 +384,7 @@
     <Compile Include="Models\Enums\TipoLiquido.cs" />
     <Compile Include="Models\Enums\TipoPolvo.cs" />
     <Compile Include="Models\Enums\TipoR.cs" />
-    <Compile Include="Models\LinwaydbContext.cs" />
+    <Compile Include="Models\DbContexts\LinwayDbContext.cs" />
     <Compile Include="Models\NotaDeEnvio.cs" />
     <Compile Include="Models\OModel\ObjModel.cs" />
     <Compile Include="Models\Pedido.cs" />
@@ -399,7 +399,6 @@
     <Compile Include="Repositories\Interfaces\IUnitOfWork.cs" />
     <Compile Include="Repositories\Interfaces\IRepository.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
-    <Compile Include="Repositories\SQLiteCommands.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
     <Compile Include="Services\Interfaces\IServicioCliente.cs" />
     <Compile Include="Services\Interfaces\IServicioProducto.cs" />
@@ -412,6 +411,7 @@
     <Compile Include="Services\Interfaces\IServicioProdVendido.cs" />
     <Compile Include="Services\Interfaces\IServicioRecibo.cs" />
     <Compile Include="Services\Interfaces\IServicioDetalleRecibo.cs" />
+    <Compile Include="Services\ServicioBase.cs" />
     <Compile Include="Services\ServicioDetalleRecibo.cs" />
     <Compile Include="Services\ServicioDiaReparto.cs" />
     <Compile Include="Services\ServicioProdVendido.cs" />

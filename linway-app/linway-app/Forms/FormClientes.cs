@@ -189,8 +189,6 @@ namespace linway_app.Forms
                 radioButton4.Checked = false;
             }
         }
-        private void PrepararEditar_Leave(object sender, EventArgs e)
-        {}
         private void Editar_Click(object sender, EventArgs e)
         {
             if (TodoOkModificarC())
@@ -220,28 +218,17 @@ namespace linway_app.Forms
         }
 
 
-
         //  Borrar clientes
-
-        private void MostrarClienteEliminar_Leave(object sender, EventArgs e)
-        {
-        }
         private void EliminarCliente_Click(object sender, EventArgs e)
         {
             if (cbSeguroBorrar.Checked)
             {
                 var cliente = getClientePorDireccion(label47.Text);
-                DeleteCliente(cliente);
+                deleteCliente(cliente);
                 cbSeguroBorrar.Checked = false;
                 label47.Text = "";
                 textBox22.Text = "";
             }
-        }
-        private void SalirBtn_Click(object sender, EventArgs e)
-        {
-        }
-        private void label6_Click(object sender, EventArgs e)
-        {
         }
         private void BorrarPorId_textBox_TextChanged(object sender, EventArgs e)
         {
@@ -249,7 +236,7 @@ namespace linway_app.Forms
             {
                 try { long.Parse(textBox22.Text); } catch { return; };
                 label47.Visible = true;
-                Cliente cliente = GetCliente(long.Parse(textBox22.Text));
+                Cliente cliente = getCliente(long.Parse(textBox22.Text));
                 if (cliente == null)
                 {
                     label47.Text = "No encontrado";
