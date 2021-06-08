@@ -1,4 +1,5 @@
 ﻿using linway_app.Models;
+using linway_app.Models.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -37,18 +38,17 @@ namespace linway_app.Forms
         {
             if (recibos != null)
             {
-                List<Recibo> grid1 = new List<Recibo>();
+                List<ERecibo> grid1 = new List<ERecibo>();
                 foreach (Recibo recibo in recibos)
                 {
-                    grid1.Add(new Recibo
+                    grid1.Add(new ERecibo
                     {
                         Id = recibo.Id,
                         ClienteId = recibo.ClienteId,
                         Fecha = recibo.Fecha,
                         DireccionCliente = recibo.DireccionCliente,
                         ImporteTotal = recibo.ImporteTotal,
-                        Impresa = recibo.Impresa
-                        //== 0 ? "No" : "Sí"
+                        Impreso = recibo.Impreso == 1 ? "Sí" : "No"
                     });
                 }
                 dataGridView1.DataSource = grid1.ToArray();
@@ -63,22 +63,13 @@ namespace linway_app.Forms
                 dataGridView2.Columns[1].Width = 55;
             }
         }
-        private long GuardarRecibo(Recibo recibo)
-        {
-            addRecibo(recibo);
-            var response1 = getRecibos();
-            var last = response1[response1.Count - 1];
-            return last.Id;
-        }
-        
-
         private void AbrirFormImprimirRecibo(Recibo recibo)
         {
             var form = Program.GetConfig().GetRequiredService<FormImprimirRecibo>();
             form.Rellenar_Datos(recibo);
             form.Show();
         }
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton1_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton4.Checked) textBox7.Enabled = true;
             else textBox7.Enabled = false;
@@ -91,17 +82,15 @@ namespace linway_app.Forms
                 return;
             }
         }
-        private void textBox8_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBox8_KeyPress(object sender, KeyPressEventArgs e)
         {
             bool IsDec = false;
             int nroDec = 0;
-
             if (e.KeyChar == 8)
             {
                 e.Handled = false;
                 return;
             }
-
             for (int i = 0; i < textBox8.Text.Length; i++)
             {
                 if (textBox8.Text[i] == ',')
@@ -112,7 +101,6 @@ namespace linway_app.Forms
                     return;
                 }
             }
-
             if (e.KeyChar >= 48 && e.KeyChar <= 57)
                 e.Handled = false;
             else if (e.KeyChar == 44)
@@ -189,7 +177,7 @@ namespace linway_app.Forms
                 textBox1.Visible = false;
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Impresa == 1)
+                    if (recibo.Impreso == 1)
                     {
                         lstRecibosFiltrados.Add(recibo);
                     }
@@ -204,7 +192,7 @@ namespace linway_app.Forms
                 textBox1.Visible = false;
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Impresa == 0)
+                    if (recibo.Impreso == 0)
                     {
                         lstRecibosFiltrados.Add(recibo);
                     }
@@ -226,41 +214,24 @@ namespace linway_app.Forms
                 textBox1.Visible = true;
             }
         }
-
         void FiltrarDatos(string texto, char x)
         {
             List<Recibo> lstFiltrados = new List<Recibo>();
-
             foreach (Recibo recibo in _lstRecibos)
             {
-                if (x == 'c')
-                {
-                    if (recibo.DireccionCliente.ToLower().Contains(texto.ToLower()))
-                    {
-                        lstFiltrados.Add(recibo);
-                    }
-                }
-                if (x == 'f')
-                {
-                    if (recibo.Fecha.Contains(texto))
-                    {
-                        lstFiltrados.Add(recibo);
-                    }
-                }
+                if (x == 'c' && recibo.DireccionCliente.ToLower().Contains(texto.ToLower()))
+                    lstFiltrados.Add(recibo);
+                if (x == 'f' && recibo.Fecha.Contains(texto))
+                    lstFiltrados.Add(recibo);
             }
             ActualizarGridRecibos(lstFiltrados);
         }
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             if (comboBox1.SelectedItem.ToString() == "Cliente")
-            {
                 FiltrarDatos(textBox1.Text, 'c');
-            }
             if (comboBox1.SelectedItem.ToString() == "Fecha")
-            {
                 FiltrarDatos(textBox1.Text, 'f');
-            }
         }
 
         
@@ -273,6 +244,7 @@ namespace linway_app.Forms
                 {
                     AbrirFormImprimirRecibo(recibo);
                 }
+                Close();
             }
         }
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
@@ -291,15 +263,14 @@ namespace linway_app.Forms
                 return;
             }
         }
-        private void textBox5_Leave(object sender, EventArgs e)
+        private void TextBox5_TextChanged(object sender, EventArgs e)
         {
             label10.Text = ObtenerListaABorrar().Count.ToString();
         }
-        private void textBox4_Leave(object sender, EventArgs e)
+        private void TextBox4_TextChanged(object sender, EventArgs e)
         {
             label10.Text = ObtenerListaABorrar().Count.ToString();
         }
-
         private List<Recibo> ObtenerListaAImprimir()
         {
             List<Recibo> listaAImprimir = new List<Recibo>();
@@ -308,10 +279,7 @@ namespace linway_app.Forms
             {
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Impresa == 0)
-                    {
-                        listaAImprimir.Add(recibo);
-                    }
+                    if (recibo.Impreso == 0) listaAImprimir.Add(recibo);
                 }
             }
 
@@ -319,38 +287,29 @@ namespace linway_app.Forms
             {
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Fecha == DateTime.Now.ToString("yyy-MM-dd"))
-                    {
-                        listaAImprimir.Add(recibo);
-                    }
+                    if (recibo.Fecha == DateTime.Now.ToString("yyy-MM-dd")) listaAImprimir.Add(recibo);
                 }
             }
 
-            if (textBox2.Text != "" && textBox3.Text != "")
+            if (textBox2.Text != "" && textBox3.Text != "" && comboBox2.SelectedItem.ToString() == "Establecer rango")
             {
-                if (comboBox2.SelectedItem.ToString() == "Establecer rango")
+                try
                 {
-                    try
+                    long menor = long.Parse(textBox2.Text);
+                    long mayor = long.Parse(textBox3.Text);
+                    if (menor <= mayor)
                     {
-                        long menor = long.Parse(textBox2.Text);
-                        long mayor = long.Parse(textBox3.Text);
-                        if (menor <= mayor)
+                        for (long i = menor; i <= mayor; i++)
                         {
-                            for (long i = menor; i <= mayor; i++)
+                            try
                             {
-                                try
-                                {
-                                    listaAImprimir.Add(_lstRecibos.Find(x => x.Id == i));
-                                }
-                                catch {}
+                                listaAImprimir.Add(_lstRecibos.Find(x => x.Id == i));
                             }
+                            catch {}
                         }
                     }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("Rango establecido incorrecto");
-                    }
                 }
+                catch { MessageBox.Show("Rango establecido incorrecto"); }
             }
             return listaAImprimir;
         }
@@ -358,8 +317,7 @@ namespace linway_app.Forms
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBox2.SelectedItem.ToString() == "No impresas"
-                || (comboBox2.SelectedItem.ToString() == "Hoy")
-            )
+                || (comboBox2.SelectedItem.ToString() == "Hoy"))
             {
                 textBox2.Visible = false;
                 textBox3.Visible = false;
@@ -377,11 +335,11 @@ namespace linway_app.Forms
             }
             label7.Text = ObtenerListaAImprimir().Count.ToString();
         }
-        private void textBox3_Leave(object sender, EventArgs e)
+        private void TextBox3_TextChanged(object sender, EventArgs e)
         {
             label7.Text = ObtenerListaAImprimir().Count.ToString();
         }
-        private void textBox2_Leave(object sender, EventArgs e)
+        private void TextBox2_TextChanged(object sender, EventArgs e)
         {
             label7.Text = ObtenerListaAImprimir().Count.ToString();
         }
@@ -446,7 +404,7 @@ namespace linway_app.Forms
             {
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Impresa == 1) listaABorrar.Add(recibo);
+                    if (recibo.Impreso == 1) listaABorrar.Add(recibo);
                 }
             }
             return listaABorrar;
@@ -490,8 +448,8 @@ namespace linway_app.Forms
             ActualizarGridRecibos(_lstRecibos);
         }
 
-        // NUEVO RECIBO
-        private void ClienteId_Leave(object sender, EventArgs e)
+        // AGREGAR RECIBO
+        private void ClienteId_TextChanged(object sender, EventArgs e)
         {
             if (textBox6.Text != "")
             {
@@ -518,18 +476,37 @@ namespace linway_app.Forms
                 button6.Enabled = false;
             }
         }
-
+        private void TextBox9_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox9.Text != "")
+            {
+                Cliente cliente = getClientePorDireccion(textBox9.Text);
+                if (cliente != null)
+                {
+                    label15.Text = cliente.Direccion;
+                    if (_lstDetallesAAgregar.Count != 0)
+                        button6.Enabled = true;
+                }
+                else
+                {
+                    label15.Text = "No encontrado";
+                    button6.Enabled = false;
+                }
+            }
+            else
+            {
+                label15.Text = "";
+                button6.Enabled = false;
+            }
+        }
         private void AgregarDetalle_Click(object sender, EventArgs e)
         {
             if (textBox8.Text != "" && AlgunDetSeleccionado())
             {
                 try { double.Parse(textBox8.Text); } catch { return; };
                 double importe = double.Parse(textBox8.Text);
-                DetalleRecibo nuevoDetalle = new DetalleRecibo
-                {
-                    ReciboId = 1
-                };
-
+                // si ya existe en _lstDetallesAAgregar sumar en vez de crear nuevo
+                DetalleRecibo nuevoDetalle = new DetalleRecibo();
                 if (radioButton1.Checked)
                 {
                     nuevoDetalle.Detalle = "Saldo a Favor";
@@ -561,21 +538,19 @@ namespace linway_app.Forms
                 label18.Text = _subTo.ToString();
                 LimpiarCampos();
 
-                if ((label15.Text != "") && (label15.Text != "No encontrado"))
+                if (label15.Text != "" && label15.Text != "No encontrado")
                 {
                     button6.Enabled = true;
                 }
             }
-            else
-            {
-                MessageBox.Show("Complete correctamente los campos.");
-            }
+            else MessageBox.Show("Complete correctamente los campos.");
         }
 
         private void Limpiar_Click(object sender, EventArgs e)
         {
             LimpiarCampos();
             textBox6.Text = "";
+            textBox8.Text = "";
             label15.Text = "";
             button6.Enabled = false;
             label18.Text = "0";
@@ -585,9 +560,8 @@ namespace linway_app.Forms
 
         private void AnyadirRecibo_Click(object sender, EventArgs e)
         {
-            try { long.Parse(textBox6.Text); } catch { return; };
             CargarRecibos();
-            Cliente cliente = getCliente(long.Parse(textBox6.Text));
+            Cliente cliente = getClientePorDireccionExacta(label15.Text);
             if (cliente == null) return;
 
             Recibo nuevoRecibo = new Recibo
@@ -595,7 +569,7 @@ namespace linway_app.Forms
                 ClienteId = cliente.Id,
                 DireccionCliente = label15.Text,
                 ImporteTotal = _subTo,
-                Impresa = 0,
+                Impreso = 0,
                 Fecha = DateTime.Now.ToString("yyyy-MM-dd")
             };
             long reciboId = addReciboReturnId(nuevoRecibo);
@@ -608,6 +582,7 @@ namespace linway_app.Forms
             
             LimpiarCampos();
             textBox6.Text = "";
+            textBox8.Text = "";
             label15.Text = "";
             button6.Enabled = false;
             label18.Text = "0";

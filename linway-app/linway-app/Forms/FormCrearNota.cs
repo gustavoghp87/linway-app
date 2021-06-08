@@ -186,8 +186,7 @@ namespace linway_app.Forms
                         ProductoId = producto.Id,
                         Descripcion = label38.Text,
                         Cantidad = 1,
-                        Precio = producto.Precio,
-                        Estado = "Activo"
+                        Precio = producto.Precio
                     };
                     if (producto.Nombre.Contains("pendiente"))
                     {
@@ -263,13 +262,12 @@ namespace linway_app.Forms
 
                 NotaDeEnvio nuevaNota = new NotaDeEnvio
                 {
-                    ClientId = cliente.Id,
-                    Client = cliente,
+                    ClienteId = cliente.Id,
+                    Cliente = cliente,
                     Fecha = DateTime.Now.ToString("yyyy-MM-dd"),
                     Impresa = 0,
                     Detalle = ServicioNotaDeEnvio.ExtraerDetalle(_lstProdVendidos),
-                    ImporteTotal = ServicioNotaDeEnvio.ExtraerImporte(_lstProdVendidos),
-                    Estado = "Activo"
+                    ImporteTotal = ServicioNotaDeEnvio.ExtraerImporte(_lstProdVendidos)
                 };
                 long notaId = addNotaDeEnvioReturnId(nuevaNota);
                 if (notaId == 0)
@@ -290,8 +288,7 @@ namespace linway_app.Forms
                         ClienteId = cliente.Id,
                         Cliente = cliente,
                         Fecha = DateTime.Now.ToString(),
-                        NombreCliente = cliente.Direccion,
-                        Estado = "Activo"
+                        NombreCliente = cliente.Direccion
                     };
                     long registroId = addRegistroVentaReturnId(nuevoRegistro);
                     foreach (var prodVendido in _lstProdVendidos)
@@ -341,7 +338,7 @@ namespace linway_app.Forms
                 {
                     List<Reparto> repartos = getRepartosPorDia(comboBox4.Text);
                     Reparto reparto = repartos.Find(x => x.Nombre == comboBox3.Text);
-                    addPedidoARepartoPorNota(reparto, cliente, _lstProdVendidos);
+                    addPedidoAReparto(reparto, cliente, _lstProdVendidos);
                 }
                 Close();
             }

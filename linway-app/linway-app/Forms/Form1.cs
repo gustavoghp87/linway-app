@@ -103,9 +103,8 @@ namespace linway_app.Forms
             {
                 bool response = addCliente(new Cliente
                 {
-                    Name = "Cliente Particular X",
-                    Direccion = "Cliente Particular X",
-                    Estado = "Activo"
+                    Nombre = "Cliente Particular X",
+                    Direccion = "Cliente Particular X"
                 });
                 if (!response)
                 {

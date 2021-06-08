@@ -9,20 +9,23 @@ namespace linway_app.Services.Delegates
     public static class DReparto
     {
         public delegate void DAddReparto(Reparto pedido);
-        public delegate void DAddPedidoARepartoPorNota(Reparto reparto, Cliente cliente,
+        public delegate void DAddPedidoAReparto(Reparto reparto, Cliente cliente,
             List<ProdVendido> lstProdVendidos);
         public delegate List<Reparto> DGetRepartos();
         public delegate List<Reparto> DGetRepartosPorDia(string diaReparto);
+        public delegate Reparto DGetRepartoPorNombre(string dia, string nombre);
         public delegate void DEditReparto(Reparto reparto);
 
         public readonly static DAddReparto addReparto
             = new DAddReparto(AddReparto);
-        public readonly static DAddPedidoARepartoPorNota addPedidoARepartoPorNota
-            = new DAddPedidoARepartoPorNota(AddPedidoARepartoPorNota);
+        public readonly static DAddPedidoAReparto addPedidoAReparto
+            = new DAddPedidoAReparto(AddPedidoAReparto);
         public readonly static DGetRepartos getRepartos
             = new DGetRepartos(GetRepartos);
         public readonly static DGetRepartosPorDia getRepartosPorDia
             = new DGetRepartosPorDia(GetRepartosPorDia);
+        public readonly static DGetRepartoPorNombre getRepartoPorNombre
+            = new DGetRepartoPorNombre(GetRepartoPorNombre);
         public readonly static DEditReparto editReparto
             = new DEditReparto(EditReparto);
 
@@ -31,7 +34,7 @@ namespace linway_app.Services.Delegates
             bool response = Form1._servReparto.Add(reparto);
             if (!response) MessageBox.Show("Algo falló al agregar nuevo Reparto a la base de datos");
         }
-        private static void AddPedidoARepartoPorNota(Reparto reparto, Cliente cliente,
+        private static void AddPedidoAReparto(Reparto reparto, Cliente cliente,
             List<ProdVendido> lstProdVendidos)
         {
             bool response = Form1._servReparto.AgregarPedidoAReparto(cliente.Id,
@@ -54,6 +57,16 @@ namespace linway_app.Services.Delegates
             {
                 return null;
             }
+        }
+        private static Reparto GetRepartoPorNombre(string dia, string nombre)
+        {
+            try
+            {
+                return Form1._servDiaReparto.GetAll()
+                    .Find(x => x.Dia == dia).Reparto.ToList()
+                    .Find(x => x.Nombre == nombre);
+            }
+            catch { return null; }
         }
         private static void EditReparto(Reparto reparto)
         {

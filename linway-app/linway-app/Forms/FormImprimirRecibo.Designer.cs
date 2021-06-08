@@ -56,7 +56,7 @@ namespace linway_app.Forms
             this.lLocalidad.AutoSize = true;
             this.lLocalidad.BackColor = System.Drawing.Color.Transparent;
             this.lLocalidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lLocalidad.Location = new System.Drawing.Point(163, 215);
+            this.lLocalidad.Location = new System.Drawing.Point(163, 212);
             this.lLocalidad.Name = "lLocalidad";
             this.lLocalidad.Size = new System.Drawing.Size(91, 24);
             this.lLocalidad.TabIndex = 5;
@@ -67,7 +67,7 @@ namespace linway_app.Forms
             this.lCalle.AutoSize = true;
             this.lCalle.BackColor = System.Drawing.Color.Transparent;
             this.lCalle.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lCalle.Location = new System.Drawing.Point(152, 169);
+            this.lCalle.Location = new System.Drawing.Point(152, 166);
             this.lCalle.Name = "lCalle";
             this.lCalle.Size = new System.Drawing.Size(69, 24);
             this.lCalle.TabIndex = 4;
@@ -97,7 +97,7 @@ namespace linway_app.Forms
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Arial Narrow", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(50, 295);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(0, 25);
@@ -107,7 +107,7 @@ namespace linway_app.Forms
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Font = new System.Drawing.Font("Arial Narrow", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(220, 295);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(0, 25);
@@ -149,9 +149,10 @@ namespace linway_app.Forms
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Vista Previa";
-            this.Load += new System.EventHandler(this.FormImprimirRecibo_Load);
+            //this.Load += new System.EventHandler(this.FormImprimirRecibo_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

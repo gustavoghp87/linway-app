@@ -10,11 +10,15 @@ namespace linway_app.Services.Delegates
         public delegate bool DAddRecibo(Recibo recibo);
         public delegate long DAddReciboReturnId(Recibo recibo);
         public delegate void DDeleteRecibo(Recibo recibo);
+        public delegate void DEditRecibo(Recibo recibo);
+        public delegate Recibo DGetRecibo(long reciboId);
         public delegate List<Recibo> DGetRecibos();
 
         public readonly static DAddRecibo addRecibo = new DAddRecibo(AddRecibo);
         public readonly static DAddReciboReturnId addReciboReturnId = new DAddReciboReturnId(AddReciboReturnId);
         public readonly static DDeleteRecibo deleteRecibo = new DDeleteRecibo(DeleteRecibo);
+        public readonly static DEditRecibo editRecibo = new DEditRecibo(EditRecibo);
+        public readonly static DGetRecibo getRecibo = new DGetRecibo(GetRecibo);
         public readonly static DGetRecibos getRecibos = new DGetRecibos(GetRecibos);
 
         private static bool AddRecibo(Recibo recibo)
@@ -35,6 +39,15 @@ namespace linway_app.Services.Delegates
         {
             bool response = Form1._servRecibo.Delete(recibo);
             if (!response) MessageBox.Show("Algo falló al eliminar el Recibo de la base de datos");
+        }
+        private static void EditRecibo(Recibo recibo)
+        {
+            bool response = Form1._servRecibo.Edit(recibo);
+            if (!response) MessageBox.Show("Algo falló al editar el Recibo de la base de datos");
+        }
+        private static Recibo GetRecibo(long reciboId)
+        {
+            return Form1._servRecibo.Get(reciboId);
         }
         private static List<Recibo> GetRecibos()
         {

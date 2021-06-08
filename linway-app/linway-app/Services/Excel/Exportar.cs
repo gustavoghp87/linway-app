@@ -66,7 +66,7 @@ namespace linway_app.Excel
                     hoja_trabajo.Cells[i + 2, 2] = listaClientes[i].Direccion.ToString();
                     hoja_trabajo.Cells[i + 2, 3] = listaClientes[i].CodigoPostal.ToString();
                     hoja_trabajo.Cells[i + 2, 4] = listaClientes[i].Telefono.ToString();
-                    hoja_trabajo.Cells[i + 2, 5] = listaClientes[i].Name.ToString();
+                    hoja_trabajo.Cells[i + 2, 5] = listaClientes[i].Nombre.ToString();
                     hoja_trabajo.Cells[i + 2, 6] = listaClientes[i].Cuit.ToString();
                     hoja_trabajo.Cells[i + 2, 7] = listaClientes[i].Tipo.ToString();
                     i++;

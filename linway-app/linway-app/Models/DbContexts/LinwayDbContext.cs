@@ -86,9 +86,9 @@ namespace linway_app.Models.DbContexts
 
                 entity.Property(e => e.Fecha).IsRequired();
 
-                entity.HasOne(d => d.Client)
+                entity.HasOne(d => d.Cliente)
                     .WithMany(p => p.NotaDeEnvio)
-                    .HasForeignKey(d => d.ClientId)
+                    .HasForeignKey(d => d.ClienteId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.Property(e => e.Estado).IsRequired();

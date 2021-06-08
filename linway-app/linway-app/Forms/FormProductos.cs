@@ -42,8 +42,7 @@ namespace linway_app.Forms
                 try { double.Parse(textBox7.Text); } catch { return; };
                 Producto nuevoProducto = new Producto {
                     Nombre = textBox6.Text,
-                    Precio = double.Parse(textBox7.Text),
-                    Estado = "Activo"
+                    Precio = double.Parse(textBox7.Text)
                 };
                 addProducto(nuevoProducto);
                 limpiarBtn.PerformClick();

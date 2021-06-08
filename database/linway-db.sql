@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS "Recibo" (
 	"Id"	INTEGER NOT NULL,
 	"ClienteId"	INTEGER NOT NULL,
 	"Fecha"	TEXT NOT NULL,
-	"Impresa"	INTEGER NOT NULL,
+	"Impreso"	INTEGER NOT NULL,
 	"DireccionCliente"	TEXT NOT NULL,
 	"ImporteTotal"	REAL NOT NULL,
 	"Estado"	TEXT NOT NULL,
@@ -73,13 +73,13 @@ CREATE TABLE IF NOT EXISTS "Recibo" (
 );
 CREATE TABLE IF NOT EXISTS "NotaDeEnvio" (
 	"Id"	INTEGER NOT NULL,
-	"ClientId"	INTEGER NOT NULL,
+	"ClienteId"	INTEGER NOT NULL,
 	"Fecha"	TEXT NOT NULL,
 	"Impresa"	INTEGER NOT NULL,
 	"Detalle"	TEXT NOT NULL,
 	"ImporteTotal"	REAL NOT NULL,
 	"Estado"	TEXT NOT NULL,
-	FOREIGN KEY("ClientId") REFERENCES "Cliente"("Id"),
+	FOREIGN KEY("ClienteId") REFERENCES "Cliente"("Id"),
 	PRIMARY KEY("Id" AUTOINCREMENT)
 );
 CREATE TABLE IF NOT EXISTS "DetalleRecibo" (
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS "Cliente" (
 	"Direccion"	TEXT NOT NULL,
 	"CodigoPostal"	TEXT,
 	"Telefono"	TEXT,
-	"Name"	TEXT,
+	"Nombre"	TEXT,
 	"CUIT"	TEXT,
 	"Tipo"	TEXT,
 	"Estado"	TEXT NOT NULL,

@@ -18,14 +18,19 @@ namespace linway_app.Forms
 {
     public partial class FormVentas : Form
     {
-        private List<Venta> _lstVentas = new List<Venta>();
-        private List<RegistroVenta> _lstRegistros = new List<RegistroVenta>();
-        private List<Venta> _lstAgregarVentas = new List<Venta>();
-        private List<Cliente> _lstClientes = new List<Cliente>();
-        private List<Producto> _lstProductos = new List<Producto>();
+        private List<Venta> _lstVentas;
+        private List<RegistroVenta> _lstRegistros;
+        private List<Venta> _lstAgregarVentas;
+        private List<Cliente> _lstClientes;
+        private List<Producto> _lstProductos;
         public FormVentas()
         {
             InitializeComponent();
+            _lstVentas = new List<Venta>();
+            _lstRegistros = new List<RegistroVenta>();
+            _lstAgregarVentas = new List<Venta>();
+            _lstClientes = new List<Cliente>();
+            _lstProductos = new List<Producto>();
         }
         private void FormVentas_Load(object sender, EventArgs e)
         {
@@ -33,63 +38,67 @@ namespace linway_app.Forms
         }
         private void Actualizar()
         {
-            GetVentas();
-            GetRegistros();
-            _lstProductos = getProductos();
-        }
-        private void GetVentas()
-        {
             _lstClientes = getClientes();
+            _lstProductos = getProductos();
             _lstVentas = getVentas();
+            _lstRegistros = getRegistroVentas();
+            ActualizarGrid1Registros(_lstRegistros);
+            ActualizarGrid3Ventas();
+        }
+        private void ActualizarGrid1Registros(List<RegistroVenta> lstRegistroVentas)
+        {
+            if (lstRegistroVentas == null) return;
+            dataGridView1.DataSource = lstRegistroVentas.ToArray();
+            dataGridView1.Columns[0].Width = 34;
+            dataGridView1.Columns[1].Width = 67;
+            label1.Text = "Registro de ventas (" + lstRegistroVentas.Count.ToString() + ")";
+        }
+        private void ActualizarGrid2ProdVendidos (List<ProdVendido> lstProdVendidos)
+        {
+            if (lstProdVendidos == null) return;
+            dataGridView1.DataSource = lstProdVendidos.ToArray();
+            //dataGridView1.Columns[0].Width = 34;
+            //dataGridView1.Columns[1].Width = 67;
+            //label1.Text = "Registro de ventas (" + lstRegistroVentas.Count.ToString() + ")";
+        }
+        private void ActualizarGrid3Ventas()
+        {
             if (_lstVentas == null) return;
             dataGridView3.DataSource = _lstVentas.ToArray();
             dataGridView3.Columns[0].Width = 20;
             dataGridView3.Columns[1].Width = 40;
             dataGridView3.Columns[3].Visible = false;
         }
-        private void GetRegistros()
-        {
-            _lstRegistros = getRegistroVentas();
-            if (_lstRegistros == null) return;
-            dataGridView1.DataSource = _lstRegistros.ToArray();
-            dataGridView1.Columns[0].Width = 34;
-            dataGridView1.Columns[1].Width = 67;
-            label1.Text = "Registro de ventas (" + _lstRegistros.Count.ToString() + ")";
-        }
         private DiaReparto GetRepartosPordia(string dia)
         {
             List<DiaReparto> dias = getDiaRepartos();
             return dias.Find(x => x.Dia == dia);
         }
-        private void AgregarPedidoAReparto(long clientId, string dia, string reparto, List<ProdVendido> prodVendidos)
+        
+        private long AgregarRegistroVenta(RegistroVenta registroVenta)
         {
-            //bool response = _servReparto.AgregarPedidoAReparto(clientId, dia, reparto, prodVendidos);
-            //if (!response) MessageBox.Show("Algo falló al agregar Pedido al reparto en la base de datos");
+            bool response = addRegistroVenta(registroVenta);
+            if (!response)
+            {
+                MessageBox.Show("Algo falló al agregar Registro de Venta en la base de datos");
+                return 0;
+            }
+            try
+            {
+                var lst = getRegistroVentas();
+                var last = lst[lst.Count - 1];
+                return last.Id;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
-        //private long AgregarRegistroVenta(RegistroVenta registroVenta)
-        //{
-            //bool response = _servRegistroVenta.Add(registroVenta);
-            //if (!response)
-            //{
-            //    MessageBox.Show("Algo falló al agregar Registro de Venta en la base de datos");
-            //    return 0;
-            //}
-            //try
-            //{
-            //    var lst = _servRegistroVenta.GetAll();
-            //    var last = lst[lst.Count - 1];
-            //    return last.Id;
-            //}
-            //catch (Exception)
-            //{
-            //    return 0;
-            //}
-        //}
-        //private void ModificarClienteIdEnRegistroVenta(long clienteId, RegistroVenta registroVenta)
-        //{
-        //    bool response = _servRegistroVenta.ModificarClienteId(clienteId, registroVenta);
-        //    if (!response) MessageBox.Show("Algo falló al editar Registro de Venta en la base de datos (2)");
-        //}
+        private void ModificarClienteIdEnRegistroVenta(long clienteId, RegistroVenta registroVenta)
+        {
+            bool response = editRegistroVentaModificarClienteId(clienteId, registroVenta);
+            if (!response) MessageBox.Show("Algo falló al editar Registro de Venta en la base de datos (2)");
+        }
 
         private void LimpiarPantalla()
         {
@@ -200,7 +209,8 @@ namespace linway_app.Forms
                 // listo // generar un RegistroVenta por cada con "Venta particular"y devuelve un id para usar en los ProdVendido
                 // listo // generar un ProdVendido, necesita producto, precio, cantidad, id de su RegVenta
 
-                GetVentas();
+                try { double.Parse(labelPrecio.Text); } catch { return; };
+                ActualizarGrid3Ventas();
                 double precio = double.Parse(labelPrecio.Text);
                 long clienteId = 1;
                 List<ProdVendido> lstProdVendidos = new List<ProdVendido>();
@@ -259,13 +269,13 @@ namespace linway_app.Forms
                 // agregar cliente a cada RegistroVenta
                 if (checkBox2.Checked)   // enviar a reparto, o sea agregar o modificar pedido del cliente
                 {
-                    try {
-                        clienteId = long.Parse(textBox19.Text);
-                        string dia = comboBox1.Text;
-                        string reparto = comboBox2.Text;
-                        AgregarPedidoAReparto(clienteId, dia, reparto, lstProdVendidos);
-                    }
-                    catch { return; };
+                    try { long.Parse(textBox19.Text); } catch { return; };
+                    string dia = comboBox1.Text;
+                    string nombre = comboBox2.Text;
+                    Cliente cliente = getCliente(long.Parse(textBox19.Text));
+                    Reparto reparto = getRepartoPorNombre(dia, nombre);
+                    addPedidoAReparto(reparto, cliente, lstProdVendidos);
+                    
                     foreach (var nuevoRegVenta in lstNuevosRegistroVentas)
                     {
                         //ModificarClienteIdEnRegistroVenta(clienteId, nuevoRegVenta);
@@ -293,7 +303,7 @@ namespace linway_app.Forms
         }
         private void button17_Click(object sender, EventArgs e)
         {
-            if ((label28.Text != "No encontrado") && (textBox13.Text != "") && (textBox12.Text != ""))
+            if (label28.Text != "No encontrado" && textBox13.Text != "" && textBox12.Text != "")
             {
                 Producto prod = _lstProductos.Find(x => x.Nombre == label28.Text);
                 if (prod == null) return;
@@ -337,20 +347,18 @@ namespace linway_app.Forms
 
         private void AgregarAReparto_SelectedIndexChanged(object sender, EventArgs e)
         {
+            List<Reparto> repartos = getRepartosPorDia(comboBox1.Text);
+            if (repartos == null) return;
             var form = Program.GetConfig().GetRequiredService<FormRepartos>();
-            comboBox2.DataSource = GetRepartosPordia(comboBox1.Text);
+            comboBox2.DataSource = repartos;
             comboBox2.DisplayMember = "Nombre";
             comboBox2.ValueMember = "Nombre";
             form.Close();
         }
 
-        private void textBox19_Leave(object sender, EventArgs e)
+        private void TextBox19_TextChanged(object sender, EventArgs e)
         {
-            if (textBox19.Text == "")
-            {
-                label20.Text = "No encontrado";
-            }
-            else
+            if (textBox19.Text != "")
             {
                 try
                 {
@@ -359,16 +367,12 @@ namespace linway_app.Forms
                     {
                         label20.Text = (_lstClientes.Find(x => x.Id == clienteId).Direccion);
                     }
-                    else
-                    {
-                        label20.Text = "No encontrado";
-                    }
+                    else label20.Text = "No encontrado";
                 }
-                catch (Exception)
-                {
-                    label20.Text = "No encontrado";
-                }
+                catch (Exception) { label20.Text = "No encontrado"; }
             }
+            else
+                label20.Text = "No encontrado";
         }
 
         //reiniciar ventas
@@ -382,15 +386,14 @@ namespace linway_app.Forms
         {
             if (cbSeguroBorrar.Checked)
             {
-                _lstVentas.Clear();
-                //GuardarVentas();
+                foreach (Venta venta in _lstVentas)
+                {
+                    deleteVenta(venta);
+                }
                 LimpiarPantalla();
-                GetVentas();
+                Actualizar();
             }
-            else
-            {
-                MessageBox.Show("Seleccione si esta seguro para borrar la lista de ventas");
-            }
+            else MessageBox.Show("Seleccione si esta seguro para borrar la lista de ventas");
         }
 
 
@@ -407,63 +410,62 @@ namespace linway_app.Forms
 
         
         //Deshacer una venta
-        private void TextBox1_Leave(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs e)
         {
-            bool encontrado = false;
             if (textBox1.Text != "")
             {
-                foreach (RegistroVenta registroVenta in _lstRegistros)
+                try { long.Parse(textBox1.Text); } catch { return; };
+                RegistroVenta registroVenta = getRegistroVenta(long.Parse(textBox1.Text));
+                if (registroVenta != null)
                 {
-                    if (registroVenta.Id == uint.Parse(textBox1.Text))
+                    labelFecha.Text = registroVenta.Fecha;
+                    labelCliente.Text = registroVenta.NombreCliente;
+                    dataGridView2.DataSource = registroVenta.ProdVendido.ToArray();
+                    double importeTotal = 0;
+                    foreach (ProdVendido prodVendido in registroVenta.ProdVendido)
                     {
-                        encontrado = true;
-                        labelFecha.Text = registroVenta.Fecha;
-                        labelCliente.Text = registroVenta.NombreCliente;
-                        dataGridView2.DataSource = registroVenta.ProdVendido.ToArray();
-                        double importeTotal = 0;
-                        foreach (ProdVendido prodVendido in registroVenta.ProdVendido)
-                        {
-                            importeTotal += prodVendido.Precio;
-                        }
-                        labelTotal.Text = "Total: $" + importeTotal.ToString();
-                        bDeshacerVenta.Enabled = true;
+                        importeTotal += prodVendido.Precio;
                     }
+                    labelTotal.Text = "Total: $" + importeTotal.ToString();
+                    bDeshacerVenta.Enabled = true;
                 }
-            }
-            if (!encontrado)
-            {
-                labelCliente.Text = "NO SE ENCONTRO REGISTRO";
-                labelFecha.Text = "XX/XX/XXXX";
-                labelTotal.Text = "Total: $XXXX";
-                dataGridView2.DataSource = new List<ProdVendido>().ToArray();
-                bDeshacerVenta.Enabled = false;
-            }
-        }
-
-        private void bDeshacerVenta_Click(object sender, EventArgs e)
-        {
-            if (cbSeguro.Checked)
-            {
-                try
+                else
                 {
-                    RegistroVenta registro = _lstRegistros.Find(x => x.Id == int.Parse(textBox1.Text.ToString()));
-                    foreach (ProdVendido prodVendido in registro.ProdVendido)
-                        if (EsProducto(prodVendido.ProductoId))
-                            foreach (Venta venta in _lstVentas)
-                                if (venta.ProductoId.Equals(prodVendido.ProductoId)) venta.Cantidad -= prodVendido.Cantidad;
-                    editRegistroVenta(registro);
-                    Actualizar();
-                    LimpiarPantalla();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Algo falló: " + ex.Message);
+                    labelCliente.Text = "";
+                    labelFecha.Text = "";
+                    labelTotal.Text = "";
+                    dataGridView2.DataSource = new List<ProdVendido>().ToArray();
+                    bDeshacerVenta.Enabled = false;
                 }
             }
             else
             {
-                MessageBox.Show("Debe confirmar que esta seguro de deshacer este registro.");
+                labelCliente.Text = "";
+                labelFecha.Text = "";
+                labelTotal.Text = "";
+                ActualizarGrid2ProdVendidos(new List<ProdVendido>());
+                bDeshacerVenta.Enabled = false;
             }
+        }
+        private void DeshacerVenta_Click(object sender, EventArgs e)
+        {
+            if (cbSeguro.Checked)
+            {
+                try { long.Parse(textBox1.Text); } catch { return; };
+                RegistroVenta registro = getRegistroVenta(long.Parse(textBox1.Text));
+                if (registro != null)
+                {
+
+                }
+                foreach (ProdVendido prodVendido in registro.ProdVendido)
+                    if (EsProducto(prodVendido.ProductoId))
+                        foreach (Venta venta in _lstVentas)
+                            if (venta.ProductoId.Equals(prodVendido.ProductoId)) venta.Cantidad -= prodVendido.Cantidad;
+                editRegistroVenta(registro);
+                Actualizar();
+                LimpiarPantalla();
+            }
+            else MessageBox.Show("Debe confirmar que esta seguro de deshacer este registro.");
         }
 
         //////Filtrar datos. 
@@ -528,24 +530,22 @@ namespace linway_app.Forms
                     }
                 }
             }
-            dataGridView1.DataSource = ListaFiltrada.ToArray();
+            ActualizarGrid1Registros(ListaFiltrada);
         }
 
         //Borrar registro de ventas
-        private void borrarRegistrosToolStripMenuItem_Click(object sender, EventArgs e)
+        private void BorrarRegistros_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
             gbBorrarReg.Visible = true;
         }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (bBorrarRegVentas.Enabled)
                 bBorrarRegVentas.Enabled = false;
             else
                 bBorrarRegVentas.Enabled = true;
         }
-
         private bool IntervaloCorrecto()
         {
             try
@@ -564,21 +564,23 @@ namespace linway_app.Forms
                 return false;
             }
         }
-
         private bool SeEncuentraEnIntervalo(long id)
         {
-            long primero = long.Parse(tbDesde.Text);
-            long segundo = long.Parse(tbHasta.Text);
-            return ((primero <= id) & (segundo >= id));
+            try
+            {
+                long primero = long.Parse(tbDesde.Text);
+                long segundo = long.Parse(tbHasta.Text);
+                return (primero <= id & segundo >= id);
+            }
+            catch { return false; }
         }
-
-        private void bBorrarRegVentas_Click(object sender, EventArgs e)
+        private void BorrarRegVentas_Click(object sender, EventArgs e)
         {
             List<RegistroVenta> registrosABorrar = new List<RegistroVenta>();
             if (IntervaloCorrecto())
             {
                 _lstRegistros.RemoveAll(x => SeEncuentraEnIntervalo(x.Id));
-                GetRegistros();
+                Actualizar();
                 LimpiarPantalla();
                 bActualizar.PerformClick();
             }

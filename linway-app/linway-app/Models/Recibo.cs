@@ -19,7 +19,7 @@ namespace linway_app.Models
         public long Id { get; set; }
         public long ClienteId { get; set; }
         public string Fecha { get; set; }
-        public long Impresa { get; set; }
+        public long Impreso { get; set; }
         public string DireccionCliente { get; set; }
 
         [DisplayName("Total")]

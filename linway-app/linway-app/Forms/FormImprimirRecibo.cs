@@ -1,81 +1,53 @@
 using linway_app.Models;
-using linway_app.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using static linway_app.Services.Delegates.DRecibo;
 
 namespace linway_app.Forms
 {
     public partial class FormImprimirRecibo : Form
     {
-        private long impresa = 0;
-        private long NotaId = 0;
-        private List<Recibo> _lstRecibos = new List<Recibo>();
-        //private List<DetalleRecibo> _lstDetalles = new List<DetalleRecibo>();
-        private readonly IServicioRecibo _servRecibo;
-        private readonly IServicioDetalleRecibo _servDetalleRecibo;
+        private Recibo _recibo;
         private Bitmap memoryImage;
 
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         public static extern long BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth,
             int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
 
-        public FormImprimirRecibo(IServicioRecibo servRecibo
-            //, IServicioDetalleRecibo servDetalleRecibo
-        )
+        public FormImprimirRecibo()
         {
             InitializeComponent();
-            _servRecibo = servRecibo;
-            //_servDetalleRecibo = servDetalleRecibo;
-        }
-
-        private void FormImprimirRecibo_Load(object sender, EventArgs e)
-        {
-            CargarRecibos();
-            CargarDetalles();
-        }
-        void CargarRecibos()
-        {
-            _lstRecibos = _servRecibo.GetAll();
-        }
-        void CargarDetalles()
-        {
-            //_lstDetalles = _servDetalleRecibo.GetAll();
-        }
-        private void EditarRecibo(Recibo recibo)
-        {
-            _servRecibo.Edit(recibo);
+            _recibo = new Recibo();
         }
         public void Rellenar_Datos(Recibo recibo)
         {
-            lFecha.Text = recibo.Fecha;
-            string elcodigo = recibo.Id.ToString();
+            _recibo = recibo;
+            lFecha.Text = _recibo.Fecha;
+            string elcodigo = _recibo.Id.ToString();
             for (int i = elcodigo.Length; i < 5; i++)
             {
                 elcodigo = "0" + elcodigo;
             }
             lCodigo.Text = elcodigo;
-            int separador = recibo.DireccionCliente.IndexOf('-');
-            lCalle.Text = recibo.DireccionCliente.Substring(0, separador);
-            lLocalidad.Text = recibo.DireccionCliente.Substring(separador + 1);
-            lTotal.Text = "$ " + recibo.ImporteTotal.ToString(".00");
-            foreach (DetalleRecibo detalle in recibo.DetalleRecibos)
+            //int separador = recibo.DireccionCliente.IndexOf('-');
+            //lCalle.Text = recibo.DireccionCliente.Substring(0, separador);
+            lCalle.Text = " ";
+            //lLocalidad.Text = recibo.DireccionCliente.Substring(separador + 1);
+            lLocalidad.Text = _recibo.DireccionCliente;
+            lTotal.Text = "$ " + _recibo.ImporteTotal.ToString(".00");
+            foreach (DetalleRecibo detalle in _recibo.DetalleRecibos)
             {
                 label1.Text = label1.Text + detalle.Detalle + Environment.NewLine;
                 label2.Text = label2.Text + detalle.Importe.ToString(".00") + Environment.NewLine;
             }
-            impresa = recibo.Impresa;
-            NotaId = recibo.Id;
         }
         private void MarcarImpresa()
         {
-            if (impresa == 0)
+            if (_recibo.Impreso == 0)
             {
-                CargarRecibos();
-                var recibo = _lstRecibos.Find(x => x.Id == NotaId);
-                recibo.Impresa = 1;
-                EditarRecibo(recibo);
+                _recibo.Impreso = 1;
+                editRecibo(_recibo);
             }
         }
         private void CaptureScreen()

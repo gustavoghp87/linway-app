@@ -66,16 +66,16 @@ namespace linway_app.Services
             List<DiaReparto> dias = _unitOfWork.RepoDiaReparto.GetAll();
             DiaReparto dia = dias.Find(x => x.Dia == diaDeReparto);
             Reparto reparto = dia.Reparto.ToList().Find(x => x.Nombre == nombreReparto);
-            Pedido pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == nota.ClientId);
+            Pedido pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == nota.ClienteId);
 
             if (pedido == null) // no existe pedido para este cliente este día y reparto, se hace pedido
             {
                 Pedido nuevoPedido = new Pedido
                 {
-                    ClienteId = nota.ClientId,
-                    Cliente = nota.Client,
+                    ClienteId = nota.ClienteId,
+                    Cliente = nota.Cliente,
                     RepartoId = reparto.Id,
-                    Direccion = nota.Client.Direccion,
+                    Direccion = nota.Cliente.Direccion,
                     Entregar = 1,
                     ProductosText = "",
                     ProdVendidos = nota.ProdVendidos,

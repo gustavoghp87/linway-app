@@ -41,7 +41,6 @@ namespace linway_app.Forms
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
             this.button1 = new System.Windows.Forms.Button();
-            this.AutoSize = true;
             this.SuspendLayout();
             // 
             // lFecha
@@ -69,7 +68,7 @@ namespace linway_app.Forms
             this.lCalle.AutoSize = true;
             this.lCalle.BackColor = System.Drawing.Color.Transparent;
             this.lCalle.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lCalle.Location = new System.Drawing.Point(144, 56);
+            this.lCalle.Location = new System.Drawing.Point(144, 53);
             this.lCalle.Name = "lCalle";
             this.lCalle.Size = new System.Drawing.Size(49, 24);
             this.lCalle.TabIndex = 2;
@@ -80,7 +79,7 @@ namespace linway_app.Forms
             this.lLocalidad.AutoSize = true;
             this.lLocalidad.BackColor = System.Drawing.Color.Transparent;
             this.lLocalidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lLocalidad.Location = new System.Drawing.Point(144, 94);
+            this.lLocalidad.Location = new System.Drawing.Point(144, 91);
             this.lLocalidad.Name = "lLocalidad";
             this.lLocalidad.Size = new System.Drawing.Size(91, 24);
             this.lLocalidad.TabIndex = 3;
@@ -154,6 +153,7 @@ namespace linway_app.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(784, 506);
@@ -172,7 +172,6 @@ namespace linway_app.Forms
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Vista Previa";
-            //this.Load += new System.EventHandler(this.FormImprimirNota_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

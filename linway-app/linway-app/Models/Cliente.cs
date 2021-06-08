@@ -32,7 +32,7 @@ namespace linway_app.Models
         public string Telefono { get; set; }
 
         [DisplayName("Nombre del Cliente")]
-        public string Name { get; set; }
+        public string Nombre { get; set; }
 
         [DisplayName("CUIT")]
         public string Cuit { get; set; }

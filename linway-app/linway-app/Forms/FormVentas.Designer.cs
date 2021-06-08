@@ -184,7 +184,7 @@ namespace linway_app.Forms
             this.textBox19.TabIndex = 43;
             this.textBox19.Visible = false;
             this.textBox19.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
-            this.textBox19.Leave += new System.EventHandler(this.textBox19_Leave);
+            this.textBox19.TextChanged += new System.EventHandler(this.TextBox19_TextChanged);
             // 
             // label15
             // 
@@ -405,7 +405,7 @@ namespace linway_app.Forms
             this.borrarRegistrosToolStripMenuItem.Name = "borrarRegistrosToolStripMenuItem";
             this.borrarRegistrosToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.borrarRegistrosToolStripMenuItem.Text = "Borrar registros";
-            this.borrarRegistrosToolStripMenuItem.Click += new System.EventHandler(this.borrarRegistrosToolStripMenuItem_Click);
+            this.borrarRegistrosToolStripMenuItem.Click += new System.EventHandler(this.BorrarRegistros_ToolStripMenuItem_Click);
             // 
             // bExportar
             // 
@@ -568,7 +568,7 @@ namespace linway_app.Forms
             this.bDeshacerVenta.TabIndex = 24;
             this.bDeshacerVenta.Text = "Deshacer venta";
             this.bDeshacerVenta.UseVisualStyleBackColor = true;
-            this.bDeshacerVenta.Click += new System.EventHandler(this.bDeshacerVenta_Click);
+            this.bDeshacerVenta.Click += new System.EventHandler(this.DeshacerVenta_Click);
             // 
             // bSalirVerReg
             // 
@@ -616,7 +616,7 @@ namespace linway_app.Forms
             this.textBox1.Size = new System.Drawing.Size(33, 21);
             this.textBox1.TabIndex = 5;
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
-            this.textBox1.Leave += new System.EventHandler(this.TextBox1_Leave);
+            this.textBox1.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
             // 
             // label2
             // 
@@ -713,7 +713,7 @@ namespace linway_app.Forms
             this.bBorrarRegVentas.TabIndex = 29;
             this.bBorrarRegVentas.Text = "Borrar";
             this.bBorrarRegVentas.UseVisualStyleBackColor = true;
-            this.bBorrarRegVentas.Click += new System.EventHandler(this.bBorrarRegVentas_Click);
+            this.bBorrarRegVentas.Click += new System.EventHandler(this.BorrarRegVentas_Click);
             // 
             // checkBox1
             // 
@@ -725,7 +725,7 @@ namespace linway_app.Forms
             this.checkBox1.TabIndex = 28;
             this.checkBox1.Text = "Estoy seguro de borrar los registros \r\nseleccionados.\r\n";
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
             // 
             // tbHasta
             // 

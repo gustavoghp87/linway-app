@@ -70,7 +70,7 @@ namespace linway_app.Excel
                         Direccion = direccion,
                         CodigoPostal = codigoPostal,
                         Telefono = telefono,
-                        Name = nombre,
+                        Nombre = nombre,
                         Cuit = cuit,
                         Tipo = tipo.ToString()
                     });

@@ -358,6 +358,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Entities\ENotaDeEnvio.cs" />
+    <Compile Include="Models\Entities\EPedido.cs" />
+    <Compile Include="Models\Entities\ERecibo.cs" />
     <Compile Include="Services\Delegates\DDetalleRecibo.cs" />
     <Compile Include="Services\Delegates\DDiaReparto.cs" />
     <Compile Include="Services\Delegates\DNotaDeEnvio.cs" />

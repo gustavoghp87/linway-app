@@ -230,7 +230,6 @@ namespace linway_app.Forms
                 {
                     Nombre = textBox1.Text,
                     DiaRepartoId = diaRep.Id,
-                    Estado = "Activado",
                     Ta = 0, Tae = 0, Td = 0, Te = 0, Tl = 0, TotalB = 0, Tt = 0
                 };
                 addReparto(nuevoReparto);
@@ -302,8 +301,9 @@ namespace linway_app.Forms
                     ClienteId = cliente.Id,
                     Direccion = cliente.Direccion,
                     RepartoId = reparto.Id,
-                    A = 0, Ae = 0, D = 0, E = 0, L = 0, T = 0, ProductosText = "", Entregar = 0,
-                    Estado = "Activo"
+                    ProductosText = "",
+                    Entregar = 0,
+                    A = 0, Ae = 0, D = 0, E = 0, L = 0, T = 0
                 };
                 // corroborar que no esté antes de agregar   <----------
                 if (_lstPedidos.Exists(x => x.ClienteId == nuevoPedido.ClienteId && x.RepartoId == nuevoPedido.RepartoId))

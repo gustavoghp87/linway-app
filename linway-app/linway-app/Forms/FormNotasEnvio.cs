@@ -161,9 +161,9 @@ namespace linway_app.Forms
             {
                 if (x == 'c')
                 {
-                    if (nota.Client != null
-                        && nota.Client.Direccion != null
-                        && nota.Client.Direccion.ToLower().Contains(texto.ToLower())
+                    if (nota.Cliente != null
+                        && nota.Cliente.Direccion != null
+                        && nota.Cliente.Direccion.ToLower().Contains(texto.ToLower())
                     )
                     {
                         lstFiltrada.Add(nota);
@@ -450,7 +450,7 @@ namespace linway_app.Forms
                 NotaDeEnvio nota = _lstNotaDeEnvios.Find(x => x.Id == id);
                 if (nota != null)
                 {
-                    label16.Text = nota.Client.Direccion;
+                    label16.Text = nota.Cliente.Direccion;
                     if (comboBox5.Text != "") button6.Enabled = true;
                     else button6.Enabled = false;
                 }
@@ -508,10 +508,10 @@ namespace linway_app.Forms
                     }
                     label20.Text = impTotal.ToString();
                     button10.Enabled = true;
-                    if (notaDeEnvio.Client != null && notaDeEnvio.Client.Direccion != null)
+                    if (notaDeEnvio.Cliente != null && notaDeEnvio.Cliente.Direccion != null)
                     {
-                        label18.Text = notaDeEnvio.Client.Direccion.ToString() +
-                            " - " + notaDeEnvio.ClientId.ToString();
+                        label18.Text = notaDeEnvio.Cliente.Direccion.ToString() +
+                            " - " + notaDeEnvio.ClienteId.ToString();
                     }
                 }
                 else
@@ -670,7 +670,6 @@ namespace linway_app.Forms
             nuevoPV.Descripcion = prod.Nombre;
             nuevoPV.Cantidad = 1;
             nuevoPV.Precio = prod.Precio;
-            nuevoPV.Estado = "Activo";
             nuevoPV.ProductoId = prod.Id;
             if (prod == null) return;
             if (prod.Nombre.Contains("pendiente")) { }

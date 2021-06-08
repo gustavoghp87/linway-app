@@ -44,10 +44,9 @@ namespace linway_app.Forms
                     Direccion = textBox2.Text + " - " + textBox18.Text,
                     CodigoPostal = textBox4.Text,
                     Telefono = textBox5.Text,
-                    Name = textBox1.Text,
+                    Nombre = textBox1.Text,
                     Cuit = textBox3.Text,
-                    Tipo = tipo.ToString(),
-                    Estado = "Activo"
+                    Tipo = tipo.ToString()
                 };
                 addCliente(nuevoCliente);
                 button2.PerformClick();
@@ -127,7 +126,7 @@ namespace linway_app.Forms
                 textBox23.Text = cliente.Direccion;
                 textBox24.Text = cliente.Telefono?.ToString();
                 textBox25.Text = cliente.CodigoPostal?.ToString();
-                textBox11.Text = cliente.Name;
+                textBox11.Text = cliente.Nombre;
                 textBox10.Text = cliente.Cuit;
                 if (cliente.Tipo == TipoR.Inscripto.ToString())
                 {
@@ -198,7 +197,7 @@ namespace linway_app.Forms
                 cliente.Direccion = textBox23.Text;
                 cliente.Telefono = textBox24.Text;
                 cliente.CodigoPostal = textBox25.Text;
-                cliente.Name = textBox11.Text;
+                cliente.Nombre = textBox11.Text;
                 cliente.Cuit = textBox10.Text;
                 if (radioButton3.Checked)
                 {

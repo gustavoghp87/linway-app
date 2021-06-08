@@ -17,7 +17,7 @@ namespace linway_app.Models
         }
 
         public long Id { get; set; }
-        public long ClientId { get; set; }
+        public long ClienteId { get; set; }
         public string Fecha { get; set; }
         public long Impresa { get; set; }
         public string Detalle { get; set; }
@@ -25,7 +25,7 @@ namespace linway_app.Models
         [DisplayName("Total")]
         public double ImporteTotal { get; set; }
         public string Estado { get; set; }
-        public virtual Cliente Client { get; set; }
+        public virtual Cliente Cliente { get; set; }
         public virtual ICollection<ProdVendido> ProdVendidos { get; set; }
     }
 }
