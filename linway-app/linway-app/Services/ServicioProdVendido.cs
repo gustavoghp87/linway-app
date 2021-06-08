@@ -14,24 +14,25 @@ namespace linway_app.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public bool Add(ProdVendido producto)
+        public bool Add(ProdVendido prodVendido)
         {
-            return _unitOfWork.RepoProdVendido.Add(producto);
+            prodVendido.Estado = "Activo";
+            return _unitOfWork.RepoProdVendido.Add(prodVendido);
         }
-        public bool Delete(ProdVendido producto)
+        public bool Delete(ProdVendido prodVendido)
         {
-            producto.Estado = "Eliminado";
-            return _unitOfWork.RepoProdVendido.Edit(producto);
+            prodVendido.Estado = "Eliminado";
+            return _unitOfWork.RepoProdVendido.Edit(prodVendido);
         }
-        public bool Edit(ProdVendido producto)
+        public bool Edit(ProdVendido prodVendido)
         {
-            return _unitOfWork.RepoProdVendido.Edit(producto);
+            return _unitOfWork.RepoProdVendido.Edit(prodVendido);
         }
         public ProdVendido Get(long id)
         {
-            ProdVendido producto = _unitOfWork.RepoProdVendido.Get(id);
-            return producto == null || producto.Estado == null || producto.Estado == "Eliminado"
-                ? null : producto;
+            ProdVendido prodVendido = _unitOfWork.RepoProdVendido.Get(id);
+            return prodVendido == null || prodVendido.Estado == null || prodVendido.Estado == "Eliminado"
+                ? null : prodVendido;
         }
         public List<ProdVendido> GetAll()
         {

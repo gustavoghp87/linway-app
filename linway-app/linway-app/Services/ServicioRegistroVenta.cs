@@ -15,6 +15,7 @@ namespace linway_app.Services
         }
         public bool Add(RegistroVenta registroVenta)
         {
+            registroVenta.Estado = "Activo";
             return _unitOfWork.RepoRegistroVenta.Add(registroVenta);
         }
         public bool Delete(RegistroVenta registroVenta)

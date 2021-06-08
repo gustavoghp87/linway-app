@@ -2,7 +2,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using static linway_app.Forms.Delegates.DNotaDeEnvio;
+using static linway_app.Services.Delegates.DNotaDeEnvio;
 
 namespace linway_app.Forms
 {

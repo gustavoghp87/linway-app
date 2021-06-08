@@ -15,6 +15,7 @@ namespace linway_app.Services
         }
         public bool Add(Venta venta)
         {
+            venta.Estado = "Activo";
             return _unitOfWork.RepoVenta.Add(venta);
         }
         public bool Delete(Venta venta)

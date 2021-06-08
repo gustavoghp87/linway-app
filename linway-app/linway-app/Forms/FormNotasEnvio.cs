@@ -5,12 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using static linway_app.Forms.Delegates.DDiaReparto;
-using static linway_app.Forms.Delegates.DReparto;
-using static linway_app.Forms.Delegates.DNotaDeEnvio;
-using static linway_app.Forms.Delegates.DPedido;
-using static linway_app.Forms.Delegates.DProductos;
-using static linway_app.Forms.Delegates.DProdVendido;
+using static linway_app.Services.Delegates.DDiaReparto;
+using static linway_app.Services.Delegates.DReparto;
+using static linway_app.Services.Delegates.DNotaDeEnvio;
+using static linway_app.Services.Delegates.DPedido;
+using static linway_app.Services.Delegates.DProductos;
+using static linway_app.Services.Delegates.DProdVendido;
 
 namespace linway_app.Forms
 {

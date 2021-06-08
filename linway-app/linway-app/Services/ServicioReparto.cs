@@ -17,6 +17,7 @@ namespace linway_app.Services
         }
         public bool Add(Reparto reparto)
         {
+            reparto.Estado = "Activo";
             return _unitOfWork.RepoReparto.Add(reparto);
         }
         public bool Delete(Reparto reparto)
@@ -79,7 +80,7 @@ namespace linway_app.Services
                     RepartoId = reparto.Id,
                     ProdVendidos = lstProdVendidos,
                     Entregar = 1,
-                    Productos = "",
+                    ProductosText = "",
                     A = 0,
                     Ae = 0,
                     D = 0,
@@ -90,7 +91,7 @@ namespace linway_app.Services
                 };
                 foreach (var prodVendido in lstProdVendidos)
                 {
-                    nuevoPedido.Productos += prodVendido.Descripcion + " | ";
+                    nuevoPedido.ProductosText += prodVendido.Descripcion + " | ";
                 }
                 _unitOfWork.RepoPedido.Add(nuevoPedido);
             }
@@ -98,7 +99,7 @@ namespace linway_app.Services
             {
                 foreach (var prodVendido in lstProdVendidos)
                 {
-                    pedidoViejo.Productos += prodVendido.Descripcion + " | ";
+                    pedidoViejo.ProductosText += prodVendido.Descripcion + " | ";
                 }
                 _unitOfWork.RepoPedido.Edit(pedidoViejo);
             }

@@ -15,6 +15,7 @@ namespace linway_app.Services
         }
         public bool Add(Cliente cliente)
         {
+            cliente.Estado = "Activo";
             return _unitOfWork.RepoCliente.Add(cliente);
         }
         public bool Delete(Cliente cliente)

@@ -358,15 +358,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\Delegates\DDiaReparto.cs" />
-    <Compile Include="Forms\Delegates\DNotaDeEnvio.cs" />
-    <Compile Include="Forms\Delegates\DPedido.cs" />
-    <Compile Include="Forms\Delegates\DProductos.cs" />
-    <Compile Include="Forms\Delegates\DClientes.cs" />
-    <Compile Include="Forms\Delegates\DProdVendido.cs" />
-    <Compile Include="Forms\Delegates\DRegistroVenta.cs" />
-    <Compile Include="Forms\Delegates\DReparto.cs" />
-    <Compile Include="Forms\Delegates\DVentas.cs" />
+    <Compile Include="Services\Delegates\DDetalleRecibo.cs" />
+    <Compile Include="Services\Delegates\DDiaReparto.cs" />
+    <Compile Include="Services\Delegates\DNotaDeEnvio.cs" />
+    <Compile Include="Services\Delegates\DPedido.cs" />
+    <Compile Include="Services\Delegates\DProductos.cs" />
+    <Compile Include="Services\Delegates\DClientes.cs" />
+    <Compile Include="Services\Delegates\DProdVendido.cs" />
+    <Compile Include="Services\Delegates\DRecibo.cs" />
+    <Compile Include="Services\Delegates\DRegistroVenta.cs" />
+    <Compile Include="Services\Delegates\DReparto.cs" />
+    <Compile Include="Services\Delegates\DVentas.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\DetalleRecibo.cs" />
     <Compile Include="Models\DiaReparto.cs" />
@@ -471,11 +473,11 @@
     <Compile Include="Forms\FormRecibos.Designer.cs">
       <DependentUpon>FormRecibos.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormReparto.cs">
+    <Compile Include="Forms\FormRepartos.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormReparto.Designer.cs">
-      <DependentUpon>FormReparto.cs</DependentUpon>
+    <Compile Include="Forms\FormRepartos.Designer.cs">
+      <DependentUpon>FormRepartos.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormVentas.cs">
       <SubType>Form</SubType>
@@ -513,8 +515,8 @@
     <EmbeddedResource Include="Forms\FormRecibos.resx">
       <DependentUpon>FormRecibos.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormReparto.resx">
-      <DependentUpon>FormReparto.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormRepartos.resx">
+      <DependentUpon>FormRepartos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormVentas.resx">
       <DependentUpon>FormVentas.cs</DependentUpon>

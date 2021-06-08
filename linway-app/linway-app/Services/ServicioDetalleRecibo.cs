@@ -15,6 +15,7 @@ namespace linway_app.Services
         }
         public bool Add(DetalleRecibo detalleRecibo)
         {
+            detalleRecibo.Estado = "Activo";
             return _unitOfWork.RepoDetalleRecibo.Add(detalleRecibo);
         }
         public bool Delete(DetalleRecibo detalleRecibo)

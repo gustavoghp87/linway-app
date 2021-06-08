@@ -1,7 +1,7 @@
 ﻿using linway_app.Models;
 using System;
 using System.Windows.Forms;
-using static linway_app.Forms.Delegates.DProductos;
+using static linway_app.Services.Delegates.DProductos;
 
 namespace linway_app.Forms
 {
@@ -11,12 +11,6 @@ namespace linway_app.Forms
         {
             InitializeComponent();
         }
-        private void FormProductos_Load(object sender, EventArgs e)
-        {}
-        private void CrearCopiaSeguridad_Click(object sender, EventArgs e)
-        {}
-        private void ImportarBtn(object sender, EventArgs e)
-        {}
         private void Limpiar_Click(object sender, EventArgs e)
         {
             textBox21.Text = "";

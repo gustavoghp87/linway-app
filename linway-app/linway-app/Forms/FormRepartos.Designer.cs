@@ -1,7 +1,7 @@
 ﻿
 namespace linway_app.Forms
 {
-    partial class FormReparto
+    partial class FormRepartos
     {
         /// <summary>
         /// Variable del diseñador requerida.
@@ -34,7 +34,6 @@ namespace linway_app.Forms
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.opcionesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.agregarRepartoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -123,6 +122,8 @@ namespace linway_app.Forms
             this.button18 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.exportarButton = new System.Windows.Forms.Button();
+            this.labelDire = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.gpNuevoReparto.SuspendLayout();
@@ -141,7 +142,7 @@ namespace linway_app.Forms
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 36);
+            this.label1.Location = new System.Drawing.Point(14, 36);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 20);
             this.label1.TabIndex = 0;
@@ -151,7 +152,7 @@ namespace linway_app.Forms
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(191, 36);
+            this.label2.Location = new System.Drawing.Point(208, 36);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(84, 20);
             this.label2.TabIndex = 1;
@@ -164,27 +165,28 @@ namespace linway_app.Forms
             this.comboBox1.Items.AddRange(new object[] {
             "Lunes",
             "Martes",
-            "Miercoles",
+            "Miércoles",
             "Jueves",
-            "Viernes", "Sabado"});
-            this.comboBox1.Location = new System.Drawing.Point(64, 34);
+            "Viernes",
+            "Sábado"});
+            this.comboBox1.Location = new System.Drawing.Point(62, 34);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 26);
             this.comboBox1.TabIndex = 2;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(270, 34);
+            this.comboBox2.Location = new System.Drawing.Point(296, 34);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 26);
+            this.comboBox2.Size = new System.Drawing.Size(134, 26);
             this.comboBox2.TabIndex = 3;
             this.comboBox2.Visible = false;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox2_SelectedIndexChanged);
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.comboBox2);
             this.groupBox1.Controls.Add(this.label2);
@@ -196,16 +198,6 @@ namespace linway_app.Forms
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Buscar Hoja de Reparto";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(397, 30);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(49, 32);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Ver";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.Ver_Click);
             // 
             // menuStrip1
             // 
@@ -370,6 +362,8 @@ namespace linway_app.Forms
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.textBox6);
+            this.groupBox2.Controls.Add(this.labelDire);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.button4);
             this.groupBox2.Controls.Add(this.comboBox5);
@@ -392,7 +386,7 @@ namespace linway_app.Forms
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(6, 105);
+            this.label8.Location = new System.Drawing.Point(6, 142);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(46, 18);
             this.label8.TabIndex = 13;
@@ -433,9 +427,10 @@ namespace linway_app.Forms
             this.comboBox4.Items.AddRange(new object[] {
             "Lunes",
             "Martes",
-            "Miercoles",
+            "Miércoles",
             "Jueves",
-            "Viernes", "Sabado"});
+            "Viernes",
+            "Sábado"});
             this.comboBox4.Location = new System.Drawing.Point(41, 33);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(88, 26);
@@ -453,21 +448,21 @@ namespace linway_app.Forms
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(156, 76);
+            this.textBox2.Location = new System.Drawing.Point(156, 71);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(45, 24);
             this.textBox2.TabIndex = 7;
-            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 76);
+            this.label6.Location = new System.Drawing.Point(21, 75);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(144, 18);
+            this.label6.Size = new System.Drawing.Size(124, 18);
             this.label6.TabIndex = 6;
-            this.label6.Text = "Codigo de cliente:";
+            this.label6.Text = "Código Cliente:";
             // 
             // button1
             // 
@@ -700,9 +695,10 @@ namespace linway_app.Forms
             this.comboBox6.Items.AddRange(new object[] {
             "Lunes",
             "Martes",
-            "Miercoles",
+            "Miércoles",
             "Jueves",
-            "Viernes", "Sabado"});
+            "Viernes",
+            "Sábado"});
             this.comboBox6.Location = new System.Drawing.Point(74, 26);
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(121, 24);
@@ -780,9 +776,10 @@ namespace linway_app.Forms
             this.comboBox8.Items.AddRange(new object[] {
             "Lunes",
             "Martes",
-            "Miercoles",
+            "Miércoles",
             "Jueves",
-            "Viernes", "Sabado"});
+            "Viernes",
+            "Sábado"});
             this.comboBox8.Location = new System.Drawing.Point(41, 40);
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(88, 26);
@@ -990,9 +987,10 @@ namespace linway_app.Forms
             this.comboBox10.Items.AddRange(new object[] {
             "Lunes",
             "Martes",
-            "Miercoles",
+            "Miércoles",
             "Jueves",
-            "Viernes", "Sabado"});
+            "Viernes",
+            "Sábado"});
             this.comboBox10.Location = new System.Drawing.Point(41, 33);
             this.comboBox10.Name = "comboBox10";
             this.comboBox10.Size = new System.Drawing.Size(88, 26);
@@ -1135,15 +1133,33 @@ namespace linway_app.Forms
             this.exportarButton.UseVisualStyleBackColor = true;
             this.exportarButton.Click += new System.EventHandler(this.Exportar_Click);
             // 
+            // labelDire
+            // 
+            this.labelDire.AutoSize = true;
+            this.labelDire.Location = new System.Drawing.Point(8, 105);
+            this.labelDire.Name = "labelDire";
+            this.labelDire.Size = new System.Drawing.Size(142, 18);
+            this.labelDire.TabIndex = 14;
+            this.labelDire.Text = "Dirección Cliente:";
+            //this.labelDire.Click += new System.EventHandler(this.labelDire_Click);
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(156, 102);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(129, 24);
+            this.textBox6.TabIndex = 15;
+            this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
+            // 
             // FormReparto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 676);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.exportarButton);
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.gpNuevoReparto);
-            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.groupBox4);
@@ -1163,7 +1179,6 @@ namespace linway_app.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hojas de Reparto";
             this.TopMost = true;
-            //this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.formReparto_FormClosing);
             this.Load += new System.EventHandler(this.FormReparto_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -1208,7 +1223,6 @@ namespace linway_app.Forms
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ComboBox comboBox4;
         private System.Windows.Forms.Label label5;
@@ -1287,5 +1301,7 @@ namespace linway_app.Forms
         private System.Windows.Forms.Button button18;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button exportarButton;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Label labelDire;
     }
 }

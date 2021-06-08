@@ -231,9 +231,9 @@ namespace linway_app.Forms
             this.comboBox1.Items.AddRange(new object[] {
             "Lunes",
             "Martes",
-            "Miercoles",
+            "Miércoles",
             "Jueves",
-            "Viernes", "Sabado"});
+            "Viernes", "Sábado"});
             this.comboBox1.Location = new System.Drawing.Point(41, 292);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(99, 23);

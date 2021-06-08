@@ -4,14 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using static linway_app.Forms.Delegates.DClientes;
-using static linway_app.Forms.Delegates.DDiaReparto;
-using static linway_app.Forms.Delegates.DNotaDeEnvio;
-using static linway_app.Forms.Delegates.DProductos;
-using static linway_app.Forms.Delegates.DProdVendido;
-using static linway_app.Forms.Delegates.DRegistroVenta;
-using static linway_app.Forms.Delegates.DReparto;
-using static linway_app.Forms.Delegates.DVentas;
+using static linway_app.Services.Delegates.DClientes;
+using static linway_app.Services.Delegates.DNotaDeEnvio;
+using static linway_app.Services.Delegates.DProductos;
+using static linway_app.Services.Delegates.DProdVendido;
+using static linway_app.Services.Delegates.DRegistroVenta;
+using static linway_app.Services.Delegates.DReparto;
+using static linway_app.Services.Delegates.DVentas;
 
 namespace linway_app.Forms
 {

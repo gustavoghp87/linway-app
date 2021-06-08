@@ -1,10 +1,12 @@
 ﻿using linway_app.Models;
-using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
+using static linway_app.Services.Delegates.DClientes;
+using static linway_app.Services.Delegates.DDetalleRecibo;
+using static linway_app.Services.Delegates.DRecibo;
+
 
 namespace linway_app.Forms
 {
@@ -12,18 +14,11 @@ namespace linway_app.Forms
     {
         private List<Recibo> _lstRecibos = new List<Recibo>();
         private List<DetalleRecibo> _lstDetallesAAgregar = new List<DetalleRecibo>();
-        private List<Cliente> _lstClientes = new List<Cliente>();
-        private readonly IServicioCliente _servCliente;
-        private readonly IServicioRecibo _servRecibo;
-        private readonly IServicioDetalleRecibo _servDetalleRecibo;
         private double _subTo = 0;
 
-        public FormRecibos(IServicioCliente servCliente, IServicioRecibo servRecibo, IServicioDetalleRecibo servDetalleRecibo)
+        public FormRecibos()
         {
             InitializeComponent();
-            _servCliente = servCliente;
-            _servRecibo = servRecibo;
-            _servDetalleRecibo = servDetalleRecibo;
         }
         private void FormRecibos_Load(object sender, EventArgs e)
         {
@@ -32,16 +27,11 @@ namespace linway_app.Forms
         private void Actualizar()
         {
             CargarRecibos();
-            CargarClientes();
             ActualizarGridRecibos(_lstRecibos);
         }
         private void CargarRecibos()
         {
-            _lstRecibos = _servRecibo.GetAll();
-        }
-        private void CargarClientes()
-        {
-            _lstClientes = _servCliente.GetAll();
+            _lstRecibos = getRecibos();
         }
         private void ActualizarGridRecibos(List<Recibo> recibos)
         {
@@ -53,6 +43,7 @@ namespace linway_app.Forms
                     grid1.Add(new Recibo
                     {
                         Id = recibo.Id,
+                        ClienteId = recibo.ClienteId,
                         Fecha = recibo.Fecha,
                         DireccionCliente = recibo.DireccionCliente,
                         ImporteTotal = recibo.ImporteTotal,
@@ -74,22 +65,13 @@ namespace linway_app.Forms
         }
         private long GuardarRecibo(Recibo recibo)
         {
-            bool response = _servRecibo.Add(recibo);
-            if (!response) MessageBox.Show("Algo falló al guardar el Recibo en la base de datos");
-            var response1 = _servRecibo.GetAll();
+            addRecibo(recibo);
+            var response1 = getRecibos();
             var last = response1[response1.Count - 1];
             return last.Id;
         }
-        private void EliminarRecibo(Recibo recibo)
-        {
-            bool response = _servRecibo.Delete(recibo);
-            if (!response) MessageBox.Show("Algo falló al eliminar el Recibo de la base de datos");
-        }
-        private void AgregarDetalle(DetalleRecibo detalle)
-        {
-            bool response = _servDetalleRecibo.Add(detalle);
-            if (!response) MessageBox.Show("Algo falló al guardar el Detalle de Recibo en la base de datos");
-        }
+        
+
         private void AbrirFormImprimirRecibo(Recibo recibo)
         {
             var form = Program.GetConfig().GetRequiredService<FormImprimirRecibo>();
@@ -98,14 +80,8 @@ namespace linway_app.Forms
         }
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton4.Checked)
-            {
-                textBox7.Enabled = true;
-            }
-            else
-            {
-                textBox7.Enabled = false;
-            }
+            if (radioButton4.Checked) textBox7.Enabled = true;
+            else textBox7.Enabled = false;
         }
         private void SoloNumeros(object sender, KeyPressEventArgs e)
         {
@@ -175,13 +151,6 @@ namespace linway_app.Forms
                 seleccionado = true;
             return seleccionado;
         }
-        private void bCopiaSeguridad_Click(object sender, EventArgs e)
-        {
-        }
-        private void Importar_Click(object sender, EventArgs e)
-        {
-        }
-
 
 
         // ____________ filtrar datos________________
@@ -477,10 +446,7 @@ namespace linway_app.Forms
             {
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Impresa == 1)
-                    {
-                        listaABorrar.Add(recibo);
-                    }
+                    if (recibo.Impresa == 1) listaABorrar.Add(recibo);
                 }
             }
             return listaABorrar;
@@ -512,7 +478,7 @@ namespace linway_app.Forms
         {
             foreach (Recibo recibo in ObtenerListaABorrar())
             {
-                EliminarRecibo(recibo);
+                deleteRecibo(recibo);
             }
             Actualizar();
             comboBox3.SelectedItem = "(Seleccionar)";
@@ -529,35 +495,35 @@ namespace linway_app.Forms
         {
             if (textBox6.Text != "")
             {
-                try
+                try { long.Parse(textBox6.Text); } catch { return; };
+                long id = long.Parse(textBox6.Text);
+                Cliente cliente = getCliente(id);
+                if (cliente != null)
                 {
-                    long id = long.Parse(textBox6.Text);
-                    if (_lstClientes.Exists(x => x.Id == id))
+                    label15.Text = cliente.Direccion;
+                    if (_lstDetallesAAgregar.Count != 0)
                     {
-                        label15.Text = _lstClientes.Find(x => x.Id == id).Direccion;
-                        if (_lstDetallesAAgregar.Count != 0)
-                        {
-                            button6.Enabled = true;
-                        }
-                    }
-                    else
-                    {
-                        label15.Text = "No encontrado";
-                        button6.Enabled = false;
+                        button6.Enabled = true;
                     }
                 }
-                catch (Exception)
+                else
                 {
-                    MessageBox.Show("No se encontró");
+                    label15.Text = "No encontrado";
+                    button6.Enabled = false;
                 }
             }
-
+            else
+            {
+                label15.Text = "";
+                button6.Enabled = false;
+            }
         }
 
         private void AgregarDetalle_Click(object sender, EventArgs e)
         {
             if (textBox8.Text != "" && AlgunDetSeleccionado())
             {
+                try { double.Parse(textBox8.Text); } catch { return; };
                 double importe = double.Parse(textBox8.Text);
                 DetalleRecibo nuevoDetalle = new DetalleRecibo
                 {
@@ -619,24 +585,25 @@ namespace linway_app.Forms
 
         private void AnyadirRecibo_Click(object sender, EventArgs e)
         {
+            try { long.Parse(textBox6.Text); } catch { return; };
             CargarRecibos();
-            Cliente cliente = _lstClientes.Find(x => x.Id == long.Parse(textBox6.Text));
+            Cliente cliente = getCliente(long.Parse(textBox6.Text));
             if (cliente == null) return;
 
             Recibo nuevoRecibo = new Recibo
             {
                 ClienteId = cliente.Id,
                 DireccionCliente = label15.Text,
-                DetalleRecibos = _lstDetallesAAgregar,
                 ImporteTotal = _subTo,
                 Impresa = 0,
                 Fecha = DateTime.Now.ToString("yyyy-MM-dd")
             };
-            long reciboId = GuardarRecibo(nuevoRecibo);
+            long reciboId = addReciboReturnId(nuevoRecibo);
+            if (reciboId == 0) { MessageBox.Show("Algo falló en el proceso"); return; }
             foreach (DetalleRecibo detalle in _lstDetallesAAgregar)
             {
                 detalle.ReciboId = reciboId;
-                AgregarDetalle(detalle);
+                addDetalleRecibo(detalle);
             }
             
             LimpiarCampos();

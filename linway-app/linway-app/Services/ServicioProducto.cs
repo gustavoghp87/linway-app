@@ -17,6 +17,7 @@ namespace linway_app.Services
         }
         public bool Add(Producto producto)
         {
+            producto.Estado = "Activo";
             producto.Precio = Math.Truncate(producto.Precio * 100) / 100;
             return _unitOfWork.RepoProducto.Add(producto);
         }

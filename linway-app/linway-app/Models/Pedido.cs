@@ -26,7 +26,7 @@ namespace linway_app.Models
         public long D { get; set; }
         public long T { get; set; }
         public long Ae { get; set; }
-        public string Productos { get; set; }
+        public string ProductosText { get; set; }
         public string Estado { get; set; }
 
         public virtual Cliente Cliente { get; set; }

@@ -1,9 +1,10 @@
-﻿using linway_app.Models;
+﻿using linway_app.Forms;
+using linway_app.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms.Delegates
+namespace linway_app.Services.Delegates
 {
     public static class DReparto
     {

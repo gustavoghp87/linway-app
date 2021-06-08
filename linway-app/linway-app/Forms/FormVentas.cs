@@ -5,14 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using static linway_app.Forms.Delegates.DClientes;
-using static linway_app.Forms.Delegates.DDiaReparto;
-using static linway_app.Forms.Delegates.DNotaDeEnvio;
-using static linway_app.Forms.Delegates.DProductos;
-using static linway_app.Forms.Delegates.DProdVendido;
-using static linway_app.Forms.Delegates.DRegistroVenta;
-using static linway_app.Forms.Delegates.DReparto;
-using static linway_app.Forms.Delegates.DVentas;
+using static linway_app.Services.Delegates.DClientes;
+using static linway_app.Services.Delegates.DDiaReparto;
+using static linway_app.Services.Delegates.DNotaDeEnvio;
+using static linway_app.Services.Delegates.DProductos;
+using static linway_app.Services.Delegates.DProdVendido;
+using static linway_app.Services.Delegates.DRegistroVenta;
+using static linway_app.Services.Delegates.DReparto;
+using static linway_app.Services.Delegates.DVentas;
 
 namespace linway_app.Forms
 {
@@ -337,7 +337,7 @@ namespace linway_app.Forms
 
         private void AgregarAReparto_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var form = Program.GetConfig().GetRequiredService<FormReparto>();
+            var form = Program.GetConfig().GetRequiredService<FormRepartos>();
             comboBox2.DataSource = GetRepartosPordia(comboBox1.Text);
             comboBox2.DisplayMember = "Nombre";
             comboBox2.ValueMember = "Nombre";

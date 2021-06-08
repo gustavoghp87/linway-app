@@ -15,6 +15,7 @@ namespace linway_app.Services
         }
         public bool Add(NotaDeEnvio notaDeEnvio)
         {
+            notaDeEnvio.Estado = "Activo";
             return _unitOfWork.RepoNotaDeEnvio.Add(notaDeEnvio);
         }
         public bool Delete(NotaDeEnvio notaDeEnvio)

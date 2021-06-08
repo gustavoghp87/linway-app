@@ -36,7 +36,7 @@ namespace linway_app
             services.AddTransient<FormNotasEnvio>();
             services.AddTransient<FormProductos>();
             services.AddTransient<FormRecibos>();
-            services.AddTransient<FormReparto>();
+            services.AddTransient<FormRepartos>();
             services.AddTransient<FormVentas>();
 
             services.AddTransient<IServicioCliente, ServicioCliente>();

@@ -4,8 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using static linway_app.Forms.Delegates.DClientes;
-using static linway_app.Forms.Delegates.DProductos;
+using static linway_app.Services.Delegates.DClientes;
+using static linway_app.Services.Delegates.DProductos;
 
 namespace linway_app.Forms
 {
@@ -152,7 +152,7 @@ namespace linway_app.Forms
         }
         private void AbrirHojasDeReparto_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Program.GetConfig().GetRequiredService<FormReparto>();
+            var form = Program.GetConfig().GetRequiredService<FormRepartos>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }

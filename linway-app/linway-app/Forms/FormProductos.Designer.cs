@@ -420,7 +420,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Productos";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.FormProductos_Load);
+            //this.Load += new System.EventHandler(this.FormProductos_Load);
             this.gbBorrar.ResumeLayout(false);
             this.gbBorrar.PerformLayout();
             this.gbAgregar.ResumeLayout(false);

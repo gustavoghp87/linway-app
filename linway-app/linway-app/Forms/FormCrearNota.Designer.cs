@@ -127,10 +127,10 @@ namespace linway_app.Forms
             this.comboBox4.Items.AddRange(new object[] {
             "Lunes",
             "Martes",
-            "Miercoles",
+            "Miércoles",
             "Jueves",
             "Viernes",
-            "Sabado"});
+            "Sábado"});
             this.comboBox4.Location = new System.Drawing.Point(476, 243);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(99, 21);

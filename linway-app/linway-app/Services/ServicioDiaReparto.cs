@@ -15,6 +15,7 @@ namespace linway_app.Services
         }
         public bool Add(DiaReparto diaReparto)
         {
+            diaReparto.Estado = "Activo";
             return _unitOfWork.RepoDiaReparto.Add(diaReparto);
         }
         public bool Delete(DiaReparto diaReparto)

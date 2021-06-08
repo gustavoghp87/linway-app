@@ -17,6 +17,7 @@ namespace linway_app.Services
         }
         //public bool Add(T t)
         //{
+        //    t.Estado = "Activo";
         //    return _unitOfWork.RepoBase.Add(t);
         //}
         //public bool Delete(T t)
