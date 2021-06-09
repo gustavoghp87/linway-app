@@ -537,7 +537,7 @@ namespace linway_app.Forms
             if (_lstProdVendidos.Count != 0)
             {
                 NotaDeEnvio nota = _lstNotaDeEnvios.Find(x => x.Id == long.Parse(textBox7.Text));
-                nota = ServicioNotaDeEnvio.Modificar(nota, _lstProdVendidos);
+                nota = modificarNotaDeEnvio(nota, _lstProdVendidos);
                 addNotaDeEnvioReturnId(nota);
                 ActualizarNotas();
                 ActualizarGrid1(_lstNotaDeEnvios);

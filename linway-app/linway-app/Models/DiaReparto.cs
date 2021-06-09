@@ -17,7 +17,7 @@ namespace linway_app.Models
 
         public long Id { get; set; }
         public string Dia { get; set; }
-        public string Estado { get; set; }
+        //public string Estado { get; set; }
         public virtual ICollection<Reparto> Reparto { get; set; }
     }
 }

@@ -39,30 +39,8 @@ namespace linway_app
             services.AddTransient<FormRepartos>();
             services.AddTransient<FormVentas>();
 
-            services.AddTransient<IServicioCliente, ServicioCliente>();
-            services.AddTransient<IServicioDiaReparto, ServicioDiaReparto>();
-            services.AddTransient<IServicioNotaDeEnvio, ServicioNotaDeEnvio>();
-            services.AddTransient<IServicioPedido, ServicioPedido>();
-            services.AddTransient<IServicioProducto, ServicioProducto>();
-            services.AddTransient<IServicioProdVendido, ServicioProdVendido>();
-            services.AddTransient<IServicioRecibo, ServicioRecibo>();
-            services.AddTransient<IServicioDetalleRecibo, ServicioDetalleRecibo>();
-            services.AddTransient<IServicioRegistroVenta, ServicioRegistroVenta>();
-            services.AddTransient<IServicioReparto, ServicioReparto>();
-            services.AddTransient<IServicioVenta, ServicioVenta>();
-
-            //services.AddScoped<IRepository<Cliente>, RepositoryCliente>();
-            //services.AddScoped<IRepository<DiaReparto>, RepositoryDiaReparto>();
-            //services.AddScoped<IRepository<NotaDeEnvio>, RepositoryNotaDeEnvio>();
-            //services.AddScoped<IRepository<Pedido>, RepositoryPedido>();
-            //services.AddScoped<IRepository<Producto>, RepositoryProducto>();
-            //services.AddScoped<IRepository<ProdVendido>, RepositoryProdVendido>();
-            //services.AddScoped<IRepository<Recibo>, RepositoryRecibo>();
-            //services.AddScoped<IRepository<RegistroVenta>, RepositoryRegistroVenta>();
-            //services.AddScoped<IRepository<Reparto>, RepositoryReparto>();
-            //services.AddScoped<IRepository<Venta>, RepositoryVenta>();
+            services.AddScoped(typeof(IService<>), typeof(Service<>));
             services.AddScoped(typeof(IRepository<>), typeof(RepositoryBase<>));
-
             services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
 

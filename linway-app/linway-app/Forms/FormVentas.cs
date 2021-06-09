@@ -94,11 +94,6 @@ namespace linway_app.Forms
                 return 0;
             }
         }
-        private void ModificarClienteIdEnRegistroVenta(long clienteId, RegistroVenta registroVenta)
-        {
-            bool response = editRegistroVentaModificarClienteId(clienteId, registroVenta);
-            if (!response) MessageBox.Show("Algo falló al editar Registro de Venta en la base de datos (2)");
-        }
 
         private void LimpiarPantalla()
         {
@@ -278,7 +273,8 @@ namespace linway_app.Forms
                     
                     foreach (var nuevoRegVenta in lstNuevosRegistroVentas)
                     {
-                        //ModificarClienteIdEnRegistroVenta(clienteId, nuevoRegVenta);
+                        nuevoRegVenta.ClienteId = clienteId;
+                        editRegistroVenta(nuevoRegVenta);
                     }
                 }
 

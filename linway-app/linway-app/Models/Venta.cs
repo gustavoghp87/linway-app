@@ -12,7 +12,7 @@ namespace linway_app.Models
         public long Id { get; set; }
         public long ProductoId { get; set; }
         public long Cantidad { get; set; }
-        public string Estado { get; set; }
+        //public string Estado { get; set; }
         public virtual Producto Producto { get; set; }
     }
 }

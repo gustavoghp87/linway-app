@@ -23,7 +23,7 @@ namespace linway_app.Models
 
         [DisplayName("Precio($)")]
         public double Precio { get; set; }
-        public string Estado { get; set; }
+        //public string Estado { get; set; }
 
         public virtual ICollection<ProdVendido> ProdVendido { get; set; }
         public virtual ICollection<Venta> Venta { get; set; }

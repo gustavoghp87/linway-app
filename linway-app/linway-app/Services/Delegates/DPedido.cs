@@ -1,5 +1,7 @@
 ﻿using linway_app.Forms;
 using linway_app.Models;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace linway_app.Services.Delegates
@@ -27,7 +29,7 @@ namespace linway_app.Services.Delegates
         }
         private static void AddPedidoDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId)
         {
-            bool response = Form1._servPedido.AgregarDesdeNota(diaDeReparto, nombreReparto, notaDeEnvioId);
+            bool response = AgregarDesdeNota(diaDeReparto, nombreReparto, notaDeEnvioId);
             if (!response) MessageBox.Show("Algo falló al agregar Nota de Envío a la base de datos");
         }
         private static void DeletePedido(Pedido pedido)
@@ -39,6 +41,46 @@ namespace linway_app.Services.Delegates
         {
             bool response = Form1._servPedido.Edit(pedido);
             if (!response) MessageBox.Show("Algo falló al editar el Pedido en la base de datos");
+        }
+
+        private static bool AgregarDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId)
+        {
+            NotaDeEnvio nota = Form1._servNotaDeEnvio.Get(notaDeEnvioId);
+            List<DiaReparto> dias = Form1._servDiaReparto.GetAll();
+            DiaReparto dia = dias.Find(x => x.Dia == diaDeReparto);
+            Reparto reparto = dia.Reparto.ToList().Find(x => x.Nombre == nombreReparto);
+            Pedido pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == nota.ClienteId);
+
+            if (pedido == null) // no existe pedido para este cliente este día y reparto, se hace pedido
+            {
+                Pedido nuevoPedido = new Pedido
+                {
+                    ClienteId = nota.ClienteId,
+                    Cliente = nota.Cliente,
+                    RepartoId = reparto.Id,
+                    Direccion = nota.Cliente.Direccion,
+                    Entregar = 1,
+                    ProductosText = "",
+                    ProdVendidos = nota.ProdVendidos,
+                    Reparto = reparto
+                };
+                foreach (var prodVendido in nota.ProdVendidos)
+                {
+                    nuevoPedido.ProductosText += prodVendido.Descripcion + " | ";
+                }
+                Form1._servPedido.Add(nuevoPedido);
+            }
+            else
+            {
+                foreach (var prodVendido in nota.ProdVendidos)
+                {
+                    pedido.ProductosText += prodVendido.Descripcion + " | ";
+                    pedido.ProdVendidos.Add(prodVendido);
+                }
+                Form1._servPedido.Edit(pedido);
+            }
+
+            return true;
         }
     }
 }

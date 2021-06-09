@@ -24,7 +24,7 @@ namespace linway_app.Models
 
         [DisplayName("Total")]
         public double ImporteTotal { get; set; }
-        public string Estado { get; set; }
+        //public string Estado { get; set; }
         public virtual Cliente Cliente { get; set; }
         public virtual ICollection<ProdVendido> ProdVendidos { get; set; }
     }

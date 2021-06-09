@@ -150,6 +150,7 @@ namespace linway_app.Forms
             textBox3.Text = "";
             textBox4.Text = "";
             textBox2.Text = "";
+            textBox6.Text = "";
             textBox1.Text = "";
             textBox5.Text = "";
             textBox7.Text = "";
@@ -313,6 +314,7 @@ namespace linway_app.Forms
                 };
                 addPedido(nuevoPedido);
                 LimpiarPantalla();
+                Actualizar();
             }
             else
             {
@@ -323,7 +325,7 @@ namespace linway_app.Forms
 
         //_LImpiar DATOS_ 
         // 1. todos los dias
-        private void todasLuAViToolStripMenuItem_Click(object sender, EventArgs e)
+        private void TodasLuAVi_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
             groupBox4.Visible = true;

@@ -11,29 +11,29 @@ namespace linway_app.Forms
 {
     public partial class Form1 : Form
     {
-        public static IServicioCliente _servCliente;
-        public static IServicioDetalleRecibo _servDetalleRecibo;
-        public static IServicioDiaReparto _servDiaReparto;
-        public static IServicioNotaDeEnvio _servNotaDeEnvio;
-        public static IServicioPedido _servPedido;
-        public static IServicioProducto _servProducto;
-        public static IServicioProdVendido _servProdVendido;
-        public static IServicioRecibo _servRecibo;
-        public static IServicioRegistroVenta _servRegistroVenta;
-        public static IServicioReparto _servReparto;
-        public static IServicioVenta _servVenta;
+        public static IService<Cliente> _servCliente;
+        public static IService<DetalleRecibo> _servDetalleRecibo;
+        public static IService<DiaReparto> _servDiaReparto;
+        public static IService<NotaDeEnvio> _servNotaDeEnvio;
+        public static IService<Pedido> _servPedido;
+        public static IService<Producto> _servProducto;
+        public static IService<ProdVendido> _servProdVendido;
+        public static IService<Recibo> _servRecibo;
+        public static IService<RegistroVenta> _servRegistroVenta;
+        public static IService<Reparto> _servReparto;
+        public static IService<Venta> _servVenta;
         public Form1(
-            IServicioCliente servCliente,
-            IServicioDetalleRecibo servDetalleRecibo,
-            IServicioDiaReparto servDiaReparto,
-            IServicioNotaDeEnvio servNotaDeEnvio,
-            IServicioPedido servPedido,
-            IServicioProducto servProducto,
-            IServicioProdVendido servProdVendido,
-            IServicioRecibo servRecibo,
-            IServicioRegistroVenta servRegistroVenta,
-            IServicioReparto servReparto,
-            IServicioVenta servVenta
+            IService<Cliente> servCliente,
+            IService<DetalleRecibo> servDetalleRecibo,
+            IService<DiaReparto> servDiaReparto,
+            IService<NotaDeEnvio> servNotaDeEnvio,
+            IService<Pedido> servPedido,
+            IService<Producto> servProducto,
+            IService<ProdVendido> servProdVendido,
+            IService<Recibo> servRecibo,
+            IService<RegistroVenta> servRegistroVenta,
+            IService<Reparto> servReparto,
+            IService<Venta> servVenta
             )
         {
             _servCliente = servCliente;

@@ -12,7 +12,5 @@ namespace linway_app.Services.Interfaces
         bool Edit(Reparto reparto);
         Reparto Get(long id);
         List<Reparto> GetAll();
-        void LimpiarDatos(Reparto reparto);
-        bool AgregarPedidoAReparto(long clientId, string dia, string repartoNombre, List<ProdVendido> lstProdVendidos);
     }
 }

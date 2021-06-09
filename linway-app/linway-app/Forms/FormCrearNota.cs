@@ -266,8 +266,8 @@ namespace linway_app.Forms
                     Cliente = cliente,
                     Fecha = DateTime.Now.ToString("yyyy-MM-dd"),
                     Impresa = 0,
-                    Detalle = ServicioNotaDeEnvio.ExtraerDetalle(_lstProdVendidos),
-                    ImporteTotal = ServicioNotaDeEnvio.ExtraerImporte(_lstProdVendidos)
+                    Detalle = extraerDetalleDeNotaDeEnvio(_lstProdVendidos),
+                    ImporteTotal = extraerImporteDeNotaDeEnvio(_lstProdVendidos)
                 };
                 long notaId = addNotaDeEnvioReturnId(nuevaNota);
                 if (notaId == 0)

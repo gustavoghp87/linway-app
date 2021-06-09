@@ -416,18 +416,11 @@
     <Compile Include="Services\Interfaces\IServicioProdVendido.cs" />
     <Compile Include="Services\Interfaces\IServicioRecibo.cs" />
     <Compile Include="Services\Interfaces\IServicioDetalleRecibo.cs" />
-    <Compile Include="Services\ServicioBase.cs" />
-    <Compile Include="Services\ServicioDetalleRecibo.cs" />
-    <Compile Include="Services\ServicioDiaReparto.cs" />
-    <Compile Include="Services\ServicioProdVendido.cs" />
-    <Compile Include="Services\ServicioRegistroVenta.cs" />
-    <Compile Include="Services\ServicioVenta.cs" />
-    <Compile Include="Services\ServicioCliente.cs" />
-    <Compile Include="Services\ServicioNotaDeEnvio.cs" />
-    <Compile Include="Services\ServicioPedido.cs" />
-    <Compile Include="Services\ServicioProducto.cs" />
-    <Compile Include="Services\ServicioRecibo.cs" />
-    <Compile Include="Services\ServicioReparto.cs" />
+    <Compile Include="Services\Interfaces\IService.cs" />
+    <Compile Include="Services\Interfaces\IServicioUnitOfWork.cs" />
+    <Compile Include="Services\Service.cs" />
+    <Compile Include="Services\residuoServicioPedido.cs" />
+    <Compile Include="Services\ResiduoServicioReparto.cs" />
     <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
     </Compile>

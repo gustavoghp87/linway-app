@@ -1,6 +1,7 @@
 ﻿using linway_app.Forms;
 using linway_app.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace linway_app.Services.Delegates
@@ -32,9 +33,22 @@ namespace linway_app.Services.Delegates
         }
         private static long AddRegistroVentaReturnId(RegistroVenta registroVenta)
         {
-            long response = Form1._servRegistroVenta.AddAndGetId(registroVenta);
-            if (response == 0) MessageBox.Show("Algo falló al agregar Registro de Venta a base de datos");
-            return response;
+            try
+            {
+                bool response = AddRegistroVenta(registroVenta);
+                if (!response)
+                {
+                    MessageBox.Show("Algo falló al agregar Registro de Venta a base de datos");
+                    return 0;
+                }
+                var lst = GetRegistroVentas();
+                return lst.Last().Id;
+            }
+            catch
+            {
+                MessageBox.Show("Algo falló al agregar Registro de Venta a base de datos");
+                return 0;
+            }
         }
         private static RegistroVenta GetRegistroVenta(long registroVentaId)
         {

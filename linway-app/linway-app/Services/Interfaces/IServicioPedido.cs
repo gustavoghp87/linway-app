@@ -10,6 +10,5 @@ namespace linway_app.Services.Interfaces
         bool Edit(Pedido reparto);
         Pedido Get(long id);
         List<Pedido> GetAll();
-        bool AgregarDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId);
     }
 }

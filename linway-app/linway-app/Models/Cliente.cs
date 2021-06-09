@@ -40,7 +40,7 @@ namespace linway_app.Models
         [DisplayName("Tipo R.")]
         public string Tipo { get; set; }
 
-        public string Estado { get; set; }
+        //public string Estado { get; set; }
 
         public virtual ICollection<NotaDeEnvio> NotaDeEnvio { get; set; }
         public virtual ICollection<Pedido> Pedido { get; set; }

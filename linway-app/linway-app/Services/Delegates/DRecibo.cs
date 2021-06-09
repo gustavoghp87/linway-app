@@ -13,6 +13,7 @@ namespace linway_app.Services.Delegates
         public delegate void DEditRecibo(Recibo recibo);
         public delegate Recibo DGetRecibo(long reciboId);
         public delegate List<Recibo> DGetRecibos();
+        public delegate double DCalcularTotalRecibo(Recibo recibo);
 
         public readonly static DAddRecibo addRecibo = new DAddRecibo(AddRecibo);
         public readonly static DAddReciboReturnId addReciboReturnId = new DAddReciboReturnId(AddReciboReturnId);
@@ -20,6 +21,7 @@ namespace linway_app.Services.Delegates
         public readonly static DEditRecibo editRecibo = new DEditRecibo(EditRecibo);
         public readonly static DGetRecibo getRecibo = new DGetRecibo(GetRecibo);
         public readonly static DGetRecibos getRecibos = new DGetRecibos(GetRecibos);
+        public readonly static DCalcularTotalRecibo calcularTotalRecibo = new DCalcularTotalRecibo(CalcularTotalRecibo);
 
         private static bool AddRecibo(Recibo recibo)
         {
@@ -52,6 +54,17 @@ namespace linway_app.Services.Delegates
         private static List<Recibo> GetRecibos()
         {
             return Form1._servRecibo.GetAll();
+        }
+
+        private static double CalcularTotalRecibo(Recibo recibo)
+        {
+            double subTo = 0;
+            if (recibo.DetalleRecibos != null && recibo.DetalleRecibos.Count != 0)
+                foreach (DetalleRecibo detalle in recibo.DetalleRecibos)
+                {
+                    subTo += detalle.Importe;
+                }
+            return subTo;
         }
     }
 }
