@@ -1,4 +1,5 @@
 ﻿using linway_app.Models;
+using linway_app.Models.Entities;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -64,19 +65,28 @@ namespace linway_app.Forms
         {
             if (lstClientes != null && lstClientes.Count > 0)
             {
-                dataGridView1.DataSource = lstClientes.ToArray();
+                List<ECliente> grid1 = new List<ECliente>();
+                foreach (Cliente cliente in lstClientes)
+                {
+                    grid1.Add(new ECliente
+                    {
+                        Id = cliente.Id,
+                        Direccion = cliente.Direccion,
+                        CodigoPostal = cliente.CodigoPostal,
+                        Telefono = cliente.Telefono,
+                        Nombre = cliente.Nombre,
+                        Cuit = cliente.Cuit,
+                        Tipo = cliente.Tipo
+                    });
+                }
+                dataGridView1.DataSource = grid1.ToArray();
                 dataGridView1.Columns[0].Width = 40;
                 dataGridView1.Columns[1].Width = 250;
-                dataGridView1.Columns[2].Width = 60;
-                dataGridView1.Columns[3].Width = 90;
+                dataGridView1.Columns[2].Width = 120;
+                dataGridView1.Columns[3].Width = 40;
                 dataGridView1.Columns[4].Width = 90;
                 dataGridView1.Columns[5].Width = 65;
                 dataGridView1.Columns[6].Width = 65;
-                dataGridView1.Columns[7].Visible = false;
-                dataGridView1.Columns[8].Visible = false;
-                dataGridView1.Columns[9].Visible = false;
-                dataGridView1.Columns[10].Visible = false;
-                dataGridView1.Columns[11].Visible = false;
             }
             else
             {

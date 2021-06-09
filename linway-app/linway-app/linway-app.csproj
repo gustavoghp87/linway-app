@@ -358,6 +358,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Entities\ECliente.cs" />
     <Compile Include="Models\Entities\ENotaDeEnvio.cs" />
     <Compile Include="Models\Entities\EPedido.cs" />
     <Compile Include="Models\Entities\ERecibo.cs" />
@@ -405,19 +406,7 @@
     <Compile Include="Repositories\Interfaces\IRepository.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
-    <Compile Include="Services\Interfaces\IServicioCliente.cs" />
-    <Compile Include="Services\Interfaces\IServicioProducto.cs" />
-    <Compile Include="Services\Interfaces\IServicioNotaDeEnvio.cs" />
-    <Compile Include="Services\Interfaces\IServicioVenta.cs" />
-    <Compile Include="Services\Interfaces\IServicioRegistroVenta.cs" />
-    <Compile Include="Services\Interfaces\IServicioDiaReparto.cs" />
-    <Compile Include="Services\Interfaces\IServicioReparto.cs" />
-    <Compile Include="Services\Interfaces\IServicioPedido.cs" />
-    <Compile Include="Services\Interfaces\IServicioProdVendido.cs" />
-    <Compile Include="Services\Interfaces\IServicioRecibo.cs" />
-    <Compile Include="Services\Interfaces\IServicioDetalleRecibo.cs" />
     <Compile Include="Services\Interfaces\IService.cs" />
-    <Compile Include="Services\Interfaces\IServicioUnitOfWork.cs" />
     <Compile Include="Services\Service.cs" />
     <Compile Include="Services\residuoServicioPedido.cs" />
     <Compile Include="Services\ResiduoServicioReparto.cs" />

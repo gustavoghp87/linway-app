@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace linway_app.Models.Entities
 {
-    public partial class ERecibo : ObjModel
+    public partial class ERecibo
     {
         public long Id { get; set; }
 

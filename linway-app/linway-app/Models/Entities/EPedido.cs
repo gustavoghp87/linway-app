@@ -2,7 +2,7 @@
 
 namespace linway_app.Models.Entities
 {
-    public partial class EPedido : ObjModel
+    public partial class EPedido
     {
         public long Id { get; set; }
         public string Direccion { get; set; }
@@ -16,7 +16,5 @@ namespace linway_app.Models.Entities
         public long T { get; set; }
         public long Ae { get; set; }
         public string ProductosText { get; set; }
-        public Cliente Cliente { get; set; }
-        public Reparto Reparto { get; set; }
     }
 }

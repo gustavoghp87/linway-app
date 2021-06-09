@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace linway_app.Models.Entities
 {
-    public partial class ENotaDeEnvio : ObjModel
+    public partial class ENotaDeEnvio
     {
         public long Id { get; set; }
         public string Fecha { get; set; }
@@ -12,6 +12,5 @@ namespace linway_app.Models.Entities
 
         [DisplayName("Total")]
         public double ImporteTotal { get; set; }
-        public Cliente Cliente { get; set; }
     }
 }
