@@ -429,7 +429,7 @@ namespace linway_app.Forms
             this.textBox14.Name = "textBox14";
             this.textBox14.Size = new System.Drawing.Size(131, 21);
             this.textBox14.TabIndex = 2;
-            this.textBox14.TextChanged += new System.EventHandler(this.textBox14_TextChanged);
+            this.textBox14.TextChanged += new System.EventHandler(this.TextBox14_TextChanged);
             //this.textBox14.Leave += new System.EventHandler(this.PrepararEditar_Leave);
             // 
             // radioButton4
@@ -510,7 +510,7 @@ namespace linway_app.Forms
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(131, 21);
             this.textBox6.TabIndex = 24;
-            this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
+            this.textBox6.TextChanged += new System.EventHandler(this.TextBox6_TextChanged);
             // 
             // label6
             // 
@@ -538,7 +538,7 @@ namespace linway_app.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Clientes";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.FormClientes_Load);
+            //this.Load += new System.EventHandler(this.FormClientes_Load);
             this.gbBorrar.ResumeLayout(false);
             this.gbBorrar.PerformLayout();
             this.gbAgregar.ResumeLayout(false);

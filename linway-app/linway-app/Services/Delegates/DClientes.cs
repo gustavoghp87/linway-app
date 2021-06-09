@@ -7,27 +7,53 @@ namespace linway_app.Services.Delegates
 {
     public static class DClientes
     {
-        public delegate List<Cliente> DGetClientes();
+        public delegate bool DAddCliente(Cliente cliente);
+        public delegate bool DAddClientePrimero();
+        public delegate void DDeleteCliente(Cliente cliente);
+        public delegate void DEditCliente(Cliente cliente);
         public delegate Cliente DGetCliente(long clientId);
         public delegate Cliente DGetClientePorDireccion(string direccion);
         public delegate Cliente DGetClientePorDireccionExacta(string direccion);
-        public delegate bool DAddCliente(Cliente cliente);
-        public delegate void DEditCliente(Cliente cliente);
-        public delegate void DDeleteCliente(Cliente cliente);
+        public delegate List<Cliente> DGetClientes();
 
-        public readonly static DAddCliente addCliente = new DAddCliente(AddCliente);
-        public readonly static DEditCliente editCliente = new DEditCliente(EditCliente);
-        public readonly static DGetClientes getClientes = new DGetClientes(GetClientes);
-        public readonly static DGetCliente getCliente = new DGetCliente(GetCliente);
+        public readonly static DAddCliente addCliente
+            = new DAddCliente(AddCliente);
+        public readonly static DAddClientePrimero addClientePrimero
+            = new DAddClientePrimero(AddClientePrimero);
+        public readonly static DDeleteCliente deleteCliente
+            = new DDeleteCliente(DeleteCliente);
+        public readonly static DEditCliente editCliente
+            = new DEditCliente(EditCliente);
+        public readonly static DGetCliente getCliente
+            = new DGetCliente(GetCliente);
         public readonly static DGetClientePorDireccion getClientePorDireccion
             = new DGetClientePorDireccion(GetClientePorDireccion);
         public readonly static DGetClientePorDireccionExacta getClientePorDireccionExacta
             = new DGetClientePorDireccionExacta(GetClientePorDireccionExacta);
-        public readonly static DDeleteCliente deleteCliente = new DDeleteCliente(DeleteCliente);
+        public readonly static DGetClientes getClientes
+            = new DGetClientes(GetClientes);
 
-        private static List<Cliente> GetClientes()
+        private static bool AddCliente(Cliente cliente)
         {
-            return Form1._servCliente.GetAll();
+            return Form1._servCliente.Add(cliente);
+        }
+        private static bool AddClientePrimero()
+        {
+            return addCliente(new Cliente
+            {
+                Nombre = "Cliente Particular X",
+                Direccion = "Cliente Particular X"
+            });
+        }
+        private static void DeleteCliente(Cliente cliente)
+        {
+            bool response = Form1._servCliente.Delete(cliente);
+            if (!response) MessageBox.Show("Falló guardado Cliente en base de datos");
+        }
+        private static void EditCliente(Cliente cliente)
+        {
+            bool response = Form1._servCliente.Edit(cliente);
+            if (!response) MessageBox.Show("Falló editando Cliente en base de datos");
         }
         private static Cliente GetCliente(long clientId)
         {
@@ -41,20 +67,9 @@ namespace linway_app.Services.Delegates
         {
             return GetClientes().Find(x => x.Direccion.Contains(direccion));
         }
-        private static bool AddCliente(Cliente cliente)
+        private static List<Cliente> GetClientes()
         {
-            return Form1._servCliente.Add(cliente);
+            return Form1._servCliente.GetAll();
         }
-        private static void EditCliente(Cliente cliente)
-        {
-            bool response = Form1._servCliente.Edit(cliente);
-            if (!response) MessageBox.Show("Falló editando Cliente en base de datos");
-        }
-        private static void DeleteCliente(Cliente cliente)
-        {
-            bool response = Form1._servCliente.Delete(cliente);
-            if (!response) MessageBox.Show("Falló guardado Cliente en base de datos");
-        }
-
     }
 }

@@ -14,10 +14,7 @@ namespace linway_app.Models
         {
             Reparto = new HashSet<Reparto>();
         }
-
-        public long Id { get; set; }
         public string Dia { get; set; }
-        //public string Estado { get; set; }
         public virtual ICollection<Reparto> Reparto { get; set; }
     }
 }

@@ -8,7 +8,6 @@ using static linway_app.Services.Delegates.DClientes;
 using static linway_app.Services.Delegates.DDetalleRecibo;
 using static linway_app.Services.Delegates.DRecibo;
 
-
 namespace linway_app.Forms
 {
     public partial class FormRecibos : Form
@@ -41,17 +40,9 @@ namespace linway_app.Forms
                 List<ERecibo> grid1 = new List<ERecibo>();
                 foreach (Recibo recibo in recibos)
                 {
-                    grid1.Add(new ERecibo
-                    {
-                        Id = recibo.Id,
-                        ClienteId = recibo.ClienteId,
-                        Fecha = recibo.Fecha,
-                        DireccionCliente = recibo.DireccionCliente,
-                        ImporteTotal = recibo.ImporteTotal,
-                        Impreso = recibo.Impreso == 1 ? "Sí" : "No"
-                    });
+                    grid1.Add(Form1._mapper.Map<ERecibo>(recibo));
                 }
-                dataGridView1.DataSource = grid1.ToArray();
+                dataGridView1.DataSource = grid1;
             }
             lCantRecibos.Text = recibos.Count.ToString() + " recibos.";
         }
@@ -59,8 +50,13 @@ namespace linway_app.Forms
         {
             if (_lstDetallesAAgregar != null)
             {
-                dataGridView2.DataSource = _lstDetallesAAgregar.ToArray();
-                dataGridView2.Columns[1].Width = 55;
+                List<EDetalleRecibo> grid2 = new List<EDetalleRecibo>();
+                foreach (DetalleRecibo detalleRecibo in _lstDetallesAAgregar)
+                {
+                    grid2.Add(Form1._mapper.Map<EDetalleRecibo>(detalleRecibo));
+                }
+                dataGridView2.DataSource = grid2;
+                dataGridView2.Columns[0].Width = 140;
             }
         }
         private void AbrirFormImprimirRecibo(Recibo recibo)

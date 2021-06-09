@@ -1,5 +1,6 @@
 ﻿using linway_app.Excel;
 using linway_app.Models;
+using linway_app.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,16 +59,30 @@ namespace linway_app.Forms
         }
         private void RenderizarRepartos()
         {
-            dataGridView1.DataSource = _lstPedidos.ToArray();
-            dataGridView1.Columns[0].Width = 25;
-            dataGridView1.Columns[1].Width = 100;
-            dataGridView1.Columns[2].Width = 30;
-            dataGridView1.Columns[3].Width = 400;
-            dataGridView1.Columns[4].Width = 30;
-            dataGridView1.Columns[5].Width = 30;
-            dataGridView1.Columns[6].Width = 30;
-            dataGridView1.Columns[7].Width = 30;
-            dataGridView1.Columns[8].Width = 60;
+            if (_lstPedidos != null)
+            {
+                List<EPedido> grid1 = new List<EPedido>();
+                foreach (Pedido pedido in _lstPedidos)
+                {
+                    grid1.Add(Form1._mapper.Map<EPedido>(pedido));
+                }
+                dataGridView1.DataSource = grid1;
+                dataGridView1.Columns[0].Width = 25;
+                dataGridView1.Columns[1].Width = 150;
+                dataGridView1.Columns[2].Width = 350;
+                dataGridView1.Columns[3].Width = 40;
+                dataGridView1.Columns[4].Width = 30;
+                dataGridView1.Columns[5].Width = 30;
+                dataGridView1.Columns[6].Width = 30;
+                dataGridView1.Columns[7].Width = 30;
+                dataGridView1.Columns[8].Width = 30;
+            }
+        }
+        private void ReCargarHDR(string elDia, string elReparto)
+        {
+            CargarDiaRepartos();
+            _lstRepartos = _lstDiaRepartos.Find(x => x.Dia == elDia).Reparto.ToList();
+            _lstPedidos = _lstRepartos.Find(x => x.Nombre == elReparto).Pedidos.ToList();
         }
         public void LimpiarReparto(Reparto reparto)
         {
@@ -88,7 +103,6 @@ namespace linway_app.Forms
                 pedido.D = 0;
                 pedido.T = 0;
                 pedido.Ae = 0;
-                // en realidad es deletePedido()
                 editPedido(pedido);
                 foreach (ProdVendido prodVendido in pedido.ProdVendidos)
                 {
@@ -113,27 +127,9 @@ namespace linway_app.Forms
                 string litros = label22.Text;
                 string bolsas = label21.Text;
                 bool success = new Exportar().ExportarAExcel(reparto, dia, litros, bolsas);
-                if (success)
-                {
-                    MessageBox.Show("Terminado");
-                }
-                else
-                {
-                    MessageBox.Show("Hubo un error al guardar los cambios.");
-                }
+                if (success) MessageBox.Show("Terminado");
+                else MessageBox.Show("Hubo un error al guardar los cambios.");
             }
-        }
-        private void ActualizarHDR(string elDia, string elReparto)
-        {
-            CargarDiaRepartos();
-            _lstDiaRepartos.Find(x => x.Dia == elDia).Reparto.ToList().Find(x => x.Nombre == elReparto).Pedidos
-                = _lstPedidos;
-        }
-        private void ReCargarHDR(string elDia, string elReparto)
-        {
-            CargarDiaRepartos();
-            _lstRepartos = _lstDiaRepartos.Find(x => x.Dia == elDia).Reparto.ToList();
-            _lstPedidos = _lstRepartos.Find(x => x.Nombre == elReparto).Pedidos.ToList();
         }
         private void LimpiarPantalla()
         {

@@ -12,9 +12,6 @@ namespace linway_app.Forms
         {
             InitializeComponent();
         }
-        private void FormClientes_Load(object sender, EventArgs e) { }
-        private void bCopiaSeguridad_Click(object sender, EventArgs e) {}
-        public void ImportarClientes_Click(object sender, EventArgs e) {}
 
         // agregar Cliente
         public bool TodoOKagregarC()
@@ -24,10 +21,7 @@ namespace linway_app.Forms
                 && textBox4.Text != "" && textBox5.Text != "" && textBox18.Text != ""
             )
             {
-                if (radioButton1.Checked || radioButton2.Checked)
-                {
-                    correcto = true;
-                }
+                if (radioButton1.Checked || radioButton2.Checked) correcto = true;
             }
             return correcto;
         }
@@ -51,10 +45,7 @@ namespace linway_app.Forms
                 addCliente(nuevoCliente);
                 button2.PerformClick();
             }
-            else
-            {
-                MessageBox.Show("Revise que se hayan llenado los campos correctamente");
-            }
+            else MessageBox.Show("Revise que se hayan llenado los campos correctamente");
         }
         private void limpiar_Click(object sender, EventArgs e)
         {
@@ -122,20 +113,14 @@ namespace linway_app.Forms
         {
             if (cliente != null)
             {
-                label23.Text = cliente.Direccion;                 // label 23
+                label23.Text = cliente.Direccion;
                 textBox23.Text = cliente.Direccion;
                 textBox24.Text = cliente.Telefono?.ToString();
                 textBox25.Text = cliente.CodigoPostal?.ToString();
                 textBox11.Text = cliente.Nombre;
                 textBox10.Text = cliente.Cuit;
-                if (cliente.Tipo == TipoR.Inscripto.ToString())
-                {
-                    radioButton3.Checked = true;
-                }
-                else
-                {
-                    radioButton4.Checked = true;
-                }
+                if (cliente.Tipo == TipoR.Inscripto.ToString()) radioButton3.Checked = true;
+                else radioButton4.Checked = true;
             }
             else
             {
@@ -149,7 +134,7 @@ namespace linway_app.Forms
                 radioButton4.Checked = false;
             }
         }
-        private void textBox14_TextChanged(object sender, EventArgs e)
+        private void TextBox14_TextChanged(object sender, EventArgs e)
         {
             if (textBox14.Text != "")
             {
@@ -169,7 +154,7 @@ namespace linway_app.Forms
                 radioButton4.Checked = false;
             }
         }
-        private void textBox6_TextChanged(object sender, EventArgs e)
+        private void TextBox6_TextChanged(object sender, EventArgs e)
         {
             if (textBox6.Text != "")
             {
@@ -210,10 +195,7 @@ namespace linway_app.Forms
                 editCliente(cliente);
                 button8.PerformClick();
             }
-            else
-            {
-                MessageBox.Show("Verifique que los campos sean correctos");
-            }
+            else MessageBox.Show("Verifique que los campos sean correctos");
         }
 
 

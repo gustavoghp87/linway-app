@@ -11,6 +11,7 @@ using static linway_app.Services.Delegates.DNotaDeEnvio;
 using static linway_app.Services.Delegates.DPedido;
 using static linway_app.Services.Delegates.DProductos;
 using static linway_app.Services.Delegates.DProdVendido;
+using linway_app.Models.Entities;
 
 namespace linway_app.Forms
 {
@@ -44,36 +45,35 @@ namespace linway_app.Forms
         private void ActualizarGrid1(List<NotaDeEnvio> lstNotadeEnvios)
         {
             ActualizarNotas();
-            dataGridView1.DataSource = lstNotadeEnvios.ToArray();
             if (lstNotadeEnvios != null)
             {
+                List<ENotaDeEnvio> grid = new List<ENotaDeEnvio>();
+                foreach (NotaDeEnvio nota in lstNotadeEnvios)
+                {
+                    grid.Add(Form1._mapper.Map<ENotaDeEnvio>(nota));
+                }
+                dataGridView1.DataSource = grid;
                 dataGridView1.Columns[0].Width = 20;
-                dataGridView1.Columns[1].Width = 30;
-                dataGridView1.Columns[2].Width = 40;
-                dataGridView1.Columns[3].Width = 30;
-                dataGridView1.Columns[4].Width = 150;
-                dataGridView1.Columns[5].Width = 40;
-                dataGridView1.Columns[6].Visible = false;
-                dataGridView1.Columns[7].Visible = false;
-                dataGridView1.Columns[8].Visible = false;
+                dataGridView1.Columns[1].Width = 70;
+                dataGridView1.Columns[2].Width = 170;
+                dataGridView1.Columns[3].Width = 350;
             }
             comboBox1.SelectedItem = "Todas ??";
             comboBox3.SelectedItem = "(Seleccionar)";
         }
         private void ActualizarGrid2(List<ProdVendido> lstProdVendidos)
         {
-            dataGridView2.DataSource = lstProdVendidos.ToArray();
             if (lstProdVendidos != null)
             {
-                dataGridView2.Columns[0].Visible = false;
-                dataGridView2.Columns[2].Visible = false;
-                dataGridView2.Columns[3].Visible = false;
-                dataGridView2.Columns[4].Visible = false;
-                dataGridView2.Columns[8].Visible = false;
-                dataGridView2.Columns[9].Visible = false;
-                dataGridView2.Columns[10].Visible = false;
-                dataGridView2.Columns[11].Visible = false;
-                dataGridView2.Columns[12].Visible = false;
+                List<EProdVendido> grid = new List<EProdVendido>();
+                foreach (ProdVendido prodVendido in lstProdVendidos)
+                {
+                    grid.Add(Form1._mapper.Map<EProdVendido>(prodVendido));
+                }
+                dataGridView2.DataSource = grid;
+                dataGridView2.Columns[0].Width = 25;
+                dataGridView2.Columns[1].Width = 200;
+                //dataGridView2.Columns[2].Width = 35;
             }
         }
 
@@ -300,12 +300,12 @@ namespace linway_app.Forms
             label7.Text = ObtenerListaAImprimir().Count.ToString();
         }
 
-        private void textBox3_Leave(object sender, EventArgs e)
+        private void TextBox3_TextChanged(object sender, EventArgs e)
         {
             label7.Text = ObtenerListaAImprimir().Count.ToString();
         }
 
-        private void textBox2_Leave(object sender, EventArgs e)
+        private void TextBox2_TextChanged(object sender, EventArgs e)
         {
             label7.Text = ObtenerListaAImprimir().Count.ToString();
         }
@@ -376,12 +376,12 @@ namespace linway_app.Forms
             return listaABorrar;
         }
 
-        private void textBox5_Leave(object sender, EventArgs e)
+        private void TextBox5_TextChanged(object sender, EventArgs e)
         {
             label10.Text = ObtenerListaABorrar().Count.ToString();
         }
 
-        private void textBox4_Leave(object sender, EventArgs e)
+        private void TextBox4_TextChanged(object sender, EventArgs e)
         {
             label10.Text = ObtenerListaABorrar().Count.ToString();
         }

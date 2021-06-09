@@ -355,7 +355,7 @@ namespace linway_app.Forms
             this.textBox12.Size = new System.Drawing.Size(57, 21);
             this.textBox12.TabIndex = 3;
             this.textBox12.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
-            this.textBox12.Leave += new System.EventHandler(this.InputProductoId_Leave);
+            this.textBox12.TextChanged += new System.EventHandler(this.InputProductoId_TextChanged);
             // 
             // menuStrip1
             // 
@@ -660,7 +660,7 @@ namespace linway_app.Forms
             this.textBox2.Size = new System.Drawing.Size(135, 21);
             this.textBox2.TabIndex = 6;
             this.textBox2.Visible = false;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
             // 
             // comboBox3
             // 

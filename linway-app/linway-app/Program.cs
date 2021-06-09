@@ -1,5 +1,7 @@
-﻿using linway_app.Forms;
+﻿using AutoMapper;
+using linway_app.Forms;
 using linway_app.Models.DbContexts;
+using linway_app.Models.Entities.Mapping;
 using linway_app.Repositories;
 using linway_app.Repositories.Interfaces;
 using linway_app.Services;
@@ -42,6 +44,13 @@ namespace linway_app
             services.AddScoped(typeof(IService<>), typeof(Service<>));
             services.AddScoped(typeof(IRepository<>), typeof(RepositoryBase<>));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            var mapperConfig = new MapperConfiguration(m =>
+            {
+                m.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         public static ServiceProvider GetConfig()

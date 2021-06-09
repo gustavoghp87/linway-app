@@ -1,4 +1,5 @@
-﻿using linway_app.Models;
+﻿using AutoMapper;
+using linway_app.Models;
 using linway_app.Models.Entities;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,7 @@ namespace linway_app.Forms
         public static IService<RegistroVenta> _servRegistroVenta;
         public static IService<Reparto> _servReparto;
         public static IService<Venta> _servVenta;
+        public static IMapper _mapper;
         public Form1(
             IService<Cliente> servCliente,
             IService<DetalleRecibo> servDetalleRecibo,
@@ -34,7 +36,8 @@ namespace linway_app.Forms
             IService<Recibo> servRecibo,
             IService<RegistroVenta> servRegistroVenta,
             IService<Reparto> servReparto,
-            IService<Venta> servVenta
+            IService<Venta> servVenta,
+            IMapper mapper
             )
         {
             _servCliente = servCliente;
@@ -48,6 +51,7 @@ namespace linway_app.Forms
             _servRegistroVenta = servRegistroVenta;
             _servReparto = servReparto;
             _servVenta = servVenta;
+            _mapper = mapper;
             try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.Message); return; }
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -63,23 +67,14 @@ namespace linway_app.Forms
         }
         private void CargarGrid1(List<Cliente> lstClientes)
         {
-            if (lstClientes != null && lstClientes.Count > 0)
+            if (lstClientes != null)
             {
-                List<ECliente> grid1 = new List<ECliente>();
+                List<ECliente> grid = new List<ECliente>();
                 foreach (Cliente cliente in lstClientes)
                 {
-                    grid1.Add(new ECliente
-                    {
-                        Id = cliente.Id,
-                        Direccion = cliente.Direccion,
-                        CodigoPostal = cliente.CodigoPostal,
-                        Telefono = cliente.Telefono,
-                        Nombre = cliente.Nombre,
-                        Cuit = cliente.Cuit,
-                        Tipo = cliente.Tipo
-                    });
+                    grid.Add(_mapper.Map<ECliente>(cliente));
                 }
-                dataGridView1.DataSource = grid1.ToArray();
+                dataGridView1.DataSource = grid.ToArray();
                 dataGridView1.Columns[0].Width = 40;
                 dataGridView1.Columns[1].Width = 250;
                 dataGridView1.Columns[2].Width = 120;
@@ -96,26 +91,24 @@ namespace linway_app.Forms
         }
         private void CargarGrid2(List<Producto> lstProductos)
         {
-            if (lstProductos != null && lstProductos.Count > 0)
+            if (lstProductos != null)
             {
-                dataGridView2.DataSource = lstProductos.ToArray();
+                List<EProducto> grid = new List<EProducto>();
+                foreach (Producto producto in lstProductos)
+                {
+                    grid.Add(_mapper.Map<EProducto>(producto));
+                }
+                dataGridView2.DataSource = grid;
                 dataGridView2.Columns[0].Width = 48;
                 dataGridView2.Columns[1].Width = 220;
                 dataGridView2.Columns[2].Width = 72;
-                dataGridView2.Columns[3].Visible = false;
-                dataGridView2.Columns[4].Visible = false;
-                dataGridView2.Columns[5].Visible = false;
             }
         }
         private void CrearPrimerCliente()
         {
             try
             {
-                bool response = addCliente(new Cliente
-                {
-                    Nombre = "Cliente Particular X",
-                    Direccion = "Cliente Particular X"
-                });
+                bool response = addClientePrimero();
                 if (!response)
                 {
                     MessageBox.Show("Hay problemas con la base de datos y no se puede seguir");
