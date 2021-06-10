@@ -96,7 +96,7 @@ namespace linway_app.Excel
                     //MessageBox.Show(i.ToString() + " - " + dt.Rows[i].ItemArray[0].ToString() + " - " + dt.Rows[i].ItemArray[1].ToString() + " - " + dt.Rows[i].ItemArray[2].ToString());
                     int id = Int32.Parse(dt.Rows[i].ItemArray[0].ToString());
                     string nombre = dt.Rows[i].ItemArray[1].ToString();
-                    float precio = float.Parse(dt.Rows[i].ItemArray[2].ToString());
+                    decimal precio = decimal.Parse(dt.Rows[i].ItemArray[2].ToString());
                     //listaProductos.Add(new Producto(id, nombre, precio));
                     listaProductos.Add(new Producto {
                         Id = id,

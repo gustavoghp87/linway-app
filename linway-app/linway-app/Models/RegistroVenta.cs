@@ -1,9 +1,10 @@
-﻿using linway_app.Models.OModel;
+﻿using linway_app.Models.Interfaces;
+using linway_app.Models.OModel;
 using System.Collections.Generic;
 
 namespace linway_app.Models
 {
-    public partial class RegistroVenta : ObjModel
+    public partial class RegistroVenta : ObjModel, IRegistroVenta
     {
         public RegistroVenta()
         {

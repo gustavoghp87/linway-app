@@ -13,7 +13,7 @@ namespace linway_app.Services.Delegates
         public delegate void DEditRecibo(Recibo recibo);
         public delegate Recibo DGetRecibo(long reciboId);
         public delegate List<Recibo> DGetRecibos();
-        public delegate double DCalcularTotalRecibo(Recibo recibo);
+        public delegate decimal DCalcularTotalRecibo(Recibo recibo);
 
         public readonly static DAddRecibo addRecibo = new DAddRecibo(AddRecibo);
         public readonly static DAddReciboReturnId addReciboReturnId = new DAddReciboReturnId(AddReciboReturnId);
@@ -56,9 +56,9 @@ namespace linway_app.Services.Delegates
             return Form1._servRecibo.GetAll();
         }
 
-        private static double CalcularTotalRecibo(Recibo recibo)
+        private static decimal CalcularTotalRecibo(Recibo recibo)
         {
-            double subTo = 0;
+            decimal subTo = 0;
             if (recibo.DetalleRecibos != null && recibo.DetalleRecibos.Count != 0)
                 foreach (DetalleRecibo detalle in recibo.DetalleRecibos)
                 {

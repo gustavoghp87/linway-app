@@ -13,7 +13,7 @@ namespace linway_app.Services.Delegates
         public delegate void DEditNotaDeEnvio(NotaDeEnvio notaDeEnvio);
         public delegate NotaDeEnvio DGetNotaDeEnvio(long id);
         public delegate List<NotaDeEnvio> DGetNotaDeEnvios();
-        public delegate double DExtraerImporte(List<ProdVendido> lstProdVendidos);
+        public delegate decimal DExtraerImporte(List<ProdVendido> lstProdVendidos);
         public delegate string DExtraerDetalle(List<ProdVendido> lstProdVendidos);
         public delegate NotaDeEnvio DModificar(NotaDeEnvio notaDeEnvio, List<ProdVendido> lstProdVendidos);
 
@@ -72,9 +72,9 @@ namespace linway_app.Services.Delegates
                 return 0;
             }
         }
-        private static double ExtraerImporteDeNotaDeEnvio(List<ProdVendido> lstProdVendidos)
+        private static decimal ExtraerImporteDeNotaDeEnvio(List<ProdVendido> lstProdVendidos)
         {
-            double subTo = 0;
+            decimal subTo = 0;
             if (lstProdVendidos != null && lstProdVendidos.Count != 0)
             {
                 foreach (ProdVendido prodVendido in lstProdVendidos)
@@ -99,7 +99,7 @@ namespace linway_app.Services.Delegates
         private static NotaDeEnvio ModificarNotaDeEnvio(NotaDeEnvio notaDeEnvio, List<ProdVendido> lstProdVendidos)
         {
             notaDeEnvio.ProdVendidos = lstProdVendidos;
-            double subTo = 0;
+            decimal subTo = 0;
             string deta = "";
             foreach (ProdVendido prodVendido in lstProdVendidos)
             {

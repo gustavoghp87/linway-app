@@ -579,7 +579,7 @@ namespace linway_app.Forms
             this.button10.TabIndex = 26;
             this.button10.Text = "Modificar";
             this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
+            this.button10.Click += new System.EventHandler(this.Button10_Click);
             // 
             // label20
             // 
@@ -638,7 +638,7 @@ namespace linway_app.Forms
             this.textBox12.Name = "textBox12";
             this.textBox12.Size = new System.Drawing.Size(124, 20);
             this.textBox12.TabIndex = 29;
-            this.textBox12.TextChanged += new System.EventHandler(this.textBox12_TextChanged);
+            this.textBox12.TextChanged += new System.EventHandler(this.TextBox12_TextChanged);
             // 
             // label28
             // 
@@ -693,7 +693,7 @@ namespace linway_app.Forms
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(53, 20);
             this.textBox10.TabIndex = 23;
-            this.textBox10.TextChanged += new System.EventHandler(this.textBox10_TextChanged);
+            this.textBox10.TextChanged += new System.EventHandler(this.TextBox10_TextChanged);
             this.textBox10.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
             // 
             // textBox9
@@ -702,7 +702,7 @@ namespace linway_app.Forms
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new System.Drawing.Size(47, 20);
             this.textBox9.TabIndex = 22;
-            this.textBox9.TextChanged += new System.EventHandler(this.textBox9_TextChanged);
+            this.textBox9.TextChanged += new System.EventHandler(this.TextBox9_TextChanged);
             this.textBox9.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
             // 
             // button9
@@ -761,7 +761,7 @@ namespace linway_app.Forms
             this.button8.TabIndex = 3;
             this.button8.Text = "Quitar ";
             this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.button8.Click += new System.EventHandler(this.Button8_Click);
             // 
             // label22
             // 
@@ -778,7 +778,7 @@ namespace linway_app.Forms
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(100, 20);
             this.textBox8.TabIndex = 1;
-            this.textBox8.TextChanged += new System.EventHandler(this.textBox8_TextChanged);
+            this.textBox8.TextChanged += new System.EventHandler(this.TextBox8_TextChanged);
             // 
             // label21
             // 

@@ -1,9 +1,10 @@
-﻿using linway_app.Models.OModel;
+﻿using linway_app.Models.Interfaces;
+using linway_app.Models.OModel;
 using System.Collections.Generic;
 
 namespace linway_app.Models
 {
-    public partial class Cliente : ObjModel
+    public partial class Cliente : ObjModel, ICliente
     {
         public Cliente()
         {
@@ -12,14 +13,12 @@ namespace linway_app.Models
             Recibo = new HashSet<Recibo>();
             RegistroVenta = new HashSet<RegistroVenta>();
         }
-
         public string Direccion { get; set; }
         public string CodigoPostal { get; set; }
         public string Telefono { get; set; }
         public string Nombre { get; set; }
         public string Cuit { get; set; }
         public string Tipo { get; set; }
-
         public virtual ICollection<NotaDeEnvio> NotaDeEnvio { get; set; }
         public virtual ICollection<Pedido> Pedido { get; set; }
         public virtual ICollection<Recibo> Recibo { get; set; }

@@ -12,13 +12,11 @@ namespace linway_app.Models.Interfaces
         string Direccion { get; set; }
         long E { get; set; }
         long Entregar { get; set; }
-        long Id { get; set; }
         long L { get; set; }
-        string Productos { get; set; }
+        string ProductosText { get; set; }
         ICollection<ProdVendido> ProdVendidos { get; set; }
         Reparto Reparto { get; set; }
         long RepartoId { get; set; }
         long T { get; set; }
-        string Estado { get; set; }
     }
 }

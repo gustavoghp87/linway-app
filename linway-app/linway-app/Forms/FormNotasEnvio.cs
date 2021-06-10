@@ -501,7 +501,7 @@ namespace linway_app.Forms
                     if (notaDeEnvio.ProdVendidos == null) return;
                     _lstProdVendidos = notaDeEnvio.ProdVendidos.ToList();
                     ActualizarGrid2(_lstProdVendidos);
-                    double impTotal = 0;
+                    decimal impTotal = 0;
                     foreach (ProdVendido nota in _lstProdVendidos)
                     {
                         impTotal += nota.Precio;
@@ -532,7 +532,7 @@ namespace linway_app.Forms
                 ActualizarGrid2(_lstProdVendidos);
             }
         }
-        private void button10_Click(object sender, EventArgs e)
+        private void Button10_Click(object sender, EventArgs e)
         {
             if (_lstProdVendidos.Count != 0)
             {
@@ -555,7 +555,7 @@ namespace linway_app.Forms
         }
 
         //Quitar
-        private void textBox8_TextChanged(object sender, EventArgs e)
+        private void TextBox8_TextChanged(object sender, EventArgs e)
         {
             if (textBox8.Text != "")
             {
@@ -580,13 +580,13 @@ namespace linway_app.Forms
                 button10.Enabled = false;
             }
         }
-        private void button8_Click(object sender, EventArgs e)
+        private void Button8_Click(object sender, EventArgs e)
         {
             if (label18.Text != "" && label18.Text != "No encontrado" && textBox7.Text != "")
             {
                 ProdVendido prodVendido = getProdVendidoPorNombreExacto(label22.Text);
                 deleteProdVendido(prodVendido);
-                double impTotal = 0;
+                decimal impTotal = 0;
                 foreach (ProdVendido producto in _lstProdVendidos)
                 {
                     impTotal += producto.Precio;
@@ -600,7 +600,7 @@ namespace linway_app.Forms
         }
 
         //agregar
-        private void textBox9_TextChanged(object sender, EventArgs e)     // id producto
+        private void TextBox9_TextChanged(object sender, EventArgs e)     // id producto
         {
             label26.Text = "";
             if (textBox9.Text != "")
@@ -626,7 +626,7 @@ namespace linway_app.Forms
                 button9.Enabled = true;
             }
         }
-        private void textBox12_TextChanged(object sender, EventArgs e)     // producto por nombre
+        private void TextBox12_TextChanged(object sender, EventArgs e)     // producto por nombre
         {
             label26.Text = "";
             if (textBox12.Text != "")
@@ -651,7 +651,7 @@ namespace linway_app.Forms
                 button9.Enabled = true;
             }
         }
-        private void textBox10_TextChanged(object sender, EventArgs e)     // cantidad a agregar
+        private void TextBox10_TextChanged(object sender, EventArgs e)     // cantidad a agregar
         {
             if (label25.Text != "No encontrado" && textBox10.Text != "")
             {
@@ -691,7 +691,7 @@ namespace linway_app.Forms
             ActualizarGrid2(_lstProdVendidos);
             ActualizarNotas();
             ActualizarGrid1(_lstNotaDeEnvios);
-            double impTotal = 0;
+            decimal impTotal = 0;
             foreach (ProdVendido prodVendido in _lstProdVendidos)
             {
                 impTotal += prodVendido.Precio;

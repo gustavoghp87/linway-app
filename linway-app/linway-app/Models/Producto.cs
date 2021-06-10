@@ -1,9 +1,10 @@
-﻿using linway_app.Models.OModel;
+﻿using linway_app.Models.Interfaces;
+using linway_app.Models.OModel;
 using System.Collections.Generic;
 
 namespace linway_app.Models
 {
-    public partial class Producto : ObjModel
+    public partial class Producto : ObjModel, IProducto
     {
         public Producto()
         {
@@ -11,7 +12,7 @@ namespace linway_app.Models
             Venta = new HashSet<Venta>();
         }
         public string Nombre { get; set; }
-        public double Precio { get; set; }
+        public decimal Precio { get; set; }
         public virtual ICollection<ProdVendido> ProdVendido { get; set; }
         public virtual ICollection<Venta> Venta { get; set; }
     }

@@ -10,6 +10,6 @@ namespace linway_app.Models.Entities
     public class EDetalleRecibo
     {
         public string Detalle { get; set; }
-        public double Importe { get; set; }
+        public decimal Importe { get; set; }
     }
 }

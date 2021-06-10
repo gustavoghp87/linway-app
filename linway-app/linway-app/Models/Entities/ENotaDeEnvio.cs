@@ -12,7 +12,7 @@ namespace linway_app.Models.Entities
         public string Detalle { get; set; }
 
         [DisplayName("Total")]
-        public double ImporteTotal { get; set; }
+        public decimal ImporteTotal { get; set; }
         public string Impresa { get; set; }
     }
 }

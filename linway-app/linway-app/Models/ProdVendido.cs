@@ -1,8 +1,9 @@
-﻿using linway_app.Models.OModel;
+﻿using linway_app.Models.Interfaces;
+using linway_app.Models.OModel;
 
 namespace linway_app.Models
 {
-    public partial class ProdVendido : ObjModel
+    public partial class ProdVendido : ObjModel, IProdVendido
     {
         public long ProductoId { get; set; }
         public long? NotaDeEnvioId { get; set; }
@@ -10,7 +11,7 @@ namespace linway_app.Models
         public long? PedidoId { get; set; }
         public long Cantidad { get; set; }
         public string Descripcion { get; set; }
-        public double Precio { get; set; }
+        public decimal Precio { get; set; }
         public virtual NotaDeEnvio NotaDeEnvio { get; set; }
         public virtual Pedido Pedido { get; set; }
         public virtual Producto Producto { get; set; }

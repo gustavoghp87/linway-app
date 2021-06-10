@@ -204,7 +204,7 @@ namespace linway_app.Forms
                     _lstProdVendidos.Add(nuevoPV);
                 }
 
-                double impTotal = 0;
+                decimal impTotal = 0;
                 foreach (ProdVendido prodVendido in _lstProdVendidos)
                 {
                     impTotal += prodVendido.Precio;

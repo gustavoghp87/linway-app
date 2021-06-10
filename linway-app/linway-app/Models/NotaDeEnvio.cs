@@ -1,9 +1,10 @@
-﻿using linway_app.Models.OModel;
+﻿using linway_app.Models.Interfaces;
+using linway_app.Models.OModel;
 using System.Collections.Generic;
 
 namespace linway_app.Models
 {
-    public partial class NotaDeEnvio : ObjModel
+    public partial class NotaDeEnvio : ObjModel, INotaDeEnvio
     {
         public NotaDeEnvio()
         {
@@ -13,7 +14,7 @@ namespace linway_app.Models
         public string Fecha { get; set; }
         public long Impresa { get; set; }
         public string Detalle { get; set; }
-        public double ImporteTotal { get; set; }
+        public decimal ImporteTotal { get; set; }
         public virtual Cliente Cliente { get; set; }
         public virtual ICollection<ProdVendido> ProdVendidos { get; set; }
     }

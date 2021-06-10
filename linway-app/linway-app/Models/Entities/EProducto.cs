@@ -10,6 +10,6 @@ namespace linway_app.Models.Entities
         public string Nombre { get; set; }
 
         [DisplayName("Precio($)")]
-        public double Precio { get; set; }
+        public decimal Precio { get; set; }
     }
 }

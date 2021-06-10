@@ -4,14 +4,12 @@ namespace linway_app.Models.Interfaces
 {
     public interface INotaDeEnvio
     {
-        Cliente Client { get; set; }
-        long ClientId { get; set; }
+        Cliente Cliente { get; set; }
+        long ClienteId { get; set; }
         string Detalle { get; set; }
         string Fecha { get; set; }
-        long Id { get; set; }
-        double ImporteTotal { get; set; }
+        decimal ImporteTotal { get; set; }
         long Impresa { get; set; }
-        string Estado { get; set; }
         ICollection<ProdVendido> ProdVendidos { get; set; }
     }
 }

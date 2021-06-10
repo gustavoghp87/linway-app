@@ -14,7 +14,7 @@ namespace linway_app.Forms
     {
         private List<Recibo> _lstRecibos = new List<Recibo>();
         private List<DetalleRecibo> _lstDetallesAAgregar = new List<DetalleRecibo>();
-        private double _subTo = 0;
+        private decimal _subTo = 0;
 
         public FormRecibos()
         {
@@ -406,7 +406,7 @@ namespace linway_app.Forms
             return listaABorrar;
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
             if (comboBox3.SelectedItem.ToString() == "Todas"
                 || comboBox3.SelectedItem.ToString() == "Establecer rango"
@@ -420,7 +420,7 @@ namespace linway_app.Forms
                 button3.Visible = false;
             }
         }
-        private void button5_Click(object sender, EventArgs e)
+        private void Button5_Click(object sender, EventArgs e)
         {
             comboBox3.SelectedItem = "(Seleccionar)";
             label11.Visible = false;
@@ -499,8 +499,8 @@ namespace linway_app.Forms
         {
             if (textBox8.Text != "" && AlgunDetSeleccionado())
             {
-                try { double.Parse(textBox8.Text); } catch { return; };
-                double importe = double.Parse(textBox8.Text);
+                try { decimal.Parse(textBox8.Text); } catch { return; };
+                decimal importe = decimal.Parse(textBox8.Text);
                 // si ya existe en _lstDetallesAAgregar sumar en vez de crear nuevo
                 DetalleRecibo nuevoDetalle = new DetalleRecibo();
                 if (radioButton1.Checked)

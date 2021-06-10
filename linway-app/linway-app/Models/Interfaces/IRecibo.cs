@@ -9,9 +9,7 @@ namespace linway_app.Models.Interfaces
         ICollection<DetalleRecibo> DetalleRecibos { get; set; }
         string DireccionCliente { get; set; }
         string Fecha { get; set; }
-        long Id { get; set; }
-        double ImporteTotal { get; set; }
-        long Impresa { get; set; }
-        string Estado { get; set; }
+        decimal ImporteTotal { get; set; }
+        long Impreso { get; set; }
     }
 }

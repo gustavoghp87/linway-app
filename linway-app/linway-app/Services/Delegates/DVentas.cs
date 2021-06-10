@@ -10,12 +10,14 @@ namespace linway_app.Services.Delegates
         public delegate void DAddVenta(Venta venta);
         public delegate void DDeleteVenta(Venta venta);
         public delegate void DEditVenta(Venta venta);
-        public delegate List<Venta> DGetNotadeEnvios();
+        public delegate Venta DGetVenta(long ventaId);
+        public delegate List<Venta> DGetVentas();
 
         public readonly static DAddVenta addVenta = new DAddVenta(AddVenta);
         public readonly static DDeleteVenta deleteVenta = new DDeleteVenta(DeleteVenta);
         public readonly static DEditVenta editVenta = new DEditVenta(EditVenta);
-        public readonly static DGetNotadeEnvios getVentas = new DGetNotadeEnvios(GetVentas);
+        public readonly static DGetVenta getVenta = new DGetVenta(GetVenta);
+        public readonly static DGetVentas getVentas = new DGetVentas(GetVentas);
 
         private static void AddVenta(Venta venta)
         {
@@ -31,6 +33,10 @@ namespace linway_app.Services.Delegates
         {
             bool response = Form1._servVenta.Edit(venta);
             if (!response) MessageBox.Show("Algo falló al editar Venta en la base de datos");
+        }
+        private static Venta GetVenta(long ventaId)
+        {
+            return Form1._servVenta.Get(ventaId);
         }
         private static List<Venta> GetVentas()
         {

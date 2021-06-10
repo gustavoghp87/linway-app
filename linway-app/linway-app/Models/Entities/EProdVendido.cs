@@ -20,8 +20,12 @@ namespace linway_app.Models.Entities
 
         [DisplayName("Nombre")]
         public string Descripcion { get; set; }
+        
+        [DisplayName("Cant")]
         public long Cantidad { get; set; }
-        public double Precio { get; set; }
-        public double Total { get; set; }
+        public decimal Precio { get; set; }
+
+        [DisplayName("Total($)")]
+        public decimal Total { get; set; }
     }
 }

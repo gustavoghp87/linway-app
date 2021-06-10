@@ -583,7 +583,7 @@ namespace linway_app.Forms
             this.button5.Text = "Cancelar";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Visible = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
             // label8
             // 
@@ -604,7 +604,7 @@ namespace linway_app.Forms
             this.button3.TabIndex = 18;
             this.button3.Text = "Borrar";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
             // comboBox3
             // 

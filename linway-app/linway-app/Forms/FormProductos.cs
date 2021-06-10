@@ -39,10 +39,10 @@ namespace linway_app.Forms
         {
             if (TodoOKagregarP())
             {
-                try { double.Parse(textBox7.Text); } catch { return; };
+                try { decimal.Parse(textBox7.Text); } catch { return; };
                 Producto nuevoProducto = new Producto {
                     Nombre = textBox6.Text,
-                    Precio = double.Parse(textBox7.Text)
+                    Precio = decimal.Parse(textBox7.Text)
                 };
                 addProducto(nuevoProducto);
                 limpiarBtn.PerformClick();
@@ -152,8 +152,8 @@ namespace linway_app.Forms
             {
                 Producto producto = getProductoPorNombreExacto(label19.Text);
                 if (producto == null) return;
-                try { double.Parse(textBox9.Text); } catch { return; };
-                producto.Precio = double.Parse(textBox9.Text);
+                try { decimal.Parse(textBox9.Text); } catch { return; };
+                producto.Precio = decimal.Parse(textBox9.Text);
                 editProducto(producto);
                 button6.PerformClick();
             }
