@@ -403,7 +403,7 @@ namespace linway_app.Forms
         }
 
         
-        //Deshacer una venta
+        // Ver y deshacer una venta
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
             if (textBox1.Text != "")

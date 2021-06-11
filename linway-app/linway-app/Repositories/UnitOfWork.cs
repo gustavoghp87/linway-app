@@ -19,12 +19,10 @@ namespace linway_app.Repositories
         private readonly IRepository<Recibo> _repoRecibo;
         private readonly IRepository<Pedido> _repoPedido;
         private readonly IRepository<DetalleRecibo> _repoDetalleRecibo;
-
         public UnitOfWork(LinwayDbContext context)
         {
             _context = context;
         }
-
         public IRepository<Cliente> RepoCliente =>
             _repoCliente ?? new RepositoryBase<Cliente>(_context);
         public IRepository<Producto> RepoProducto =>
@@ -47,7 +45,6 @@ namespace linway_app.Repositories
             _repoPedido ?? new RepositoryBase<Pedido>(_context);
         public IRepository<DetalleRecibo> RepoDetalleRecibo =>
             _repoDetalleRecibo ?? new RepositoryBase<DetalleRecibo>(_context);
-
         public void Dispose()
         {
             if (_context != null) _context.Dispose();

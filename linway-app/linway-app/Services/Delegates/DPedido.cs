@@ -12,6 +12,8 @@ namespace linway_app.Services.Delegates
         public delegate void DAddPedidoDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId);
         public delegate void DDeletePedido(Pedido pedido);
         public delegate void DEditPedido(Pedido pedido);
+        public delegate Pedido DGetPedidoPorDireccion(string direccion);
+        public delegate List<Pedido> DGetPedidos();
 
         public readonly static DAddPedido addPedido
             = new DAddPedido(AddPedido);
@@ -21,6 +23,10 @@ namespace linway_app.Services.Delegates
             = new DDeletePedido(DeletePedido);
         public readonly static DEditPedido editPedido
             = new DEditPedido(EditPedido);
+        public readonly static DGetPedidoPorDireccion getPedidoPorDireccion
+            = new DGetPedidoPorDireccion(GetPedidoPorDireccion);
+        public readonly static DGetPedidos getPedidos
+            = new DGetPedidos(GetPedidos);
 
         private static void AddPedido(Pedido pedido)
         {
@@ -41,6 +47,16 @@ namespace linway_app.Services.Delegates
         {
             bool response = Form1._servPedido.Edit(pedido);
             if (!response) MessageBox.Show("Algo falló al editar el Pedido en la base de datos");
+        }
+        private static Pedido GetPedidoPorDireccion(string direccion)
+        {
+            List<Pedido> lstPedidos = GetPedidos();
+            if (lstPedidos == null) return null;
+            return lstPedidos.Find(x => x.Direccion.Equals(direccion));
+        }
+        private static List<Pedido> GetPedidos()
+        {
+            return Form1._servPedido.GetAll();
         }
 
         private static bool AgregarDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId)

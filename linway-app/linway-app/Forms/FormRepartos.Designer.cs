@@ -258,35 +258,35 @@ namespace linway_app.Forms
             this.diaEspecíficoToolStripMenuItem.Name = "diaEspecíficoToolStripMenuItem";
             this.diaEspecíficoToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.diaEspecíficoToolStripMenuItem.Text = "Día seleccionado";
-            this.diaEspecíficoToolStripMenuItem.Click += new System.EventHandler(this.diaEspecíficoToolStripMenuItem_Click);
+            this.diaEspecíficoToolStripMenuItem.Click += new System.EventHandler(this.DiaEspecífico_ToolStripMenuItem_Click);
             // 
             // repartoSeleccionadoToolStripMenuItem
             // 
             this.repartoSeleccionadoToolStripMenuItem.Name = "repartoSeleccionadoToolStripMenuItem";
             this.repartoSeleccionadoToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.repartoSeleccionadoToolStripMenuItem.Text = "Reparto seleccionado";
-            this.repartoSeleccionadoToolStripMenuItem.Click += new System.EventHandler(this.repartoSeleccionadoToolStripMenuItem_Click);
+            this.repartoSeleccionadoToolStripMenuItem.Click += new System.EventHandler(this.RepartoSeleccionado_ToolStripMenuItem_Click);
             // 
             // destinoToolStripMenuItem
             // 
             this.destinoToolStripMenuItem.Name = "destinoToolStripMenuItem";
             this.destinoToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.destinoToolStripMenuItem.Text = "Destino ";
-            this.destinoToolStripMenuItem.Click += new System.EventHandler(this.destinoToolStripMenuItem_Click);
+            this.destinoToolStripMenuItem.Click += new System.EventHandler(this.Destino_ToolStripMenuItem_Click);
             // 
             // posicionarDestinoToolStripMenuItem
             // 
             this.posicionarDestinoToolStripMenuItem.Name = "posicionarDestinoToolStripMenuItem";
             this.posicionarDestinoToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.posicionarDestinoToolStripMenuItem.Text = "Reposicionar destino";
-            this.posicionarDestinoToolStripMenuItem.Click += new System.EventHandler(this.posicionarDestinoToolStripMenuItem_Click);
+            this.posicionarDestinoToolStripMenuItem.Click += new System.EventHandler(this.PosicionarDestino_ToolStripMenuItem_Click);
             // 
             // borrarUnDestinoToolStripMenuItem
             // 
             this.borrarUnDestinoToolStripMenuItem.Name = "borrarUnDestinoToolStripMenuItem";
             this.borrarUnDestinoToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.borrarUnDestinoToolStripMenuItem.Text = "Borrar un destino";
-            this.borrarUnDestinoToolStripMenuItem.Click += new System.EventHandler(this.borrarUnDestinoToolStripMenuItem_Click);
+            this.borrarUnDestinoToolStripMenuItem.Click += new System.EventHandler(this.BorrarUnDestino_ToolStripMenuItem_Click);
             // 
             // gpNuevoReparto
             // 
@@ -388,7 +388,7 @@ namespace linway_app.Forms
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(129, 24);
             this.textBox6.TabIndex = 15;
-            this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
+            this.textBox6.TextChanged += new System.EventHandler(this.TextBox6_TextChanged);
             // 
             // labelDire
             // 
@@ -419,7 +419,7 @@ namespace linway_app.Forms
             this.button4.TabIndex = 12;
             this.button4.Text = "Cancelar";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // comboBox5
             // 
@@ -470,8 +470,8 @@ namespace linway_app.Forms
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(45, 24);
             this.textBox2.TabIndex = 7;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
+            this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
+            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox2_KeyPress);
             // 
             // label6
             // 
@@ -681,7 +681,7 @@ namespace linway_app.Forms
             this.button7.TabIndex = 1;
             this.button7.Text = "Cancelar";
             this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.button7.Click += new System.EventHandler(this.Button7_Click);
             // 
             // button6
             // 
@@ -730,7 +730,7 @@ namespace linway_app.Forms
             this.button8.TabIndex = 1;
             this.button8.Text = "Cancelar";
             this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.button8.Click += new System.EventHandler(this.Button8_Click);
             // 
             // button9
             // 
@@ -740,7 +740,7 @@ namespace linway_app.Forms
             this.button9.TabIndex = 0;
             this.button9.Text = "Aceptar";
             this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            this.button9.Click += new System.EventHandler(this.Button9_Click);
             // 
             // groupBox6
             // 
@@ -768,7 +768,7 @@ namespace linway_app.Forms
             this.button10.TabIndex = 12;
             this.button10.Text = "Cancelar";
             this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button4_Click);
+            this.button10.Click += new System.EventHandler(this.Button4_Click);
             // 
             // comboBox7
             // 
@@ -802,7 +802,7 @@ namespace linway_app.Forms
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(88, 26);
             this.comboBox8.TabIndex = 9;
-            this.comboBox8.SelectedIndexChanged += new System.EventHandler(this.comboBox8_SelectedIndexChanged);
+            this.comboBox8.SelectedIndexChanged += new System.EventHandler(this.ComboBox8_SelectedIndexChanged);
             // 
             // label25
             // 
@@ -822,7 +822,7 @@ namespace linway_app.Forms
             this.button11.TabIndex = 5;
             this.button11.Text = "Limpiar";
             this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.button11_Click);
+            this.button11.Click += new System.EventHandler(this.Button11_Click);
             // 
             // groupBox7
             // 
@@ -850,7 +850,7 @@ namespace linway_app.Forms
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(213, 24);
             this.textBox4.TabIndex = 19;
-            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
+            this.textBox4.TextChanged += new System.EventHandler(this.TextBox4_TextChanged);
             // 
             // textBox3
             // 
@@ -858,7 +858,7 @@ namespace linway_app.Forms
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(182, 24);
             this.textBox3.TabIndex = 18;
-            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
+            this.textBox3.TextChanged += new System.EventHandler(this.TextBox3_TextChanged);
             // 
             // label31
             // 
@@ -916,7 +916,7 @@ namespace linway_app.Forms
             this.button13.TabIndex = 12;
             this.button13.Text = "Cancelar";
             this.button13.UseVisualStyleBackColor = true;
-            this.button13.Click += new System.EventHandler(this.button4_Click);
+            this.button13.Click += new System.EventHandler(this.Button4_Click);
             // 
             // button14
             // 
@@ -979,7 +979,7 @@ namespace linway_app.Forms
             this.button15.TabIndex = 12;
             this.button15.Text = "Cancelar";
             this.button15.UseVisualStyleBackColor = true;
-            this.button15.Click += new System.EventHandler(this.button15_Click);
+            this.button15.Click += new System.EventHandler(this.Button15_Click);
             // 
             // comboBox9
             // 
@@ -1075,7 +1075,7 @@ namespace linway_app.Forms
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(182, 24);
             this.textBox7.TabIndex = 18;
-            this.textBox7.TextChanged += new System.EventHandler(this.textBox7_TextChanged);
+            this.textBox7.TextChanged += new System.EventHandler(this.TextBox7_TextChanged);
             // 
             // label36
             // 
@@ -1114,7 +1114,7 @@ namespace linway_app.Forms
             this.button17.TabIndex = 12;
             this.button17.Text = "Cancelar";
             this.button17.UseVisualStyleBackColor = true;
-            this.button17.Click += new System.EventHandler(this.button15_Click);
+            this.button17.Click += new System.EventHandler(this.Button15_Click);
             // 
             // button18
             // 
@@ -1125,7 +1125,7 @@ namespace linway_app.Forms
             this.button18.TabIndex = 5;
             this.button18.Text = "Modificar";
             this.button18.UseVisualStyleBackColor = true;
-            this.button18.Click += new System.EventHandler(this.button18_Click);
+            this.button18.Click += new System.EventHandler(this.Button18_Click);
             // 
             // dataGridView1
             // 

@@ -184,9 +184,8 @@ namespace linway_app.Forms
             this.textBox15.Name = "textBox15";
             this.textBox15.Size = new System.Drawing.Size(45, 20);
             this.textBox15.TabIndex = 2;
-            this.textBox15.TextChanged += new System.EventHandler(this.textBox15_TextChanged);
+            this.textBox15.TextChanged += new System.EventHandler(this.TextBox15_TextChanged);
             this.textBox15.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
-            this.textBox15.Leave += new System.EventHandler(this.CargarCliente_Leave);
             // 
             // button15
             // 
@@ -211,7 +210,7 @@ namespace linway_app.Forms
             // 
             this.label42.AutoSize = true;
             this.label42.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label42.Location = new System.Drawing.Point(807, 133);
+            this.label42.Location = new System.Drawing.Point(798, 133);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(19, 20);
             this.label42.TabIndex = 14;
@@ -231,7 +230,7 @@ namespace linway_app.Forms
             // 
             this.label41.AutoSize = true;
             this.label41.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label41.Location = new System.Drawing.Point(813, 108);
+            this.label41.Location = new System.Drawing.Point(797, 108);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(49, 20);
             this.label41.TabIndex = 13;
@@ -243,9 +242,8 @@ namespace linway_app.Forms
             this.textBox16.Name = "textBox16";
             this.textBox16.Size = new System.Drawing.Size(45, 20);
             this.textBox16.TabIndex = 5;
-            this.textBox16.TextChanged += new System.EventHandler(this.textBox16_TextChanged);
+            this.textBox16.TextChanged += new System.EventHandler(this.TextBox16_TextChanged);
             this.textBox16.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
-            this.textBox16.Leave += new System.EventHandler(this.CargarProducto_Leave);
             // 
             // button14
             // 
@@ -297,7 +295,7 @@ namespace linway_app.Forms
             this.button13.TabIndex = 10;
             this.button13.Text = "Añadir a lista";
             this.button13.UseVisualStyleBackColor = true;
-            this.button13.Click += new System.EventHandler(this.NuevoProdVendidos_btn13_Click);
+            this.button13.Click += new System.EventHandler(this.AnyadirProdVendidos_Click);
             // 
             // textBox17
             // 
@@ -305,9 +303,8 @@ namespace linway_app.Forms
             this.textBox17.Name = "textBox17";
             this.textBox17.Size = new System.Drawing.Size(41, 20);
             this.textBox17.TabIndex = 8;
-            this.textBox17.TextChanged += new System.EventHandler(this.textBox17_TextChanged);
+            this.textBox17.TextChanged += new System.EventHandler(this.TextBox17_TextChanged);
             this.textBox17.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
-            this.textBox17.Leave += new System.EventHandler(this.CargarSubtotal_Leave);
             // 
             // label40
             // 
@@ -333,7 +330,7 @@ namespace linway_app.Forms
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(115, 20);
             this.textBox1.TabIndex = 49;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.textBox1.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
             // 
             // label2
             // 
@@ -351,7 +348,7 @@ namespace linway_app.Forms
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(115, 20);
             this.textBox2.TabIndex = 51;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
             // 
             // labelClienteId
             // 

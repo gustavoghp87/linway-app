@@ -1,5 +1,5 @@
 ﻿using linway_app.Models;
-using linway_app.Services;
+using linway_app.Models.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -24,35 +24,31 @@ namespace linway_app.Forms
         }
         private void FormCrearNota_Load(object sender, EventArgs e)
         {
-            Actualizar();
+            ActualizarGrid();
         }
-        private void Actualizar()
+        private void ActualizarGrid()
         {
-            if (_lstProdVendidos == null || _lstProdVendidos.Count == 0) return;
-            dataGridView4.DataSource = _lstProdVendidos.ToArray();
-            dataGridView4.Columns[0].Visible = false;
-            dataGridView4.Columns[1].Width = 30;
-            dataGridView4.Columns[2].Visible = false;
-            dataGridView4.Columns[3].Visible = false;
-            dataGridView4.Columns[4].Visible = false;
-            dataGridView4.Columns[5].Width = 30;
-            dataGridView4.Columns[6].Visible = true;
-            dataGridView4.Columns[7].Visible = true;
-            dataGridView4.Columns[8].Visible = false;
-            dataGridView4.Columns[9].Visible = false;
-            dataGridView4.Columns[10].Visible = false;
-            dataGridView4.Columns[11].Visible = false;
-            dataGridView4.Columns[12].Visible = false;
+            if (_lstProdVendidos != null)
+            {
+                List<EProdVendido> grid = new List<EProdVendido>();
+                foreach (ProdVendido prodVendido in _lstProdVendidos)
+                {
+                    grid.Add(Form1._mapper.Map<EProdVendido>(prodVendido));
+                }
+                dataGridView4.DataSource = grid;
+                dataGridView4.Columns[0].Width = 28;
+                dataGridView4.Columns[1].Width = 100;
+            }
         }
         private void SoloNumero_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
+            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
             {
                 e.Handled = true;
                 return;
             }
         }
-        private void textBox15_TextChanged(object sender, EventArgs e)
+        private void TextBox15_TextChanged(object sender, EventArgs e)
         {
             textBox1.Text = "";
             if (textBox15.Text != "")
@@ -74,7 +70,7 @@ namespace linway_app.Forms
                 labelClienteId.Text = "";
             }
         }
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs e)
         {
             if (textBox1.Text != "")
             {
@@ -94,9 +90,7 @@ namespace linway_app.Forms
                 labelClienteId.Text = "";
             }
         }
-        private void CargarCliente_Leave(object sender, EventArgs e)
-        {}
-        private void textBox16_TextChanged(object sender, EventArgs e)
+        private void TextBox16_TextChanged(object sender, EventArgs e)
         {
             if (textBox16.Text != "")
             {
@@ -119,7 +113,7 @@ namespace linway_app.Forms
                 labelProductoId.Text = "";
             }
         }
-        private void textBox2_TextChanged(object sender, EventArgs e)  // prod x nombr
+        private void TextBox2_TextChanged(object sender, EventArgs e)  // prod x nombr
         {
             if (textBox2.Text != "")
             {
@@ -141,9 +135,7 @@ namespace linway_app.Forms
                 labelProductoId.Text = "";
             }
         }
-        private void CargarProducto_Leave(object sender, EventArgs e)
-        {}
-        private void textBox17_TextChanged(object sender, EventArgs e)
+        private void TextBox17_TextChanged(object sender, EventArgs e)
         {
             if (labelProductoId.Text != "")
             {
@@ -161,53 +153,46 @@ namespace linway_app.Forms
                 label40.Text = "";
             }
         }
-        private void CargarSubtotal_Leave(object sender, EventArgs e)
-        {}
         private void LimpiarLista_Click(object sender, EventArgs e)
         {
             _lstProdVendidos.Clear();
-            dataGridView4.DataSource = _lstProdVendidos.ToArray();
+            ActualizarGrid();
             label42.Text = "";
         }
-
-
-        private void NuevoProdVendidos_btn13_Click(object sender, EventArgs e)
+        private void AnyadirProdVendidos_Click(object sender, EventArgs e)
         {
             if (labelClienteId.Text != "" && labelProductoId.Text != "")
             {
                 try { long.Parse(labelProductoId.Text); } catch { return; };
-                var producto = getProducto(long.Parse(labelProductoId.Text));
-                var cantidad = int.Parse(textBox17.Text);
-
-                for (int i = 0; i < cantidad; i++)
+                Producto producto = getProducto(long.Parse(labelProductoId.Text));
+                if (producto == null) return;
+                int cantidad = int.Parse(textBox17.Text);
+                ProdVendido nuevoPV = new ProdVendido
                 {
-                    ProdVendido nuevoPV = new ProdVendido
-                    {
-                        ProductoId = producto.Id,
-                        Descripcion = label38.Text,
-                        Cantidad = 1,
-                        Precio = producto.Precio
-                    };
-                    if (producto.Nombre.Contains("pendiente"))
-                    {
+                    ProductoId = producto.Id,
+                    Descripcion = label38.Text,
+                    Cantidad = cantidad,
+                    Precio = producto.Precio
+                };
 
-                    }
-                    else if (producto.Nombre.Contains("favor")
-                          || producto.Nombre.Contains("devoluci")
-                          || producto.Nombre.Contains("BONIF")
-                    )
-                        nuevoPV.Precio = producto.Precio * -1;
-                    else if (producto.Nombre.Contains("actura"))
-                        nuevoPV.Descripcion = label38.Text + textBox20.Text;
-                    else
-                        nuevoPV.Cantidad = int.Parse(textBox17.Text);
-                    _lstProdVendidos.Add(nuevoPV);
-                }
+                if (producto.Nombre.Contains("pendiente"))
+                {}
+                else if (producto.Nombre.Contains("favor")
+                        || producto.Nombre.Contains("devoluci")
+                        || producto.Nombre.Contains("BONIF")
+                )
+                    nuevoPV.Precio = producto.Precio * -1;
+                else if (producto.Nombre.Contains("actura"))
+                    nuevoPV.Descripcion = label38.Text + textBox20.Text;
+                else
+                    nuevoPV.Cantidad = int.Parse(textBox17.Text);
+                
+                _lstProdVendidos.Add(nuevoPV);
 
                 decimal impTotal = 0;
                 foreach (ProdVendido prodVendido in _lstProdVendidos)
                 {
-                    impTotal += prodVendido.Precio;
+                    impTotal += prodVendido.Precio * prodVendido.Cantidad;
                 }
                 label42.Text = impTotal.ToString();
 
@@ -219,7 +204,7 @@ namespace linway_app.Forms
                 label38.Text = "";
                 label40.Text = "";
                 labelProductoId.Text = "";
-                Actualizar(); // dataGridView4.DataSource = _lstProdVendidos.ToArray();
+                ActualizarGrid();
             }
         }
 
@@ -240,19 +225,11 @@ namespace linway_app.Forms
                 comboBox4.Visible = false;
             }
         }
-
         private bool EsProducto(string nombre)
         {
-            bool es = true;
-            if ((nombre.Contains("pendiente")) || (nombre.Contains("favor")) || (nombre.Contains("actura"))
-                || (nombre.Contains("evoluc")) || (nombre.Contains("cobrar") || (nombre.Contains("BONIFI")))
-            )
-            {
-                es = false;
-            }
-            return es;
+            return !(nombre.Contains("pendiente") || nombre.Contains("favor") || nombre.Contains("actura")
+                || nombre.Contains("evoluc") || nombre.Contains("cobrar") || nombre.Contains("BONIFI"));
         }
-
         private void ConfirmarCrearNota_Click(object sender, EventArgs e)
         {
             if (labelClienteId.Text != "" && labelClienteId.Text != "No encontrado")
@@ -287,7 +264,7 @@ namespace linway_app.Forms
                     {
                         ClienteId = cliente.Id,
                         Cliente = cliente,
-                        Fecha = DateTime.Now.ToString(),
+                        Fecha = DateTime.Now.ToString("yyyy-MM-dd"),
                         NombreCliente = cliente.Direccion
                     };
                     long registroId = addRegistroVentaReturnId(nuevoRegistro);
