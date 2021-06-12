@@ -91,7 +91,7 @@ namespace linway_app.Forms
             this.gbBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbBorrar.Location = new System.Drawing.Point(592, 12);
             this.gbBorrar.Name = "gbBorrar";
-            this.gbBorrar.Size = new System.Drawing.Size(277, 290);
+            this.gbBorrar.Size = new System.Drawing.Size(277, 303);
             this.gbBorrar.TabIndex = 42;
             this.gbBorrar.TabStop = false;
             this.gbBorrar.Text = "Borrar Cliente";
@@ -108,7 +108,7 @@ namespace linway_app.Forms
             // 
             this.BusqPorDireLabel.AutoSize = true;
             this.BusqPorDireLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BusqPorDireLabel.Location = new System.Drawing.Point(62, 66);
+            this.BusqPorDireLabel.Location = new System.Drawing.Point(62, 65);
             this.BusqPorDireLabel.Name = "BusqPorDireLabel";
             this.BusqPorDireLabel.Size = new System.Drawing.Size(62, 15);
             this.BusqPorDireLabel.TabIndex = 6;
@@ -128,9 +128,10 @@ namespace linway_app.Forms
             // button23
             // 
             this.button23.Enabled = false;
-            this.button23.Location = new System.Drawing.Point(107, 238);
+            this.button23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button23.Location = new System.Drawing.Point(96, 233);
             this.button23.Name = "button23";
-            this.button23.Size = new System.Drawing.Size(75, 29);
+            this.button23.Size = new System.Drawing.Size(89, 37);
             this.button23.TabIndex = 4;
             this.button23.Text = "Borrar";
             this.button23.UseVisualStyleBackColor = true;
@@ -146,7 +147,7 @@ namespace linway_app.Forms
             // 
             // textBox22
             // 
-            this.textBox22.Location = new System.Drawing.Point(139, 27);
+            this.textBox22.Location = new System.Drawing.Point(139, 29);
             this.textBox22.Name = "textBox22";
             this.textBox22.Size = new System.Drawing.Size(43, 22);
             this.textBox22.TabIndex = 1;
@@ -156,7 +157,7 @@ namespace linway_app.Forms
             // 
             this.label48.AutoSize = true;
             this.label48.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label48.Location = new System.Drawing.Point(19, 30);
+            this.label48.Location = new System.Drawing.Point(19, 32);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(105, 15);
             this.label48.TabIndex = 0;
@@ -183,7 +184,7 @@ namespace linway_app.Forms
             this.gbAgregar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbAgregar.Location = new System.Drawing.Point(12, 12);
             this.gbAgregar.Name = "gbAgregar";
-            this.gbAgregar.Size = new System.Drawing.Size(270, 290);
+            this.gbAgregar.Size = new System.Drawing.Size(270, 303);
             this.gbAgregar.TabIndex = 43;
             this.gbAgregar.TabStop = false;
             this.gbAgregar.Text = "Agregar nuevo cliente";
@@ -222,13 +223,13 @@ namespace linway_app.Forms
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(148, 238);
+            this.button2.Location = new System.Drawing.Point(158, 247);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 20;
             this.button2.Text = "Limpiar";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.limpiar_Click);
+            this.button2.Click += new System.EventHandler(this.Limpiar_Click);
             // 
             // textBox2
             // 
@@ -240,7 +241,7 @@ namespace linway_app.Forms
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(59, 194);
+            this.radioButton2.Location = new System.Drawing.Point(59, 199);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(83, 19);
             this.radioButton2.TabIndex = 19;
@@ -258,7 +259,7 @@ namespace linway_app.Forms
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(148, 194);
+            this.radioButton1.Location = new System.Drawing.Point(148, 199);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(103, 19);
             this.radioButton1.TabIndex = 18;
@@ -300,9 +301,10 @@ namespace linway_app.Forms
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(59, 235);
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(41, 239);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 26);
+            this.button1.Size = new System.Drawing.Size(95, 40);
             this.button1.TabIndex = 16;
             this.button1.Text = "Agregar";
             this.button1.UseVisualStyleBackColor = true;
@@ -311,20 +313,20 @@ namespace linway_app.Forms
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(14, 135);
+            this.label4.Location = new System.Drawing.Point(14, 130);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(83, 15);
             this.label4.TabIndex = 10;
-            this.label4.Text = "Codigo Postal";
+            this.label4.Text = "Código Postal";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(37, 161);
+            this.label5.Location = new System.Drawing.Point(37, 156);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(55, 15);
             this.label5.TabIndex = 11;
-            this.label5.Text = "Telefono";
+            this.label5.Text = "Teléfono";
             // 
             // gbModificar
             // 
@@ -350,7 +352,7 @@ namespace linway_app.Forms
             this.gbModificar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbModificar.Location = new System.Drawing.Point(288, 12);
             this.gbModificar.Name = "gbModificar";
-            this.gbModificar.Size = new System.Drawing.Size(298, 290);
+            this.gbModificar.Size = new System.Drawing.Size(298, 303);
             this.gbModificar.TabIndex = 44;
             this.gbModificar.TabStop = false;
             this.gbModificar.Text = "Modificar Cliente";
@@ -358,7 +360,7 @@ namespace linway_app.Forms
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(49, 50);
+            this.label6.Location = new System.Drawing.Point(52, 50);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(62, 15);
             this.label6.TabIndex = 25;
@@ -402,7 +404,7 @@ namespace linway_app.Forms
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(58, 15);
             this.label49.TabIndex = 22;
-            this.label49.Text = "Telefono:";
+            this.label49.Text = "Teléfono:";
             // 
             // textBox23
             // 
@@ -413,13 +415,13 @@ namespace linway_app.Forms
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(165, 257);
+            this.button8.Location = new System.Drawing.Point(176, 262);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(75, 23);
             this.button8.TabIndex = 20;
             this.button8.Text = "Cancelar";
             this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.limpiar_Click);
+            this.button8.Click += new System.EventHandler(this.Limpiar_Click);
             // 
             // label25
             // 
@@ -486,18 +488,19 @@ namespace linway_app.Forms
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label23.ForeColor = System.Drawing.SystemColors.Highlight;
             this.label23.Location = new System.Drawing.Point(39, 76);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(0, 15);
+            this.label23.Size = new System.Drawing.Size(0, 16);
             this.label23.TabIndex = 9;
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(39, 257);
+            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button9.Location = new System.Drawing.Point(56, 257);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(101, 23);
+            this.button9.Size = new System.Drawing.Size(101, 35);
             this.button9.TabIndex = 16;
             this.button9.Text = "Modificar";
             this.button9.UseVisualStyleBackColor = true;
@@ -525,7 +528,7 @@ namespace linway_app.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(881, 314);
+            this.ClientSize = new System.Drawing.Size(881, 321);
             this.Controls.Add(this.gbBorrar);
             this.Controls.Add(this.gbModificar);
             this.Controls.Add(this.gbAgregar);

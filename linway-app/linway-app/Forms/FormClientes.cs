@@ -14,28 +14,14 @@ namespace linway_app.Forms
         }
 
         // agregar Cliente
-        public bool TodoOKagregarC()
-        {
-            bool correcto = false;
-            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != ""
-                && textBox4.Text != "" && textBox5.Text != "" && textBox18.Text != ""
-            )
-            {
-                if (radioButton1.Checked || radioButton2.Checked) correcto = true;
-            }
-            return correcto;
-        }
         private void AgregarCliente_Click(object sender, EventArgs e)
         {
-            if (TodoOKagregarC())
+            if (textBox2.Text != "" && (radioButton1.Checked || radioButton2.Checked))
             {
                 TipoR tipo = TipoR.Monotributo;
-                if (radioButton2.Checked)
-                {
-                    tipo = TipoR.Inscripto;
-                }
+                if (radioButton2.Checked) tipo = TipoR.Inscripto;
                 Cliente nuevoCliente = new Cliente {
-                    Direccion = textBox2.Text + " - " + textBox18.Text,
+                    Direccion = textBox18.Text != "" ? textBox2.Text + " - " + textBox18.Text : textBox2.Text,
                     CodigoPostal = textBox4.Text,
                     Telefono = textBox5.Text,
                     Nombre = textBox1.Text,
@@ -45,9 +31,9 @@ namespace linway_app.Forms
                 addCliente(nuevoCliente);
                 button2.PerformClick();
             }
-            else MessageBox.Show("Revise que se hayan llenado los campos correctamente");
+            else MessageBox.Show("Los campos Dirección y Responsable Inscr/Monotributo son obligatorios");
         }
-        private void limpiar_Click(object sender, EventArgs e)
+        private void Limpiar_Click(object sender, EventArgs e)
         {
             label23.Text = "";
             textBox1.Text = "";
@@ -68,28 +54,16 @@ namespace linway_app.Forms
             radioButton3.Checked = false;
             radioButton4.Checked = false;
         }
-        //private void keyPress_SoloLetras(object sender, KeyPressEventArgs e)
+        //private void KeyPress_SoloLetras(object sender, KeyPressEventArgs e)
         //{
-        //    if (Char.IsLetter(e.KeyChar))
-        //    {
-        //        e.Handled = false;
-        //    }
-        //    else if (Char.IsControl(e.KeyChar))
-        //    {
-        //        e.Handled = false;
-        //    }
-        //    else if (Char.IsSeparator(e.KeyChar))
-        //    {
-        //        e.Handled = false;
-        //    }
-        //    else
-        //    {
-        //        e.Handled = true;
-        //    }
+        //    if (Char.IsLetter(e.KeyChar)) e.Handled = false;
+        //    else if (Char.IsControl(e.KeyChar)) e.Handled = false;
+        //    else if (Char.IsSeparator(e.KeyChar)) e.Handled = false;
+        //    else e.Handled = true;
         //}
-        //private void keyPress_SoloNumeros(object sender, KeyPressEventArgs e)
+        //private void KeyPress_SoloNumeros(object sender, KeyPressEventArgs e)
         //{
-        //    if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
+        //    if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
         //    {
         //        e.Handled = true;
         //        return;
@@ -100,14 +74,8 @@ namespace linway_app.Forms
         //  modificar cliente
         bool TodoOkModificarC()
         {
-            bool correcto = false;
-            if (label23.Text != "No encontrado" && textBox10.Text != "" && textBox11.Text != ""
-                && textBox23.Text != "" && textBox24.Text != "" && textBox25.Text != ""
-            )
-            {
-                correcto = true;
-            }
-            return correcto;
+            return label23.Text != "No encontrado" && textBox10.Text != "" && textBox11.Text != ""
+                && textBox23.Text != "" && textBox24.Text != "" && textBox25.Text != "";
         }
         private void DoIt(Cliente cliente)
         {
@@ -185,13 +153,9 @@ namespace linway_app.Forms
                 cliente.Nombre = textBox11.Text;
                 cliente.Cuit = textBox10.Text;
                 if (radioButton3.Checked)
-                {
                     cliente.Tipo = TipoR.Inscripto.ToString();
-                }
                 else
-                {
                     cliente.Tipo = TipoR.Monotributo.ToString();
-                }
                 editCliente(cliente);
                 button8.PerformClick();
             }

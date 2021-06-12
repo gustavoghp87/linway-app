@@ -35,6 +35,8 @@ namespace linway_app.Services.Delegates
 
         private static bool AddCliente(Cliente cliente)
         {
+            while (cliente.Direccion.Contains("'")) cliente.Direccion = cliente.Direccion.Replace(char.Parse("'"), '"');
+            while (cliente.Nombre.Contains("'")) cliente.Nombre = cliente.Nombre.Replace(char.Parse("'"), '"');
             return Form1._servCliente.Add(cliente);
         }
         private static bool AddClientePrimero()

@@ -371,6 +371,8 @@
     <Compile Include="Models\Entities\ERegistroVenta.cs" />
     <Compile Include="Models\Entities\EVenta.cs" />
     <Compile Include="Models\Entities\Mapping\MappingProfile.cs" />
+    <Compile Include="Models\Enums\TipoSaldo.cs" />
+    <Compile Include="Models\Enums\TipoProducto.cs" />
     <Compile Include="Models\Interfaces\ICliente.cs" />
     <Compile Include="Models\Interfaces\IDetalleRecibo.cs" />
     <Compile Include="Models\Interfaces\IDiaReparto.cs" />
@@ -405,7 +407,6 @@
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Producto.cs" />
     <Compile Include="Models\ProdVendido.cs" />
-    <Compile Include="Models\Project\ProductoL.cs" />
     <Compile Include="Models\Recibo.cs" />
     <Compile Include="Models\RegistroVenta.cs" />
     <Compile Include="Models\Reparto.cs" />

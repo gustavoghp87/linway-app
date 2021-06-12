@@ -11,5 +11,7 @@ namespace linway_app.Models.Entities
 
         [DisplayName("Precio($)")]
         public decimal Precio { get; set; }
+        public string Tipo { get; set; }
+        public string SubTipo { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using linway_app.Models;
+using linway_app.Models.Enums;
 using System;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DProductos;
@@ -7,9 +8,17 @@ namespace linway_app.Forms
 {
     public partial class FormProductos : Form
     {
+        private string _tipo;
+        private string _subTipo;
+        private string _tipoMod;
+        private string _subTipoMod;
         public FormProductos()
         {
             InitializeComponent();
+            _tipo = TipoProducto.Líquido.ToString();
+            _subTipo = "";
+            _tipoMod = "";
+            _subTipoMod = "";
         }
         private void Limpiar_Click(object sender, EventArgs e)
         {
@@ -26,14 +35,48 @@ namespace linway_app.Forms
             radioButton2.Checked = false;
             radioButton3.Checked = false;
             radioButton4.Checked = false;
+            comboBox1.Visible = false;
+            comboBox2.Visible = false;
+            comboBox3.Visible = false;
         }
-        // private bool AlgunTipoSeleccionado()
-        // {
-        //     return (radioButton1.Checked | radioButton2.Checked | radioButton3.Checked | radioButton4.Checked);
-        // }
+
+        // AGREGAR PRODUCTO
+        private void SeleccionarTipo_CheckedChanged(object sender, EventArgs e)
+        {
+            comboBox1.Visible = true;
+            RadioButton elegido = (RadioButton)sender;
+            switch (elegido.Text)
+            {
+                case "Líquido":
+                    _tipo = TipoProducto.Líquido.ToString();
+                    comboBox1.DataSource = Enum.GetValues(typeof(TipoLiquido));
+                    break;
+                case "Polvo":
+                    _tipo = TipoProducto.Polvo.ToString();
+                    comboBox1.Visible = true;
+                    comboBox1.DataSource = Enum.GetValues(typeof(TipoPolvo));
+                    break;
+                case "Unidad":
+                    _tipo = TipoProducto.Unidad.ToString();
+                    comboBox1.Visible = false;
+                    comboBox1.DataSource = null;
+                    break;
+                case "Saldo":
+                    _tipo = TipoProducto.Saldo.ToString();
+                    comboBox1.Visible = true;
+                    comboBox1.DataSource = Enum.GetValues(typeof(TipoSaldo));
+                    break;
+            }
+        }
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedItem != null) _subTipo = comboBox1.SelectedItem.ToString();
+            else _subTipo = "";
+        }
         private bool TodoOKagregarP()
         {
-            return (textBox6.Text != "" && textBox7.Text != "");
+            return textBox6.Text != "" && textBox7.Text != ""
+                && (radioButton1.Checked | radioButton2.Checked | radioButton3.Checked | radioButton4.Checked);
         }
         private void AgregarProducto_Click(object sender, EventArgs e)
         {
@@ -42,15 +85,14 @@ namespace linway_app.Forms
                 try { decimal.Parse(textBox7.Text); } catch { return; };
                 Producto nuevoProducto = new Producto {
                     Nombre = textBox6.Text,
-                    Precio = decimal.Parse(textBox7.Text)
+                    Precio = decimal.Parse(textBox7.Text),
+                    Tipo = _tipo.ToString()
                 };
+                if (_subTipo != "") nuevoProducto.SubTipo = _subTipo;
                 addProducto(nuevoProducto);
                 limpiarBtn.PerformClick();
             }
-            else
-            {
-                MessageBox.Show("Verifique los campos.");
-            }
+            else MessageBox.Show("Verifique los campos.");
         }
         private void SoloImporte_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -73,78 +115,135 @@ namespace linway_app.Forms
                     return;
                 }
             }
-            if (e.KeyChar >= 48 && e.KeyChar <= 57)
-                e.Handled = false;
-            else if (e.KeyChar == 44)
-                e.Handled = (IsDec) ? true : false;
-            else
-                e.Handled = true;
+            if (e.KeyChar >= 48 && e.KeyChar <= 57) e.Handled = false;
+            else if (e.KeyChar == 44) e.Handled = (IsDec) ? true : false;
+            else e.Handled = true;
         }
 
-        //Modificar
+        // MODIFICAR PRODUCTO
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
+            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
             {
                 e.Handled = true;
                 return;
             }
         }
-        private void textBox8_TextChanged(object sender, EventArgs e)   // buscar por id
+        private void CargarDatosAModificar(Producto producto)
+        {
+            if (producto != null)
+            {
+                liberado = false;
+                liberado2 = false;
+                label19.Text = producto.Nombre;
+                textBox9.Text = producto.Precio.ToString();
+                _tipoMod = producto.Tipo;
+                if (producto.SubTipo != null)
+                {
+                    _subTipoMod = producto.SubTipo;
+                    comboBox2.Visible = true;
+                }
+                else _subTipoMod = "";
+                comboBox3.Visible = true;
+                comboBox3.DataSource = Enum.GetValues(typeof(TipoProducto));
+            }
+            else
+            {
+                label19.Text = "No encontrado";
+                textBox9.Text = "";
+                _subTipoMod = "";
+                comboBox3.Visible = false;
+                comboBox2.Visible = false;
+            }
+        }
+
+        bool liberado = false;
+        bool liberado2 = false;
+        private void ComboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox tipoElegido = (ComboBox)sender;
+            if (_tipoMod == null) return;
+            if (_tipoMod != "" && !liberado)
+            {
+                tipoElegido.Text = _tipoMod.ToString();
+                _tipoMod = "";
+            }
+            switch (tipoElegido.Text)
+            {
+                case "Líquido":
+                    _tipoMod = TipoProducto.Líquido.ToString();
+                    comboBox2.Visible = true;
+                    comboBox2.DataSource = Enum.GetValues(typeof(TipoLiquido));
+                    break;
+                case "Polvo":
+                    _tipoMod = TipoProducto.Polvo.ToString();
+                    comboBox2.Visible = true;
+                    comboBox2.DataSource = Enum.GetValues(typeof(TipoPolvo));
+                    break;
+                case "Unidad":
+                    _tipoMod = TipoProducto.Unidad.ToString();
+                    comboBox2.Visible = false;
+                    comboBox2.DataSource = null;
+                    break;
+                case "Saldo":
+                    _tipoMod = TipoProducto.Saldo.ToString();
+                    comboBox2.Visible = true;
+                    comboBox2.DataSource = Enum.GetValues(typeof(TipoSaldo));
+                    break;
+            }
+            comboBox2.Text = _subTipoMod;
+            liberado = true;
+        }
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_subTipoMod == null) return;
+            ComboBox tipoElegido = (ComboBox)sender;
+            if (_subTipoMod != "" && !liberado2)
+            {
+                tipoElegido.Text = _subTipoMod;
+                //_subTipoMod = "";
+                liberado2 = true;
+            }
+            //else _subTipoMod = tipoElegido.Text;
+        }
+        private void TextBox8_TextChanged(object sender, EventArgs e)   // buscar por id
         {
             if (textBox8.Text != "")
             {
                 try { long.Parse(textBox8.Text); } catch { return; };
                 Producto producto = getProducto(long.Parse(textBox8.Text));
-                if (producto != null)
-                {
-                    label19.Text = producto.Nombre;
-                    textBox9.Text = producto.Precio.ToString();        // campo de edición
-                }
-                else
-                {
-                    label19.Text = "No encontrado";
-                    textBox9.Text = "";
-                }
+                CargarDatosAModificar(producto);
             }
             else
             {
                 label19.Text = "";
                 textBox9.Text = "";
+                _tipoMod = "";
+                _subTipoMod = "";
+                comboBox3.Visible = false;
+                comboBox2.Visible = false;
             }
         }
-        private void textBox2_TextChanged(object sender, EventArgs e)  // buscar por nombre
+        private void TextBox2_TextChanged(object sender, EventArgs e)  // buscar por nombre
         {
             if (textBox2.Text != "")
             {
                 Producto producto = getProductoPorNombre(textBox2.Text);
-                if (producto != null)
-                {
-                    label19.Text = producto.Nombre;
-                    textBox9.Text = producto.Precio.ToString();        // campo de edición
-                }
-                else
-                {
-                    label19.Text = "No encontrado";
-                    textBox9.Text = "";
-                }
+                CargarDatosAModificar(producto);
             }
             else
             {
                 label19.Text = "";
                 textBox9.Text = "";
+                _tipoMod = "";
+                _subTipoMod = "";
+                comboBox3.Visible = false;
+                comboBox2.Visible = false;
             }
         }
         bool TodoOKmodificarP()
         {
-            if (label19.Text == "No encontrado" || label19.Text == "" || textBox9.Text == "")
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return !(label19.Text == "No encontrado" || label19.Text == "" || textBox9.Text == "");
         }
         private void EditarProducto_Click(object sender, EventArgs e)
         {
@@ -154,21 +253,18 @@ namespace linway_app.Forms
                 if (producto == null) return;
                 try { decimal.Parse(textBox9.Text); } catch { return; };
                 producto.Precio = decimal.Parse(textBox9.Text);
+                producto.Tipo = comboBox3.Text;
+                if (comboBox2.Text != null && comboBox2.Text != "") producto.SubTipo = comboBox2.Text;
                 editProducto(producto);
                 button6.PerformClick();
             }
-            else
-            {
-                MessageBox.Show("Verifique que se hayan llenado los campos correctamente");
-            }
+            else MessageBox.Show("Verifique que se hayan llenado los campos correctamente");
         }
 
 
 
         //Borrar
-        private void textBox21_Leave(object sender, EventArgs e)
-        {}
-        private void textBox21_TextChanged(object sender, EventArgs e)  // por id
+        private void TextBox21_TextChanged(object sender, EventArgs e)  // por id
         {
             if (textBox21.Text != "")
             {
@@ -191,7 +287,7 @@ namespace linway_app.Forms
                 button22.Enabled = false;
             }
         }
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs e)
         {
             if (textBox1.Text != "")
             {
@@ -225,69 +321,11 @@ namespace linway_app.Forms
                 label46.Text = "";
                 cbSeguroBorrar.Checked = false;
             }
-            else
-            {
-                MessageBox.Show("Tilde si esta seguro para borrar el producto");
-            }
+            else MessageBox.Show("Tilde si esta seguro para borrar el producto");
         }
-
         private void SalirBtn_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-
-
-
-
-
-
-        // proyecto tipos de producto:
-
-        private void SeleccionarTipo_CheckedChanged(object sender, EventArgs e)
-        {
-            comboBox1.Visible = true;
-            RadioButton elegido = (RadioButton)sender;
-
-            switch (elegido.Text)
-            {
-                case "Liquido":
-                    //productoNuevo = new Liquido();
-                    //comboBox1.DataSource = Enum.GetValues(typeof(TipoLiquido));
-                    break;
-                case "Polvo":
-                    //productoNuevo = new Polvo();
-                    comboBox1.Visible = true;
-                    //comboBox1.DataSource = Enum.GetValues(typeof(TipoPolvo));
-                    break;
-                case "Unidades":
-                    //productoNuevo = new Unidades();
-                    comboBox1.Visible = false;
-                    comboBox1.DataSource = null;
-                    break;
-                case "Otro":
-                    //productoNuevo = new Otros();
-                    comboBox1.Visible = false;
-                    comboBox1.DataSource = null;
-                    break;
-            }
-        }
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //productoNuevo.DarTipoDeProducto((Enum)comboBox1.SelectedItem);
-        }
-        private void agregarPL_Click(object sender, EventArgs e)
-        {
-            if (TodoOKagregarP())
-            {
-                //GetProductos();
-                //productoNuevo.Nombre = textBox6.Text;
-                //productoNuevo.Precio = float.Parse(textBox7.Text);
-                ////listaProductos.Add(productoNuevo);
-                //GuardarProducto();
-                //button4.PerformClick();
-            }
-
         }
     }
 }

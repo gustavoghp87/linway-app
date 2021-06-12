@@ -225,11 +225,6 @@ namespace linway_app.Forms
                 comboBox4.Visible = false;
             }
         }
-        private bool EsProducto(string nombre)
-        {
-            return !(nombre.Contains("pendiente") || nombre.Contains("favor") || nombre.Contains("actura")
-                || nombre.Contains("evoluc") || nombre.Contains("cobrar") || nombre.Contains("BONIFI"));
-        }
         private void ConfirmarCrearNota_Click(object sender, EventArgs e)
         {
             if (labelClienteId.Text != "" && labelClienteId.Text != "No encontrado")
@@ -271,7 +266,7 @@ namespace linway_app.Forms
                     foreach (var prodVendido in _lstProdVendidos)
                     {
                         prodVendido.RegistroVentaId = registroId;
-                        if (EsProducto(prodVendido.Producto.Nombre))
+                        if (esProducto(prodVendido.Producto))
                         {
                             List<Venta> lstVentas = getVentas();
                             bool exists = false;

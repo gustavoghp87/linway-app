@@ -196,18 +196,6 @@ namespace linway_app.Forms
                 labelPrecio.Text = "";
             }
         }
-        private bool EsProducto(long productoId)
-        {
-            bool es = true;
-            string nombreProd = _lstProductos.Find(x => x.Id == productoId).Nombre;
-            if ((nombreProd.Contains("pendiente")) || (nombreProd.Contains("favor")) || (nombreProd.Contains("actura"))
-                 || (nombreProd.Contains("evoluc")) || (nombreProd.Contains("cobrar") || (nombreProd.Contains("BONIFI")))
-            )
-            {
-                es = false;
-            }
-            return es;
-        }
         private void Limpiar_Click(object sender, EventArgs e)
         {
             _lstAgregarVentas.Clear();
@@ -259,7 +247,7 @@ namespace linway_app.Forms
 
                 foreach (Venta ventaParaAgregar in _lstAgregarVentas)
                 {
-                    if (EsProducto(ventaParaAgregar.ProductoId))
+                    if (esProducto(ventaParaAgregar.Producto))
                     {
                         // hacer o editar ventas
                         Venta venta = getVenta(ventaParaAgregar.ProductoId);
@@ -452,7 +440,7 @@ namespace linway_app.Forms
 
                 }
                 foreach (ProdVendido prodVendido in registro.ProdVendido)
-                    if (EsProducto(prodVendido.ProductoId))
+                    if (esProducto(prodVendido.Producto))
                         foreach (Venta venta in _lstVentas)
                             if (venta.ProductoId.Equals(prodVendido.ProductoId)) venta.Cantidad -= prodVendido.Cantidad;
                 editRegistroVenta(registro);

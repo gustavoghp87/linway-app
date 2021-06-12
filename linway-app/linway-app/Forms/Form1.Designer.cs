@@ -314,7 +314,7 @@ namespace linway_app.Forms
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowHeadersWidth = 10;
             this.dataGridView2.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridView2.Size = new System.Drawing.Size(452, 281);
+            this.dataGridView2.Size = new System.Drawing.Size(635, 281);
             this.dataGridView2.TabIndex = 19;
             // 
             // openFileDialog1

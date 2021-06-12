@@ -10,6 +10,7 @@ namespace linway_app.Services.Delegates
         public delegate void DAddProducto(Producto Producto);
         public delegate void DDeleteProducto(Producto producto);
         public delegate void DEditProducto(Producto producto);
+        public delegate bool DEsProducto(Producto producto);
         public delegate Producto DGetProducto(long productId);
         public delegate Producto DGetProductoPorNombre(string nombre);
         public delegate Producto DGetProductoPorNombreExacto(string nombre);
@@ -21,6 +22,8 @@ namespace linway_app.Services.Delegates
             = new DDeleteProducto(DeleteProducto);
         public readonly static DEditProducto editProducto
             = new DEditProducto(EditProducto);
+        public readonly static DEsProducto esProducto
+            = new DEsProducto(EsProducto);
         public readonly static DGetProducto getProducto
             = new DGetProducto(GetProducto);
         public readonly static DGetProductoPorNombre getProductoPorNombre
@@ -32,6 +35,7 @@ namespace linway_app.Services.Delegates
 
         private static void AddProducto(Producto producto)
         {
+            while(producto.Nombre.Contains("'")) producto.Nombre = producto.Nombre.Replace(char.Parse("'"), '"');
             bool response = Form1._servProducto.Add(producto);
             if (!response) MessageBox.Show("Algo falló al guardar Producto en la base de datos");
         }
@@ -44,6 +48,12 @@ namespace linway_app.Services.Delegates
         {
             bool response = Form1._servProducto.Edit(producto);
             if (!response) MessageBox.Show("Algo falló al editar Producto en la base de datos");
+        }
+        private static bool EsProducto(Producto producto)
+        {
+            string nombre = producto.Nombre;
+            return !(nombre.Contains("pendiente") || nombre.Contains("favor") || nombre.Contains("actura")
+                     || nombre.Contains("evoluc") || nombre.Contains("cobrar") || nombre.Contains("BONIFI"));
         }
         private static Producto GetProducto(long productId)
         {

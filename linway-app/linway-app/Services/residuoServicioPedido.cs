@@ -45,18 +45,6 @@
         //    return pedido;
         //}
 
-        //private void ModificarRenglon(Pedido pedido, long cant, string prod)
-        //{
-        //if (EsPolvo(prod))
-        //{
-        //    SumarPolvo(cant, prod);
-        //}
-
-        //if ((!EsPolvo(prod)) && (!EsOtro(prod)) && !(prod.Contains("cobrar")))
-        //{
-        //    SumarLiquido(pedido, cant);
-        //}
-
         //if (!EsProducto(prod))
         //{
         //    //Aca agregar para cada producto ( si es polvo, liquido, bolsas o talonario con funciones bool)
@@ -83,19 +71,6 @@
         //        }
         //    }
         //}
-        //pedido.Entregar = 1;
-        //}
-
-        //private bool EsPolvo(string cadena)
-        //{
-        //    bool es = false;
-        //    if ((cadena.Contains("pol - p")) || (cadena.Contains("san - p")) || (cadena.Contains("bón - p")) || (cadena.Contains("son - p")) || (cadena.Contains("ial - p")))
-        //    {
-        //        es = true;
-        //    }
-
-        //    return es;
-        //}
 
         //private void SumarPolvo(long c, string cadena)
         //{
@@ -119,29 +94,6 @@
         //    {
         //        _pedido.Ae += (c / 20);
         //    }
-        //}
-
-        //private bool EsOtro(string cadena)
-        //{
-        //    bool es = false;
-        //    if ((cadena.Contains("olsas")) || (cadena.Contains("BONIFI")) || (cadena.Contains("Tal/"))
-        //        || (cadena.Contains("queador")) || (cadena.Contains("pendiente")) || (cadena.Contains("actura"))
-        //        || (cadena.Contains("favor")) || (cadena.Contains("escuento")))
-        //    {
-        //        es = true;
-        //    }
-        //    return es;
-        //}
-
-        //private static bool EsProducto(string descripcion)
-        //{
-        //    bool es = false;
-        //    if ((descripcion.Contains("pendiente")) || (descripcion.Contains("BONIFI")) || (descripcion.Contains("actura"))
-        //        || (descripcion.Contains("favor")) || (descripcion.Contains("escuento")))
-        //    {
-        //        es = true;
-        //    }
-        //    return es;
         //}
     }
 }
