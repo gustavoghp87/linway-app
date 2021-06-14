@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DClientes;
-using static linway_app.Services.Delegates.DProductos;
+using static linway_app.Services.Delegates.DProducto;
 
 namespace linway_app.Forms
 {

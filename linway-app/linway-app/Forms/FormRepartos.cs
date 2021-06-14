@@ -33,11 +33,7 @@ namespace linway_app.Forms
         private void Actualizar()
         {
             _lstDiaRepartos = getDiaRepartos();
-            _lstRepartos = getRepartos();
-            _lstPedidos = getPedidos();
-            _lstPedidos = (from x in _lstPedidos select x).OrderBy(x => x.Orden).ToList();
             if (_lstDiaRepartos == null || _lstDiaRepartos.Count == 0) CrearDias();
-            ActualizarGrid(_lstPedidos);
         }
         private void CrearDias()
         {
@@ -66,17 +62,17 @@ namespace linway_app.Forms
                 }
                 grid1 = grid1.OrderBy(x => x.Orden).ToList();
                 dataGridView1.DataSource = grid1;
-                dataGridView1.Columns[0].Width = 35;
-                dataGridView1.Columns[1].Width = 35;
-                dataGridView1.Columns[2].Width = 180;
+                dataGridView1.Columns[0].Visible = false;
+                dataGridView1.Columns[1].Width = 37;
+                dataGridView1.Columns[2].Width = 230;
                 dataGridView1.Columns[3].Width = 320;
-                dataGridView1.Columns[4].Width = 50;
+                dataGridView1.Columns[4].Width = 53;
                 dataGridView1.Columns[5].Width = 30;
                 dataGridView1.Columns[6].Width = 30;
                 dataGridView1.Columns[7].Width = 30;
                 dataGridView1.Columns[8].Width = 30;
                 dataGridView1.Columns[9].Width = 30;
-                dataGridView1.Columns[11].Visible = true;
+                dataGridView1.Columns[11].Visible = false;
             }
         }
         private void ReCargarHDR(string elDia, string elReparto)
@@ -86,34 +82,6 @@ namespace linway_app.Forms
             long repartoId = _lstRepartos.Find(x => x.Nombre == elReparto).Id;
             _lstPedidos = getPedidosPorRepartoId(repartoId);
             _lstPedidos = _lstPedidos.OrderBy(x => x.Orden).ToList();
-        }
-        public void LimpiarReparto(Reparto reparto)
-        {
-            reparto.Ta = 0;
-            reparto.Te = 0;
-            reparto.Td = 0;
-            reparto.Tt = 0;
-            reparto.Tae = 0;
-            reparto.TotalB = 0;
-            reparto.Tl = 0;
-            foreach (Pedido pedido in reparto.Pedidos)
-            {
-                pedido.Entregar = 0;
-                pedido.L = 0;
-                pedido.ProductosText = "";
-                pedido.A = 0;
-                pedido.E = 0;
-                pedido.D = 0;
-                pedido.T = 0;
-                pedido.Ae = 0;
-                editPedido(pedido);
-                foreach (ProdVendido prodVendido in pedido.ProdVendidos)
-                {
-                    prodVendido.PedidoId = 0;
-                    editProdVendido(prodVendido);
-                }
-            }
-            editReparto(reparto);
         }
         private void Exportar_Click(object sender, EventArgs e)
         {
@@ -158,6 +126,7 @@ namespace linway_app.Forms
         //____________________Ejegir Hoja de Reparto______________________________
         private void VerDatos(Reparto reparto)
         {
+            if (reparto == null) return;
             label14.Text = reparto.Ta.ToString();
             label15.Text = reparto.Te.ToString();
             label16.Text = reparto.Td.ToString();
@@ -323,8 +292,7 @@ namespace linway_app.Forms
             {
                 foreach (Reparto reparto in diaReparto.Reparto)
                 {
-                    LimpiarReparto(reparto);
-                    editReparto(reparto);
+                    cleanReparto(reparto);
                 }
             }
             LimpiarPantalla();
@@ -355,7 +323,7 @@ namespace linway_app.Forms
                     List<Reparto> lstRepartos = _lstDiaRepartos.Find(x => x.Dia == comboBox6.Text).Reparto.ToList();
                     foreach (Reparto reparto in lstRepartos)
                     {
-                        LimpiarReparto(reparto);
+                        cleanReparto(reparto);
                     }
                     LimpiarPantalla();
                     Actualizar();
@@ -385,10 +353,11 @@ namespace linway_app.Forms
             {
                 string dia = comboBox8.Text;
                 string nombre = comboBox7.Text;
-                Reparto reparto = _lstDiaRepartos.Find(x => x.Dia == dia).Reparto.ToList().Find(x => x.Nombre == nombre);
+                Reparto reparto = _lstDiaRepartos.Find(x => x.Dia == dia).Reparto.ToList()
+                    .Find(x => x.Nombre == nombre);
                 comboBox1.SelectedIndex = comboBox8.SelectedIndex;
                 comboBox2.SelectedIndex = comboBox7.SelectedIndex;
-                LimpiarReparto(reparto);
+                cleanReparto(reparto);
                 VerDatos(reparto);
                 LimpiarPantalla();
                 Actualizar();
@@ -405,40 +374,23 @@ namespace linway_app.Forms
         }
         private void TextBox7_TextChanged(object sender, EventArgs e)
         {
-            if (_lstPedidos.Exists(x => x.Direccion.Contains(textBox7.Text)))
-            {
-                label36.Text = _lstPedidos.Find(x => x.Direccion.Contains(textBox7.Text)).Direccion;
-            }
-            else
-            {
-                label36.Text = "No encontrado";
-            }
+            Pedido pedido = _lstPedidos.Find(x => x.Direccion.ToLower().Contains(textBox7.Text.ToLower()));
+            if (pedido != null) label36.Text = pedido.Direccion;
+            else label36.Text = "No encontrado";
         }
         private void Button18_Click(object sender, EventArgs e)
         {
-            if (_lstPedidos.Exists(x => x.Direccion == label36.Text))
+            ReCargarHDR(comboBox1.Text, comboBox2.Text);
+            string direcCliente = label36.Text;
+            string nombreRep = comboBox2.Text;
+            string direccion = label36.Text;
+            Pedido pedido = getPedidoPorDireccion(label36.Text);
+            Reparto reparto = getReparto(pedido.RepartoId);
+            if (pedido != null)
             {
-                string direcCliente = label36.Text;
-                ReCargarHDR(comboBox1.Text, comboBox2.Text);
-                string nombreRep = comboBox2.Text;
-                string direccion = label36.Text;
-                Reparto reparto = _lstRepartos.Find(x => x.Nombre == nombreRep);
-                Pedido pedido = _lstPedidos.Find(x => x.Direccion == direccion);
-                reparto.Tl -= pedido.L;
-                reparto.Ta -= pedido.A;
-                reparto.TotalB -= pedido.A;
-                reparto.Te -= pedido.E;
-                reparto.TotalB -= pedido.E;
-                reparto.Tt -= pedido.T;
-                reparto.TotalB -= pedido.T;
-                reparto.Tae -= pedido.Ae;
-                reparto.TotalB -= pedido.Ae;
-                reparto.Td -= pedido.D;
-                reparto.TotalB -= pedido.D;
-                VerDatos(reparto);
-                editReparto(reparto);
-                // EliminarPedido(pedido);   ??
-                LimpiarReparto(reparto);
+                substractPedidoAReparto(reparto, pedido);
+                cleanPedido(pedido);
+                VerDatos(getReparto(pedido.RepartoId));
                 LimpiarPantalla();
                 Actualizar();
             }
@@ -465,7 +417,7 @@ namespace linway_app.Forms
             if (aux == null) label31.Text = "No encontrado";
             else label31.Text = aux.Direccion;
         }
-        private void Button14_Click(object sender, EventArgs e)
+        private void Button14_Click(object sender, EventArgs e)           //   aceptar
         {
             if (
                 label30.Text != "No encontrado" && label30.Text != "" &&

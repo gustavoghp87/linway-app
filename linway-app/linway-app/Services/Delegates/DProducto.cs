@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace linway_app.Services.Delegates
 {
-    public static class DProductos
+    public static class DProducto
     {
         public delegate void DAddProducto(Producto Producto);
         public delegate void DDeleteProducto(Producto producto);
@@ -51,9 +51,9 @@ namespace linway_app.Services.Delegates
         }
         private static bool EsProducto(Producto producto)
         {
-            string nombre = producto.Nombre;
+            string nombre = producto.Nombre.ToLower();
             return !(nombre.Contains("pendiente") || nombre.Contains("favor") || nombre.Contains("actura")
-                     || nombre.Contains("evoluc") || nombre.Contains("cobrar") || nombre.Contains("BONIFI"));
+                     || nombre.Contains("evoluc") || nombre.Contains("cobrar") || nombre.Contains("bonifi"));
         }
         private static Producto GetProducto(long productId)
         {

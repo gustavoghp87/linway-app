@@ -10,48 +10,79 @@ namespace linway_app.Services.Delegates
 {
     public static class DReparto
     {
-        public delegate void DAddReparto(Reparto pedido);
-        public delegate void DAddPedidoAReparto(Reparto reparto, Cliente cliente,
-            List<ProdVendido> lstProdVendidos);
+        public delegate void DAddPedidoARepartoSimple(Reparto reparto, Pedido pedido);
+        public delegate void DAddReparto(Reparto reparto);
+        public delegate Reparto DCleanReparto(Reparto reparto);
+        public delegate void DEditReparto(Reparto reparto);
         public delegate bool DExportReparto(string dia, string nombreReparto);
         public delegate Reparto DGetReparto(long repartoId);
+        public delegate Reparto DGetRepartoPorDiaYNombre(string dia, string nombre);
         public delegate List<Reparto> DGetRepartos();
         public delegate List<Reparto> DGetRepartosPorDia(string diaReparto);
-        public delegate Reparto DGetRepartoPorNombre(string dia, string nombre);
-        public delegate void DEditReparto(Reparto reparto);
+        public delegate void DSubstractPedidoAReparto(Reparto reparto, Pedido pedido);
 
+        public readonly static DAddPedidoARepartoSimple addPedidoARepartoSimple
+            = new DAddPedidoARepartoSimple(AddPedidoARepartoSimple);
         public readonly static DAddReparto addReparto
             = new DAddReparto(AddReparto);
-        public readonly static DAddPedidoAReparto addPedidoAReparto
-            = new DAddPedidoAReparto(AddPedidoAReparto);
+        public readonly static DCleanReparto cleanReparto
+            = new DCleanReparto(CleanReparto);
         public readonly static DExportReparto exportReparto
             = new DExportReparto(ExportReparto);
+        public readonly static DEditReparto editReparto
+            = new DEditReparto(EditReparto);
         public readonly static DGetReparto getReparto
             = new DGetReparto(GetReparto);
+        public readonly static DGetRepartoPorDiaYNombre getRepartoPorDiaYNombre
+            = new DGetRepartoPorDiaYNombre(GetRepartoPorDiaYNombre);
         public readonly static DGetRepartos getRepartos
             = new DGetRepartos(GetRepartos);
         public readonly static DGetRepartosPorDia getRepartosPorDia
             = new DGetRepartosPorDia(GetRepartosPorDia);
-        public readonly static DGetRepartoPorNombre getRepartoPorNombre
-            = new DGetRepartoPorNombre(GetRepartoPorNombre);
-        public readonly static DEditReparto editReparto
-            = new DEditReparto(EditReparto);
+        public readonly static DSubstractPedidoAReparto substractPedidoAReparto
+            = new DSubstractPedidoAReparto(SubstractPedidoAReparto);
 
+
+        private static void AddPedidoARepartoSimple(Reparto reparto, Pedido pedido)
+        {
+            reparto.Ta += pedido.A;
+            reparto.Te += pedido.E;
+            reparto.Tt += pedido.T;
+            reparto.Tae += pedido.Ae;
+            reparto.Td += pedido.D;
+            reparto.TotalB += pedido.A + pedido.E + pedido.T + pedido.Ae + pedido.D;
+            reparto.Tl += pedido.L;
+            EditReparto(reparto);
+        }
         private static void AddReparto(Reparto reparto)
         {
             bool response = Form1._servReparto.Add(reparto);
             if (!response) MessageBox.Show("Algo falló al agregar nuevo Reparto a la base de datos");
         }
-        private static void AddPedidoAReparto(Reparto reparto, Cliente cliente,
-            List<ProdVendido> lstProdVendidos)
+        private static Reparto CleanReparto(Reparto reparto)
         {
-            bool response = AgregarPedidoAReparto(cliente.Id,
-                reparto.DiaReparto.Dia, reparto.Nombre, lstProdVendidos);
-            if (!response) MessageBox.Show("Algo falló al agregar Pedido a Reparto en base de datos");
+            reparto.Ta = 0;
+            reparto.Te = 0;
+            reparto.Td = 0;
+            reparto.Tt = 0;
+            reparto.Tae = 0;
+            reparto.TotalB = 0;
+            reparto.Tl = 0;
+            foreach (Pedido pedido in reparto.Pedidos)
+            {
+                cleanPedido(pedido);
+            }
+            editReparto(reparto);
+            return getReparto(reparto.Id);
+        }
+        private static void EditReparto(Reparto reparto)
+        {
+            bool response = Form1._servReparto.Edit(reparto);
+            if (!response) MessageBox.Show("Algo falló al editar el Reparto en la base de datos");
         }
         private static bool ExportReparto(string dia, string nombreReparto)
         {
-            Reparto reparto = getRepartoPorNombre(dia, nombreReparto);
+            Reparto reparto = getRepartoPorDiaYNombre(dia, nombreReparto);
             var export = new Exportar();
             bool success = export.ExportarAExcel(reparto);
             if (success) MessageBox.Show("Terminado");
@@ -61,6 +92,16 @@ namespace linway_app.Services.Delegates
         private static Reparto GetReparto(long repartoId)
         {
             return Form1._servReparto.Get(repartoId);
+        }
+        private static Reparto GetRepartoPorDiaYNombre(string dia, string nombre)
+        {
+            try
+            {
+                return Form1._servDiaReparto.GetAll()
+                    .Find(x => x.Dia == dia).Reparto.ToList()
+                    .Find(x => x.Nombre == nombre);
+            }
+            catch { return null; }
         }
         private static List<Reparto> GetRepartos()
         {
@@ -79,80 +120,16 @@ namespace linway_app.Services.Delegates
                 return null;
             }
         }
-        private static Reparto GetRepartoPorNombre(string dia, string nombre)
+        private static void SubstractPedidoAReparto(Reparto reparto, Pedido pedido)
         {
-            try
-            {
-                return Form1._servDiaReparto.GetAll()
-                    .Find(x => x.Dia == dia).Reparto.ToList()
-                    .Find(x => x.Nombre == nombre);
-            }
-            catch { return null; }
-        }
-        private static void EditReparto(Reparto reparto)
-        {
-            bool response = Form1._servReparto.Edit(reparto);
-            if (!response) MessageBox.Show("Algo falló al editar el Reparto en la base de datos");
-        }
-
-        public static bool AgregarPedidoAReparto(long clientId, string dia, string repartoNombre, List<ProdVendido> lstProdVendidos)
-        {
-            if (lstProdVendidos == null || lstProdVendidos.Count == 0) return false;
-            Cliente cliente = Form1._servCliente.Get(clientId);
-            if (cliente == null) return false;
-            List<DiaReparto> dias = Form1._servDiaReparto.GetAll();
-            if (dias == null) return false;
-            DiaReparto diaRep = dias.Find(x => x.Dia == dia);
-            if (diaRep == null) return false;
-            Reparto reparto = diaRep.Reparto.ToList().Find(x => x.Nombre == repartoNombre);
-            if (reparto == null) return false;
-
-            Pedido pedidoViejo = reparto.Pedidos.ToList().Find(x => x.ClienteId == cliente.Id);
-            // saber si el cliente ya tenía un pedido para este reparto
-
-            if (pedidoViejo == null)            // no tiene, crear pedido de cero
-            {
-                Pedido nuevoPedido = new Pedido();
-                nuevoPedido.ClienteId = cliente.Id;
-                nuevoPedido.Direccion = cliente.Direccion;
-                nuevoPedido.RepartoId = reparto.Id;
-                nuevoPedido.ProdVendidos = (ICollection<ProdVendido>)lstProdVendidos;
-                nuevoPedido.Entregar = 1;
-                nuevoPedido.ProductosText = "";
-                nuevoPedido.A = 0;
-                nuevoPedido.Ae = 0;
-                nuevoPedido.D = 0;
-                nuevoPedido.E = 0;
-                nuevoPedido.Id = 0;
-                nuevoPedido.L = 0;
-                nuevoPedido.T = 0;
-                foreach (var prodVendido in lstProdVendidos)
-                {
-                    nuevoPedido.ProductosText += prodVendido.Descripcion + " | ";
-                }
-                addPedido(nuevoPedido);
-            }
-            else        // sí tiene, sumar pedido a lo pedido
-            {
-                foreach (var prodVendido in lstProdVendidos)
-                {
-                    pedidoViejo.ProductosText += prodVendido.Descripcion + " | ";
-                }
-                Form1._servPedido.Edit(pedidoViejo);
-            }
-
-            return true;
-        }
-        public static void LimpiarDatos(Reparto reparto)
-        {
-            reparto.Ta = 0;
-            reparto.Te = 0;
-            reparto.Td = 0;
-            reparto.Tt = 0;
-            reparto.Tae = 0;
-            reparto.TotalB = 0;
-            reparto.Tl = 0;
-            reparto.Pedidos.Clear();
+            reparto.Ta -= pedido.A;
+            reparto.Te -= pedido.E;
+            reparto.Tt -= pedido.T;
+            reparto.Tae -= pedido.Ae;
+            reparto.Td -= pedido.D;
+            reparto.TotalB -= pedido.A + pedido.E + pedido.T + pedido.Ae + pedido.D;
+            reparto.Tl -= pedido.L;
+            EditReparto(reparto);
         }
     }
 }

@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DClientes;
-using static linway_app.Services.Delegates.DProductos;
+using static linway_app.Services.Delegates.DPedido;
+using static linway_app.Services.Delegates.DProducto;
 using static linway_app.Services.Delegates.DProdVendido;
 using static linway_app.Services.Delegates.DRegistroVenta;
 using static linway_app.Services.Delegates.DReparto;
@@ -78,6 +79,7 @@ namespace linway_app.Forms
                 {
                     grid.Add(Form1._mapper.Map<EVenta>(venta));
                 }
+                grid = grid.OrderBy(x => x.Detalle).ToList();
                 dataGridView3.DataSource = grid;
                 dataGridView3.Columns[0].Width = 20;
                 dataGridView3.Columns[1].Width = 40;
@@ -92,6 +94,7 @@ namespace linway_app.Forms
                 {
                     grid.Add(Form1._mapper.Map<EVenta>(venta));
                 }
+                grid = grid.OrderBy(x => x.Detalle).ToList();
                 dataGridView5.DataSource = grid;
                 dataGridView5.Columns[0].Width = 280;
             }
@@ -223,7 +226,7 @@ namespace linway_app.Forms
             {
                 // generar un RegistroVenta con "Venta particular"y devuelve un id para usar en los ProdVendido
                 // generar un Venta por cada ítem en _lstAgregarVentas, no necesita precios
-                // generar un ProdVendido por cada ítem en _lstAgregarVentas
+                // generar un ProdVendido por cada ítem en _lstAgregarVentas con el id de (1)
 
                 ActualizarGrid3Ventas();
                 List<ProdVendido> lstProdVendidos = new List<ProdVendido>();
@@ -280,12 +283,12 @@ namespace linway_app.Forms
                     string nombre = comboBox2.Text;
                     Cliente cliente = getClientePorDireccionExacta(label20.Text);
                     if (cliente == null) return;
-                    Reparto reparto = getRepartoPorNombre(dia, nombre);
+                    Reparto reparto = getRepartoPorDiaYNombre(dia, nombre);
                     if (reparto == null) return;
                     addPedidoAReparto(reparto, cliente, lstProdVendidos);                   
-                    nuevoRegistroVenta.ClienteId = cliente1.Id;
+                    nuevoRegistroVenta.ClienteId = cliente.Id;
+                    nuevoRegistroVenta.NombreCliente = cliente.Direccion;
                     editRegistroVenta(nuevoRegistroVenta);
-                    
                 }
 
                 _lstAgregarVentas.Clear();
@@ -535,7 +538,10 @@ namespace linway_app.Forms
             List<RegistroVenta> registrosABorrar = new List<RegistroVenta>();
             if (IntervaloCorrecto())
             {
-                _lstRegistros.RemoveAll(x => SeEncuentraEnIntervalo(x.Id));
+                foreach (RegistroVenta registroVenta in _lstRegistros)
+                {
+                    if (SeEncuentraEnIntervalo(registroVenta.Id)) deleteRegistroVenta(registroVenta);
+                }
                 Actualizar();
                 LimpiarPantalla();
                 //bActualizar.PerformClick();

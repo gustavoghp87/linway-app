@@ -230,7 +230,7 @@
             this.radioButton1.Size = new System.Drawing.Size(66, 19);
             this.radioButton1.TabIndex = 7;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Liquido";
+            this.radioButton1.Text = "Líquido";
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.SeleccionarTipo_CheckedChanged);
             // 

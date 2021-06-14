@@ -10,6 +10,7 @@ namespace linway_app.Services.Delegates
     {
         public delegate bool DAddRegistroVenta(RegistroVenta registroVenta);
         public delegate long DAddRegistroVentaReturnId(RegistroVenta registroVenta);
+        public delegate void DDeleteRegistroVenta(RegistroVenta registroVenta);
         public delegate RegistroVenta DGetRegistroVenta(long registroVentaId);
         public delegate List<RegistroVenta> DGetRegistroVentas();
         public delegate void DEditRegistroVentas(RegistroVenta registroVenta);
@@ -18,6 +19,8 @@ namespace linway_app.Services.Delegates
             = new DAddRegistroVenta(AddRegistroVenta);
         public readonly static DAddRegistroVentaReturnId addRegistroVentaReturnId
             = new DAddRegistroVentaReturnId(AddRegistroVentaReturnId);
+        public readonly static DDeleteRegistroVenta deleteRegistroVenta
+            = new DDeleteRegistroVenta(DeleteRegistroVenta);
         public readonly static DGetRegistroVenta getRegistroVenta
             = new DGetRegistroVenta(GetRegistroVenta);
         public readonly static DGetRegistroVentas getRegistroVentas
@@ -49,6 +52,11 @@ namespace linway_app.Services.Delegates
                 MessageBox.Show("Algo falló al agregar Registro de Venta a base de datos");
                 return 0;
             }
+        }
+        private static void DeleteRegistroVenta(RegistroVenta registroVenta)
+        {
+            bool success = Form1._servRegistroVenta.Delete(registroVenta);
+            if (!success) MessageBox.Show("Algo falló al eliminar Registro de Venta a base de datos");
         }
         private static RegistroVenta GetRegistroVenta(long registroVentaId)
         {

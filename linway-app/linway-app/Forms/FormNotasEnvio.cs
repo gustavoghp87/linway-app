@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DNotaDeEnvio;
 using static linway_app.Services.Delegates.DPedido;
-using static linway_app.Services.Delegates.DProductos;
+using static linway_app.Services.Delegates.DProducto;
 using static linway_app.Services.Delegates.DProdVendido;
 using static linway_app.Services.Delegates.DReparto;
 

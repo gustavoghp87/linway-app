@@ -377,7 +377,7 @@
     <Compile Include="Services\Delegates\DDiaReparto.cs" />
     <Compile Include="Services\Delegates\DNotaDeEnvio.cs" />
     <Compile Include="Services\Delegates\DPedido.cs" />
-    <Compile Include="Services\Delegates\DProductos.cs" />
+    <Compile Include="Services\Delegates\DProducto.cs" />
     <Compile Include="Services\Delegates\DClientes.cs" />
     <Compile Include="Services\Delegates\DProdVendido.cs" />
     <Compile Include="Services\Delegates\DRecibo.cs" />

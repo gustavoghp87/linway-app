@@ -12,11 +12,14 @@ namespace linway_app.Models.Entities
 
         [DisplayName("Dirección")]
         public string Direccion { get; set; }
+
         //public long RepartoId { get; set; }
 
         [DisplayName("Productos")]
         public string ProductosText { get; set; }
         public string Entregar { get; set; }
+
+        [DisplayName("Ltr")]
         public long L { get; set; }
         public long A { get; set; }
         public long E { get; set; }
