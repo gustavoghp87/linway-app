@@ -1,37 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-
-// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
-// If you have enabled NRTs for your project, then un-comment the following line:
-// #nullable disable
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace linway_app.Models.DbContexts
 {
     public partial class LinwayDbContext : DbContext
     {
-        public LinwayDbContext()
-        {
-        }
-
-        public LinwayDbContext(DbContextOptions<LinwayDbContext> options)
-            : base(options)
-        {
-        }
-
         public virtual DbSet<Cliente> Cliente { get; set; }
         public virtual DbSet<DetalleRecibo> DetalleRecibo { get; set; }
         public virtual DbSet<DiaReparto> DiaReparto { get; set; }
         public virtual DbSet<NotaDeEnvio> NotaDeEnvio { get; set; }
         public virtual DbSet<Pedido> Pedido { get; set; }
-        public virtual DbSet<ProdVendido> ProdVendido { get; set; }
         public virtual DbSet<Producto> Producto { get; set; }
+        public virtual DbSet<ProdVendido> ProdVendido { get; set; }
         public virtual DbSet<Recibo> Recibo { get; set; }
         public virtual DbSet<RegistroVenta> RegistroVenta { get; set; }
         public virtual DbSet<Reparto> Reparto { get; set; }
         public virtual DbSet<Venta> Venta { get; set; }
-
+        
+        public LinwayDbContext()
+        {}
+        public LinwayDbContext(DbContextOptions<LinwayDbContext> options) : base(options)
+        {}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -41,7 +29,6 @@ namespace linway_app.Models.DbContexts
                 optionsBuilder.UseLazyLoadingProxies();
             }
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cliente>(entity =>

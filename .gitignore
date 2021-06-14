@@ -6,6 +6,7 @@
 .vs
 .env
 clave.txt
+*.db
 
 
 ## Ignore Visual Studio temporary files, build results, and

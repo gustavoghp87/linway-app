@@ -1,5 +1,4 @@
 ﻿using linway_app.Models;
-using linway_app.Models.OModel;
 using System;
 using System.Threading.Tasks;
 

@@ -1,10 +1,9 @@
-﻿using linway_app.Models.Interfaces;
-using linway_app.Models.OModel;
+﻿using linway_app.Models.OModel;
 using System.Collections.Generic;
 
 namespace linway_app.Models
 {
-    public partial class Pedido : ObjModel, IPedido
+    public partial class Pedido : ObjModel
     {
         public Pedido()
         {
@@ -21,6 +20,7 @@ namespace linway_app.Models
         public long D { get; set; }
         public long T { get; set; }
         public long Ae { get; set; }
+        public long Orden { get; set; }
         public virtual Cliente Cliente { get; set; }
         public virtual Reparto Reparto { get; set; }
         public virtual ICollection<ProdVendido> ProdVendidos { get; set; }

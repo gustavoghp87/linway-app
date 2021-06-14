@@ -186,7 +186,6 @@ namespace linway_app.Forms
             this.label26.Size = new System.Drawing.Size(96, 13);
             this.label26.TabIndex = 27;
             this.label26.Text = "Buscar por nombre";
-            this.label26.Visible = false;
             // 
             // label10
             // 
@@ -205,7 +204,7 @@ namespace linway_app.Forms
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(29, 23);
             this.button10.TabIndex = 26;
-            this.button10.Text = ">>";
+            this.button10.Text = "<<";
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.Button10_Click);
             // 
@@ -216,9 +215,9 @@ namespace linway_app.Forms
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(29, 23);
             this.button5.TabIndex = 22;
-            this.button5.Text = ">>";
+            this.button5.Text = "<<";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
             // BuscadorProductos
             // 
@@ -226,7 +225,6 @@ namespace linway_app.Forms
             this.BuscadorProductos.Name = "BuscadorProductos";
             this.BuscadorProductos.Size = new System.Drawing.Size(114, 20);
             this.BuscadorProductos.TabIndex = 28;
-            this.BuscadorProductos.Visible = false;
             this.BuscadorProductos.TextChanged += new System.EventHandler(this.BuscadorProductos_TextChanged);
             // 
             // dataGridView1
@@ -266,7 +264,6 @@ namespace linway_app.Forms
             this.label11.Size = new System.Drawing.Size(107, 13);
             this.label11.TabIndex = 23;
             this.label11.Text = "Buscar por dirección:";
-            this.label11.Visible = false;
             // 
             // BuscadorClientes
             // 
@@ -274,8 +271,7 @@ namespace linway_app.Forms
             this.BuscadorClientes.Name = "BuscadorClientes";
             this.BuscadorClientes.Size = new System.Drawing.Size(110, 20);
             this.BuscadorClientes.TabIndex = 20;
-            this.BuscadorClientes.Visible = false;
-            this.BuscadorClientes.TextChanged += new System.EventHandler(this.textBox8_TextChanged);
+            this.BuscadorClientes.TextChanged += new System.EventHandler(this.TextBox8_TextChanged);
             // 
             // label12
             // 

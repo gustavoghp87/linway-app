@@ -55,7 +55,6 @@ namespace linway_app.Services.Delegates
         {
             return Form1._servRecibo.GetAll();
         }
-
         private static decimal CalcularTotalRecibo(Recibo recibo)
         {
             decimal subTo = 0;

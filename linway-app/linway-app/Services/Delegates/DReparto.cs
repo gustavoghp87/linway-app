@@ -1,8 +1,10 @@
-﻿using linway_app.Forms;
+﻿using linway_app.Excel;
+using linway_app.Forms;
 using linway_app.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using static linway_app.Services.Delegates.DPedido;
 
 namespace linway_app.Services.Delegates
 {
@@ -11,6 +13,8 @@ namespace linway_app.Services.Delegates
         public delegate void DAddReparto(Reparto pedido);
         public delegate void DAddPedidoAReparto(Reparto reparto, Cliente cliente,
             List<ProdVendido> lstProdVendidos);
+        public delegate bool DExportReparto(string dia, string nombreReparto);
+        public delegate Reparto DGetReparto(long repartoId);
         public delegate List<Reparto> DGetRepartos();
         public delegate List<Reparto> DGetRepartosPorDia(string diaReparto);
         public delegate Reparto DGetRepartoPorNombre(string dia, string nombre);
@@ -20,6 +24,10 @@ namespace linway_app.Services.Delegates
             = new DAddReparto(AddReparto);
         public readonly static DAddPedidoAReparto addPedidoAReparto
             = new DAddPedidoAReparto(AddPedidoAReparto);
+        public readonly static DExportReparto exportReparto
+            = new DExportReparto(ExportReparto);
+        public readonly static DGetReparto getReparto
+            = new DGetReparto(GetReparto);
         public readonly static DGetRepartos getRepartos
             = new DGetRepartos(GetRepartos);
         public readonly static DGetRepartosPorDia getRepartosPorDia
@@ -40,6 +48,19 @@ namespace linway_app.Services.Delegates
             bool response = AgregarPedidoAReparto(cliente.Id,
                 reparto.DiaReparto.Dia, reparto.Nombre, lstProdVendidos);
             if (!response) MessageBox.Show("Algo falló al agregar Pedido a Reparto en base de datos");
+        }
+        private static bool ExportReparto(string dia, string nombreReparto)
+        {
+            Reparto reparto = getRepartoPorNombre(dia, nombreReparto);
+            var export = new Exportar();
+            bool success = export.ExportarAExcel(reparto);
+            if (success) MessageBox.Show("Terminado");
+            else MessageBox.Show("Algo falló");
+            return success;
+        }
+        private static Reparto GetReparto(long repartoId)
+        {
+            return Form1._servReparto.Get(repartoId);
         }
         private static List<Reparto> GetRepartos()
         {
@@ -91,27 +112,25 @@ namespace linway_app.Services.Delegates
 
             if (pedidoViejo == null)            // no tiene, crear pedido de cero
             {
-                Pedido nuevoPedido = new Pedido
-                {
-                    ClienteId = cliente.Id,
-                    Direccion = cliente.Direccion,
-                    RepartoId = reparto.Id,
-                    ProdVendidos = lstProdVendidos,
-                    Entregar = 1,
-                    ProductosText = "",
-                    A = 0,
-                    Ae = 0,
-                    D = 0,
-                    E = 0,
-                    Id = 0,
-                    L = 0,
-                    T = 0
-                };
+                Pedido nuevoPedido = new Pedido();
+                nuevoPedido.ClienteId = cliente.Id;
+                nuevoPedido.Direccion = cliente.Direccion;
+                nuevoPedido.RepartoId = reparto.Id;
+                nuevoPedido.ProdVendidos = (ICollection<ProdVendido>)lstProdVendidos;
+                nuevoPedido.Entregar = 1;
+                nuevoPedido.ProductosText = "";
+                nuevoPedido.A = 0;
+                nuevoPedido.Ae = 0;
+                nuevoPedido.D = 0;
+                nuevoPedido.E = 0;
+                nuevoPedido.Id = 0;
+                nuevoPedido.L = 0;
+                nuevoPedido.T = 0;
                 foreach (var prodVendido in lstProdVendidos)
                 {
                     nuevoPedido.ProductosText += prodVendido.Descripcion + " | ";
                 }
-                Form1._servPedido.Add(nuevoPedido);
+                addPedido(nuevoPedido);
             }
             else        // sí tiene, sumar pedido a lo pedido
             {

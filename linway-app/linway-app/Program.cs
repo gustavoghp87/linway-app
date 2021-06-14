@@ -18,18 +18,6 @@ namespace linway_app
         {
             services.AddDbContext<LinwayDbContext>();
 
-            //services.AddScoped<ICliente, Cliente>();
-            //services.AddScoped<IDiaReparto, DiaReparto>();
-            //services.AddScoped<INotaDeEnvio, NotaDeEnvio>();
-            //services.AddScoped<IPedido, Pedido>();
-            //services.AddScoped<IProducto, Producto>();
-            //services.AddScoped<IProdVendido, ProdVendido>();
-            //services.AddScoped<IRecibo, Recibo>();
-            //services.AddScoped<IDetalleRecibo, DetalleRecibo>();
-            //services.AddScoped<IRegistroVenta, RegistroVenta>();
-            //services.AddScoped<IReparto, Reparto>();
-            //services.AddScoped<IVenta, Venta>();
-
             services.AddTransient<Form1>();
             services.AddTransient<FormClientes>();
             services.AddTransient<FormCrearNota>();
@@ -41,9 +29,9 @@ namespace linway_app
             services.AddTransient<FormRepartos>();
             services.AddTransient<FormVentas>();
 
-            services.AddScoped(typeof(IService<>), typeof(Service<>));
-            services.AddScoped(typeof(IRepository<>), typeof(RepositoryBase<>));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IServiceBase<>), typeof(ServiceBase<>));
+            services.AddScoped(typeof(IRepository<>), typeof(RepositoryBase<>));
 
             var mapperConfig = new MapperConfiguration(m =>
             {

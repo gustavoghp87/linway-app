@@ -41,11 +41,10 @@ namespace linway_app.Services.Delegates
         }
         private static bool AddClientePrimero()
         {
-            return addCliente(new Cliente
-            {
-                Nombre = "Cliente Particular X",
-                Direccion = "Cliente Particular X"
-            });
+            Cliente cliente = new Cliente();
+            cliente.Nombre = "Cliente Particular X";
+            cliente.Direccion = "Cliente Particular X";
+            return addCliente(cliente);
         }
         private static void DeleteCliente(Cliente cliente)
         {

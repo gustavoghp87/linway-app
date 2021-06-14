@@ -60,7 +60,7 @@ namespace linway_app.Repositories
             }
             catch
             {
-                return null;
+                return default;
             }
         }
         public List<T> GetAll()
@@ -71,7 +71,7 @@ namespace linway_app.Repositories
             }
             catch
             {
-                return null;
+                return default;
             }
         }
     }

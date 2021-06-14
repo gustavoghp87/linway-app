@@ -7,11 +7,11 @@ using System.Linq;
 
 namespace linway_app.Services
 {
-    public class Service<T> : IService<T> where T : ObjModel
+    public class ServiceBase<T> : IServiceBase<T> where T : ObjModel
     {
         private readonly IUnitOfWork _unitOfWork;
         private IRepository<T> _service;
-        public Service(IUnitOfWork unitOfWork, IRepository<T> service)
+        public ServiceBase(IUnitOfWork unitOfWork, IRepository<T> service)
         {
             _unitOfWork = unitOfWork;
             _service = service;
@@ -44,7 +44,7 @@ namespace linway_app.Services
         {
             T t = (T)_service.Get(id);
             return t == null || t.Estado == null || t.Estado == "Eliminado"
-                ? null : t;
+                ? default : t;
         }
         public List<T> GetAll()
         {

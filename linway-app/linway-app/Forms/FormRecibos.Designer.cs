@@ -170,7 +170,7 @@ namespace linway_app.Forms
             this.textBox3.TabIndex = 10;
             this.textBox3.Visible = false;
             this.textBox3.TextChanged += new System.EventHandler(this.TextBox3_TextChanged);
-            this.textBox3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox3_KeyPress);
+            this.textBox3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox3_KeyPress);
             // 
             // textBox2
             // 
@@ -180,7 +180,7 @@ namespace linway_app.Forms
             this.textBox2.TabIndex = 9;
             this.textBox2.Visible = false;
             this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
-            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
+            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox2_KeyPress);
             // 
             // label5
             // 
@@ -227,7 +227,7 @@ namespace linway_app.Forms
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(109, 21);
             this.comboBox2.TabIndex = 2;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox2_SelectedIndexChanged);
             // 
             // button1
             // 
@@ -238,7 +238,7 @@ namespace linway_app.Forms
             this.button1.TabIndex = 1;
             this.button1.Text = "Ver/imprimir";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // groupBox1
             // 
@@ -261,7 +261,7 @@ namespace linway_app.Forms
             this.textBox1.Size = new System.Drawing.Size(86, 21);
             this.textBox1.TabIndex = 6;
             this.textBox1.Visible = false;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.textBox1.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
             // 
             // label2
             // 
@@ -371,7 +371,7 @@ namespace linway_app.Forms
             this.button6.TabIndex = 19;
             this.button6.Text = "Crear Recibo";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.AnyadirRecibo_Click);
+            this.button6.Click += new System.EventHandler(this.CrearRecibo_Click);
             // 
             // label18
             // 
@@ -433,7 +433,7 @@ namespace linway_app.Forms
             this.button8.TabIndex = 19;
             this.button8.Text = "Limpiar";
             this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.button8.Click += new System.EventHandler(this.Button8_Click);
             // 
             // button2
             // 
@@ -618,7 +618,7 @@ namespace linway_app.Forms
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(109, 21);
             this.comboBox3.TabIndex = 24;
-            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
+            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.ComboBox3_SelectedIndexChanged);
             // 
             // button4
             // 
@@ -630,7 +630,7 @@ namespace linway_app.Forms
             this.button4.Text = "Confirmar";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Visible = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // label9
             // 

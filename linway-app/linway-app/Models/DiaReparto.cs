@@ -1,10 +1,9 @@
-﻿using linway_app.Models.Interfaces;
-using linway_app.Models.OModel;
+﻿using linway_app.Models.OModel;
 using System.Collections.Generic;
 
 namespace linway_app.Models
 {
-    public partial class DiaReparto : ObjModel, IDiaReparto
+    public partial class DiaReparto : ObjModel
     {
         public DiaReparto()
         {

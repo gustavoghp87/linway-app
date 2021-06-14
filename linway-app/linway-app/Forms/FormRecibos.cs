@@ -12,12 +12,14 @@ namespace linway_app.Forms
 {
     public partial class FormRecibos : Form
     {
-        private List<Recibo> _lstRecibos = new List<Recibo>();
-        private List<DetalleRecibo> _lstDetallesAAgregar = new List<DetalleRecibo>();
+        private List<Recibo> _lstRecibos;
+        private List<DetalleRecibo> _lstDetallesAAgregar;
         private decimal _subTo = 0;
 
         public FormRecibos()
         {
+            _lstRecibos = new List<Recibo>();
+            _lstDetallesAAgregar = new List<DetalleRecibo>();
             InitializeComponent();
         }
         private void FormRecibos_Load(object sender, EventArgs e)
@@ -33,18 +35,21 @@ namespace linway_app.Forms
         {
             _lstRecibos = getRecibos();
         }
-        private void ActualizarGridRecibos(List<Recibo> recibos)
+        private void ActualizarGridRecibos(List<Recibo> lstRecibos)
         {
-            if (recibos != null)
+            if (lstRecibos != null)
             {
                 List<ERecibo> grid1 = new List<ERecibo>();
-                foreach (Recibo recibo in recibos)
+                foreach (Recibo recibo in lstRecibos)
                 {
                     grid1.Add(Form1._mapper.Map<ERecibo>(recibo));
                 }
                 dataGridView1.DataSource = grid1;
+                dataGridView1.Columns[0].Width = 25;
+                dataGridView1.Columns[1].Width = 38;
+                dataGridView1.Columns[2].Width = 350;
+                lCantRecibos.Text = lstRecibos.Count.ToString() + " recibos.";
             }
-            lCantRecibos.Text = recibos.Count.ToString() + " recibos.";
         }
         private void ActualizarGridDetalles()
         {
@@ -72,7 +77,7 @@ namespace linway_app.Forms
         }
         private void SoloNumeros(object sender, KeyPressEventArgs e)
         {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
+            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
             {
                 e.Handled = true;
                 return;
@@ -113,7 +118,7 @@ namespace linway_app.Forms
             textBox7.Text = "";
             textBox8.Text = "";
         }
-        private void button8_Click(object sender, EventArgs e)
+        private void Button8_Click(object sender, EventArgs e)
         {
             LimpiarCampos();
             button6.Enabled = false;
@@ -150,10 +155,7 @@ namespace linway_app.Forms
                 textBox1.Visible = false;
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Fecha == DateTime.Now.ToString("yyyy-MM-dd"))
-                    {
-                        lstRecibosFiltrados.Add(recibo);
-                    }
+                    if (recibo.Fecha == DateTime.Now.ToString("yyyy-MM-dd")) lstRecibosFiltrados.Add(recibo);
                 }
                 ActualizarGridRecibos(lstRecibosFiltrados);
             }
@@ -173,10 +175,7 @@ namespace linway_app.Forms
                 textBox1.Visible = false;
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Impreso == 1)
-                    {
-                        lstRecibosFiltrados.Add(recibo);
-                    }
+                    if (recibo.Impreso == 1) lstRecibosFiltrados.Add(recibo);
                 }
                 ActualizarGridRecibos(lstRecibosFiltrados);
             }
@@ -188,10 +187,7 @@ namespace linway_app.Forms
                 textBox1.Visible = false;
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Impreso == 0)
-                    {
-                        lstRecibosFiltrados.Add(recibo);
-                    }
+                    if (recibo.Impreso == 0) lstRecibosFiltrados.Add(recibo);
                 }
                 ActualizarGridRecibos(lstRecibosFiltrados);
             }
@@ -222,7 +218,7 @@ namespace linway_app.Forms
             }
             ActualizarGridRecibos(lstFiltrados);
         }
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs e)
         {
             if (comboBox1.SelectedItem.ToString() == "Cliente")
                 FiltrarDatos(textBox1.Text, 'c');
@@ -232,7 +228,7 @@ namespace linway_app.Forms
 
         
         //_____________grupo imprimir_______________
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             if (comboBox2.Text != "")
             {
@@ -243,17 +239,17 @@ namespace linway_app.Forms
                 Close();
             }
         }
-        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBox2_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
+            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
             {
                 e.Handled = true;
                 return;
             }
         }
-        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBox3_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
+            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
             {
                 e.Handled = true;
                 return;
@@ -270,6 +266,7 @@ namespace linway_app.Forms
         private List<Recibo> ObtenerListaAImprimir()
         {
             List<Recibo> listaAImprimir = new List<Recibo>();
+            if (_lstRecibos == null) return listaAImprimir;
 
             if (comboBox2.SelectedItem.ToString() == "No impresas")
             {
@@ -297,11 +294,7 @@ namespace linway_app.Forms
                     {
                         for (long i = menor; i <= mayor; i++)
                         {
-                            try
-                            {
-                                listaAImprimir.Add(_lstRecibos.Find(x => x.Id == i));
-                            }
-                            catch {}
+                            listaAImprimir.Add(_lstRecibos.Find(x => x.Id == i));
                         }
                     }
                 }
@@ -309,10 +302,10 @@ namespace linway_app.Forms
             }
             return listaAImprimir;
         }
-
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox2.SelectedItem.ToString() == "No impresas"
+            if (
+                comboBox2.SelectedItem.ToString() == "No impresas"
                 || (comboBox2.SelectedItem.ToString() == "Hoy"))
             {
                 textBox2.Visible = false;
@@ -338,110 +331,6 @@ namespace linway_app.Forms
         private void TextBox2_TextChanged(object sender, EventArgs e)
         {
             label7.Text = ObtenerListaAImprimir().Count.ToString();
-        }
-
-
-        //BORRAR RECIBOS
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBox3.SelectedItem.ToString() == "Impresas"
-                || (comboBox3.SelectedItem.ToString() == "Todas"
-                || comboBox3.SelectedItem.ToString() == "(Seleccionar)")
-            )
-            {
-                textBox4.Visible = false;
-                textBox5.Visible = false;
-                label13.Visible = false;
-                label12.Visible = false;
-                textBox4.Text = "";
-                textBox5.Text = "";
-            }
-            if (comboBox3.SelectedItem.ToString() == "Establecer rango")
-            {
-                textBox4.Visible = true;
-                textBox5.Visible = true;
-                label13.Visible = true;
-                label12.Visible = true;
-            }
-            label10.Text = ObtenerListaABorrar().Count.ToString();
-        }
-
-        private List<Recibo> ObtenerListaABorrar()
-        {
-            List<Recibo> listaABorrar = new List<Recibo>();
-
-            if (textBox5.Text != "" && textBox4.Text != "")
-            {
-                if (comboBox3.SelectedItem.ToString() == "Establecer rango")
-                {
-                    try
-                    {
-                        long menor = long.Parse(textBox5.Text);
-                        long mayor = long.Parse(textBox4.Text);
-                        if (menor <= mayor)
-                        {
-                            for (long i = menor; i <= mayor; i++)
-                            {
-                                listaABorrar.Add(_lstRecibos.Find(x => x.Id == i));
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("Rango establecido incorrecto");
-                    }
-                }
-            }
-            else if (comboBox3.SelectedItem.ToString() == "Todas")
-            {
-                listaABorrar.AddRange(_lstRecibos);
-            }
-            else if (comboBox3.SelectedItem.ToString() == "Impresas")
-            {
-                foreach (Recibo recibo in _lstRecibos)
-                {
-                    if (recibo.Impreso == 1) listaABorrar.Add(recibo);
-                }
-            }
-            return listaABorrar;
-        }
-
-        private void Button3_Click(object sender, EventArgs e)
-        {
-            if (comboBox3.SelectedItem.ToString() == "Todas"
-                || comboBox3.SelectedItem.ToString() == "Establecer rango"
-                || comboBox3.SelectedItem.ToString() == "Impresas"
-            )
-            {
-                MessageBox.Show("Confirme si desea borrar los recibos seleccionados");
-                label11.Visible = true;
-                button4.Visible = true;
-                button5.Visible = true;
-                button3.Visible = false;
-            }
-        }
-        private void Button5_Click(object sender, EventArgs e)
-        {
-            comboBox3.SelectedItem = "(Seleccionar)";
-            label11.Visible = false;
-            button4.Visible = false;
-            button5.Visible = false;
-            button3.Visible = true;
-        }
-        private void button4_Click(object sender, EventArgs e)
-        {
-            foreach (Recibo recibo in ObtenerListaABorrar())
-            {
-                deleteRecibo(recibo);
-            }
-            Actualizar();
-            comboBox3.SelectedItem = "(Seleccionar)";
-            label11.Visible = false;
-            button4.Visible = false;
-            button5.Visible = false;
-            button3.Visible = true;
-            lCantRecibos.Text = _lstRecibos.Count.ToString() + " recibos.";
-            ActualizarGridRecibos(_lstRecibos);
         }
 
         // AGREGAR RECIBO
@@ -501,7 +390,6 @@ namespace linway_app.Forms
             {
                 try { decimal.Parse(textBox8.Text); } catch { return; };
                 decimal importe = decimal.Parse(textBox8.Text);
-                // si ya existe en _lstDetallesAAgregar sumar en vez de crear nuevo
                 DetalleRecibo nuevoDetalle = new DetalleRecibo();
                 if (radioButton1.Checked)
                 {
@@ -541,33 +429,30 @@ namespace linway_app.Forms
             }
             else MessageBox.Show("Complete correctamente los campos.");
         }
-
         private void Limpiar_Click(object sender, EventArgs e)
         {
             LimpiarCampos();
             textBox6.Text = "";
             textBox8.Text = "";
+            textBox9.Text = "";
             label15.Text = "";
             button6.Enabled = false;
             label18.Text = "0";
             _lstDetallesAAgregar.Clear();
             ActualizarGridDetalles();
         }
-
-        private void AnyadirRecibo_Click(object sender, EventArgs e)
+        private void CrearRecibo_Click(object sender, EventArgs e)
         {
             CargarRecibos();
             Cliente cliente = getClientePorDireccionExacta(label15.Text);
             if (cliente == null) return;
 
-            Recibo nuevoRecibo = new Recibo
-            {
-                ClienteId = cliente.Id,
-                DireccionCliente = label15.Text,
-                ImporteTotal = _subTo,
-                Impreso = 0,
-                Fecha = DateTime.Now.ToString("yyyy-MM-dd")
-            };
+            Recibo nuevoRecibo = new Recibo();
+            nuevoRecibo.ClienteId = cliente.Id;
+            nuevoRecibo.DireccionCliente = label15.Text;
+            nuevoRecibo.ImporteTotal = _subTo;
+            nuevoRecibo.Impreso = 0;
+            nuevoRecibo.Fecha = DateTime.Now.ToString("yyyy-MM-dd");
             long reciboId = addReciboReturnId(nuevoRecibo);
             if (reciboId == 0) { MessageBox.Show("Algo falló en el proceso"); return; }
             foreach (DetalleRecibo detalle in _lstDetallesAAgregar)
@@ -585,5 +470,110 @@ namespace linway_app.Forms
             _lstDetallesAAgregar.Clear();
             Actualizar();
         }
+
+
+        //BORRAR RECIBOS
+        private void ComboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (
+                comboBox3.SelectedItem.ToString() == "Impresas"
+                || (comboBox3.SelectedItem.ToString() == "Todas"
+                || comboBox3.SelectedItem.ToString() == "(Seleccionar)")
+            )
+            {
+                textBox4.Visible = false;
+                textBox5.Visible = false;
+                label13.Visible = false;
+                label12.Visible = false;
+                textBox4.Text = "";
+                textBox5.Text = "";
+            }
+            if (comboBox3.SelectedItem.ToString() == "Establecer rango")
+            {
+                textBox4.Visible = true;
+                textBox5.Visible = true;
+                label13.Visible = true;
+                label12.Visible = true;
+            }
+            label10.Text = ObtenerListaABorrar().Count.ToString();
+        }
+        private List<Recibo> ObtenerListaABorrar()
+        {
+            List<Recibo> listaABorrar = new List<Recibo>();
+            if (textBox5.Text != "" && textBox4.Text != "")
+            {
+                if (comboBox3.SelectedItem.ToString() == "Establecer rango")
+                {
+                    try
+                    {
+                        long menor = long.Parse(textBox5.Text);
+                        long mayor = long.Parse(textBox4.Text);
+                        if (menor <= mayor)
+                        {
+                            for (long i = menor; i <= mayor; i++) listaABorrar.Add(_lstRecibos.Find(x => x.Id == i));
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Rango establecido incorrecto");
+                    }
+                }
+            }
+            else if (comboBox3.SelectedItem.ToString() == "Todas")
+            {
+                listaABorrar.AddRange(_lstRecibos);
+            }
+            else if (comboBox3.SelectedItem.ToString() == "Impresas")
+            {
+                foreach (Recibo recibo in _lstRecibos)
+                {
+                    if (recibo.Impreso == 1) listaABorrar.Add(recibo);
+                }
+            }
+            return listaABorrar;
+        }
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            if (
+                comboBox3.SelectedItem.ToString() == "Todas"
+                || comboBox3.SelectedItem.ToString() == "Establecer rango"
+                || comboBox3.SelectedItem.ToString() == "Impresas"
+            )
+            {
+                MessageBox.Show("Confirme si desea borrar los recibos seleccionados");
+                label11.Visible = true;
+                button4.Visible = true;
+                button5.Visible = true;
+                button3.Visible = false;
+            }
+        }
+        private void Button5_Click(object sender, EventArgs e)
+        {
+            comboBox3.SelectedItem = "(Seleccionar)";
+            label11.Visible = false;
+            button4.Visible = false;
+            button5.Visible = false;
+            button3.Visible = true;
+        }
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            foreach (Recibo recibo in ObtenerListaABorrar())
+            {
+                foreach(DetalleRecibo detalle in recibo.DetalleRecibos)
+                {
+                    deleteDetalleRecibo(detalle);
+                }
+                deleteRecibo(recibo);
+            }
+            Actualizar();
+            comboBox3.SelectedItem = "(Seleccionar)";
+            label11.Visible = false;
+            button4.Visible = false;
+            button5.Visible = false;
+            button3.Visible = true;
+            lCantRecibos.Text = _lstRecibos.Count.ToString() + " recibos.";
+            ActualizarGridRecibos(_lstRecibos);
+        }
+
     }
 }

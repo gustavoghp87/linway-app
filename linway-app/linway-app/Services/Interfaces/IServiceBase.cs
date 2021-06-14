@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace linway_app.Services.Interfaces
 {
-    public interface IService<T>
+    public interface IServiceBase<T>
     {
         bool Add(T t);
         bool Delete(T t);

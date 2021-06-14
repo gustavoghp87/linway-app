@@ -7,9 +7,11 @@ namespace linway_app.Models.Entities
     {
         public long Id { get; set; }
 
+        [DisplayName("Cli")]
+        public long ClienteId { get; set; }
+
         [DisplayName("Dirección")]
         public string Direccion { get; set; }
-        //public long ClienteId { get; set; }
         //public long RepartoId { get; set; }
 
         [DisplayName("Productos")]
@@ -21,5 +23,6 @@ namespace linway_app.Models.Entities
         public long D { get; set; }
         public long T { get; set; }
         public long Ae { get; set; }
+        public long Orden { get; set; }
     }
 }

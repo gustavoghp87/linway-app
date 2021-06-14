@@ -18,7 +18,6 @@ namespace linway_app.Forms
         private List<Venta> _lstVentas;
         private List<RegistroVenta> _lstRegistros;
         private List<Venta> _lstAgregarVentas;
-        private List<Producto> _lstProductos;
         private string showing = "agregarReg";
         public FormVentas()
         {
@@ -26,7 +25,6 @@ namespace linway_app.Forms
             _lstVentas = new List<Venta>();
             _lstRegistros = new List<RegistroVenta>();
             _lstAgregarVentas = new List<Venta>();
-            _lstProductos = new List<Producto>();
         }
         private void FormVentas_Load(object sender, EventArgs e)
         {
@@ -34,7 +32,6 @@ namespace linway_app.Forms
         }
         private void Actualizar()
         {
-            _lstProductos = getProductos();
             _lstVentas = getVentas();
             _lstRegistros = getRegistroVentas();
             ActualizarGrid1Registros(_lstRegistros);
@@ -137,7 +134,7 @@ namespace linway_app.Forms
         }
         private void SoloNumero_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
+            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
             {
                 e.Handled = true;
                 return;
@@ -145,7 +142,7 @@ namespace linway_app.Forms
         }
         private void SoloNumeroYNegativo_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && (!char.IsDigit(e.KeyChar)) && (e.KeyChar != '-'))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '-')
                 e.Handled = true;
 
             if (e.KeyChar == '-' && (sender as TextBox).Text.Length > 0)
@@ -209,12 +206,10 @@ namespace linway_app.Forms
             try { int.Parse(textBox13.Text); } catch { return; }
             Producto prod = getProductoPorNombreExacto(label28.Text);
             if (prod == null) return;
-            Venta nuevaVenta = new Venta
-            {
-                ProductoId = prod.Id,
-                Cantidad = int.Parse(textBox13.Text),
-                Producto = getProducto(prod.Id)
-            };
+            Venta nuevaVenta = new Venta();
+            nuevaVenta.ProductoId = prod.Id;
+            nuevaVenta.Cantidad = int.Parse(textBox13.Text);
+            nuevaVenta.Producto = getProducto(prod.Id);
             _lstAgregarVentas.Add(nuevaVenta);
             ActualizarGrid5(_lstAgregarVentas);
             label28.Text = "";
@@ -236,12 +231,10 @@ namespace linway_app.Forms
                 // hacer o editar registros (no puedo editar porque no tengo cliente, se modifica si hay "enviar a hdr")
                 Cliente cliente1 = getCliente(1);
                 if (cliente1 == null) return;
-                RegistroVenta nuevoRegistroVenta = new RegistroVenta
-                {
-                    ClienteId = cliente1.Id,
-                    NombreCliente = cliente1.Direccion,
-                    Fecha = DateTime.Now.ToString("yyyy-MM-dd")
-                };
+                RegistroVenta nuevoRegistroVenta = new RegistroVenta();
+                nuevoRegistroVenta.ClienteId = cliente1.Id;
+                nuevoRegistroVenta.NombreCliente = cliente1.Direccion;
+                nuevoRegistroVenta.Fecha = DateTime.Now.ToString("yyyy-MM-dd");
                 long registroId = addRegistroVentaReturnId(nuevoRegistroVenta);
                 if (registroId == 0) { MessageBox.Show("Falló"); return; };
 
@@ -250,25 +243,28 @@ namespace linway_app.Forms
                     if (esProducto(ventaParaAgregar.Producto))
                     {
                         // hacer o editar ventas
-                        Venta venta = getVenta(ventaParaAgregar.ProductoId);
-                        if (venta == null) addVenta(ventaParaAgregar);
-                        else
+                        List<Venta> lstVentas = getVentas();
+                        bool exists = false;
+                        foreach (Venta venta in lstVentas)
                         {
-                            venta.Cantidad += ventaParaAgregar.Cantidad;
-                            editVenta(venta);
+                            if (venta.ProductoId == ventaParaAgregar.ProductoId)
+                            {
+                                exists = true;
+                                venta.Cantidad += ventaParaAgregar.Cantidad;
+                                editVenta(venta);
+                            }
                         }
+                        if (!exists) addVenta(ventaParaAgregar);
 
                         // hacer ProdVendidos
                         Producto producto = getProducto(ventaParaAgregar.ProductoId);
                         if (producto == null) return;
-                        ProdVendido nuevoProdVendido = new ProdVendido
-                        {
-                            Cantidad = ventaParaAgregar.Cantidad,
-                            Descripcion = producto.Nombre,
-                            Precio = producto.Precio,
-                            ProductoId = producto.Id,
-                            RegistroVentaId = registroId
-                        };
+                        ProdVendido nuevoProdVendido = new ProdVendido();
+                        nuevoProdVendido.Cantidad = ventaParaAgregar.Cantidad;
+                        nuevoProdVendido.Descripcion = producto.Nombre;
+                        nuevoProdVendido.Precio = producto.Precio;
+                        nuevoProdVendido.ProductoId = producto.Id;
+                        nuevoProdVendido.RegistroVentaId = registroId;
                         lstProdVendidos.Add(nuevoProdVendido);
                         addProdVendido(nuevoProdVendido);
                     }
@@ -282,7 +278,7 @@ namespace linway_app.Forms
                 {
                     string dia = comboBox1.Text;
                     string nombre = comboBox2.Text;
-                    Cliente cliente = getClientePorDireccionExacta(textBox19.Text);
+                    Cliente cliente = getClientePorDireccionExacta(label20.Text);
                     if (cliente == null) return;
                     Reparto reparto = getRepartoPorNombre(dia, nombre);
                     if (reparto == null) return;
@@ -478,14 +474,8 @@ namespace linway_app.Forms
         }
         private void TextBox2_TextChanged(object sender, EventArgs e)
         {
-            if (comboBox3.SelectedItem.ToString() == "Cliente")
-            {
-                FiltrarDatos(textBox2.Text, 'c');
-            }
-            if (comboBox3.SelectedItem.ToString() == "Fecha")
-            {
-                FiltrarDatos(textBox2.Text, 'f');
-            }
+            if (comboBox3.SelectedItem.ToString() == "Cliente") FiltrarDatos(textBox2.Text, 'c');
+            if (comboBox3.SelectedItem.ToString() == "Fecha") FiltrarDatos(textBox2.Text, 'f');
         }
         private void FiltrarDatos(string texto, char x)
         {

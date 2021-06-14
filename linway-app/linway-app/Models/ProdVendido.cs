@@ -1,9 +1,8 @@
-﻿using linway_app.Models.Interfaces;
-using linway_app.Models.OModel;
+﻿using linway_app.Models.OModel;
 
 namespace linway_app.Models
 {
-    public partial class ProdVendido : ObjModel, IProdVendido
+    public partial class ProdVendido : ObjModel
     {
         public long ProductoId { get; set; }
         public long? NotaDeEnvioId { get; set; }

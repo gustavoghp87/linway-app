@@ -106,6 +106,7 @@ CREATE TABLE IF NOT EXISTS "Pedido" (
 	"T"	INTEGER NOT NULL,
 	"AE"	INTEGER NOT NULL,
 	"ProductosText"	TEXT NOT NULL,
+	"Orden" INTEGER NOT NULL,
 	"Estado"	TEXT NOT NULL,
 	FOREIGN KEY("ClienteId") REFERENCES "Cliente"("Id"),
 	FOREIGN KEY("RepartoId") REFERENCES "Reparto"("Id"),

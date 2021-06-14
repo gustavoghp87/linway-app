@@ -14,6 +14,7 @@ namespace linway_app.Services.Delegates
         public delegate void DEditPedido(Pedido pedido);
         public delegate Pedido DGetPedidoPorDireccion(string direccion);
         public delegate List<Pedido> DGetPedidos();
+        public delegate List<Pedido> DGetPedidosPorRepartoId(long repartoId);
 
         public readonly static DAddPedido addPedido
             = new DAddPedido(AddPedido);
@@ -27,9 +28,12 @@ namespace linway_app.Services.Delegates
             = new DGetPedidoPorDireccion(GetPedidoPorDireccion);
         public readonly static DGetPedidos getPedidos
             = new DGetPedidos(GetPedidos);
+        public readonly static DGetPedidosPorRepartoId getPedidosPorRepartoId
+            = new DGetPedidosPorRepartoId(GetPedidosPorRepartoId);
 
         private static void AddPedido(Pedido pedido)
         {
+            pedido.Orden = 1000;
             bool response = Form1._servPedido.Add(pedido);
             if (!response) MessageBox.Show("Algo falló al agregar nuevo Pedido a la base de datos");
         }
@@ -54,6 +58,11 @@ namespace linway_app.Services.Delegates
             if (lstPedidos == null) return null;
             return lstPedidos.Find(x => x.Direccion.Equals(direccion));
         }
+        private static List<Pedido> GetPedidosPorRepartoId(long repartoId)
+        {
+            var pedidos = GetPedidos();
+            return pedidos.Where(x => x.RepartoId == repartoId).ToList();
+        }
         private static List<Pedido> GetPedidos()
         {
             return Form1._servPedido.GetAll();
@@ -69,22 +78,19 @@ namespace linway_app.Services.Delegates
 
             if (pedido == null) // no existe pedido para este cliente este día y reparto, se hace pedido
             {
-                Pedido nuevoPedido = new Pedido
-                {
-                    ClienteId = nota.ClienteId,
-                    Cliente = nota.Cliente,
-                    RepartoId = reparto.Id,
-                    Direccion = nota.Cliente.Direccion,
-                    Entregar = 1,
-                    ProductosText = "",
-                    ProdVendidos = nota.ProdVendidos,
-                    Reparto = reparto
-                };
+                Pedido nuevoPedido = new Pedido();
+                nuevoPedido.ClienteId = nota.ClienteId;
+                nuevoPedido.Cliente = nota.Cliente;
+                nuevoPedido.RepartoId = reparto.Id;
+                nuevoPedido.Direccion = nota.Cliente.Direccion;
+                nuevoPedido.Entregar = 1;
+                nuevoPedido.ProductosText = "";
+                nuevoPedido.ProdVendidos = nota.ProdVendidos;
                 foreach (var prodVendido in nota.ProdVendidos)
                 {
                     nuevoPedido.ProductosText += prodVendido.Descripcion + " | ";
                 }
-                Form1._servPedido.Add(nuevoPedido);
+                AddPedido(nuevoPedido);
             }
             else
             {

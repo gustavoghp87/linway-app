@@ -12,13 +12,18 @@ namespace linway_app.Forms
         private string _subTipo;
         private string _tipoMod;
         private string _subTipoMod;
+        private bool _liberado;
+        private bool _liberado2;
         public FormProductos()
         {
             InitializeComponent();
+            ActiveControl = textBox2;
             _tipo = TipoProducto.Líquido.ToString();
             _subTipo = "";
             _tipoMod = "";
             _subTipoMod = "";
+            _liberado = false;
+            _liberado2 = false;
         }
         private void Limpiar_Click(object sender, EventArgs e)
         {
@@ -83,11 +88,10 @@ namespace linway_app.Forms
             if (TodoOKagregarP())
             {
                 try { decimal.Parse(textBox7.Text); } catch { return; };
-                Producto nuevoProducto = new Producto {
-                    Nombre = textBox6.Text,
-                    Precio = decimal.Parse(textBox7.Text),
-                    Tipo = _tipo.ToString()
-                };
+                Producto nuevoProducto = new Producto();
+                nuevoProducto.Nombre = textBox6.Text;
+                nuevoProducto.Precio = decimal.Parse(textBox7.Text);
+                nuevoProducto.Tipo = _tipo.ToString();
                 if (_subTipo != "") nuevoProducto.SubTipo = _subTipo;
                 addProducto(nuevoProducto);
                 limpiarBtn.PerformClick();
@@ -133,8 +137,8 @@ namespace linway_app.Forms
         {
             if (producto != null)
             {
-                liberado = false;
-                liberado2 = false;
+                _liberado = false;
+                _liberado2 = false;
                 label19.Text = producto.Nombre;
                 textBox9.Text = producto.Precio.ToString();
                 _tipoMod = producto.Tipo;
@@ -156,14 +160,11 @@ namespace linway_app.Forms
                 comboBox2.Visible = false;
             }
         }
-
-        bool liberado = false;
-        bool liberado2 = false;
         private void ComboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox tipoElegido = (ComboBox)sender;
             if (_tipoMod == null) return;
-            if (_tipoMod != "" && !liberado)
+            if (_tipoMod != "" && !_liberado)
             {
                 tipoElegido.Text = _tipoMod.ToString();
                 _tipoMod = "";
@@ -192,19 +193,17 @@ namespace linway_app.Forms
                     break;
             }
             comboBox2.Text = _subTipoMod;
-            liberado = true;
+            _liberado = true;
         }
         private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_subTipoMod == null) return;
             ComboBox tipoElegido = (ComboBox)sender;
-            if (_subTipoMod != "" && !liberado2)
+            if (_subTipoMod != "" && !_liberado2)
             {
                 tipoElegido.Text = _subTipoMod;
-                //_subTipoMod = "";
-                liberado2 = true;
+                _liberado2 = true;
             }
-            //else _subTipoMod = tipoElegido.Text;
         }
         private void TextBox8_TextChanged(object sender, EventArgs e)   // buscar por id
         {

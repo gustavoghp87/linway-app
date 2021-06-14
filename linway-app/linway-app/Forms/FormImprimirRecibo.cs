@@ -52,53 +52,45 @@ namespace linway_app.Forms
         }
         private void CaptureScreen()
         {
-            Graphics mygraphics = CreateGraphics();
-            Size s = Size;
-            memoryImage = new Bitmap(s.Width, s.Height, mygraphics);
-            Graphics memoryGraphics = Graphics.FromImage(memoryImage);
-            IntPtr dc1 = mygraphics.GetHdc();
-            IntPtr dc2 = memoryGraphics.GetHdc();
-            BitBlt(dc2, 0, 0, ClientRectangle.Width, ClientRectangle.Height, dc1, 0, 0, 13369376);
-            mygraphics.ReleaseHdc(dc1);
-            memoryGraphics.ReleaseHdc(dc2);
+            try
+            {
+                Graphics mygraphics = CreateGraphics();
+                Size s = Size;
+                memoryImage = new Bitmap(s.Width, s.Height, mygraphics);
+                Graphics memoryGraphics = Graphics.FromImage(memoryImage);
+                IntPtr dc1 = mygraphics.GetHdc();
+                IntPtr dc2 = memoryGraphics.GetHdc();
+                BitBlt(dc2, 0, 0, ClientRectangle.Width, ClientRectangle.Height, dc1, 0, 0, 13369376);
+                mygraphics.ReleaseHdc(dc1);
+                memoryGraphics.ReleaseHdc(dc2);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Falló captura de pantalla:", exception.Message);
+            }
         }
         private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             e.Graphics.DrawImage(memoryImage, 0, 0);
         }
-        private void button1_Click(object sender, System.EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             button1.Visible = false;
+            CaptureScreen();
             try
             {
-                CaptureScreen();
-                try
+                PrintDialog printDialog1 = new PrintDialog { Document = printDocument1 };
+                DialogResult result = printDialog1.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    PrintDialog printDialog1 = new PrintDialog { Document = printDocument1 };
-                    DialogResult result = printDialog1.ShowDialog();
-                    if (result == DialogResult.OK)
-                    {
-                        printDocument1.Print();
-                        Close();
-                    }
-
-                    try
-                    {
-                        MarcarImpresa();
-                    }
-                    catch (Exception ee)
-                    {
-                        MessageBox.Show("Falló marcado como impreso: " + ee.Message);
-                    }
+                    printDocument1.Print();
+                    Close();
                 }
-                catch (Exception eee)
-                {
-                    MessageBox.Show("Falló impresión: " + eee.Message);
-                }
+                MarcarImpresa();
             }
-            catch (Exception eeee)
+            catch (Exception eee)
             {
-                MessageBox.Show("Falló captura de datos: " + eeee.Message);
+                MessageBox.Show("Falló impresión: " + eee.Message);
             }
         }
     }

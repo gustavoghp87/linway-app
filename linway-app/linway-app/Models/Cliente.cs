@@ -1,10 +1,9 @@
-﻿using linway_app.Models.Interfaces;
-using linway_app.Models.OModel;
+﻿using linway_app.Models.OModel;
 using System.Collections.Generic;
 
 namespace linway_app.Models
 {
-    public partial class Cliente : ObjModel, ICliente
+    public partial class Cliente : ObjModel
     {
         public Cliente()
         {

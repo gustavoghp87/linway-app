@@ -1,9 +1,8 @@
-﻿using linway_app.Models.Interfaces;
-using linway_app.Models.OModel;
+﻿using linway_app.Models.OModel;
 
 namespace linway_app.Models
 {
-    public partial class DetalleRecibo : ObjModel, IDetalleRecibo
+    public partial class DetalleRecibo : ObjModel
     {
         public long ReciboId { get; set; }
         public string Detalle { get; set; }

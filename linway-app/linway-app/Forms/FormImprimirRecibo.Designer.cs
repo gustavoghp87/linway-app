@@ -122,7 +122,7 @@ namespace linway_app.Forms
             this.button1.TabIndex = 11;
             this.button1.Text = "Imprimir";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // printDocument1
             // 

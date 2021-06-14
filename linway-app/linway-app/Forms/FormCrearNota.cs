@@ -148,10 +148,7 @@ namespace linway_app.Forms
                 }
                 label40.Text = (producto.Precio * int.Parse(textBox17.Text)).ToString();   // subtotal
             }
-            else
-            {
-                label40.Text = "";
-            }
+            else label40.Text = "";
         }
         private void LimpiarLista_Click(object sender, EventArgs e)
         {
@@ -167,13 +164,11 @@ namespace linway_app.Forms
                 Producto producto = getProducto(long.Parse(labelProductoId.Text));
                 if (producto == null) return;
                 int cantidad = int.Parse(textBox17.Text);
-                ProdVendido nuevoPV = new ProdVendido
-                {
-                    ProductoId = producto.Id,
-                    Descripcion = label38.Text,
-                    Cantidad = cantidad,
-                    Precio = producto.Precio
-                };
+                ProdVendido nuevoPV = new ProdVendido();
+                nuevoPV.ProductoId = producto.Id;
+                nuevoPV.Descripcion = label38.Text;
+                nuevoPV.Cantidad = cantidad;
+                nuevoPV.Precio = producto.Precio;
 
                 if (producto.Nombre.Contains("pendiente"))
                 {}
@@ -207,7 +202,6 @@ namespace linway_app.Forms
                 ActualizarGrid();
             }
         }
-
         private void CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox3.Checked)       // enviar a hoja de reparto checkbox
@@ -232,15 +226,12 @@ namespace linway_app.Forms
                 var cliente = getClientePorDireccionExacta(label36.Text);
                 if (cliente == null) return;
 
-                NotaDeEnvio nuevaNota = new NotaDeEnvio
-                {
-                    ClienteId = cliente.Id,
-                    Cliente = cliente,
-                    Fecha = DateTime.Now.ToString("yyyy-MM-dd"),
-                    Impresa = 0,
-                    Detalle = extraerDetalleDeNotaDeEnvio(_lstProdVendidos),
-                    ImporteTotal = extraerImporteDeNotaDeEnvio(_lstProdVendidos)
-                };
+                NotaDeEnvio nuevaNota = new NotaDeEnvio();
+                nuevaNota.ClienteId = cliente.Id;
+                nuevaNota.Fecha = DateTime.Now.ToString("yyyy-MM-dd");
+                nuevaNota.Impresa = 0;
+                nuevaNota.Detalle = extraerDetalleDeNotaDeEnvio(_lstProdVendidos);
+                nuevaNota.ImporteTotal = extraerImporteDeNotaDeEnvio(_lstProdVendidos);
                 long notaId = addNotaDeEnvioReturnId(nuevaNota);
                 if (notaId == 0)
                 {
@@ -252,16 +243,13 @@ namespace linway_app.Forms
                     prodVendido.NotaDeEnvioId = notaId;
                     addProdVendido(prodVendido);
                 }
-
                 if (checkBox4.Checked)      // agregar productos vendidos a lista de registros y a lista de ventas
                 {
-                    RegistroVenta nuevoRegistro = new RegistroVenta
-                    {
-                        ClienteId = cliente.Id,
-                        Cliente = cliente,
-                        Fecha = DateTime.Now.ToString("yyyy-MM-dd"),
-                        NombreCliente = cliente.Direccion
-                    };
+                    RegistroVenta nuevoRegistro = new RegistroVenta();
+                    nuevoRegistro.ClienteId = cliente.Id;
+                    nuevoRegistro.Cliente = (Models.Cliente)cliente;
+                    nuevoRegistro.Fecha = DateTime.Now.ToString("yyyy-MM-dd");
+                    nuevoRegistro.NombreCliente = cliente.Direccion;
                     long registroId = addRegistroVentaReturnId(nuevoRegistro);
                     foreach (var prodVendido in _lstProdVendidos)
                     {
@@ -281,31 +269,26 @@ namespace linway_app.Forms
                             }
                             if (!exists)
                             {
-                                Venta nuevaVenta = new Venta
-                                {
-                                    ProductoId = prodVendido.ProductoId,
-                                    Cantidad = prodVendido.Cantidad,
-                                    Producto = getProducto(prodVendido.ProductoId)
-                                };
+                                Venta nuevaVenta = new Venta();
+                                nuevaVenta.ProductoId = prodVendido.ProductoId;
+                                nuevaVenta.Cantidad = prodVendido.Cantidad;
+                                nuevaVenta.Producto = (Models.Producto)getProducto(prodVendido.ProductoId);
                                 addVenta(nuevaVenta);
                             }
                         }
                     }
                 }
-
-                foreach (var prodVendido in _lstProdVendidos)
+                foreach (ProdVendido prodVendido in _lstProdVendidos)
                 {
                     prodVendido.NotaDeEnvioId = notaId;
                     addProdVendido(prodVendido);
                 }
-
                 if (checkBox1.Checked)      // imprimir checkbox
                 {
                     var form = Program.GetConfig().GetRequiredService<FormImprimirNota>();
                     form.Rellenar_Datos(nuevaNota);
                     form.Show();
                 }
-
                 if (checkBox3.Checked)     // enviar a hoja de reparto como pedido nuevo para X reparto
                 {
                     List<Reparto> repartos = getRepartosPorDia(comboBox4.Text);
@@ -314,16 +297,13 @@ namespace linway_app.Forms
                 }
                 Close();
             }
-            else
-            {
-                MessageBox.Show("Verifique los campos");
-            }
+            else MessageBox.Show("Verifique los campos");
         }
         private void EnviarA_HDR_SelectedIndexChanged(object sender, EventArgs e)
         {
             string diaDeReparto = comboBox4.Text;
-            List<Reparto> repartos = getRepartosPorDia(diaDeReparto);  // partiendo del día seleccionado, buscar sus repartos
-            comboBox3.DataSource = repartos;                           // combobox "día", necesito la lista de dias de rep
+            List<Reparto> repartos = getRepartosPorDia(diaDeReparto);   // partiendo del día seleccionado, buscar sus repartos
+            comboBox3.DataSource = repartos;                            // combobox "día", necesito la lista de dias de rep
             comboBox3.DisplayMember = "Nombre";
             comboBox3.ValueMember = "Nombre";
         }

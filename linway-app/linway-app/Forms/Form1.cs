@@ -13,30 +13,30 @@ namespace linway_app.Forms
 {
     public partial class Form1 : Form
     {
-        public static IService<Cliente> _servCliente;
-        public static IService<DetalleRecibo> _servDetalleRecibo;
-        public static IService<DiaReparto> _servDiaReparto;
-        public static IService<NotaDeEnvio> _servNotaDeEnvio;
-        public static IService<Pedido> _servPedido;
-        public static IService<Producto> _servProducto;
-        public static IService<ProdVendido> _servProdVendido;
-        public static IService<Recibo> _servRecibo;
-        public static IService<RegistroVenta> _servRegistroVenta;
-        public static IService<Reparto> _servReparto;
-        public static IService<Venta> _servVenta;
+        public static IServiceBase<Cliente> _servCliente;
+        public static IServiceBase<DetalleRecibo> _servDetalleRecibo;
+        public static IServiceBase<DiaReparto> _servDiaReparto;
+        public static IServiceBase<NotaDeEnvio> _servNotaDeEnvio;
+        public static IServiceBase<Pedido> _servPedido;
+        public static IServiceBase<Producto> _servProducto;
+        public static IServiceBase<ProdVendido> _servProdVendido;
+        public static IServiceBase<Recibo> _servRecibo;
+        public static IServiceBase<RegistroVenta> _servRegistroVenta;
+        public static IServiceBase<Reparto> _servReparto;
+        public static IServiceBase<Venta> _servVenta;
         public static IMapper _mapper;
         public Form1(
-            IService<Cliente> servCliente,
-            IService<DetalleRecibo> servDetalleRecibo,
-            IService<DiaReparto> servDiaReparto,
-            IService<NotaDeEnvio> servNotaDeEnvio,
-            IService<Pedido> servPedido,
-            IService<Producto> servProducto,
-            IService<ProdVendido> servProdVendido,
-            IService<Recibo> servRecibo,
-            IService<RegistroVenta> servRegistroVenta,
-            IService<Reparto> servReparto,
-            IService<Venta> servVenta,
+            IServiceBase<Cliente> servCliente,
+            IServiceBase<DetalleRecibo> servDetalleRecibo,
+            IServiceBase<DiaReparto> servDiaReparto,
+            IServiceBase<NotaDeEnvio> servNotaDeEnvio,
+            IServiceBase<Pedido> servPedido,
+            IServiceBase<Producto> servProducto,
+            IServiceBase<ProdVendido> servProdVendido,
+            IServiceBase<Recibo> servRecibo,
+            IServiceBase<RegistroVenta> servRegistroVenta,
+            IServiceBase<Reparto> servReparto,
+            IServiceBase<Venta> servVenta,
             IMapper mapper
             )
         {
@@ -176,8 +176,8 @@ namespace linway_app.Forms
         //BUSCAR CLIENTE
         void FiltrarDatosC(string texto)  // filtra por dirección de clientes
         {
-            var lstClientes = getClientes();
-            var lstClientesFiltrados = new List<Cliente>();
+            List<Cliente> lstClientes = getClientes();
+            List<Cliente> lstClientesFiltrados = new List<Cliente>();
             foreach (var cliente in lstClientes)
             {
                 if (cliente.Direccion.ToLower().Contains(texto.ToLower()))
@@ -187,13 +187,11 @@ namespace linway_app.Forms
             }
             CargarGrid1(lstClientesFiltrados);
         }
-
-        private void textBox8_TextChanged(object sender, EventArgs e)
+        private void TextBox8_TextChanged(object sender, EventArgs e)
         {
             FiltrarDatosC(BuscadorClientes.Text);
         }
-
-        private void button5_Click(object sender, EventArgs e)
+        private void Button5_Click(object sender, EventArgs e)
         {
             if (BuscadorClientes.Visible)
             {
@@ -218,10 +216,7 @@ namespace linway_app.Forms
             List<Producto> lstProductosFilstrados = new List<Producto>();
             foreach (var producto in lstProductos)
             {
-                if (producto.Nombre.ToLower().Contains(texto.ToLower()))
-                {
-                    lstProductosFilstrados.Add(producto);
-                }
+                if (producto.Nombre.ToLower().Contains(texto.ToLower())) lstProductosFilstrados.Add(producto);
             }
             CargarGrid2(lstProductosFilstrados);
         }
@@ -243,11 +238,9 @@ namespace linway_app.Forms
                 BuscadorClientes.Text = "";
             }
         }
-
         private void BuscadorProductos_TextChanged(object sender, EventArgs e)
         {
             FiltrarDatosP(BuscadorProductos.Text);
         }
-
     }
 }
