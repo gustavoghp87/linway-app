@@ -92,6 +92,7 @@ namespace linway_app.Forms
             this.tbDesde = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.bCancelarBorrarReg = new System.Windows.Forms.Button();
+            this.ExportBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.gbNuevaVenta.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
@@ -130,6 +131,7 @@ namespace linway_app.Forms
             // 
             // gbNuevaVenta
             // 
+            this.gbNuevaVenta.Controls.Add(this.ExportBtn);
             this.gbNuevaVenta.Controls.Add(this.label11);
             this.gbNuevaVenta.Controls.Add(this.labelTotal);
             this.gbNuevaVenta.Controls.Add(this.textBox4);
@@ -398,7 +400,7 @@ namespace linway_app.Forms
             // button12
             // 
             this.button12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button12.Location = new System.Drawing.Point(123, 387);
+            this.button12.Location = new System.Drawing.Point(138, 387);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(129, 39);
             this.button12.TabIndex = 5;
@@ -785,6 +787,17 @@ namespace linway_app.Forms
             this.bCancelarBorrarReg.UseVisualStyleBackColor = true;
             this.bCancelarBorrarReg.Click += new System.EventHandler(this.CancelarClick_Click);
             // 
+            // ExportBtn
+            // 
+            this.ExportBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ExportBtn.Location = new System.Drawing.Point(6, 377);
+            this.ExportBtn.Name = "ExportBtn";
+            this.ExportBtn.Size = new System.Drawing.Size(111, 49);
+            this.ExportBtn.TabIndex = 51;
+            this.ExportBtn.Text = "Exportar todo a Excel";
+            this.ExportBtn.UseVisualStyleBackColor = true;
+            this.ExportBtn.Click += new System.EventHandler(this.ExportBtn_Click);
+            // 
             // FormVentas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -896,5 +909,6 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label labelProductoN;
+        private System.Windows.Forms.Button ExportBtn;
     }
 }

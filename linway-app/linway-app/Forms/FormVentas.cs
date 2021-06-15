@@ -1,10 +1,11 @@
-﻿using linway_app.Models;
+﻿using linway_app.Excel;
+using linway_app.Models;
 using linway_app.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using static linway_app.Services.Delegates.DClientes;
+using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DPedido;
 using static linway_app.Services.Delegates.DProducto;
 using static linway_app.Services.Delegates.DProdVendido;
@@ -292,7 +293,6 @@ namespace linway_app.Forms
                 }
 
                 _lstAgregarVentas.Clear();
-                //bActualizar.PerformClick();
                 LimpiarPantalla();
                 Actualizar();
             }
@@ -544,8 +544,14 @@ namespace linway_app.Forms
                 }
                 Actualizar();
                 LimpiarPantalla();
-                //bActualizar.PerformClick();
             }
+        }
+        private void ExportBtn_Click(object sender, EventArgs e)
+        {
+            Actualizar();
+            Exportar servExportar = new Exportar();
+            bool success = servExportar.ExportarVentas(_lstVentas);
+            if (success) ExportBtn.Text = "Terminado";
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace linway_app.Services.Delegates
 {
-    public static class DClientes
+    public static class DCliente
     {
         public delegate bool DAddCliente(Cliente cliente);
         public delegate bool DAddClientePrimero();

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DPedido;
+using static linway_app.Services.Delegates.DDiaReparto;
 
 namespace linway_app.Services.Delegates
 {
@@ -83,11 +84,8 @@ namespace linway_app.Services.Delegates
         private static bool ExportReparto(string dia, string nombreReparto)
         {
             Reparto reparto = getRepartoPorDiaYNombre(dia, nombreReparto);
-            var export = new Exportar();
-            bool success = export.ExportarAExcel(reparto);
-            if (success) MessageBox.Show("Terminado");
-            else MessageBox.Show("Algo falló");
-            return success;
+            Exportar servExportar = new Exportar();
+            return servExportar.ExportarReparto(reparto);
         }
         private static Reparto GetReparto(long repartoId)
         {
@@ -97,7 +95,7 @@ namespace linway_app.Services.Delegates
         {
             try
             {
-                return Form1._servDiaReparto.GetAll()
+                return getDiaRepartos()
                     .Find(x => x.Dia == dia).Reparto.ToList()
                     .Find(x => x.Nombre == nombre);
             }
@@ -111,7 +109,7 @@ namespace linway_app.Services.Delegates
         {
             try
             {
-                List<DiaReparto> lstDiasRep = Form1._servDiaReparto.GetAll();
+                List<DiaReparto> lstDiasRep = getDiaRepartos();
                 List<Reparto> lstRepartos = lstDiasRep.Find(x => x.Dia == diaReparto).Reparto.ToList();
                 return lstRepartos;
             }

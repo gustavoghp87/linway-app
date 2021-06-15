@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using static linway_app.Services.Delegates.DClientes;
+using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DNotaDeEnvio;
 using static linway_app.Services.Delegates.DPedido;
 using static linway_app.Services.Delegates.DProducto;

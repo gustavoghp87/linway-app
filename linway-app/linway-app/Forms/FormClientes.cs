@@ -2,7 +2,7 @@
 using linway_app.Models.Enums;
 using System;
 using System.Windows.Forms;
-using static linway_app.Services.Delegates.DClientes;
+using static linway_app.Services.Delegates.DCliente;
 
 namespace linway_app.Forms
 {

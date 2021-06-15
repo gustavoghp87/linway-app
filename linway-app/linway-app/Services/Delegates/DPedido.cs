@@ -4,6 +4,7 @@ using linway_app.Models.Enums;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DNotaDeEnvio;
 using static linway_app.Services.Delegates.DProducto;
 using static linway_app.Services.Delegates.DProdVendido;
@@ -118,7 +119,7 @@ namespace linway_app.Services.Delegates
         private static bool AgregarPedidoAReparto(long clientId, string dia, string repartoNombre, List<ProdVendido> lstProdVendidos)
         {
             if (lstProdVendidos == null || lstProdVendidos.Count == 0) return false;
-            Cliente cliente = Form1._servCliente.Get(clientId);
+            Cliente cliente = getCliente(clientId);
             if (cliente == null) return false;
             Reparto reparto = getRepartoPorDiaYNombre(dia, repartoNombre);
             if (reparto == null) return false;
@@ -168,22 +169,23 @@ namespace linway_app.Services.Delegates
             pedido.ProductosText += prodVendido.Cantidad.ToString() + "x " + prodVendido.Descripcion + " | ";
             if (prodVendido.Producto.Tipo == TipoProducto.Polvo.ToString() && prodVendido.Producto.SubTipo != null)
             {
+                int kilos = 20;
                 switch (prodVendido.Producto.SubTipo.ToLower())
                 {
                     case string a when a.Contains("alisonespecial"):
-                        pedido.Ae += 1;
+                        pedido.Ae += prodVendido.Cantidad/kilos;
                         break;
                     case string a when a.Contains("alison"):
-                        pedido.A += 1;
+                        pedido.A += prodVendido.Cantidad/kilos;
                         break;
                     case string a when a.Contains("dispersan") || a.Contains("dispersán"):
-                        pedido.D += 1;
+                        pedido.D += prodVendido.Cantidad/kilos;
                         break;
                     case string a when a.Contains("texapol"):
-                        pedido.T += 1;
+                        pedido.T += prodVendido.Cantidad/kilos;
                         break;
                     case string a when a.Contains("eslabon") || a.Contains("eslabón"):
-                        pedido.E += 1;
+                        pedido.E += prodVendido.Cantidad/kilos;
                         break;
                     default:
                         break;
