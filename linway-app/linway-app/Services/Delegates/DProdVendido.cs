@@ -1,5 +1,7 @@
 ﻿using linway_app.Forms;
 using linway_app.Models;
+using linway_app.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -7,44 +9,32 @@ namespace linway_app.Services.Delegates
 {
     public class DProdVendido
     {
-        public delegate void DAgregarProdVendido(ProdVendido prodVendido);
-        public delegate void DDeleteProdVendido(ProdVendido prodVendido);
-        public delegate void DEditProdVendido(ProdVendido prodVendido);
-        public delegate List<ProdVendido> DGetProdVendidos();
-        public delegate ProdVendido DGetProdVendidoPorNombre(string descripcion);
-        public delegate ProdVendido DGetProdVendidoPorNombreExacto(string descripcion);
+        public readonly static Action<ProdVendido> addProdVendido = AddProdVendido;
+        public readonly static Action<ProdVendido> deleteProdVendido = DeleteProdVendido;
+        public readonly static Action<ProdVendido> editProdVendido = EditProdVendido;
+        public readonly static Func<List<ProdVendido>> getProdVendido = GetProdVendidos;
+        public readonly static Func<string, ProdVendido> getProdVendidoPorNombre = GetProdVendidoPorNombre;
+        public readonly static Func<string, ProdVendido> getProdVendidoPorNombreExacto = GetProdVendidoPorNombreExacto;
 
-        public readonly static DAgregarProdVendido addProdVendido
-            = new DAgregarProdVendido(AddProdVendido);
-        public readonly static DDeleteProdVendido deleteProdVendido
-            = new DDeleteProdVendido(DeleteProdVendido);
-        public readonly static DEditProdVendido editProdVendido
-            = new DEditProdVendido(EditProdVendido);
-        public readonly static DGetProdVendidos getProdVendidos
-            = new DGetProdVendidos(GetProdVendidos);
-        public readonly static DGetProdVendidoPorNombre getProdVendidoPorNombre
-            = new DGetProdVendidoPorNombre(GetProdVendidoPorNombre);
-        public readonly static DGetProdVendidoPorNombreExacto getProdVendidoPorNombreExacto
-            = new DGetProdVendidoPorNombreExacto(GetProdVendidoPorNombreExacto);
-
+        private static readonly IServiceBase<ProdVendido> _service = Form1._servProdVendido;
         private static void AddProdVendido(ProdVendido prodVendido)
         {
-            bool response = Form1._servProdVendido.Add(prodVendido);
+            bool response = _service.Add(prodVendido);
             if (!response) MessageBox.Show("Algo falló al agregar Producto Vendido a la base de datos");
         }
         private static void DeleteProdVendido(ProdVendido prodVendido)
         {
-            bool response = Form1._servProdVendido.Delete(prodVendido);
+            bool response = _service.Delete(prodVendido);
             if (!response) MessageBox.Show("Algo falló al eliminar Producto Vendido de la base de datos");
         }
         private static void EditProdVendido(ProdVendido prodVendido)
         {
-            bool response = Form1._servProdVendido.Edit(prodVendido);
+            bool response = _service.Edit(prodVendido);
             if (!response) MessageBox.Show("Algo falló al editar Producto Vendido en la base de datos");
         }
         private static List<ProdVendido> GetProdVendidos()
         {
-            return Form1._servProdVendido.GetAll();
+            return _service.GetAll();
         }
         private static ProdVendido GetProdVendidoPorNombre(string descripcion)
         {

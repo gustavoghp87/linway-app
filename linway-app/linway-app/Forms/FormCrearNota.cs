@@ -1,8 +1,10 @@
 ﻿using linway_app.Models;
 using linway_app.Models.Entities;
+using linway_app.Models.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DNotaDeEnvio;
@@ -161,7 +163,7 @@ namespace linway_app.Forms
         {
             if (labelClienteId.Text != "" && labelProductoId.Text != "")
             {
-                try { long.Parse(labelProductoId.Text); } catch { return; };
+                try { long.Parse(labelProductoId.Text); int.Parse(textBox17.Text); } catch { return; };
                 Producto producto = getProducto(long.Parse(labelProductoId.Text));
                 if (producto == null) return;
                 int cantidad = int.Parse(textBox17.Text);
@@ -171,18 +173,20 @@ namespace linway_app.Forms
                 nuevoPV.Cantidad = cantidad;
                 nuevoPV.Precio = producto.Precio;
 
-                if (producto.Nombre.Contains("pendiente"))
-                {}
-                else if (producto.Nombre.Contains("favor")
-                        || producto.Nombre.Contains("devoluci")
-                        || producto.Nombre.Contains("BONIF")
-                )
-                    nuevoPV.Precio = producto.Precio * -1;
-                else if (producto.Nombre.Contains("actura"))
-                    nuevoPV.Descripcion = label38.Text + textBox20.Text;
-                else
-                    nuevoPV.Cantidad = int.Parse(textBox17.Text);
-                
+                if (producto.Tipo == TipoProducto.Saldo.ToString())
+                {
+                    if (producto.SubTipo == TipoSaldo.SaldoPendiente.ToString()) { }
+                    else if (
+                        producto.SubTipo == TipoSaldo.SaldoAFavor.ToString()
+                        || producto.SubTipo == TipoSaldo.Devolucion.ToString()
+                        || producto.SubTipo == TipoSaldo.Bonificacion.ToString()
+                    )
+                        nuevoPV.Precio = producto.Precio * -1;
+                    else if (producto.SubTipo == TipoSaldo.AFacturar.ToString())
+                        nuevoPV.Descripcion = label38.Text + textBox20.Text;
+                    else
+                        nuevoPV.Cantidad = int.Parse(textBox17.Text);
+                }
                 _lstProdVendidos.Add(nuevoPV);
 
                 decimal impTotal = 0;
@@ -248,7 +252,7 @@ namespace linway_app.Forms
                 {
                     RegistroVenta nuevoRegistro = new RegistroVenta();
                     nuevoRegistro.ClienteId = cliente.Id;
-                    nuevoRegistro.Cliente = (Models.Cliente)cliente;
+                    nuevoRegistro.Cliente = cliente;
                     nuevoRegistro.Fecha = DateTime.Now.ToString("yyyy-MM-dd");
                     nuevoRegistro.NombreCliente = cliente.Direccion;
                     long registroId = addRegistroVentaReturnId(nuevoRegistro);
@@ -273,7 +277,7 @@ namespace linway_app.Forms
                                 Venta nuevaVenta = new Venta();
                                 nuevaVenta.ProductoId = prodVendido.ProductoId;
                                 nuevaVenta.Cantidad = prodVendido.Cantidad;
-                                nuevaVenta.Producto = (Models.Producto)getProducto(prodVendido.ProductoId);
+                                nuevaVenta.Producto = getProducto(prodVendido.ProductoId);
                                 addVenta(nuevaVenta);
                             }
                         }
@@ -292,9 +296,23 @@ namespace linway_app.Forms
                 }
                 if (checkBox3.Checked)     // enviar a hoja de reparto como pedido nuevo para X reparto
                 {
-                    List<Reparto> repartos = getRepartosPorDia(comboBox4.Text);
-                    Reparto reparto = repartos.Find(x => x.Nombre == comboBox3.Text);
-                    addPedidoAReparto(reparto, cliente, _lstProdVendidos);
+                    Reparto reparto = getRepartoPorDiaYNombre(comboBox4.Text, comboBox3.Text);
+                    Pedido pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId != cliente.Id);
+                    if (pedido == null)
+                    {
+                        addPedidoAReparto(reparto, cliente, _lstProdVendidos);
+                    }
+                    else
+                    {
+                        Pedido nuevoPedido = new Pedido();
+                        pedido.ClienteId = cliente.Id;
+                        pedido.Direccion = cliente.Direccion;
+                        pedido.Entregar = 1;
+                        pedido.ProductosText = "";
+                        pedido.ProdVendidos = _lstProdVendidos;
+                        pedido.RepartoId = reparto.Id;
+                        pedido.
+                    }
                 }
                 Close();
             }

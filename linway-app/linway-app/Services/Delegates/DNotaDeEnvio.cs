@@ -1,5 +1,7 @@
 ﻿using linway_app.Forms;
 using linway_app.Models;
+using linway_app.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -8,54 +10,31 @@ namespace linway_app.Services.Delegates
 {
     public static class DNotaDeEnvio
     {
-        public delegate void DAddNotaDeEnvio(NotaDeEnvio notaDeEnvio);
-        public delegate long DAddNotaDeEnvioReturnId(NotaDeEnvio notaDeEnvio);
-        public delegate void DDeleteNotaDeEnvio(NotaDeEnvio notaDeEnvio);
-        public delegate bool DEditNotaDeEnvio(NotaDeEnvio notaDeEnvio);
-        public delegate NotaDeEnvio DEditNotaDeEnvioAgregar(NotaDeEnvio notaDeEnvio, List<ProdVendido> lstProdVendidos);
-        public delegate NotaDeEnvio DEditNotaDeEnvioQuitar(NotaDeEnvio notaDeEnvio, ProdVendido nuevoProdVendido);
-        public delegate string DExtraerDetalle(List<ProdVendido> lstProdVendidos);
-        public delegate decimal DExtraerImporte(List<ProdVendido> lstProdVendidos);
-        public delegate NotaDeEnvio DGetNotaDeEnvio(long id);
-        public delegate List<NotaDeEnvio> DGetNotaDeEnvios();
+        public readonly static Action<NotaDeEnvio> addNotaDeEnvio = AddNotaDeEnvio;
+        public readonly static Func<NotaDeEnvio, long> addNotaDeEnvioReturnId = AddNotaDeEnvioReturnId;
+        public readonly static Action<NotaDeEnvio> deleteNotaDeEnvio = DeleteNotaDeEnvio;
+        public readonly static Func<NotaDeEnvio, bool> editNotaDeEnvio = EditNotaDeEnvio;
+        public readonly static Func<NotaDeEnvio, List<ProdVendido>, NotaDeEnvio> editNotaDeEnvioAgregar = EditNotaDeEnvioAgregar;
+        public readonly static Func<NotaDeEnvio, ProdVendido, NotaDeEnvio> editNotaDeEnvioQuitar = EditNotaDeEnvioQuitar;
+        public readonly static Func<List<ProdVendido>, string> extraerDetalleDeNotaDeEnvio = ExtraerDetalleDeNotaDeEnvio;
+        public readonly static Func<List<ProdVendido>, decimal> extraerImporteDeNotaDeEnvio = ExtraerImporteDeNotaDeEnvio;
+        public readonly static Func<long, NotaDeEnvio>  getNotaDeEnvio = GetNotaDeEnvio;
+        public readonly static Func<List<NotaDeEnvio>> getNotaDeEnvios = GetNotaDeEnvios;
 
-        public readonly static DAddNotaDeEnvio addNotaDeEnvio
-            = new DAddNotaDeEnvio(AddNotaDeEnvio);
-        public readonly static DAddNotaDeEnvioReturnId addNotaDeEnvioReturnId
-            = new DAddNotaDeEnvioReturnId(AddNotaDeEnvioReturnId);
-        public readonly static DDeleteNotaDeEnvio deleteNotaDeEnvio
-            = new DDeleteNotaDeEnvio(DeleteNotaDeEnvio);
-        public readonly static DEditNotaDeEnvio editNotaDeEnvio
-            = new DEditNotaDeEnvio(EditNotaDeEnvio);
-        public readonly static DEditNotaDeEnvioAgregar editNotaDeEnvioAgregar
-            = new DEditNotaDeEnvioAgregar(EditNotaDeEnvioAgregar);
-        public readonly static DEditNotaDeEnvioQuitar editNotaDeEnvioQuitar
-            = new DEditNotaDeEnvioQuitar(EditNotaDeEnvioQuitar);
-        public readonly static DExtraerDetalle extraerDetalleDeNotaDeEnvio
-            = new DExtraerDetalle(ExtraerDetalleDeNotaDeEnvio);
-        public readonly static DExtraerImporte extraerImporteDeNotaDeEnvio
-            = new DExtraerImporte(ExtraerImporteDeNotaDeEnvio);
-        public readonly static DGetNotaDeEnvio getNotaDeEnvio
-            = new DGetNotaDeEnvio(GetNotaDeEnvio);
-        public readonly static DGetNotaDeEnvios getNotaDeEnvios
-            = new DGetNotaDeEnvios(GetNotaDeEnvios);
-
+        private static readonly IServiceBase<NotaDeEnvio> _service = Form1._servNotaDeEnvio;
         private static long AddAndGetId(NotaDeEnvio notaDeEnvio)
         {
             try
             {
-                Form1._servNotaDeEnvio.Add(notaDeEnvio);
-                List<NotaDeEnvio> lst = GetNotaDeEnvios();
+                _service.Add(notaDeEnvio);
+                List<NotaDeEnvio> lst = getNotaDeEnvios();
                 return lst.Last().Id;
             }
-            catch
-            {
-                return 0;
-            }
+            catch { return 0; }
         }
         private static void AddNotaDeEnvio(NotaDeEnvio notaDeEnvio)
         {
-            bool response = Form1._servNotaDeEnvio.Add(notaDeEnvio);
+            bool response = _service.Add(notaDeEnvio);
             if (!response) MessageBox.Show("Algo falló al agregar Nota de Envío a base de datos");
         }
         private static long AddNotaDeEnvioReturnId(NotaDeEnvio notaDeEnvio)
@@ -66,12 +45,12 @@ namespace linway_app.Services.Delegates
         }
         private static void DeleteNotaDeEnvio(NotaDeEnvio notaDeEnvio)
         {
-            bool response = Form1._servNotaDeEnvio.Delete(notaDeEnvio);
+            bool response = _service.Delete(notaDeEnvio);
             if (!response) MessageBox.Show("Algo falló al eliminar Nota de Envío de la base de datos");
         }
         private static bool EditNotaDeEnvio(NotaDeEnvio notaDeEnvio)
         {
-            bool response = Form1._servNotaDeEnvio.Edit(notaDeEnvio);
+            bool response = _service.Edit(notaDeEnvio);
             if (!response) MessageBox.Show("Algo falló al editar Nota de Envío en base de datos");
             return response;
         }
@@ -79,7 +58,7 @@ namespace linway_app.Services.Delegates
         {
             if (notaDeEnvio.ProdVendidos == null || notaDeEnvio.ProdVendidos.Count == 0)
             {
-                notaDeEnvio.ProdVendidos = (ICollection<ProdVendido>)new List<ProdVendido>();
+                notaDeEnvio.ProdVendidos = new List<ProdVendido>();
                 notaDeEnvio.ProdVendidos.ToList().AddRange((IEnumerable<ProdVendido>)lstProdVendidos);
                 notaDeEnvio.ImporteTotal = ExtraerImporteDeNotaDeEnvio(lstProdVendidos);
                 notaDeEnvio.Detalle = ExtraerDetalleDeNotaDeEnvio(lstProdVendidos);
@@ -99,15 +78,12 @@ namespace linway_app.Services.Delegates
                             prodVendidoNDC.Cantidad += prodVendidoNuevo.Cantidad;
                         }
                     }
-                    if (!exists)
-                    {
-                        notaDeEnvio.ProdVendidos.Add(prodVendidoNuevo);
-                    }
+                    if (!exists) notaDeEnvio.ProdVendidos.Add(prodVendidoNuevo);
                     notaDeEnvio.ImporteTotal += prodVendidoNuevo.Precio * prodVendidoNuevo.Cantidad;
                     notaDeEnvio.Detalle += prodVendidoNuevo.Cantidad.ToString() + "x " + prodVendidoNuevo.Descripcion + ". ";
                 }
             }
-            bool success = EditNotaDeEnvio(notaDeEnvio);
+            bool success = editNotaDeEnvio(notaDeEnvio);
             if (!success) return null;
             return notaDeEnvio;
         }
@@ -150,11 +126,11 @@ namespace linway_app.Services.Delegates
         }
         private static NotaDeEnvio GetNotaDeEnvio(long id)
         {
-            return Form1._servNotaDeEnvio.Get(id);
+            return _service.Get(id);
         }
         private static List<NotaDeEnvio> GetNotaDeEnvios()
         {
-            return Form1._servNotaDeEnvio.GetAll();
+            return _service.GetAll();
         }
     }
 }

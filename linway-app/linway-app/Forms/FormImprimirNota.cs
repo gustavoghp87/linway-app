@@ -38,14 +38,13 @@ namespace linway_app.Forms
                 //lLocalidad.Text = nota_notaDeEnvioDeEnvio.Client.Direccion.Substring(separador + 1);
                 lLocalidad.Text = _notaDeEnvio.Cliente.Direccion;
                 lTotal.Text = "$ " + _notaDeEnvio.ImporteTotal.ToString(".00");
-                if (_notaDeEnvio.Cliente.Direccion.Contains("–"))
-                    _notaDeEnvio.Cliente.Direccion = _notaDeEnvio.Cliente.Direccion.Replace("–", "-");
 
                 foreach (ProdVendido pvActual in _notaDeEnvio.ProdVendidos)
                 {
                     label1.Text = label1.Text + pvActual.Cantidad.ToString() + Environment.NewLine;
+                    //label2.Text = label2.Text + pvActual.Descripcion + " ($" + pvActual.Precio.ToString(".00") + " c/u)" + Environment.NewLine;
                     label2.Text = label2.Text + pvActual.Descripcion + Environment.NewLine;
-                    label3.Text = label3.Text + pvActual.Precio.ToString(".00") + Environment.NewLine;
+                    label3.Text = label3.Text + (pvActual.Precio * pvActual.Cantidad).ToString(".00") + Environment.NewLine;
                 }
             }
             catch (Exception exc)
@@ -103,8 +102,8 @@ namespace linway_app.Forms
             if (result == DialogResult.OK)
             {
                 printDocument1.Print();
-                Close();
                 MarcarImpresa();
+                Close();
             }
         }
     }

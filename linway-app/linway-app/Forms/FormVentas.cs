@@ -44,10 +44,7 @@ namespace linway_app.Forms
             if (lstRegistroVentas != null)
             {
                 List<ERegistroVenta> grid = new List<ERegistroVenta>();
-                foreach (RegistroVenta registroVenta in lstRegistroVentas)
-                {
-                    grid.Add(Form1._mapper.Map<ERegistroVenta>(registroVenta));
-                }
+                lstRegistroVentas.ForEach(x => grid.Add(Form1._mapper.Map<ERegistroVenta>(x)));
                 dataGridView1.DataSource = grid;
                 dataGridView1.Columns[0].Width = 30;
                 dataGridView1.Columns[1].Width = 150;
@@ -546,7 +543,7 @@ namespace linway_app.Forms
                 LimpiarPantalla();
             }
         }
-        private void ExportBtn_Click(object sender, EventArgs e)
+        private void ExportBtn_Click_1(object sender, EventArgs e)
         {
             Actualizar();
             Exportar servExportar = new Exportar();

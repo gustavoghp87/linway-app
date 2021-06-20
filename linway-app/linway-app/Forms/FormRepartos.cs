@@ -88,9 +88,11 @@ namespace linway_app.Forms
             string dia = comboBox1.Text;
             string nombreReparto = comboBox2.Text;
             if (dia == "" || nombreReparto == "") return;
+            bool success = false;
             DialogResult dialogResult = MessageBox.Show("Exportar " + dia + " - "
                 + nombreReparto + " ¿Confirmar?", "Exportar Reparto a Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes) exportReparto(dia, nombreReparto);
+            if (dialogResult == DialogResult.Yes) success = exportReparto(dia, nombreReparto);
+            if (success) exportarButton.Text = "Terminado";
         }
         private void LimpiarPantalla()
         {

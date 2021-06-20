@@ -150,13 +150,14 @@ namespace linway_app.Forms
         private void Button1_Click(object sender, EventArgs e)
         {
             if (comboBox2.Text == "") return;
-            foreach (NotaDeEnvio nota in ObtenerListaAImprimir())
+            var lstAImprimir = ObtenerListaAImprimir();
+            foreach (NotaDeEnvio nota in lstAImprimir)
             {
                 var form = Program.GetConfig().GetRequiredService<FormImprimirNota>();
                 form.Rellenar_Datos(nota);
                 form.Show();
-                Close();
             }
+            Close();
         }
         private void TextBox2_KeyPress(object sender, KeyPressEventArgs e)
         {

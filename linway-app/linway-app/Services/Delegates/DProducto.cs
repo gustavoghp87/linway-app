@@ -1,5 +1,8 @@
 ﻿using linway_app.Forms;
 using linway_app.Models;
+using linway_app.Models.Enums;
+using linway_app.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -7,57 +10,39 @@ namespace linway_app.Services.Delegates
 {
     public static class DProducto
     {
-        public delegate void DAddProducto(Producto Producto);
-        public delegate void DDeleteProducto(Producto producto);
-        public delegate void DEditProducto(Producto producto);
-        public delegate bool DEsProducto(Producto producto);
-        public delegate Producto DGetProducto(long productId);
-        public delegate Producto DGetProductoPorNombre(string nombre);
-        public delegate Producto DGetProductoPorNombreExacto(string nombre);
-        public delegate List<Producto> DGetProductos();
+        public readonly static Action<Producto> addProducto = AddProducto;
+        public readonly static Action<Producto> deleteProducto = DeleteProducto;
+        public readonly static Action<Producto> editProducto = EditProducto;
+        public readonly static Func<Producto, bool> esProducto = EsProducto;
+        public readonly static Func<long, Producto> getProducto = GetProducto;
+        public readonly static Func<string, Producto> getProductoPorNombre = GetProductoPorNombre;
+        public readonly static Func<string, Producto> getProductoPorNombreExacto = GetProductoPorNombreExacto;
+        public readonly static Func<List<Producto>> getProductos = GetProductos;
 
-        public readonly static DAddProducto addProducto
-            = new DAddProducto(AddProducto);
-        public readonly static DDeleteProducto deleteProducto
-            = new DDeleteProducto(DeleteProducto);
-        public readonly static DEditProducto editProducto
-            = new DEditProducto(EditProducto);
-        public readonly static DEsProducto esProducto
-            = new DEsProducto(EsProducto);
-        public readonly static DGetProducto getProducto
-            = new DGetProducto(GetProducto);
-        public readonly static DGetProductoPorNombre getProductoPorNombre
-            = new DGetProductoPorNombre(GetProductoPorNombre);
-        public readonly static DGetProductoPorNombreExacto getProductoPorNombreExacto
-            = new DGetProductoPorNombreExacto(GetProductoPorNombreExacto);
-        public readonly static DGetProductos getProductos
-            = new DGetProductos(GetProductos);
-
+        private static readonly IServiceBase<Producto> _service = Form1._servProducto;
         private static void AddProducto(Producto producto)
         {
             while(producto.Nombre.Contains("'")) producto.Nombre = producto.Nombre.Replace(char.Parse("'"), '"');
-            bool response = Form1._servProducto.Add(producto);
+            bool response = _service.Add(producto);
             if (!response) MessageBox.Show("Algo falló al guardar Producto en la base de datos");
         }
         private static void DeleteProducto(Producto producto)
         {
-            bool response = Form1._servProducto.Delete(producto);
+            bool response = _service.Delete(producto);
             if (!response) MessageBox.Show("Algo falló al eliminar Producto de la base de datos");
         }
         private static void EditProducto(Producto producto)
         {
-            bool response = Form1._servProducto.Edit(producto);
+            bool response = _service.Edit(producto);
             if (!response) MessageBox.Show("Algo falló al editar Producto en la base de datos");
         }
         private static bool EsProducto(Producto producto)
         {
-            string nombre = producto.Nombre.ToLower();
-            return !(nombre.Contains("pendiente") || nombre.Contains("favor") || nombre.Contains("actura")
-                     || nombre.Contains("evoluc") || nombre.Contains("cobrar") || nombre.Contains("bonifi"));
+            return producto.Tipo != TipoProducto.Saldo.ToString();
         }
         private static Producto GetProducto(long productId)
         {
-            return Form1._servProducto.Get(productId);
+            return _service.Get(productId);
         }
         private static Producto GetProductoPorNombre(string nombre)
         {
@@ -69,7 +54,7 @@ namespace linway_app.Services.Delegates
         }
         private static List<Producto> GetProductos()
         {
-            return Form1._servProducto.GetAll();
+            return _service.GetAll();
         }
     }
 }

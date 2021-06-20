@@ -1,6 +1,8 @@
 ﻿using linway_app.Forms;
 using linway_app.Models;
 using linway_app.Models.Enums;
+using linway_app.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -14,38 +16,21 @@ namespace linway_app.Services.Delegates
 {
     public static class DPedido
     {
-        public delegate void DAddPedido(Pedido pedido);
-        public delegate void DAddPedidoAReparto(Reparto reparto, Cliente cliente, List<ProdVendido> lstProdVendidos);
-        public delegate void DAddPedidoDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId);
-        public delegate void DCleanPedido(Pedido pedido);
-        public delegate void DDeletePedido(Pedido pedido);
-        public delegate void DEditPedido(Pedido pedido);
-        public delegate Pedido DGetPedidoPorDireccion(string direccion);
-        public delegate List<Pedido> DGetPedidos();
-        public delegate List<Pedido> DGetPedidosPorRepartoId(long repartoId);
+        public readonly static Action<Pedido> addPedido = AddPedido;
+        public readonly static Action<Reparto, Cliente, List<ProdVendido>> addPedidoAReparto = AddPedidoAReparto;
+        public readonly static Action<string, string, long> addPedidoDesdeNota = AddPedidoDesdeNota;
+        public readonly static Action<Pedido> cleanPedido = CleanPedido;
+        public readonly static Action<Pedido> deletePedido = DeletePedido;
+        public readonly static Action<Pedido> editPedido = EditPedido;
+        public readonly static Func<string, Pedido> getPedidoPorDireccion = GetPedidoPorDireccion;
+        public readonly static Func<List<Pedido>> getPedidos = GetPedidos;
+        public readonly static Func<long, List<Pedido>> getPedidosPorRepartoId = GetPedidosPorRepartoId;
 
-        public readonly static DAddPedido addPedido
-            = new DAddPedido(AddPedido);
-        public readonly static DAddPedidoAReparto addPedidoAReparto
-             = new DAddPedidoAReparto(AddPedidoAReparto);
-        public readonly static DAddPedidoDesdeNota addPedidoDesdeNota
-            = new DAddPedidoDesdeNota(AddPedidoDesdeNota);
-        public readonly static DCleanPedido cleanPedido = new DCleanPedido(CleanPedido);
-        public readonly static DDeletePedido deletePedido
-            = new DDeletePedido(DeletePedido);
-        public readonly static DEditPedido editPedido
-            = new DEditPedido(EditPedido);
-        public readonly static DGetPedidoPorDireccion getPedidoPorDireccion
-            = new DGetPedidoPorDireccion(GetPedidoPorDireccion);
-        public readonly static DGetPedidos getPedidos
-            = new DGetPedidos(GetPedidos);
-        public readonly static DGetPedidosPorRepartoId getPedidosPorRepartoId
-            = new DGetPedidosPorRepartoId(GetPedidosPorRepartoId);
-
+        private static readonly IServiceBase<Pedido> _service = Form1._servPedido;
         private static void AddPedido(Pedido pedido)
         {
             pedido.Orden = GetOrdenMayor(pedido.RepartoId) + 1;
-            bool response = Form1._servPedido.Add(pedido);
+            bool response =_service.Add(pedido);
             if (!response) MessageBox.Show("Algo falló al agregar nuevo Pedido a la base de datos");
         }
         private static void AddPedidoAReparto(Reparto reparto, Cliente cliente, List<ProdVendido> lstProdVendidos)
@@ -77,17 +62,17 @@ namespace linway_app.Services.Delegates
         }
         private static void DeletePedido(Pedido pedido)
         {
-            bool response = Form1._servPedido.Delete(pedido);
+            bool response = _service.Delete(pedido);
             if (!response) MessageBox.Show("Algo falló al eliminar el Pedido de la base de datos");
         }
         private static void EditPedido(Pedido pedido)
         {
-            bool response = Form1._servPedido.Edit(pedido);
+            bool response = _service.Edit(pedido);
             if (!response) MessageBox.Show("Algo falló al editar el Pedido en la base de datos");
         }
         private static Pedido GetPedido(long pedidoId)
         {
-            return Form1._servPedido.Get(pedidoId);
+            return _service.Get(pedidoId);
         }
         private static Pedido GetPedidoPorDireccion(string direccion)
         {
@@ -102,7 +87,7 @@ namespace linway_app.Services.Delegates
         }
         private static List<Pedido> GetPedidos()
         {
-            return Form1._servPedido.GetAll();
+            return _service.GetAll();
         }
 
         private static bool AgregarDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId)
@@ -172,19 +157,19 @@ namespace linway_app.Services.Delegates
                 int kilos = 20;
                 switch (prodVendido.Producto.SubTipo.ToLower())
                 {
-                    case string a when a.Contains("alisonespecial"):
+                    case string a when a == TipoPolvo.AlisonEspecial.ToString():
                         pedido.Ae += prodVendido.Cantidad/kilos;
                         break;
-                    case string a when a.Contains("alison"):
+                    case string a when a == TipoPolvo.Alison.ToString():
                         pedido.A += prodVendido.Cantidad/kilos;
                         break;
-                    case string a when a.Contains("dispersan") || a.Contains("dispersán"):
+                    case string a when a == TipoPolvo.Dispersán.ToString():
                         pedido.D += prodVendido.Cantidad/kilos;
                         break;
-                    case string a when a.Contains("texapol"):
+                    case string a when a == TipoPolvo.Texapol.ToString():
                         pedido.T += prodVendido.Cantidad/kilos;
                         break;
-                    case string a when a.Contains("eslabon") || a.Contains("eslabón"):
+                    case string a when a == TipoPolvo.Eslabón.ToString():
                         pedido.E += prodVendido.Cantidad/kilos;
                         break;
                     default:
