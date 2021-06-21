@@ -34,9 +34,9 @@ namespace linway_app.Forms
                 lCodigo.Text = elcodigo;
                 //int separador = _notaDeEnvio.Client.Direccion.IndexOf('-');
                 //lCalle.Text = _notaDeEnvio.Client.Direccion.Substring(0, separador);
-                lCalle.Text = " ";
+                lCalle.Text = _notaDeEnvio.Cliente.Direccion;
                 //lLocalidad.Text = nota_notaDeEnvioDeEnvio.Client.Direccion.Substring(separador + 1);
-                lLocalidad.Text = _notaDeEnvio.Cliente.Direccion;
+                lLocalidad.Text = " ";
                 lTotal.Text = "$ " + _notaDeEnvio.ImporteTotal.ToString(".00");
 
                 foreach (ProdVendido pvActual in _notaDeEnvio.ProdVendidos)

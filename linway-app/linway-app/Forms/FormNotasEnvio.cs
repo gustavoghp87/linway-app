@@ -156,8 +156,9 @@ namespace linway_app.Forms
                 var form = Program.GetConfig().GetRequiredService<FormImprimirNota>();
                 form.Rellenar_Datos(nota);
                 form.Show();
+                form.BringToFront();
             }
-            Close();
+            SendToBack();
         }
         private void TextBox2_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -189,7 +190,7 @@ namespace linway_app.Forms
             {
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
-                    if (nota.Fecha == DateTime.Now.ToString("yy-MM-dd")) listaAImprimir.Add(nota);
+                    if (nota.Fecha == DateTime.UtcNow.ToString("yyyy-MM-dd")) listaAImprimir.Add(nota);
                 }
             }
             if (
@@ -397,8 +398,10 @@ namespace linway_app.Forms
             try { long.Parse(textBox6.Text); } catch { return; };
             string diaDeReparto = comboBox4.Text;
             string nombreReparto = comboBox5.Text;
-            long notaDeEnvioId = long.Parse(textBox6.Text);
-            addPedidoDesdeNota(diaDeReparto, nombreReparto, notaDeEnvioId);
+            NotaDeEnvio notaDeEnvio = getNotaDeEnvio(long.Parse(textBox6.Text));
+            Reparto reparto = getRepartoPorDiaYNombre(diaDeReparto, nombreReparto);
+            if (notaDeEnvio == null || reparto == null) return;
+            addOrEditPedidoEnReparto(reparto, notaDeEnvio.Cliente, notaDeEnvio.ProdVendidos.ToList());
             comboBox5.Text = "";
             comboBox4.Text = "";
             textBox6.Text = "";

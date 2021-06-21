@@ -283,7 +283,7 @@ namespace linway_app.Forms
                     if (cliente == null) return;
                     Reparto reparto = getRepartoPorDiaYNombre(dia, nombre);
                     if (reparto == null) return;
-                    addPedidoAReparto(reparto, cliente, lstProdVendidos);                   
+                    addOrEditPedidoEnReparto(reparto, cliente, lstProdVendidos);                   
                     nuevoRegistroVenta.ClienteId = cliente.Id;
                     nuevoRegistroVenta.NombreCliente = cliente.Direccion;
                     editRegistroVenta(nuevoRegistroVenta);

@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DDiaReparto;
 using static linway_app.Services.Delegates.DPedido;
-using static linway_app.Services.Delegates.DProdVendido;
 using static linway_app.Services.Delegates.DReparto;
 
 namespace linway_app.Forms
@@ -72,7 +71,7 @@ namespace linway_app.Forms
                 dataGridView1.Columns[7].Width = 30;
                 dataGridView1.Columns[8].Width = 30;
                 dataGridView1.Columns[9].Width = 30;
-                dataGridView1.Columns[11].Visible = false;
+                dataGridView1.Columns[11].Visible = false;      // orden
             }
         }
         private void ReCargarHDR(string elDia, string elReparto)
@@ -135,7 +134,7 @@ namespace linway_app.Forms
             label17.Text = reparto.Tt.ToString();
             label18.Text = reparto.Tae.ToString();
             label21.Text = reparto.TotalB.ToString();
-            label22.Text = reparto.Tl.ToString();
+            label22.Text = reparto.Tl.ToString() + " litros";
         }
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {

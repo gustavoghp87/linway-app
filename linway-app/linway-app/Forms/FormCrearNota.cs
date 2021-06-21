@@ -40,7 +40,7 @@ namespace linway_app.Forms
                 }
                 dataGridView4.DataSource = grid;
                 dataGridView4.Columns[0].Width = 28;
-                dataGridView4.Columns[1].Width = 100;
+                dataGridView4.Columns[1].Width = 200;
             }
         }
         private void SoloNumero_KeyPress(object sender, KeyPressEventArgs e)
@@ -243,7 +243,7 @@ namespace linway_app.Forms
                     MessageBox.Show("Falló al procesar Nota nueva");
                     return;
                 }
-                foreach (var prodVendido in _lstProdVendidos)
+                foreach (ProdVendido prodVendido in _lstProdVendidos)
                 {
                     prodVendido.NotaDeEnvioId = notaId;
                     addProdVendido(prodVendido);
@@ -283,11 +283,6 @@ namespace linway_app.Forms
                         }
                     }
                 }
-                foreach (ProdVendido prodVendido in _lstProdVendidos)
-                {
-                    prodVendido.NotaDeEnvioId = notaId;
-                    addProdVendido(prodVendido);
-                }
                 if (checkBox1.Checked)      // imprimir checkbox
                 {
                     var form = Program.GetConfig().GetRequiredService<FormImprimirNota>();
@@ -298,20 +293,12 @@ namespace linway_app.Forms
                 {
                     Reparto reparto = getRepartoPorDiaYNombre(comboBox4.Text, comboBox3.Text);
                     Pedido pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId != cliente.Id);
-                    if (pedido == null)
+                    if (reparto == null || pedido == null) return;
+                    addOrEditPedidoEnReparto(reparto, cliente, _lstProdVendidos);
+                    foreach (ProdVendido prodVendido in _lstProdVendidos)
                     {
-                        addPedidoAReparto(reparto, cliente, _lstProdVendidos);
-                    }
-                    else
-                    {
-                        Pedido nuevoPedido = new Pedido();
-                        pedido.ClienteId = cliente.Id;
-                        pedido.Direccion = cliente.Direccion;
-                        pedido.Entregar = 1;
-                        pedido.ProductosText = "";
-                        pedido.ProdVendidos = _lstProdVendidos;
-                        pedido.RepartoId = reparto.Id;
-                        pedido.
+                        prodVendido.PedidoId = pedido.Id;
+                        editProdVendido(prodVendido);
                     }
                 }
                 Close();

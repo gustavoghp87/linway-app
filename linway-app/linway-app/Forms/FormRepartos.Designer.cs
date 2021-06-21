@@ -66,7 +66,6 @@ namespace linway_app.Forms
             this.label6 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label26 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
@@ -496,7 +495,6 @@ namespace linway_app.Forms
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.label26);
             this.groupBox3.Controls.Add(this.label22);
             this.groupBox3.Controls.Add(this.label21);
             this.groupBox3.Controls.Add(this.label20);
@@ -518,15 +516,6 @@ namespace linway_app.Forms
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Datos de planilla:";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(337, 66);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(46, 16);
-            this.label26.TabIndex = 15;
-            this.label26.Text = "Litros";
             // 
             // label22
             // 
@@ -1277,7 +1266,6 @@ namespace linway_app.Forms
         private System.Windows.Forms.ComboBox comboBox8;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Label label26;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Button button13;

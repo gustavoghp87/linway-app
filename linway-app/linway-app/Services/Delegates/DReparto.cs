@@ -108,7 +108,7 @@ namespace linway_app.Services.Delegates
             reparto.Td -= pedido.D;
             reparto.TotalB -= pedido.A + pedido.E + pedido.T + pedido.Ae + pedido.D;
             reparto.Tl -= pedido.L;
-            EditReparto(reparto);
+            editReparto(reparto);
         }
     }
 }

@@ -17,8 +17,7 @@ namespace linway_app.Services.Delegates
     public static class DPedido
     {
         public readonly static Action<Pedido> addPedido = AddPedido;
-        public readonly static Action<Reparto, Cliente, List<ProdVendido>> addPedidoAReparto = AddPedidoAReparto;
-        public readonly static Action<string, string, long> addPedidoDesdeNota = AddPedidoDesdeNota;
+        public readonly static Action<Reparto, Cliente, List<ProdVendido>> addOrEditPedidoEnReparto = AddOrEditPedidoEnReparto;
         public readonly static Action<Pedido> cleanPedido = CleanPedido;
         public readonly static Action<Pedido> deletePedido = DeletePedido;
         public readonly static Action<Pedido> editPedido = EditPedido;
@@ -30,18 +29,13 @@ namespace linway_app.Services.Delegates
         private static void AddPedido(Pedido pedido)
         {
             pedido.Orden = GetOrdenMayor(pedido.RepartoId) + 1;
-            bool response =_service.Add(pedido);
+            bool response = _service.Add(pedido);
             if (!response) MessageBox.Show("Algo falló al agregar nuevo Pedido a la base de datos");
         }
-        private static void AddPedidoAReparto(Reparto reparto, Cliente cliente, List<ProdVendido> lstProdVendidos)
+        private static void AddOrEditPedidoEnReparto(Reparto reparto, Cliente cliente, List<ProdVendido> lstProdVendidos)
         {
-            bool response = AgregarPedidoAReparto(cliente.Id, reparto.DiaReparto.Dia, reparto.Nombre, lstProdVendidos);
+            bool response = AgregarOEditarPedido(cliente.Id, reparto.DiaReparto.Dia, reparto.Nombre, lstProdVendidos);
             if (!response) MessageBox.Show("Algo falló al agregar Pedido a Reparto en base de datos");
-        }
-        private static void AddPedidoDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId)
-        {
-            bool response = AgregarDesdeNota(diaDeReparto, nombreReparto, notaDeEnvioId);
-            if (!response) MessageBox.Show("Algo falló al agregar Nota de Envío a la base de datos");
         }
         private static void CleanPedido(Pedido pedido)
         {
@@ -76,13 +70,13 @@ namespace linway_app.Services.Delegates
         }
         private static Pedido GetPedidoPorDireccion(string direccion)
         {
-            List<Pedido> lstPedidos = GetPedidos();
+            List<Pedido> lstPedidos = getPedidos();
             if (lstPedidos == null) return null;
             return lstPedidos.Find(x => x.Direccion.Equals(direccion));
         }
         private static List<Pedido> GetPedidosPorRepartoId(long repartoId)
         {
-            var pedidos = GetPedidos();
+            var pedidos = getPedidos();
             return pedidos.Where(x => x.RepartoId == repartoId).ToList();
         }
         private static List<Pedido> GetPedidos()
@@ -90,18 +84,7 @@ namespace linway_app.Services.Delegates
             return _service.GetAll();
         }
 
-        private static bool AgregarDesdeNota(string diaDeReparto, string nombreReparto, long notaDeEnvioId)
-        {
-            NotaDeEnvio nota = getNotaDeEnvio(notaDeEnvioId);
-            Reparto reparto = getRepartoPorDiaYNombre(diaDeReparto, nombreReparto);
-            if (nota == null || reparto == null) return false;
-            List<Pedido> lstPedidos = getPedidosPorRepartoId(reparto.Id);
-            if (lstPedidos == null || lstPedidos.Count == 0) return false;
-            Pedido pedidoViejo = lstPedidos.Find(x => x.ClienteId == nota.ClienteId);
-            Common(pedidoViejo, reparto, nota.Cliente, nota.ProdVendidos.ToList());
-            return true;
-        }
-        private static bool AgregarPedidoAReparto(long clientId, string dia, string repartoNombre, List<ProdVendido> lstProdVendidos)
+        private static bool AgregarOEditarPedido(long clientId, string dia, string repartoNombre, List<ProdVendido> lstProdVendidos)
         {
             if (lstProdVendidos == null || lstProdVendidos.Count == 0) return false;
             Cliente cliente = getCliente(clientId);
@@ -109,11 +92,7 @@ namespace linway_app.Services.Delegates
             Reparto reparto = getRepartoPorDiaYNombre(dia, repartoNombre);
             if (reparto == null) return false;
             Pedido pedidoViejo = reparto.Pedidos.ToList().Find(x => x.ClienteId == cliente.Id);
-            Common(pedidoViejo, reparto, cliente, lstProdVendidos);
-            return true;
-        }
-        private static void Common(Pedido pedidoViejo, Reparto reparto, Cliente cliente, List<ProdVendido> lstProdVendidos)
-        {
+
             if (pedidoViejo == null)
             {
                 Pedido nuevoPedido = new Pedido();
@@ -122,40 +101,50 @@ namespace linway_app.Services.Delegates
                 nuevoPedido.Direccion = cliente.Direccion;
                 nuevoPedido.Entregar = 1;
                 nuevoPedido.ProductosText = "";
-                nuevoPedido.ProdVendidos = lstProdVendidos;
+                nuevoPedido.L = 0;
                 nuevoPedido.A = 0;
                 nuevoPedido.Ae = 0;
                 nuevoPedido.D = 0;
                 nuevoPedido.E = 0;
-                nuevoPedido.L = 0;
                 nuevoPedido.T = 0;
                 foreach (var prodVendido in lstProdVendidos)
                 {
-                    AgregarProdVendidos(nuevoPedido, prodVendido);
+                    nuevoPedido = AgregarProdVendido(nuevoPedido, prodVendido);
                 }
-                AddPedido(nuevoPedido);
+                if (nuevoPedido == null)
+                {
+                    MessageBox.Show("Falló agregar a reparto");
+                    return false;
+                }
+                addPedido(nuevoPedido);
                 addPedidoARepartoSimple(reparto, nuevoPedido);
             }
             else
             {
-                substractPedidoAReparto(reparto, pedidoViejo);
+                //substractPedidoAReparto(reparto, pedidoViejo);
                 foreach (var prodVendido in lstProdVendidos)
                 {
-                    AgregarProdVendidos(pedidoViejo, prodVendido);
+                    pedidoViejo = AgregarProdVendido(pedidoViejo, prodVendido);
                 }
-                EditPedido(pedidoViejo);
+                if (pedidoViejo == null)
+                {
+                    MessageBox.Show("Falló agregar a reparto");
+                    return false;
+                }
+                editPedido(pedidoViejo);
                 pedidoViejo = GetPedido(pedidoViejo.Id);
                 addPedidoARepartoSimple(reparto, pedidoViejo);
             }
+            return true;
         }
-        private static void AgregarProdVendidos(Pedido pedido, ProdVendido prodVendido)
+        private static Pedido AgregarProdVendido(Pedido pedido, ProdVendido prodVendido)
         {
-            if (!esProducto(prodVendido.Producto)) return;
+            if (!esProducto(prodVendido.Producto)) return null;
             pedido.ProductosText += prodVendido.Cantidad.ToString() + "x " + prodVendido.Descripcion + " | ";
             if (prodVendido.Producto.Tipo == TipoProducto.Polvo.ToString() && prodVendido.Producto.SubTipo != null)
             {
                 int kilos = 20;
-                switch (prodVendido.Producto.SubTipo.ToLower())
+                switch (prodVendido.Producto.SubTipo)
                 {
                     case string a when a == TipoPolvo.AlisonEspecial.ToString():
                         pedido.Ae += prodVendido.Cantidad/kilos;
@@ -180,6 +169,7 @@ namespace linway_app.Services.Delegates
             {
                 pedido.L += prodVendido.Cantidad;
             }
+            return pedido;
         }
         private static long GetOrdenMayor(long repartoId)
         {

@@ -7,7 +7,7 @@ namespace linway_app.Models.Entities
     {
         public long Id { get; set; }
 
-        [DisplayName("Cli")]
+        [DisplayName("Clien")]
         public long ClienteId { get; set; }
 
         [DisplayName("Dirección")]
