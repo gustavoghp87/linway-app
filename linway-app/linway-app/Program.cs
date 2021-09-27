@@ -14,7 +14,7 @@ namespace linway_app
 {
     static class Program
     {
-        public static void ConfigureServices(ServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<LinwayDbContext>();
 

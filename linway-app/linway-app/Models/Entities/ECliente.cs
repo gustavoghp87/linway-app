@@ -4,10 +4,10 @@ namespace linway_app.Models.Entities
 {
     public class ECliente
     {
-        [DisplayName("Id:")]
+        [DisplayName("Id")]
         public long Id { get; set; }
 
-        [DisplayName("Dirección - Localidad:")]
+        [DisplayName("Dirección - Localidad")]
         public string Direccion { get; set; }
 
         [DisplayName("Teléfono")]

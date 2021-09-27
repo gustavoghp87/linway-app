@@ -4,6 +4,7 @@ namespace linway_app.Models.Entities
 {
     public class EProducto
     {
+        [DisplayName("Id")]
         public long Id { get; set; }
 
         [DisplayName("Producto")]

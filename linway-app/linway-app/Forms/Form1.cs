@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DProducto;
+using static linway_app.Services.Delegates.DDbBackup;
 
 namespace linway_app.Forms
 {
@@ -57,6 +58,7 @@ namespace linway_app.Forms
         private void Form1_Load(object sender, EventArgs e)
         {
             Actualizar();
+            GenerateDbBackup();
         }
         public void Actualizar()
         {
@@ -100,7 +102,7 @@ namespace linway_app.Forms
                 }
                 dataGridView2.DataSource = grid;
                 dataGridView2.Columns[0].Width = 48;
-                dataGridView2.Columns[1].Width = 220;
+                dataGridView2.Columns[1].Width = 270;
                 dataGridView2.Columns[2].Width = 72;
             }
         }
