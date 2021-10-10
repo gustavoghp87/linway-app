@@ -33,6 +33,7 @@ namespace linway_app.Forms
         {
             _lstDiaRepartos = getDiaRepartos();
             if (_lstDiaRepartos == null || _lstDiaRepartos.Count == 0) CrearDias();
+            UpdateGrid();
         }
         private void CrearDias()
         {
@@ -147,7 +148,7 @@ namespace linway_app.Forms
             comboBox2.DisplayMember = "Nombre";
             comboBox2.ValueMember = "Nombre";
         }
-        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void UpdateGrid()
         {
             if (comboBox1.Text != "")
             {
@@ -157,6 +158,10 @@ namespace linway_app.Forms
                 VerDatos(reparto);
                 ActualizarGrid(_lstPedidos);
             }
+        }
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateGrid();
         }
 
         // MENUES

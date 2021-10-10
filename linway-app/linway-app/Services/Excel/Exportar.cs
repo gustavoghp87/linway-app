@@ -33,7 +33,7 @@ namespace linway_app.Excel
         public bool ExportarVentas(List<Venta> lstVentas)
         {
             if (lstVentas == null) return false;
-            string path = @"Excels/ventas-" + DateTime.UtcNow.ToString("yyyy-MM-dd") + ".";
+            string path = @"Excels/ventas-" + DateTime.UtcNow.ToString("yyyy-MM-dd") + "-" + GetTimestamp() + ".";
             try
             {
                 using (var fs = new FileStream(path + _extension, FileMode.Create, FileAccess.Write))
@@ -102,8 +102,10 @@ namespace linway_app.Excel
         public bool ExportarReparto(Reparto reparto)
         {
             if (reparto == null) return false;
-            string path = @"Excels/reparto-" + reparto.DiaReparto.Dia.ToUpper() + "-" + reparto.Nombre + "-"
-                + DateTime.UtcNow.ToString("yyyy-MM-dd") + "-" + GetTimestamp() + ".";
+            string path = @"Excels/reparto-"
+                + DateTime.UtcNow.ToString("yyyy-MM-dd") + "-"
+                + reparto.DiaReparto.Dia.ToUpper() + "-" + reparto.Nombre + "-"
+                + GetTimestamp() + ".";
             try
             {
                 using (var fs = new FileStream(path + _extension, FileMode.Create, FileAccess.Write))
@@ -154,46 +156,48 @@ namespace linway_app.Excel
                     var cellsToHA = new List<ICell>();
                     var cellsToWrap = new List<ICell>();
 
+                    cellsToBold.Add(cell1);
+                    cellsToBold.Add(cell2);
+                    cellsToBold.Add(cell3);
+                    cellsToBold.Add(cell4);
+                    cellsToBold.Add(cell5);
+                    cellsToBold.Add(cell6);
+                    cellsToBold.Add(cell7);
+                    cellsToBold.Add(cell8);
+
                     var rowIndex = 1;
                     foreach (Pedido pedido in reparto.Pedidos.Where(x => x.Entregar == 1).OrderBy(x => x.Orden))
                     {
                         IRow row = sheet1.CreateRow(rowIndex);
-
+                        
                         ICell cellA = row.CreateCell(0);
                               cellA.SetCellValue(pedido.Direccion);
                               cellsToWrap.Add(cellA);
                         ICell cellB = row.CreateCell(1);
                               if (pedido.L != 0) cellB.SetCellValue(pedido.L);
+                              cellsToBold.Add(cellB);
                         ICell cellC = row.CreateCell(2);
                               cellC.SetCellValue(pedido.ProductosText);
                               cellsToWrap.Add(cellC);
                         ICell cellD = row.CreateCell(3);
                               if (pedido.A != 0) cellD.SetCellValue(pedido.A);
+                              cellsToBold.Add(cellD);
                         ICell cellE = row.CreateCell(4);
                               if (pedido.E != 0) cellE.SetCellValue(pedido.E);
+                              cellsToBold.Add(cellE);
                         ICell cellF = row.CreateCell(5);
                               if (pedido.D != 0) cellF.SetCellValue(pedido.D);
+                              cellsToBold.Add(cellF);
                         ICell cellG = row.CreateCell(6);
                               if (pedido.T != 0) cellG.SetCellValue(pedido.T);
+                              cellsToBold.Add(cellG);
                         ICell cellH = row.CreateCell(7);
                               if (pedido.Ae != 0) cellH.SetCellValue(pedido.Ae);
+                              cellsToBold.Add(cellH);
 
-                        cellsToVA.Add(cellA);
-                        cellsToVA.Add(cellB);
-                        cellsToVA.Add(cellC);
-                        cellsToVA.Add(cellD);
-                        cellsToVA.Add(cellE);
-                        cellsToVA.Add(cellF);
-                        cellsToVA.Add(cellG);
-                        cellsToVA.Add(cellH);
+                        row.Height = pedido.Direccion.Length > 40 || pedido.ProductosText.Length > 120 ? (short)500 : row.Height;
+                        row.Height = pedido.Direccion.Length > 80 || pedido.ProductosText.Length > 240 ? (short)1000 : row.Height;
 
-                        cellsToHA.Add(cellB);
-                        cellsToHA.Add(cellD);
-                        cellsToHA.Add(cellE);
-                        cellsToHA.Add(cellF);
-                        cellsToHA.Add(cellG);
-                        cellsToHA.Add(cellH);
-                        //row.Height = (short)AutoSizeMode.GrowAndShrink;
                         rowIndex++;
                     }
 
@@ -230,14 +234,6 @@ namespace linway_app.Excel
                         ICell cell20 = rowFinal.CreateCell(7);
                         cell20.SetCellValue(reparto.Tae);
 
-                    cellsToBold.Add(cell1);
-                    cellsToBold.Add(cell2);
-                    cellsToBold.Add(cell3);
-                    cellsToBold.Add(cell4);
-                    cellsToBold.Add(cell5);
-                    cellsToBold.Add(cell6);
-                    cellsToBold.Add(cell7);
-                    cellsToBold.Add(cell8);
                     cellsToBold.Add(cell9);
                     cellsToBold.Add(cell10);
                     cellsToBold.Add(cell11);
@@ -252,59 +248,19 @@ namespace linway_app.Excel
                     cellsToBold.Add(cell19);
                     cellsToBold.Add(cell20);
 
-                    cellsToVA.Add(cell1);
-                    cellsToVA.Add(cell2);
-                    cellsToVA.Add(cell3);
-                    cellsToVA.Add(cell4);
-                    cellsToVA.Add(cell5);
-                    cellsToVA.Add(cell6);
-                    cellsToVA.Add(cell7);
-                    cellsToVA.Add(cell8);
-                    cellsToVA.Add(cell9);
-                    cellsToVA.Add(cell10);
-                    cellsToVA.Add(cell11);
-                    cellsToVA.Add(cell12);
-                    cellsToVA.Add(cell13);
-                    cellsToVA.Add(cell14);
-                    cellsToVA.Add(cell15);
-                    cellsToVA.Add(cell15b);
-                    cellsToVA.Add(cell16);
-                    cellsToVA.Add(cell17);
-                    cellsToVA.Add(cell18);
-                    cellsToVA.Add(cell19);
-                    cellsToVA.Add(cell20);
-
-                    cellsToHA.Add(cell1);
-                    cellsToHA.Add(cell2);
-                    cellsToHA.Add(cell3);
-                    cellsToHA.Add(cell4);
-                    cellsToHA.Add(cell5);
-                    cellsToHA.Add(cell6);
-                    cellsToHA.Add(cell7);
-                    cellsToHA.Add(cell8);
-                    cellsToHA.Add(cell9);
-                    cellsToHA.Add(cell10);
-                    cellsToHA.Add(cell11);
-                    cellsToHA.Add(cell12);
-                    cellsToHA.Add(cell13);
-                    cellsToHA.Add(cell14);
-                    cellsToHA.Add(cell15);
-                    cellsToHA.Add(cell15b);
-                    cellsToHA.Add(cell16);
-                    cellsToHA.Add(cell17);
-                    cellsToHA.Add(cell18);
-                    cellsToHA.Add(cell19);
-                    cellsToHA.Add(cell20);
-
                     cellsToBold.ForEach(cell =>
                     {
                         cell.CellStyle = workbook.CreateCellStyle();
                         cell.CellStyle.SetFont(fontBold);
+                        cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                        cell.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)System.Windows.Forms.HorizontalAlignment.Center;
                     });
                     cellsToVA.ForEach(cell =>
                     {
                         cell.CellStyle = workbook.CreateCellStyle();
+                        cell.CellStyle.SetFont(fontBold);
                         cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                        cell.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)System.Windows.Forms.HorizontalAlignment.Center;
                     });
                     cellsToHA.ForEach(cell =>
                     {
@@ -317,8 +273,8 @@ namespace linway_app.Excel
                     {
                         cell.CellStyle = workbook.CreateCellStyle();
                         cell.CellStyle = wrapCellStyle;
+                        cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
                     });
-
 
                     sheet1.AutoSizeColumn(0);
                     sheet1.AutoSizeColumn(1);

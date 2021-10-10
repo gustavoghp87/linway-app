@@ -1,14 +1,19 @@
 
 
-_____________________Actualizacion Sistema Linway 11 _________________________________    junio 2021
+___________________________________Sistema Linway 12__________________________________    octubre 2021
 
--Migración de sistema de datos en librería System.Runtime.Serialization.Formatters.Binary
-  a archivo único SQLite, usando ORM Microsoft.EntityFramework.Core.SQLite
+Junio:
+-Terminado el proyecto de tipificar los productos
+-Migración de sistema de datos en listas de objetos en binarios con librería
+ System.Runtime.Serialization.Formatters.Binary a base de datos relacional en archivo único
+ SQLite, usando ORM Microsoft.EntityFramework.Core.SQLite
 -Consecuentemente, ahora a ningún dato se lo elimina de la base de datos sino que pasa
-  a ser invisible a la aplicación
--Remoción de exportación/importación Excel excepto para reparto
+ a ser invisible a la aplicación
+-Remoción de importación desde Excel, y también exportación excepto para repartos y ventas
 -La vía alternativa a modificado de datos es abrir linway-db.db con la aplicación
-  Browser for SQLite
+ Browser for SQLite
+-Para planillas Excel, cambio de librería de Microsoft por la de Apache que es más rápida
+ y no necesita de Office
 -Comienza implementación de principios SOLID
 -Agrandados algunos formularios
 -Remoción de todos los botones de Actualizar (actualización automática)
@@ -16,6 +21,28 @@ _____________________Actualizacion Sistema Linway 11 ___________________________
 -Ignoradas mayúsculas/minúsculas en las búsquedas
 -Cambiados los _leave por _textChanged para que la aplicación ejecute sin abandonar el
   campo de escritura
+-Se simplificaron los formularios de clientes y productos, que se abren con botón único y
+ no tienen partes deshabilitadas
+-En agregar clientes, ahora solo son obligatorios Dirección y Tipo de  contribuyente
+-En agregar productos, ahora el tipo de producto es obligatorio
+
+Octubre:
+-Generación automática de backup en OneDrive al abrir la app por primera vez en el día
+-Lectura de la base de datos con path absoluto para poder usar varias instancias de la app
+ a la vez
+-En los campos de búsqueda por dirección ahora es indistinto usar las tildes en las vocales
+
+
+Metas para versión 13:
+-Cambiar sistema de cantidades de líquidos y polvos (2x5, etcétera)
+-Separar dirección de localidad
+-Eliminar dobles espaciados
+-Segundo campo para teléfono
+-Cambiar las carpetas del projecto a diferentes projectos para una posterior independización
+ de Windows Forms
+-Lograr que se pueda usar la app sin tener encendida la pc host
+-Lograr que la app sea reactiva a cambios en la base de datos
+
 
 ______________________________________________________________________________________
 
