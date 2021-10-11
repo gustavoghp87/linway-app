@@ -9,6 +9,7 @@ Junio:
  SQLite, usando ORM Microsoft.EntityFramework.Core.SQLite
 -Consecuentemente, ahora a ningún dato se lo elimina de la base de datos sino que pasa
  a ser invisible a la aplicación
+-Se eliminó la llave de seguridad de la aplicación
 -Remoción de importación desde Excel, y también exportación excepto para repartos y ventas
 -La vía alternativa a modificado de datos es abrir linway-db.db con la aplicación
  Browser for SQLite
@@ -30,7 +31,6 @@ Octubre:
 -Generación automática de backup en OneDrive al abrir la app por primera vez en el día
 -Lectura de la base de datos con path absoluto para poder usar varias instancias de la app
  a la vez
--En los campos de búsqueda por dirección ahora es indistinto usar las tildes en las vocales
 
 
 Metas para versión 13:
@@ -38,6 +38,7 @@ Metas para versión 13:
 -Separar dirección de localidad
 -Eliminar dobles espaciados
 -Segundo campo para teléfono
+-En los campos de búsqueda por dirección hacer indistinto usar las tildes en las vocales
 -Cambiar las carpetas del projecto a diferentes projectos para una posterior independización
  de Windows Forms
 -Lograr que se pueda usar la app sin tener encendida la pc host
@@ -56,6 +57,7 @@ _____________________Actualizacion Sistema Linway 10 ___________________________
   aplicación para tener una manera alternativa de modificarlos
 -Agrandados algunos cuadros
 -Comienza versionado con sistema git
+-Código en https://github.com/gustavoghp87/linway-app
 
 ______________________________________________________________________________________
 
