@@ -45,9 +45,10 @@ namespace linway_app.Forms
                     grid1.Add(Form1._mapper.Map<ERecibo>(recibo));
                 }
                 dataGridView1.DataSource = grid1;
-                dataGridView1.Columns[0].Width = 25;
-                dataGridView1.Columns[1].Width = 38;
+                dataGridView1.Columns[0].Width = 50;
+                dataGridView1.Columns[1].Width = 50;
                 dataGridView1.Columns[2].Width = 350;
+                dataGridView1.Columns[3].Width = 80;
                 lCantRecibos.Text = lstRecibos.Count.ToString() + " recibos.";
             }
         }
@@ -232,9 +233,11 @@ namespace linway_app.Forms
         {
             if (comboBox2.Text != "")
             {
+                int i = 0;
                 foreach (Recibo recibo in ObtenerListaAImprimir())
                 {
-                    AbrirFormImprimirRecibo(recibo);
+                    i++;
+                    if (i<21) AbrirFormImprimirRecibo(recibo);
                 }
                 Close();
             }

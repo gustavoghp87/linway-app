@@ -43,7 +43,7 @@ namespace linway_app.Forms
                     grid.Add(Form1._mapper.Map<ENotaDeEnvio>(nota));
                 }
                 dataGridView1.DataSource = grid;
-                dataGridView1.Columns[0].Width = 20;
+                dataGridView1.Columns[0].Width = 30;
                 dataGridView1.Columns[1].Width = 70;
                 dataGridView1.Columns[2].Width = 170;
                 dataGridView1.Columns[3].Width = 350;
