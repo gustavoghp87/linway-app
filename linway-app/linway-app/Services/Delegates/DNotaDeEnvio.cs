@@ -87,17 +87,19 @@ namespace linway_app.Services.Delegates
             if (!success) return null;
             return notaDeEnvio;
         }
-        private static NotaDeEnvio EditNotaDeEnvioQuitar(NotaDeEnvio notaDeEnvio, ProdVendido nuevoProdVendido)
+        private static NotaDeEnvio EditNotaDeEnvioQuitar(NotaDeEnvio notaDeEnvio, ProdVendido prodVendidoAEliminar)
         {
+            DProdVendido.deleteProdVendido(prodVendidoAEliminar);
             List<ProdVendido> lstAuxiliar = new List<ProdVendido>();
             foreach (ProdVendido prodVendido in notaDeEnvio.ProdVendidos)
             {
-                if (prodVendido.Id != nuevoProdVendido.Id) lstAuxiliar.Add(prodVendido);
+                if (prodVendido.ProductoId != prodVendidoAEliminar.ProductoId) lstAuxiliar.Add(prodVendido);
             }
             notaDeEnvio.ProdVendidos = lstAuxiliar;
             notaDeEnvio.ImporteTotal = ExtraerImporteDeNotaDeEnvio(lstAuxiliar);
             notaDeEnvio.Detalle = ExtraerDetalleDeNotaDeEnvio(lstAuxiliar);
             editNotaDeEnvio(notaDeEnvio);
+            // falta eliminar producto vendido
             return notaDeEnvio;
         }
         private static string ExtraerDetalleDeNotaDeEnvio(List<ProdVendido> lstProdVendidos)

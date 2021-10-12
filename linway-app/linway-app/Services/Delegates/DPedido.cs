@@ -131,6 +131,7 @@ namespace linway_app.Services.Delegates
                     MessageBox.Show("Falló agregar a reparto");
                     return false;
                 }
+                pedidoViejo.Entregar = 1;
                 editPedido(pedidoViejo);
                 pedidoViejo = GetPedido(pedidoViejo.Id);
                 addPedidoARepartoSimple(reparto, pedidoViejo);
@@ -148,36 +149,42 @@ namespace linway_app.Services.Delegates
                 description = prodVendido.Descripcion.Substring(0, prodVendido.Descripcion.IndexOf("."));
             else
                 description = prodVendido.Descripcion;
-            pedido.ProductosText += prodVendido.Cantidad.ToString() + "x " + description + " | ";
-            
+
             if (prodVendido.Producto.Tipo == TipoProducto.Polvo.ToString() && prodVendido.Producto.SubTipo != null)
             {
                 int kilos = 20;
+                long cantidadDeBolsas = prodVendido.Cantidad / kilos;
                 switch (prodVendido.Producto.SubTipo)
                 {
                     case string a when a == TipoPolvo.AlisonEspecial.ToString():
-                        pedido.Ae += prodVendido.Cantidad/kilos;
+                        pedido.Ae += cantidadDeBolsas;
                         break;
                     case string a when a == TipoPolvo.Alison.ToString():
-                        pedido.A += prodVendido.Cantidad/kilos;
+                        pedido.A += cantidadDeBolsas;
                         break;
                     case string a when a == TipoPolvo.Dispersán.ToString():
-                        pedido.D += prodVendido.Cantidad/kilos;
+                        pedido.D += cantidadDeBolsas;
                         break;
                     case string a when a == TipoPolvo.Texapol.ToString():
-                        pedido.T += prodVendido.Cantidad/kilos;
+                        pedido.T += cantidadDeBolsas;
                         break;
                     case string a when a == TipoPolvo.Eslabón.ToString():
-                        pedido.E += prodVendido.Cantidad/kilos;
+                        pedido.E += cantidadDeBolsas;
                         break;
                     default:
                         break;
                 }
+                pedido.ProductosText += cantidadDeBolsas + "x20 " + description + " | ";
             }
-            if (prodVendido.Producto.Tipo == TipoProducto.Líquido.ToString())
+            else
             {
-                pedido.L += prodVendido.Cantidad;
+                if (prodVendido.Producto.Tipo == TipoProducto.Líquido.ToString())
+                {
+                    pedido.L += prodVendido.Cantidad;
+                }
+                pedido.ProductosText += prodVendido.Cantidad.ToString() + "x " + description + " | ";
             }
+
             return pedido;
         }
         private static long GetOrdenMayor(long repartoId)

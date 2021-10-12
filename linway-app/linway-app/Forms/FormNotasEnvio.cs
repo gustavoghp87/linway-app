@@ -1,5 +1,6 @@
 ﻿using linway_app.Models;
 using linway_app.Models.Entities;
+using linway_app.Models.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -517,46 +518,30 @@ namespace linway_app.Forms
         private void AgregarProductoVendido_btn9_Click(object sender, EventArgs e)
         {
             try { long.Parse(textBox7.Text); } catch { return; };
-            ProdVendido prodVendido = getProdVendidoPorNombreExacto(label25.Text);
-            if (prodVendido == null) return;
+            Producto productoNuevo = getProductoPorNombreExacto(label25.Text);
+            if (productoNuevo == null) return;
             try { long.Parse(textBox7.Text); } catch { return; };
             NotaDeEnvio notaDeEnvio = getNotaDeEnvio(long.Parse(textBox7.Text));
-            _lstProdVendidos.Add(prodVendido);
+            try { int.Parse(textBox10.Text); } catch { return; };
 
+            ProdVendido nuevoProdVendido = new ProdVendido()
+            {
+                Cantidad = int.Parse(textBox10.Text),
+                Precio = productoNuevo.Precio,
+                ProductoId = productoNuevo.Id,
+                NotaDeEnvioId = getNotaDeEnvio(long.Parse(textBox7.Text)).Id,
+                Descripcion = productoNuevo.Nombre
+            };
 
+            if (productoNuevo.Tipo == TipoProducto.Saldo.ToString() &&
+                (productoNuevo.SubTipo == TipoSaldo.Bonificacion.ToString() || productoNuevo.SubTipo == TipoSaldo.Devolucion.ToString()))
+            {
+                nuevoProdVendido.Precio *= -1;
+            }
 
+            _lstProdVendidos.Add(nuevoProdVendido);
 
-
-            //ProdVendido nuevoPV = new ProdVendido();
-            //nuevoPV.NotaDeEnvioId = getNotaDeEnvio(long.Parse(textBox7.Text)).Id;
-            //nuevoPV.Descripcion = prod.Nombre;
-            //nuevoPV.Cantidad = 1;
-            //nuevoPV.Precio = prod.Precio;
-            //nuevoPV.ProductoId = prod.Id;
-            //if (prod == null) return;
-            //if (prod.Nombre.Contains("pendiente")) { }
-            ////
-            //else if (
-            //    prod.Nombre.Contains("favor")
-            //    || prod.Nombre.Contains("devoluci")
-            //    || prod.Nombre.Contains("BONIF")
-            //)
-            //    nuevoPV.Precio = prod.Precio * -1;
-            //else if ((prod.Nombre.Contains("actura")))
-            //    nuevoPV.Descripcion = prod.Nombre + textBox11.Text;
-            //else
-            //{
-            //    try { int.Parse(textBox10.Text); } catch { return; };
-            //    nuevoPV.Cantidad = int.Parse(textBox10.Text);
-            //}
-
-
-
-
-
-
-
-            notaDeEnvio = editNotaDeEnvioAgregar(notaDeEnvio, _lstProdVendidos);
+            editNotaDeEnvioAgregar(notaDeEnvio, new List<ProdVendido>() { nuevoProdVendido } );
             ActualizarGrid2(_lstProdVendidos);
             decimal impTotal = 0;
             foreach (ProdVendido prodVend in _lstProdVendidos)
@@ -572,6 +557,7 @@ namespace linway_app.Forms
             textBox11.Visible = false;
             button9.Enabled = false;
         }
+
         //Quitar
         private void TextBox8_TextChanged(object sender, EventArgs e)
         {
