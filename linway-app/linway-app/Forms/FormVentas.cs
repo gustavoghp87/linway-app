@@ -246,15 +246,16 @@ namespace linway_app.Forms
                         // hacer o editar ventas
                         List<Venta> lstVentas = getVentas();
                         bool exists = false;
-                        foreach (Venta venta in lstVentas)
-                        {
-                            if (venta.ProductoId == ventaParaAgregar.ProductoId)
+                        if (lstVentas != null)
+                            foreach (Venta venta in lstVentas)
                             {
-                                exists = true;
-                                venta.Cantidad += ventaParaAgregar.Cantidad;
-                                editVenta(venta);
+                                if (venta.ProductoId == ventaParaAgregar.ProductoId)
+                                {
+                                    exists = true;
+                                    venta.Cantidad += ventaParaAgregar.Cantidad;
+                                    editVenta(venta);
+                                }
                             }
-                        }
                         if (!exists) addVenta(ventaParaAgregar);
 
                         // hacer ProdVendidos

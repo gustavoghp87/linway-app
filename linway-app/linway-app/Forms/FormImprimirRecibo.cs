@@ -30,11 +30,20 @@ namespace linway_app.Forms
                 elcodigo = "0" + elcodigo;
             }
             lCodigo.Text = elcodigo;
-            //int separador = recibo.DireccionCliente.IndexOf('-');
-            //lCalle.Text = recibo.DireccionCliente.Substring(0, separador);
-            lCalle.Text = " ";
-            //lLocalidad.Text = recibo.DireccionCliente.Substring(separador + 1);
-            lLocalidad.Text = _recibo.DireccionCliente;
+            
+            if (_recibo.DireccionCliente.Contains("-"))
+            {
+                int separador = 0;
+                separador = _recibo.DireccionCliente.IndexOf('-');
+                lCalle.Text = _recibo.DireccionCliente.Substring(0, separador);
+                lLocalidad.Text = _recibo.DireccionCliente.Substring(separador + 1);
+            }
+            else
+            {
+                lCalle.Text = _recibo.DireccionCliente;
+                lLocalidad.Text = " ";
+            }
+
             lTotal.Text = "$ " + _recibo.ImporteTotal.ToString(".00");
             foreach (DetalleRecibo detalle in _recibo.DetalleRecibos)
             {

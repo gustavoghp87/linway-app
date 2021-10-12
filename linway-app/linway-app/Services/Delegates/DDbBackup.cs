@@ -25,9 +25,9 @@ namespace linway_app.Services.Delegates
                     Console.WriteLine(destinationFolder + " path already exists");
                     return;
                 }
-                Directory.CreateDirectory(destinationFolder);
+                //Directory.CreateDirectory(destinationFolder);
                 Console.WriteLine("The directory was created successfully at {0}", Directory.GetCreationTime(destinationFolder));
-                File.Copy(Path.Combine(currentFolder, nameFile), filePath, true);
+                // File.Copy(Path.Combine(currentFolder, nameFile), filePath, true);
                 Console.WriteLine("The backup file was created successfully at {0}", Directory.GetCreationTime(destinationFolder));
             }
             catch (Exception e)

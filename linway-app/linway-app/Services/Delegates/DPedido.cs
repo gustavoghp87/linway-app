@@ -140,7 +140,16 @@ namespace linway_app.Services.Delegates
         private static Pedido AgregarProdVendido(Pedido pedido, ProdVendido prodVendido)
         {
             if (!esProducto(prodVendido.Producto)) return null;
-            pedido.ProductosText += prodVendido.Cantidad.ToString() + "x " + prodVendido.Descripcion + " | ";
+
+            string description = "";
+            if (prodVendido.Descripcion.Contains("-"))
+                description = prodVendido.Descripcion.Substring(0, prodVendido.Descripcion.IndexOf("-"));
+            else if (prodVendido.Descripcion.Contains("."))
+                description = prodVendido.Descripcion.Substring(0, prodVendido.Descripcion.IndexOf("."));
+            else
+                description = prodVendido.Descripcion;
+            pedido.ProductosText += prodVendido.Cantidad.ToString() + "x " + description + " | ";
+            
             if (prodVendido.Producto.Tipo == TipoProducto.Polvo.ToString() && prodVendido.Producto.SubTipo != null)
             {
                 int kilos = 20;

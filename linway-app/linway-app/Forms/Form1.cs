@@ -58,7 +58,7 @@ namespace linway_app.Forms
         private void Form1_Load(object sender, EventArgs e)
         {
             Actualizar();
-            GenerateDbBackup();
+            //GenerateDbBackup();
         }
         public void Actualizar()
         {
