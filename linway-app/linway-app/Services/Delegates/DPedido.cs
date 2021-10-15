@@ -48,11 +48,12 @@ namespace linway_app.Services.Delegates
             pedido.T = 0;
             pedido.Ae = 0;
             editPedido(pedido);
-            foreach (ProdVendido prodVendido in pedido.ProdVendidos)
-            {
-                prodVendido.PedidoId = null;
-                editProdVendido(prodVendido);
-            }
+            if (pedido.ProdVendidos != null)
+                foreach (ProdVendido prodVendido in pedido.ProdVendidos.ToList())
+                {
+                    prodVendido.PedidoId = null;
+                    editProdVendido(prodVendido);
+                }
         }
         private static void DeletePedido(Pedido pedido)
         {
@@ -140,15 +141,18 @@ namespace linway_app.Services.Delegates
         }
         private static Pedido AgregarProdVendido(Pedido pedido, ProdVendido prodVendido)
         {
-            if (!esProducto(prodVendido.Producto)) return null;
+            //if (!esProducto(prodVendido.Producto)) return null;
 
             string description = "";
-            if (prodVendido.Descripcion.Contains("-"))
-                description = prodVendido.Descripcion.Substring(0, prodVendido.Descripcion.IndexOf("-"));
-            else if (prodVendido.Descripcion.Contains("."))
-                description = prodVendido.Descripcion.Substring(0, prodVendido.Descripcion.IndexOf("."));
-            else
-                description = prodVendido.Descripcion;
+            if (esProducto(prodVendido.Producto))
+            {
+                if (prodVendido.Descripcion.Contains("-"))
+                    description = prodVendido.Descripcion.Substring(0, prodVendido.Descripcion.IndexOf("-"));
+                else if (prodVendido.Descripcion.Contains("."))
+                    description = prodVendido.Descripcion.Substring(0, prodVendido.Descripcion.IndexOf("."));
+                else
+                    description = prodVendido.Descripcion;
+            }
 
             if (prodVendido.Producto.Tipo == TipoProducto.Polvo.ToString() && prodVendido.Producto.SubTipo != null)
             {
@@ -176,7 +180,7 @@ namespace linway_app.Services.Delegates
                 }
                 pedido.ProductosText += cantidadDeBolsas + "x20 " + description + " | ";
             }
-            else
+            else if (prodVendido.Producto.Tipo != TipoProducto.Saldo.ToString())
             {
                 if (prodVendido.Producto.Tipo == TipoProducto.Líquido.ToString())
                 {

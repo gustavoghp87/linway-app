@@ -183,7 +183,7 @@ namespace linway_app.Forms
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(139, 55);
+            this.label26.Location = new System.Drawing.Point(139, 50);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(96, 13);
             this.label26.TabIndex = 27;
@@ -193,7 +193,7 @@ namespace linway_app.Forms
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(12, 395);
+            this.label10.Location = new System.Drawing.Point(12, 379);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(69, 18);
             this.label10.TabIndex = 21;
@@ -202,7 +202,7 @@ namespace linway_app.Forms
             // button10
             // 
             this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button10.Location = new System.Drawing.Point(104, 50);
+            this.button10.Location = new System.Drawing.Point(104, 45);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(29, 23);
             this.button10.TabIndex = 26;
@@ -213,7 +213,7 @@ namespace linway_app.Forms
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button5.Location = new System.Drawing.Point(104, 393);
+            this.button5.Location = new System.Drawing.Point(104, 377);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(29, 23);
             this.button5.TabIndex = 22;
@@ -223,7 +223,7 @@ namespace linway_app.Forms
             // 
             // BuscadorProductos
             // 
-            this.BuscadorProductos.Location = new System.Drawing.Point(241, 53);
+            this.BuscadorProductos.Location = new System.Drawing.Point(241, 48);
             this.BuscadorProductos.Name = "BuscadorProductos";
             this.BuscadorProductos.Size = new System.Drawing.Size(114, 20);
             this.BuscadorProductos.TabIndex = 28;
@@ -251,17 +251,17 @@ namespace linway_app.Forms
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 427);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 411);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 10;
-            this.dataGridView1.Size = new System.Drawing.Size(898, 304);
+            this.dataGridView1.Size = new System.Drawing.Size(898, 281);
             this.dataGridView1.TabIndex = 1;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(139, 399);
+            this.label11.Location = new System.Drawing.Point(139, 383);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(107, 13);
             this.label11.TabIndex = 23;
@@ -269,7 +269,7 @@ namespace linway_app.Forms
             // 
             // BuscadorClientes
             // 
-            this.BuscadorClientes.Location = new System.Drawing.Point(252, 396);
+            this.BuscadorClientes.Location = new System.Drawing.Point(252, 379);
             this.BuscadorClientes.Name = "BuscadorClientes";
             this.BuscadorClientes.Size = new System.Drawing.Size(110, 20);
             this.BuscadorClientes.TabIndex = 20;
@@ -279,7 +279,7 @@ namespace linway_app.Forms
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(12, 52);
+            this.label12.Location = new System.Drawing.Point(12, 47);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(86, 18);
             this.label12.TabIndex = 24;
@@ -307,7 +307,7 @@ namespace linway_app.Forms
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle4;
-            this.dataGridView2.Location = new System.Drawing.Point(12, 91);
+            this.dataGridView2.Location = new System.Drawing.Point(12, 82);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -321,7 +321,7 @@ namespace linway_app.Forms
             this.dataGridView2.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.dataGridView2.RowsDefaultCellStyle = dataGridViewCellStyle6;
-            this.dataGridView2.Size = new System.Drawing.Size(635, 281);
+            this.dataGridView2.Size = new System.Drawing.Size(635, 272);
             this.dataGridView2.TabIndex = 19;
             // 
             // openFileDialog1
@@ -335,7 +335,7 @@ namespace linway_app.Forms
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(925, 743);
+            this.ClientSize = new System.Drawing.Size(925, 699);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.BuscadorClientes);

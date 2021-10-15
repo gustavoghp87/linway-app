@@ -437,13 +437,14 @@ namespace linway_app.Forms
                     Pedido pedido1 = getPedidoPorDireccion(pedidoAMover);
                     Pedido pedido2 = getPedidoPorDireccion(pedidoReferencia);
                     Reparto reparto = getReparto(pedido1.RepartoId);
+                    if (!reparto.Pedidos.Any()) return;
                     long order1 = pedido1.Orden;
                     long order2 = pedido2.Orden;
 
                     if (order2 == order1) return;
                     if (order2 > order1)
                     {
-                        foreach (Pedido pedido in reparto.Pedidos)
+                        foreach (Pedido pedido in reparto.Pedidos.Where(x => x.Entregar == 1))
                         {
                             if (pedido.Orden > order1 && pedido.Orden < order2)
                             {
@@ -458,7 +459,7 @@ namespace linway_app.Forms
                     }
                     else
                     {
-                        foreach (Pedido pedido in reparto.Pedidos)
+                        foreach (Pedido pedido in reparto.Pedidos.Where(x => x.Entregar == 1))
                         {
                             if (pedido.Orden < order1 && pedido.Orden > order2)
                             {
@@ -466,8 +467,7 @@ namespace linway_app.Forms
                                 editPedido(pedido);
                             }
                         }
-                        pedido1.Orden = pedido2.Orden;
-                        pedido2.Orden += 1;
+                        pedido1.Orden = pedido2.Orden + 1;
                         editPedido(pedido1);
                         editPedido(pedido2);
                     }

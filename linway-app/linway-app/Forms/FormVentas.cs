@@ -241,8 +241,8 @@ namespace linway_app.Forms
 
                 foreach (Venta ventaParaAgregar in _lstAgregarVentas)
                 {
-                    if (esProducto(ventaParaAgregar.Producto))
-                    {
+                    //if (esProducto(ventaParaAgregar.Producto))
+                    //{
                         // hacer o editar ventas
                         List<Venta> lstVentas = getVentas();
                         bool exists = false;
@@ -269,7 +269,7 @@ namespace linway_app.Forms
                         nuevoProdVendido.RegistroVentaId = registroId;
                         lstProdVendidos.Add(nuevoProdVendido);
                         addProdVendido(nuevoProdVendido);
-                    }
+                    //}
                     Actualizar();
                 }
 

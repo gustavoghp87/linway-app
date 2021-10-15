@@ -43,6 +43,7 @@ Metas para versión 13:
  de Windows Forms
 -Lograr que se pueda usar la app sin tener encendida la pc host
 -Lograr que la app sea reactiva a cambios en la base de datos
+-Hacer un logger
 
 
 ______________________________________________________________________________________
