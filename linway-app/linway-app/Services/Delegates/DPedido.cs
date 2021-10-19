@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
-using static linway_app.Services.Delegates.DNotaDeEnvio;
 using static linway_app.Services.Delegates.DProducto;
 using static linway_app.Services.Delegates.DProdVendido;
 using static linway_app.Services.Delegates.DReparto;
@@ -144,17 +143,10 @@ namespace linway_app.Services.Delegates
             //if (!esProducto(prodVendido.Producto)) return null;
 
             string description = "";
-            if (esProducto(prodVendido.Producto))
-            {
-                if (prodVendido.Descripcion.Contains("-"))
-                    description = prodVendido.Descripcion.Substring(0, prodVendido.Descripcion.IndexOf("-"));
-                else if (prodVendido.Descripcion.Contains("."))
-                    description = prodVendido.Descripcion.Substring(0, prodVendido.Descripcion.IndexOf("."));
-                else
-                    description = prodVendido.Descripcion;
-            }
+            if (esProducto(prodVendido.Producto)) { description = editDescripcion(prodVendido.Descripcion); }
 
-            if (prodVendido.Producto.Tipo == TipoProducto.Polvo.ToString() && prodVendido.Producto.SubTipo != null)
+            if (prodVendido.Producto.Tipo == TipoProducto.Polvo.ToString() && prodVendido.Producto.SubTipo != null
+                 && prodVendido.Producto.SubTipo != TipoPolvo.Blanqueador.ToString())
             {
                 int kilos = 20;
                 long cantidadDeBolsas = prodVendido.Cantidad / kilos;
@@ -186,7 +178,12 @@ namespace linway_app.Services.Delegates
                 {
                     pedido.L += prodVendido.Cantidad;
                 }
-                pedido.ProductosText += prodVendido.Cantidad.ToString() + "x " + description + " | ";
+                
+                if (prodVendido.Producto.Tipo == TipoProducto.Polvo.ToString()
+                     && prodVendido.Producto.SubTipo == TipoPolvo.Blanqueador.ToString())
+                    pedido.ProductosText += prodVendido.Cantidad.ToString() + " kilos " + description + " | ";
+                else
+                    pedido.ProductosText += prodVendido.Cantidad.ToString() + "x " + description + " | ";
             }
 
             return pedido;

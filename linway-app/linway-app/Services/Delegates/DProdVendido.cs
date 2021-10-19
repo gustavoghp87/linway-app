@@ -11,6 +11,7 @@ namespace linway_app.Services.Delegates
     {
         public readonly static Action<ProdVendido> addProdVendido = AddProdVendido;
         public readonly static Action<ProdVendido> deleteProdVendido = DeleteProdVendido;
+        public readonly static Func<string, string> editDescripcion = EditDescripcion;
         public readonly static Action<ProdVendido> editProdVendido = EditProdVendido;
         public readonly static Func<List<ProdVendido>> getProdVendido = GetProdVendidos;
         public readonly static Func<string, ProdVendido> getProdVendidoPorNombre = GetProdVendidoPorNombre;
@@ -26,6 +27,12 @@ namespace linway_app.Services.Delegates
         {
             bool response = _service.Delete(prodVendido);
             if (!response) MessageBox.Show("Algo falló al eliminar Producto Vendido de la base de datos");
+        }
+        private static string EditDescripcion(string descripcion)
+        {
+            if (descripcion.Contains("-")) { descripcion = descripcion.Substring(0, descripcion.IndexOf("-")); };
+            if (descripcion.Contains(".")) { descripcion = descripcion.Substring(0, descripcion.IndexOf(".")); };
+            return descripcion;
         }
         private static void EditProdVendido(ProdVendido prodVendido)
         {

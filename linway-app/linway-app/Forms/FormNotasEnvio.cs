@@ -32,7 +32,8 @@ namespace linway_app.Forms
         private void ActualizarNotas()
         {
             _lstNotaDeEnvios = getNotaDeEnvios();
-            if (_lstNotaDeEnvios != null) lCantNotas.Text = _lstNotaDeEnvios.Count.ToString() + " notas de envio.";
+            if (_lstNotaDeEnvios != null)
+                lCantNotas.Text = _lstNotaDeEnvios.Count.ToString() + " notas de envio.";
         }
         private void ActualizarGrid1(List<NotaDeEnvio> lstNotadeEnvios)
         {
@@ -429,7 +430,6 @@ namespace linway_app.Forms
                         impTotal += nota.Cantidad * nota.Precio;
                     }
                     label20.Text = impTotal.ToString();
-                    button10.Enabled = true;
                     if (notaDeEnvio.Cliente != null && notaDeEnvio.Cliente.Direccion != null)
                     {
                         label18.Text = notaDeEnvio.Cliente.Direccion.ToString() +
@@ -440,7 +440,6 @@ namespace linway_app.Forms
                 {
                     label18.Text = "No encontrado";
                     label20.Text = "0";
-                    button10.Enabled = false;
                     _lstProdVendidos.Clear();
                     ActualizarGrid2(_lstProdVendidos);
                 }
@@ -449,7 +448,6 @@ namespace linway_app.Forms
             {
                 label18.Text = "";
                 label20.Text = "0";
-                button10.Enabled = false;
                 _lstProdVendidos.Clear();
                 ActualizarGrid2(_lstProdVendidos);
             }
@@ -511,7 +509,9 @@ namespace linway_app.Forms
             if (label25.Text != "No encontrado" && textBox10.Text != "")
             {
                 try { int.Parse(textBox10.Text); } catch { return; };
-                label26.Text = (getProductoPorNombreExacto(label25.Text).Precio * int.Parse(textBox10.Text)).ToString();
+                var producto = getProductoPorNombreExacto(label25.Text);
+                if (producto == null) return;
+                label26.Text = (producto.Precio * int.Parse(textBox10.Text)).ToString();
                 button9.Enabled = true;
             }
         }
@@ -542,6 +542,8 @@ namespace linway_app.Forms
             _lstProdVendidos.Add(nuevoProdVendido);
 
             editNotaDeEnvioAgregar(notaDeEnvio, new List<ProdVendido>() { nuevoProdVendido } );
+            ActualizarNotas();
+            ActualizarGrid1(_lstNotaDeEnvios);
             ActualizarGrid2(_lstProdVendidos);
             decimal impTotal = 0;
             foreach (ProdVendido prodVend in _lstProdVendidos)
@@ -568,23 +570,20 @@ namespace linway_app.Forms
                 {
                     label22.Text = prodVendido.Descripcion;
                     button8.Enabled = true;
-                    button10.Enabled = true;
                 }
                 else
                 {
                     label22.Text = "No encontrado";
                     button8.Enabled = false;
-                    button10.Enabled = false;
                 }
             }
             else
             {
                 label22.Text = "";
                 button8.Enabled = false;
-                button10.Enabled = false;
             }
         }
-        private void Button8_Click(object sender, EventArgs e)
+        private void Quitar_btn8_Click(object sender, EventArgs e)
         {
             if (label18.Text != "" && label18.Text != "No encontrado" && textBox7.Text != "")
             {
@@ -592,38 +591,29 @@ namespace linway_app.Forms
                 NotaDeEnvio notaDeEnvio = getNotaDeEnvio(long.Parse(textBox7.Text));
                 ProdVendido prodVendido = getProdVendidoPorNombre(label22.Text);
                 if (notaDeEnvio == null || prodVendido == null) return;
+                if (_lstProdVendidos.Count < 2)
+                {
+                    MessageBox.Show("No se puede quitar el único producto que tiene una nota, hay que eliminarla");
+                    return;
+                }
                 notaDeEnvio = editNotaDeEnvioQuitar(notaDeEnvio, prodVendido);
                 prodVendido.NotaDeEnvioId = null;
                 editProdVendido(prodVendido);
                 ActualizarNotas();
                 ActualizarGrid1(_lstNotaDeEnvios);
-                ActualizarGrid2(notaDeEnvio.ProdVendidos.ToList());
+                var aux = new List<ProdVendido>();
+                aux.AddRange(_lstProdVendidos);
+                _lstProdVendidos.Clear();
+                aux.ForEach(prodVend =>
+                {
+                    if (prodVend.Id != prodVendido.Id) _lstProdVendidos.Add(prodVend);
+                });
+                ActualizarGrid2(_lstProdVendidos);
                 label20.Text = notaDeEnvio.ImporteTotal.ToString();
                 textBox8.Text = "";
                 label22.Text = "";
                 button8.Enabled = false;
             }
-        }
-
-        // MODIFICAR BTN
-        private void Button10_Click(object sender, EventArgs e)
-        {
-            if (_lstProdVendidos.Count != 0)
-            {
-                NotaDeEnvio nota = getNotaDeEnvio(long.Parse(textBox7.Text));
-                if (nota == null) return;
-                nota = editNotaDeEnvioAgregar(nota, _lstProdVendidos);
-                addNotaDeEnvio(nota);
-                ActualizarNotas();
-                ActualizarGrid1(_lstNotaDeEnvios);
-                _lstProdVendidos.Clear();
-                ActualizarGrid2(_lstProdVendidos);
-                textBox7.Text = "";
-                button10.Enabled = false;
-                label18.Text = "";
-                label20.Text = "0";
-            }
-            else MessageBox.Show("La nota de envío debe tener al menos un producto");
         }
     }
 }

@@ -8,6 +8,7 @@ namespace linway_app.Services.Delegates
         public readonly static Action GenerateDbBackup = Generate;
         public readonly static string windowsUserName = Environment.UserName;
         public readonly static string path = @"C:\Users\" + windowsUserName + @"\Documents\OneDrive\Linway-Backups\";
+        private readonly static string absolutePath = @"C:\Compartidos VV\Sistema Linway\";
 
         private static void Generate()
         {

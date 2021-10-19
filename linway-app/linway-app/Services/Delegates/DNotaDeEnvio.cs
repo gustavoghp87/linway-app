@@ -59,14 +59,12 @@ namespace linway_app.Services.Delegates
             if (notaDeEnvio.ProdVendidos == null || notaDeEnvio.ProdVendidos.Count == 0)
             {
                 notaDeEnvio.ProdVendidos = new List<ProdVendido>();
-                notaDeEnvio.ProdVendidos.ToList().AddRange((IEnumerable<ProdVendido>)lstProdVendidos);
+                notaDeEnvio.ProdVendidos.ToList().AddRange(lstProdVendidos);
                 notaDeEnvio.ImporteTotal = ExtraerImporteDeNotaDeEnvio(lstProdVendidos);
                 notaDeEnvio.Detalle = ExtraerDetalleDeNotaDeEnvio(lstProdVendidos);
             }
             else
             {
-                notaDeEnvio.ImporteTotal = 0;
-                notaDeEnvio.Detalle = "";
                 foreach (ProdVendido prodVendidoNuevo in lstProdVendidos)
                 {
                     bool exists = false;
@@ -80,7 +78,8 @@ namespace linway_app.Services.Delegates
                     }
                     if (!exists) notaDeEnvio.ProdVendidos.Add(prodVendidoNuevo);
                     notaDeEnvio.ImporteTotal += prodVendidoNuevo.Precio * prodVendidoNuevo.Cantidad;
-                    notaDeEnvio.Detalle += prodVendidoNuevo.Cantidad.ToString() + "x " + prodVendidoNuevo.Descripcion + ". ";
+                    string descripcion = DProdVendido.editDescripcion(prodVendidoNuevo.Descripcion);
+                    notaDeEnvio.Detalle += prodVendidoNuevo.Cantidad.ToString() + "x " + descripcion + ". ";
                 }
             }
             bool success = editNotaDeEnvio(notaDeEnvio);
