@@ -17,6 +17,7 @@ namespace linway_app.Services.Delegates
         public readonly static Func<string, Cliente> getClientePorDireccion = GetClientePorDireccion;
         public readonly static Func<string, Cliente> getClientePorDireccionExacta = GetClientePorDireccionExacta;
         public readonly static Func<List<Cliente>> getClientes = GetClientes;
+        public readonly static Func<string, string> invertirFecha = InvertirFecha;
 
         private static readonly IServiceBase<Cliente> _service = Form1._servCliente;
         private static bool AddCliente(Cliente cliente)
@@ -57,6 +58,13 @@ namespace linway_app.Services.Delegates
         private static List<Cliente> GetClientes()
         {
             return _service.GetAll();
+        }
+        private static string InvertirFecha(string fecha)
+        {
+            if (!fecha.Contains("-")) return fecha;
+            var array = fecha.Split('-');
+            if (array.Length != 3) return fecha;
+            return array[2] + "-" + array[1] + "-" + array[0];
         }
     }
 }

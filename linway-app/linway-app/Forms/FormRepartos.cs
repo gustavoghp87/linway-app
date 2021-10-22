@@ -28,6 +28,7 @@ namespace linway_app.Forms
         private void FormReparto_Load(object sender, EventArgs e)
         {
             Actualizar();
+            checkBox1.Checked = true;
         }
         private void Actualizar()
         {
@@ -119,7 +120,7 @@ namespace linway_app.Forms
             comboBox8.Text = "";
             comboBox9.Text = "";
             comboBox10.Text = "";
-            checkBox1.Checked = false;
+            //checkBox1.Checked = false;
             label32.Text = "";
             label36.Text = "";
         }
@@ -154,7 +155,10 @@ namespace linway_app.Forms
             {
                 Reparto reparto = _lstRepartos.Find(x => x.Nombre.Equals(comboBox2.Text));
                 if (reparto == null) return;
-                _lstPedidos = reparto.Pedidos.ToList();
+                if (checkBox1.Checked)
+                    _lstPedidos = reparto.Pedidos.Where(x => x.Entregar == 1).ToList();
+                else
+                    _lstPedidos = reparto.Pedidos.ToList();
                 VerDatos(reparto);
                 ActualizarGrid(_lstPedidos);
             }
@@ -413,13 +417,15 @@ namespace linway_app.Forms
         }
         private void TextBox3_TextChanged(object sender, EventArgs e)
         {
-            var aux = _lstPedidos.Find(x => x.Direccion.ToLower().Contains(textBox3.Text.ToLower()));
+            var auxList = _lstPedidos.Where(x => x.Entregar == 1).ToList();
+            var aux = auxList.Find(x => x.Direccion.ToLower().Contains(textBox3.Text.ToLower()));
             if (aux == null) label30.Text = "No encontrado";
             else label30.Text = aux.Direccion;
         }
         private void TextBox4_TextChanged(object sender, EventArgs e)
         {
-            var aux = _lstPedidos.Find(x => x.Direccion.ToLower().Contains(textBox4.Text.ToLower()));
+            var auxList = _lstPedidos.Where(x => x.Entregar == 1).ToList();
+            var aux = auxList.Find(x => x.Direccion.ToLower().Contains(textBox4.Text.ToLower()));
             if (aux == null) label31.Text = "No encontrado";
             else label31.Text = aux.Direccion;
         }
@@ -476,7 +482,7 @@ namespace linway_app.Forms
                     _lstPedidos = getPedidosPorRepartoId(pedido1.RepartoId);
                     ActualizarGrid(_lstPedidos);
                 }
-                catch (Exception ex) { MessageBox.Show("Algo falló: ", ex.Message); }
+                catch (Exception ex) { MessageBox.Show("Algo falló: " + ex.Message, "No se pudo reposicionar"); }
             }
         }
 

@@ -1,7 +1,9 @@
 ﻿using linway_app.Models;
+using linway_app.Models.Enums;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DNotaDeEnvio;
 
 namespace linway_app.Forms
@@ -25,7 +27,7 @@ namespace linway_app.Forms
             _notaDeEnvio = notaDeEnvio;
             try
             {
-                lFecha.Text = _notaDeEnvio.Fecha;
+                lFecha.Text = invertirFecha(_notaDeEnvio.Fecha);
                 string elcodigo = _notaDeEnvio.Id.ToString();
                 for (int i = elcodigo.Length; i < 5; i++)
                 {
@@ -41,7 +43,10 @@ namespace linway_app.Forms
 
                 foreach (ProdVendido pvActual in _notaDeEnvio.ProdVendidos)
                 {
-                    label1.Text = label1.Text + pvActual.Cantidad.ToString() + Environment.NewLine;
+                    if (pvActual.Producto.Tipo == TipoProducto.Saldo.ToString())
+                        label1.Text += Environment.NewLine;
+                    else
+                        label1.Text += pvActual.Cantidad.ToString() + Environment.NewLine;
                     //label2.Text = label2.Text + pvActual.Descripcion + " ($" + pvActual.Precio.ToString(".00") + " c/u)" + Environment.NewLine;
                     label2.Text = label2.Text + pvActual.Descripcion + Environment.NewLine;
                     label3.Text = label3.Text + (pvActual.Precio * pvActual.Cantidad).ToString(".00") + Environment.NewLine;

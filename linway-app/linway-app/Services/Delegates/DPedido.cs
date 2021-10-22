@@ -185,6 +185,10 @@ namespace linway_app.Services.Delegates
                 else
                     pedido.ProductosText += prodVendido.Cantidad.ToString() + "x " + description + " | ";
             }
+            else if (prodVendido.Producto.SubTipo != null && prodVendido.Producto.SubTipo == TipoSaldo.ACobrar.ToString())
+            {
+                pedido.ProductosText += "A cobrar | ";
+            }
 
             return pedido;
         }

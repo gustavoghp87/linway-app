@@ -2,6 +2,7 @@ using linway_app.Models;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DRecibo;
 
 namespace linway_app.Forms
@@ -23,7 +24,7 @@ namespace linway_app.Forms
         public void Rellenar_Datos(Recibo recibo)
         {
             _recibo = recibo;
-            lFecha.Text = _recibo.Fecha;
+            lFecha.Text = invertirFecha(_recibo.Fecha);
             string elcodigo = _recibo.Id.ToString();
             for (int i = elcodigo.Length; i < 5; i++)
             {
@@ -33,8 +34,7 @@ namespace linway_app.Forms
             
             if (_recibo.DireccionCliente.Contains("-"))
             {
-                int separador = 0;
-                separador = _recibo.DireccionCliente.IndexOf('-');
+                int separador = _recibo.DireccionCliente.IndexOf('-');
                 lCalle.Text = _recibo.DireccionCliente.Substring(0, separador);
                 lLocalidad.Text = _recibo.DireccionCliente.Substring(separador + 1);
             }
