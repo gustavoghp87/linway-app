@@ -2,8 +2,8 @@ using linway_app.Models;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DRecibo;
+using static linway_app.Services.Delegates.DZGeneral;
 
 namespace linway_app.Forms
 {

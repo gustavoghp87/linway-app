@@ -3,6 +3,7 @@ using linway_app.Models;
 using linway_app.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace linway_app.Services.Delegates
@@ -17,7 +18,6 @@ namespace linway_app.Services.Delegates
         public readonly static Func<string, Cliente> getClientePorDireccion = GetClientePorDireccion;
         public readonly static Func<string, Cliente> getClientePorDireccionExacta = GetClientePorDireccionExacta;
         public readonly static Func<List<Cliente>> getClientes = GetClientes;
-        public readonly static Func<string, string> invertirFecha = InvertirFecha;
 
         private static readonly IServiceBase<Cliente> _service = Form1._servCliente;
         private static bool AddCliente(Cliente cliente)
@@ -49,7 +49,20 @@ namespace linway_app.Services.Delegates
         }
         private static Cliente GetClientePorDireccion(string direccion)
         {
-            return getClientes().Find(x => x.Direccion.ToLower().Contains(direccion.ToLower()));
+            List<Cliente> clientes = getClientes();
+            Cliente cliente = clientes.Find(x => x.Direccion.ToLower().Contains(direccion.ToLower()));
+            //List<Cliente> clientesx = clientes.Where(x => x.Direccion.ToLower().Contains(direccion.ToLower())).ToList();
+            if (cliente == null)
+            {
+                List<string> direcciones = DZGeneral.ignorarTildes(direccion);
+                if (direcciones == null || direcciones.Count == 0) return null;
+                foreach (var direc in direcciones)
+                {
+                    Cliente cliente1 = clientes.Find(x => x.Direccion.ToLower().Contains(direc));
+                    if (cliente1 != null) return cliente1;
+                };
+            }
+            return cliente;
         }
         private static Cliente GetClientePorDireccionExacta(string direccion)
         {
@@ -58,13 +71,6 @@ namespace linway_app.Services.Delegates
         private static List<Cliente> GetClientes()
         {
             return _service.GetAll();
-        }
-        private static string InvertirFecha(string fecha)
-        {
-            if (!fecha.Contains("-")) return fecha;
-            var array = fecha.Split('-');
-            if (array.Length != 3) return fecha;
-            return array[2] + "-" + array[1] + "-" + array[0];
         }
     }
 }

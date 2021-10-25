@@ -4,6 +4,10 @@ ___________________________________Sistema Linway 12____________________________
 
 Junio:
 -Terminado el proyecto de tipificar los productos
+-En agregar productos, ahora el tipo de producto es obligatorio
+-En agregar clientes, ahora solo son obligatorios Dirección y Tipo de  contribuyente
+-Se simplificaron los formularios de clientes y productos, que se abren con botón único y
+ no tienen partes deshabilitadas
 -Migración de sistema de datos en listas de objetos en binarios con librería
  System.Runtime.Serialization.Formatters.Binary a base de datos relacional en archivo único
  SQLite, usando ORM Microsoft.EntityFramework.Core.SQLite
@@ -22,10 +26,7 @@ Junio:
 -Ignoradas mayúsculas/minúsculas en las búsquedas
 -Cambiados los _leave por _textChanged para que la aplicación ejecute sin abandonar el
   campo de escritura
--Se simplificaron los formularios de clientes y productos, que se abren con botón único y
- no tienen partes deshabilitadas
--En agregar clientes, ahora solo son obligatorios Dirección y Tipo de  contribuyente
--En agregar productos, ahora el tipo de producto es obligatorio
+
 
 Octubre:
 -Generación automática de backup en OneDrive al abrir la app por primera vez en el día

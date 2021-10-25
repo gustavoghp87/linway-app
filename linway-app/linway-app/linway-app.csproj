@@ -443,6 +443,7 @@
     <Compile Include="Models\Entities\Mapping\MappingProfile.cs" />
     <Compile Include="Models\Enums\TipoSaldo.cs" />
     <Compile Include="Models\Enums\TipoProducto.cs" />
+    <Compile Include="Services\Delegates\DZGeneral.cs" />
     <Compile Include="Services\Delegates\DDbBackup.cs" />
     <Compile Include="Services\Delegates\DDetalleRecibo.cs" />
     <Compile Include="Services\Delegates\DDiaReparto.cs" />

@@ -263,18 +263,20 @@ namespace linway_app.Forms
                 Reparto reparto = _lstRepartos.Find(x => x.Nombre.Equals(comboBox5.Text));
                 if (cliente == null || reparto == null) { MessageBox.Show("Falló algo, código 44"); return; };
                 // este agrega Destino sin productos
-                Pedido nuevoPedido = new Pedido();
-                nuevoPedido.ClienteId = cliente.Id;
-                nuevoPedido.Direccion = cliente.Direccion;
-                nuevoPedido.RepartoId = reparto.Id;
-                nuevoPedido.ProductosText = "";
-                nuevoPedido.Entregar = 0;
-                nuevoPedido.A = 0;
-                nuevoPedido.Ae = 0;
-                nuevoPedido.D = 0;
-                nuevoPedido.E = 0;
-                nuevoPedido.L = 0;
-                nuevoPedido.T = 0;
+                Pedido nuevoPedido = new Pedido
+                {
+                    ClienteId = cliente.Id,
+                    Direccion = cliente.Direccion,
+                    RepartoId = reparto.Id,
+                    ProductosText = "",
+                    Entregar = 0,
+                    A = 0,
+                    Ae = 0,
+                    D = 0,
+                    E = 0,
+                    L = 0,
+                    T = 0
+                };
                 // corroborar que no esté antes de agregar   <----------
                 if (_lstPedidos.Exists(x => x.ClienteId == nuevoPedido.ClienteId && x.RepartoId == nuevoPedido.RepartoId))
                 {

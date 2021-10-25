@@ -43,8 +43,7 @@ namespace linway_app.Services
         public T Get(long id)
         {
             T t = (T)_service.Get(id);
-            return t == null || t.Estado == null || t.Estado == "Eliminado"
-                ? default : t;
+            return t == null || t.Estado == null || t.Estado == "Eliminado" ? default : t;
         }
         public List<T> GetAll()
         {
