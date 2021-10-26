@@ -191,16 +191,18 @@ namespace linway_app.Forms
             if (textBox1.Text != "")
             {
                 DiaReparto diaRep = _lstDiaRepartos.Find(x => x.Dia.Contains(comboBox3.Text));
-                Reparto nuevoReparto = new Reparto();
-                nuevoReparto.Nombre = textBox1.Text;
-                nuevoReparto.DiaRepartoId = diaRep.Id;
-                nuevoReparto.Ta = 0;
-                nuevoReparto.Tae = 0;
-                nuevoReparto.Td = 0;
-                nuevoReparto.Te = 0;
-                nuevoReparto.Tl = 0;
-                nuevoReparto.TotalB = 0;
-                nuevoReparto.Tt = 0;
+                Reparto nuevoReparto = new Reparto
+                {
+                    Nombre = textBox1.Text,
+                    DiaRepartoId = diaRep.Id,
+                    Ta = 0,
+                    Tae = 0,
+                    Td = 0,
+                    Te = 0,
+                    Tl = 0,
+                    TotalB = 0,
+                    Tt = 0
+                };
                 addReparto(nuevoReparto);
             }
             LimpiarPantalla();

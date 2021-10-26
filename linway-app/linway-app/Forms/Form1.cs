@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DProducto;
-using static linway_app.Services.Delegates.DDbBackup;
+//using static linway_app.Services.Delegates.DDbBackup;
 
 namespace linway_app.Forms
 {

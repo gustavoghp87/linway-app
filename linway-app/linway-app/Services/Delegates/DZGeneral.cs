@@ -5,9 +5,10 @@ namespace linway_app.Services.Delegates
 {
     public static class DZGeneral
     {
-        public readonly static Func<string, List<string>> ignorarTildes = IgnorarTildes;
-        public readonly static Func<string, string> invertirFecha = InvertirFecha;
-        
+        public static readonly Func<string, List<string>> ignorarTildes = IgnorarTildes;
+        public static readonly Func<string, string> invertirFecha = InvertirFecha;
+        public static readonly string FormatoDeFecha = "yyyy-MM-dd";
+
         private static List<string> IgnorarTildes(string palabra)
         {
             palabra = palabra.ToLower().Trim();

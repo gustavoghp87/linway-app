@@ -12,6 +12,7 @@ using static linway_app.Services.Delegates.DProdVendido;
 using static linway_app.Services.Delegates.DRegistroVenta;
 using static linway_app.Services.Delegates.DReparto;
 using static linway_app.Services.Delegates.DVentas;
+using static linway_app.Services.Delegates.DZGeneral;
 
 namespace linway_app.Forms
 {
@@ -19,7 +20,7 @@ namespace linway_app.Forms
     {
         private List<Venta> _lstVentas;
         private List<RegistroVenta> _lstRegistros;
-        private List<Venta> _lstAgregarVentas;
+        private readonly List<Venta> _lstAgregarVentas;
         private string showing = "agregarReg";
         public FormVentas()
         {
@@ -207,10 +208,12 @@ namespace linway_app.Forms
             try { int.Parse(textBox13.Text); } catch { return; }
             Producto prod = getProductoPorNombreExacto(label28.Text);
             if (prod == null) return;
-            Venta nuevaVenta = new Venta();
-            nuevaVenta.ProductoId = prod.Id;
-            nuevaVenta.Cantidad = int.Parse(textBox13.Text);
-            nuevaVenta.Producto = getProducto(prod.Id);
+            Venta nuevaVenta = new Venta
+            {
+                ProductoId = prod.Id,
+                Cantidad = int.Parse(textBox13.Text),
+                Producto = getProducto(prod.Id)
+            };
             _lstAgregarVentas.Add(nuevaVenta);
             ActualizarGrid5(_lstAgregarVentas);
             label28.Text = "";
@@ -232,10 +235,12 @@ namespace linway_app.Forms
                 // hacer o editar registros (no puedo editar porque no tengo cliente, se modifica si hay "enviar a hdr")
                 Cliente cliente1 = getCliente(1);
                 if (cliente1 == null) return;
-                RegistroVenta nuevoRegistroVenta = new RegistroVenta();
-                nuevoRegistroVenta.ClienteId = cliente1.Id;
-                nuevoRegistroVenta.NombreCliente = cliente1.Direccion;
-                nuevoRegistroVenta.Fecha = DateTime.Now.ToString("yyyy-MM-dd");
+                RegistroVenta nuevoRegistroVenta = new RegistroVenta
+                {
+                    ClienteId = cliente1.Id,
+                    NombreCliente = cliente1.Direccion,
+                    Fecha = DateTime.Now.ToString(FormatoDeFecha)
+                };
                 long registroId = addRegistroVentaReturnId(nuevoRegistroVenta);
                 if (registroId == 0) { MessageBox.Show("Falló"); return; };
 
@@ -243,32 +248,34 @@ namespace linway_app.Forms
                 {
                     //if (esProducto(ventaParaAgregar.Producto))
                     //{
-                        // hacer o editar ventas
-                        List<Venta> lstVentas = getVentas();
-                        bool exists = false;
-                        if (lstVentas != null)
-                            foreach (Venta venta in lstVentas)
+                    // hacer o editar ventas
+                    List<Venta> lstVentas = getVentas();
+                    bool exists = false;
+                    if (lstVentas != null)
+                        foreach (Venta venta in lstVentas)
+                        {
+                            if (venta.ProductoId == ventaParaAgregar.ProductoId)
                             {
-                                if (venta.ProductoId == ventaParaAgregar.ProductoId)
-                                {
-                                    exists = true;
-                                    venta.Cantidad += ventaParaAgregar.Cantidad;
-                                    editVenta(venta);
-                                }
+                                exists = true;
+                                venta.Cantidad += ventaParaAgregar.Cantidad;
+                                editVenta(venta);
                             }
-                        if (!exists) addVenta(ventaParaAgregar);
+                        }
+                    if (!exists) addVenta(ventaParaAgregar);
 
-                        // hacer ProdVendidos
-                        Producto producto = getProducto(ventaParaAgregar.ProductoId);
-                        if (producto == null) return;
-                        ProdVendido nuevoProdVendido = new ProdVendido();
-                        nuevoProdVendido.Cantidad = ventaParaAgregar.Cantidad;
-                        nuevoProdVendido.Descripcion = producto.Nombre;
-                        nuevoProdVendido.Precio = producto.Precio;
-                        nuevoProdVendido.ProductoId = producto.Id;
-                        nuevoProdVendido.RegistroVentaId = registroId;
-                        lstProdVendidos.Add(nuevoProdVendido);
-                        addProdVendido(nuevoProdVendido);
+                    // hacer ProdVendidos
+                    Producto producto = getProducto(ventaParaAgregar.ProductoId);
+                    if (producto == null) return;
+                    ProdVendido nuevoProdVendido = new ProdVendido
+                    {
+                        Cantidad = ventaParaAgregar.Cantidad,
+                        Descripcion = producto.Nombre,
+                        Precio = producto.Precio,
+                        ProductoId = producto.Id,
+                        RegistroVentaId = registroId
+                    };
+                    lstProdVendidos.Add(nuevoProdVendido);
+                    addProdVendido(nuevoProdVendido);
                     //}
                     Actualizar();
                 }
@@ -457,7 +464,7 @@ namespace linway_app.Forms
                 textBox2.Visible = false;
                 foreach (RegistroVenta rActual in _lstRegistros)
                 {
-                    if (rActual.Fecha == DateTime.UtcNow.ToString("yyyy-MM-dd")) lFiltrada.Add(rActual);
+                    if (rActual.Fecha == DateTime.UtcNow.ToString(FormatoDeFecha)) lFiltrada.Add(rActual);
                 }
                 ActualizarGrid1Registros(lFiltrada);
             }

@@ -14,6 +14,7 @@ using static linway_app.Services.Delegates.DProdVendido;
 using static linway_app.Services.Delegates.DRegistroVenta;
 using static linway_app.Services.Delegates.DReparto;
 using static linway_app.Services.Delegates.DVentas;
+using static linway_app.Services.Delegates.DZGeneral;
 
 namespace linway_app.Forms
 {
@@ -167,11 +168,13 @@ namespace linway_app.Forms
                 Producto producto = getProducto(long.Parse(labelProductoId.Text));
                 if (producto == null) return;
                 int cantidad = int.Parse(textBox17.Text);
-                ProdVendido nuevoPV = new ProdVendido();
-                nuevoPV.ProductoId = producto.Id;
-                nuevoPV.Descripcion = label38.Text;
-                nuevoPV.Cantidad = cantidad;
-                nuevoPV.Precio = producto.Precio;
+                ProdVendido nuevoPV = new ProdVendido
+                {
+                    ProductoId = producto.Id,
+                    Descripcion = label38.Text,
+                    Cantidad = cantidad,
+                    Precio = producto.Precio
+                };
 
                 if (producto.Tipo == TipoProducto.Saldo.ToString())
                 {
@@ -231,12 +234,14 @@ namespace linway_app.Forms
                 var cliente = getClientePorDireccionExacta(label36.Text);
                 if (cliente == null) return;
 
-                NotaDeEnvio nuevaNota = new NotaDeEnvio();
-                nuevaNota.ClienteId = cliente.Id;
-                nuevaNota.Fecha = DateTime.Now.ToString("yyyy-MM-dd");
-                nuevaNota.Impresa = 0;
-                nuevaNota.Detalle = extraerDetalleDeNotaDeEnvio(_lstProdVendidos);
-                nuevaNota.ImporteTotal = extraerImporteDeNotaDeEnvio(_lstProdVendidos);
+                NotaDeEnvio nuevaNota = new NotaDeEnvio
+                {
+                    ClienteId = cliente.Id,
+                    Fecha = DateTime.Now.ToString(FormatoDeFecha),
+                    Impresa = 0,
+                    Detalle = extraerDetalleDeNotaDeEnvio(_lstProdVendidos),
+                    ImporteTotal = extraerImporteDeNotaDeEnvio(_lstProdVendidos)
+                };
                 long notaId = addNotaDeEnvioReturnId(nuevaNota);
                 if (notaId == 0)
                 {
@@ -250,11 +255,13 @@ namespace linway_app.Forms
                 }
                 if (checkBox4.Checked)      // agregar productos vendidos a lista de registros y a lista de ventas
                 {
-                    RegistroVenta nuevoRegistro = new RegistroVenta();
-                    nuevoRegistro.ClienteId = cliente.Id;
-                    nuevoRegistro.Cliente = cliente;
-                    nuevoRegistro.Fecha = DateTime.Now.ToString("yyyy-MM-dd");
-                    nuevoRegistro.NombreCliente = cliente.Direccion;
+                    RegistroVenta nuevoRegistro = new RegistroVenta
+                    {
+                        ClienteId = cliente.Id,
+                        Cliente = cliente,
+                        Fecha = DateTime.Now.ToString(FormatoDeFecha),
+                        NombreCliente = cliente.Direccion
+                    };
                     long registroId = addRegistroVentaReturnId(nuevoRegistro);
                     foreach (var prodVendido in _lstProdVendidos)
                     {
@@ -274,10 +281,12 @@ namespace linway_app.Forms
                             }
                             if (!exists)
                             {
-                                Venta nuevaVenta = new Venta();
-                                nuevaVenta.ProductoId = prodVendido.ProductoId;
-                                nuevaVenta.Cantidad = prodVendido.Cantidad;
-                                nuevaVenta.Producto = getProducto(prodVendido.ProductoId);
+                                Venta nuevaVenta = new Venta
+                                {
+                                    ProductoId = prodVendido.ProductoId,
+                                    Cantidad = prodVendido.Cantidad,
+                                    Producto = getProducto(prodVendido.ProductoId)
+                                };
                                 addVenta(nuevaVenta);
                             }
                         }

@@ -3,7 +3,6 @@ using linway_app.Models;
 using linway_app.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace linway_app.Services.Delegates
@@ -28,10 +27,11 @@ namespace linway_app.Services.Delegates
         }
         private static bool AddClientePrimero()
         {
-            Cliente cliente = new Cliente();
-            cliente.Nombre = "Cliente Particular X";
-            cliente.Direccion = "Cliente Particular X";
-            return addCliente(cliente);
+            return addCliente(new Cliente
+            {
+                Nombre = "Cliente Particular X",
+                Direccion = "Cliente Particular X"
+            });
         }
         private static void DeleteCliente(Cliente cliente)
         {
@@ -60,7 +60,7 @@ namespace linway_app.Services.Delegates
                 {
                     Cliente cliente1 = clientes.Find(x => x.Direccion.ToLower().Contains(direc));
                     if (cliente1 != null) return cliente1;
-                };
+                }
             }
             return cliente;
         }

@@ -7,13 +7,14 @@ using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DDetalleRecibo;
 using static linway_app.Services.Delegates.DRecibo;
+using static linway_app.Services.Delegates.DZGeneral;
 
 namespace linway_app.Forms
 {
     public partial class FormRecibos : Form
     {
         private List<Recibo> _lstRecibos;
-        private List<DetalleRecibo> _lstDetallesAAgregar;
+        private readonly List<DetalleRecibo> _lstDetallesAAgregar;
         private decimal _subTo = 0;
 
         public FormRecibos()
@@ -144,7 +145,7 @@ namespace linway_app.Forms
 
 
         // ____________ filtrar datos________________
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             List<Recibo> lstRecibosFiltrados = new List<Recibo>();
             //todas - hoy - impresas- no impresas
@@ -156,7 +157,7 @@ namespace linway_app.Forms
                 textBox1.Visible = false;
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Fecha == DateTime.Now.ToString("yyyy-MM-dd")) lstRecibosFiltrados.Add(recibo);
+                    if (recibo.Fecha == DateTime.Now.ToString(FormatoDeFecha)) lstRecibosFiltrados.Add(recibo);
                 }
                 ActualizarGridRecibos(lstRecibosFiltrados);
             }
@@ -450,12 +451,14 @@ namespace linway_app.Forms
             Cliente cliente = getClientePorDireccionExacta(label15.Text);
             if (cliente == null) return;
 
-            Recibo nuevoRecibo = new Recibo();
-            nuevoRecibo.ClienteId = cliente.Id;
-            nuevoRecibo.DireccionCliente = label15.Text;
-            nuevoRecibo.ImporteTotal = _subTo;
-            nuevoRecibo.Impreso = 0;
-            nuevoRecibo.Fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            Recibo nuevoRecibo = new Recibo
+            {
+                ClienteId = cliente.Id,
+                DireccionCliente = label15.Text,
+                ImporteTotal = _subTo,
+                Impreso = 0,
+                Fecha = DateTime.Now.ToString(FormatoDeFecha)
+            };
             long reciboId = addReciboReturnId(nuevoRecibo);
             if (reciboId == 0) { MessageBox.Show("Algo falló en el proceso"); return; }
             foreach (DetalleRecibo detalle in _lstDetallesAAgregar)

@@ -11,6 +11,7 @@ using static linway_app.Services.Delegates.DPedido;
 using static linway_app.Services.Delegates.DProducto;
 using static linway_app.Services.Delegates.DProdVendido;
 using static linway_app.Services.Delegates.DReparto;
+using static linway_app.Services.Delegates.DZGeneral;
 
 namespace linway_app.Forms
 {
@@ -81,7 +82,7 @@ namespace linway_app.Forms
                 textBox1.Visible = false;
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
-                    if (nota.Fecha == DateTime.UtcNow.ToString("yyyy-MM-dd")) lFiltrada.Add(nota);
+                    if (nota.Fecha == DateTime.UtcNow.ToString(FormatoDeFecha)) lFiltrada.Add(nota);
                 }
                 ActualizarGrid1(lFiltrada);
             }
@@ -192,7 +193,7 @@ namespace linway_app.Forms
             {
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
-                    if (nota.Fecha == DateTime.UtcNow.ToString("yyyy-MM-dd")) listaAImprimir.Add(nota);
+                    if (nota.Fecha == DateTime.UtcNow.ToString(FormatoDeFecha)) listaAImprimir.Add(nota);
                 }
             }
             if (

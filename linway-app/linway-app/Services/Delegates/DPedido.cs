@@ -95,18 +95,20 @@ namespace linway_app.Services.Delegates
 
             if (pedidoViejo == null)
             {
-                Pedido nuevoPedido = new Pedido();
-                nuevoPedido.ClienteId = cliente.Id;
-                nuevoPedido.RepartoId = reparto.Id;
-                nuevoPedido.Direccion = cliente.Direccion;
-                nuevoPedido.Entregar = 1;
-                nuevoPedido.ProductosText = "";
-                nuevoPedido.L = 0;
-                nuevoPedido.A = 0;
-                nuevoPedido.Ae = 0;
-                nuevoPedido.D = 0;
-                nuevoPedido.E = 0;
-                nuevoPedido.T = 0;
+                Pedido nuevoPedido = new Pedido
+                {
+                    ClienteId = cliente.Id,
+                    RepartoId = reparto.Id,
+                    Direccion = cliente.Direccion,
+                    Entregar = 1,
+                    ProductosText = "",
+                    L = 0,
+                    A = 0,
+                    Ae = 0,
+                    D = 0,
+                    E = 0,
+                    T = 0
+                };
                 foreach (var prodVendido in lstProdVendidos)
                 {
                     nuevoPedido = AgregarProdVendido(nuevoPedido, prodVendido);

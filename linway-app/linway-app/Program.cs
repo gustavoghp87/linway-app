@@ -14,10 +14,12 @@ namespace linway_app
 {
     static class Program
     {
-        public static void ConfigureServices(IServiceCollection services)
+        private static ServiceCollection _services = new ServiceCollection();
+        private static ServiceProvider _serviceProvider;
+
+        private static void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<LinwayDbContext>();
-
             services.AddTransient<Form1>();
             services.AddTransient<FormClientes>();
             services.AddTransient<FormCrearNota>();
@@ -28,11 +30,9 @@ namespace linway_app
             services.AddTransient<FormRecibos>();
             services.AddTransient<FormRepartos>();
             services.AddTransient<FormVentas>();
-
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IServiceBase<>), typeof(ServiceBase<>));
             services.AddScoped(typeof(IRepository<>), typeof(RepositoryBase<>));
-
             var mapperConfig = new MapperConfiguration(m =>
             {
                 m.AddProfile(new MappingProfile());
@@ -43,10 +43,7 @@ namespace linway_app
 
         public static ServiceProvider GetConfig()
         {
-            ServiceCollection services = new ServiceCollection();
-            ConfigureServices(services);
-            ServiceProvider serviceProvider = services.BuildServiceProvider();
-            return serviceProvider;
+            return _serviceProvider;
         }
 
         [STAThread]
@@ -54,13 +51,10 @@ namespace linway_app
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var services = new ServiceCollection();
-            ConfigureServices(services);
-            using (ServiceProvider serviceProvider = services.BuildServiceProvider())
-            {
-                var form1 = serviceProvider.GetRequiredService<Form1>();
-                Application.Run(form1);
-            }
+            ConfigureServices(_services);
+            _serviceProvider = _services.BuildServiceProvider();
+            var form1 = _serviceProvider.GetRequiredService<Form1>();
+            Application.Run(form1);
         }
     }
 }
