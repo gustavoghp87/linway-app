@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DProducto;
-//using static linway_app.Services.Delegates.DDbBackup;
+using static linway_app.Services.Delegates.DDbBackup;
 
 namespace linway_app.Forms
 {
@@ -58,7 +58,7 @@ namespace linway_app.Forms
         private void Form1_Load(object sender, EventArgs e)
         {
             Actualizar();
-            //GenerateDbBackup();
+            generateDbBackup();
         }
         public void Actualizar()
         {

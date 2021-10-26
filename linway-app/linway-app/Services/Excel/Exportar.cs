@@ -252,6 +252,10 @@ namespace linway_app.Excel
                     cell.CellStyle.SetFont(fontBold);
                     cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
                     cell.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)System.Windows.Forms.HorizontalAlignment.Center;
+                    cell.CellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
                 });
                 cellsToVA.ForEach(cell =>
                 {
@@ -259,6 +263,10 @@ namespace linway_app.Excel
                     cell.CellStyle.SetFont(fontBold);
                     cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
                     cell.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)System.Windows.Forms.HorizontalAlignment.Center;
+                    cell.CellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
                 });
                 cellsToHA.ForEach(cell =>
                 {
@@ -266,12 +274,20 @@ namespace linway_app.Excel
                     cell.CellStyle.SetFont(fontBold);
                     cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
                     cell.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)System.Windows.Forms.HorizontalAlignment.Center;
+                    cell.CellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
                 });
                 cellsToWrap.ForEach(cell =>
                 {
                     cell.CellStyle = workbook.CreateCellStyle();
                     cell.CellStyle = wrapCellStyle;
                     cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                    cell.CellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cell.CellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
                 });
 
                 sheet1.AutoSizeColumn(0);
