@@ -1,5 +1,5 @@
-﻿using linway_app.Models;
-using linway_app.Models.Enums;
+﻿using Models;
+using Models.Enums;
 using System;
 using System.Drawing;
 using System.Windows.Forms;

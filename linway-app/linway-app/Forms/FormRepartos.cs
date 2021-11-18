@@ -1,5 +1,5 @@
-﻿using linway_app.Models;
-using linway_app.Models.Entities;
+﻿using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,8 +81,7 @@ namespace linway_app.Forms
             Actualizar();
             _lstRepartos = getRepartosPorDia(elDia);
             long repartoId = _lstRepartos.Find(x => x.Nombre == elReparto).Id;
-            _lstPedidos = getPedidosPorRepartoId(repartoId);
-            _lstPedidos = _lstPedidos.OrderBy(x => x.Orden).ToList();
+            _lstPedidos = getPedidosPorRepartoId(repartoId).OrderBy(x => x.Orden).ToList();
         }
         private void Exportar_Click(object sender, EventArgs e)
         {
@@ -388,20 +387,20 @@ namespace linway_app.Forms
         }
         private void TextBox7_TextChanged(object sender, EventArgs e)
         {
-            Pedido pedido = _lstPedidos.Find(x => x.Direccion.ToLower().Contains(textBox7.Text.ToLower()));
+            Pedido pedido = _lstPedidos.Find(x => x.Direccion.ToLower().Contains(textBox7.Text.ToLower()) && x.Estado != null && x.Estado != "Eliminado");
             if (pedido != null) label36.Text = pedido.Direccion;
             else label36.Text = "No encontrado";
         }
         private void Button18_Click(object sender, EventArgs e)
         {
             ReCargarHDR(comboBox1.Text, comboBox2.Text);
-            string direcCliente = label36.Text;
-            string nombreRep = comboBox2.Text;
+            //string direcCliente = label36.Text;
+            //string nombreRep = comboBox2.Text;
             string direccion = label36.Text;
-            Pedido pedido = getPedidoPorDireccion(label36.Text);
-            Reparto reparto = getReparto(pedido.RepartoId);
+            Pedido pedido = _lstPedidos.Find(x => x.Direccion.Equals(direccion));
             if (pedido != null)
             {
+                Reparto reparto = getReparto(pedido.RepartoId);
                 substractPedidoAReparto(reparto, pedido);
                 cleanPedido(pedido);
                 VerDatos(getReparto(pedido.RepartoId));

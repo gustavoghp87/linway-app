@@ -1,5 +1,5 @@
-﻿using linway_app.Models;
-using linway_app.Models.Enums;
+﻿using Models;
+using Models.Enums;
 using System;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
@@ -20,13 +20,15 @@ namespace linway_app.Forms
             {
                 TipoR tipo = TipoR.Monotributo;
                 if (radioButton2.Checked) tipo = TipoR.Inscripto;
-                Cliente nuevoCliente = new Cliente();
-                nuevoCliente.Direccion = textBox18.Text != "" ? textBox2.Text + " - " + textBox18.Text : textBox2.Text;
-                nuevoCliente.CodigoPostal = textBox4.Text;
-                nuevoCliente.Telefono = textBox5.Text;
-                nuevoCliente.Nombre = textBox1.Text;
-                nuevoCliente.Cuit = textBox3.Text;
-                nuevoCliente.Tipo = tipo.ToString();
+                Cliente nuevoCliente = new Cliente
+                {
+                    Direccion = textBox18.Text != "" ? textBox2.Text + " - " + textBox18.Text : textBox2.Text,
+                    CodigoPostal = textBox4.Text,
+                    Telefono = textBox5.Text,
+                    Nombre = textBox1.Text,
+                    Cuit = textBox3.Text,
+                    Tipo = tipo.ToString()
+                };
                 addCliente(nuevoCliente);
                 button2.PerformClick();
             }

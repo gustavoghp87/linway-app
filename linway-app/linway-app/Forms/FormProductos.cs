@@ -1,5 +1,5 @@
-﻿using linway_app.Models;
-using linway_app.Models.Enums;
+﻿using Models;
+using Models.Enums;
 using System;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DProducto;
@@ -88,10 +88,12 @@ namespace linway_app.Forms
             if (TodoOKagregarP())
             {
                 try { decimal.Parse(textBox7.Text); } catch { return; };
-                Producto nuevoProducto = new Producto();
-                nuevoProducto.Nombre = textBox6.Text;
-                nuevoProducto.Precio = decimal.Parse(textBox7.Text);
-                nuevoProducto.Tipo = _tipo.ToString();
+                Producto nuevoProducto = new Producto
+                {
+                    Nombre = textBox6.Text,
+                    Precio = decimal.Parse(textBox7.Text),
+                    Tipo = _tipo.ToString()
+                };
                 if (_subTipo != "") nuevoProducto.SubTipo = _subTipo;
                 addProducto(nuevoProducto);
                 limpiarBtn.PerformClick();
@@ -120,7 +122,7 @@ namespace linway_app.Forms
                 }
             }
             if (e.KeyChar >= 48 && e.KeyChar <= 57) e.Handled = false;
-            else if (e.KeyChar == 44) e.Handled = (IsDec) ? true : false;
+            else if (e.KeyChar == 44) e.Handled = IsDec;
             else e.Handled = true;
         }
 

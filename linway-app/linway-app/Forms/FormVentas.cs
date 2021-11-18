@@ -1,6 +1,6 @@
 ﻿using linway_app.Excel;
-using linway_app.Models;
-using linway_app.Models.Entities;
+using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -239,7 +239,7 @@ namespace linway_app.Forms
                 {
                     ClienteId = cliente1.Id,
                     NombreCliente = cliente1.Direccion,
-                    Fecha = DateTime.Now.ToString(FormatoDeFecha)
+                    Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
                 };
                 long registroId = addRegistroVentaReturnId(nuevoRegistroVenta);
                 if (registroId == 0) { MessageBox.Show("Falló"); return; };
@@ -464,7 +464,7 @@ namespace linway_app.Forms
                 textBox2.Visible = false;
                 foreach (RegistroVenta rActual in _lstRegistros)
                 {
-                    if (rActual.Fecha == DateTime.UtcNow.ToString(FormatoDeFecha)) lFiltrada.Add(rActual);
+                    if (rActual.Fecha == DateTime.UtcNow.ToString(Constants.FormatoDeFecha)) lFiltrada.Add(rActual);
                 }
                 ActualizarGrid1Registros(lFiltrada);
             }

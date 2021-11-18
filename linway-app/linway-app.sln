@@ -3,7 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "linway-app", "linway-app\linway-app.csproj", "{65BF7AFC-BB51-499D-BD9D-AC22A886BE41}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "linway-app\App.csproj", "{65BF7AFC-BB51-499D-BD9D-AC22A886BE41}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0C2610D0-68F1-42EB-8DA5-288E3D98BA43} = {0C2610D0-68F1-42EB-8DA5-288E3D98BA43}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{0C2610D0-68F1-42EB-8DA5-288E3D98BA43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{DD5C2812-6E1E-4766-A6B1-0E28544FE936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppServices", "InfrasServices\AppServices.csproj", "{B4A40BA6-3B3E-4749-8962-C7ED0C5BD9DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +24,18 @@ Global
 		{65BF7AFC-BB51-499D-BD9D-AC22A886BE41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65BF7AFC-BB51-499D-BD9D-AC22A886BE41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65BF7AFC-BB51-499D-BD9D-AC22A886BE41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C2610D0-68F1-42EB-8DA5-288E3D98BA43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C2610D0-68F1-42EB-8DA5-288E3D98BA43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C2610D0-68F1-42EB-8DA5-288E3D98BA43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C2610D0-68F1-42EB-8DA5-288E3D98BA43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD5C2812-6E1E-4766-A6B1-0E28544FE936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD5C2812-6E1E-4766-A6B1-0E28544FE936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD5C2812-6E1E-4766-A6B1-0E28544FE936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD5C2812-6E1E-4766-A6B1-0E28544FE936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4A40BA6-3B3E-4749-8962-C7ED0C5BD9DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4A40BA6-3B3E-4749-8962-C7ED0C5BD9DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4A40BA6-3B3E-4749-8962-C7ED0C5BD9DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4A40BA6-3B3E-4749-8962-C7ED0C5BD9DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

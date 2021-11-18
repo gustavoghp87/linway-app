@@ -1,7 +1,7 @@
-﻿using linway_app.Models;
-using linway_app.Models.Entities;
-using linway_app.Models.Enums;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Models;
+using Models.Entities;
+using Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -237,7 +237,7 @@ namespace linway_app.Forms
                 NotaDeEnvio nuevaNota = new NotaDeEnvio
                 {
                     ClienteId = cliente.Id,
-                    Fecha = DateTime.Now.ToString(FormatoDeFecha),
+                    Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
                     Impresa = 0,
                     Detalle = extraerDetalleDeNotaDeEnvio(_lstProdVendidos),
                     ImporteTotal = extraerImporteDeNotaDeEnvio(_lstProdVendidos)
@@ -259,7 +259,7 @@ namespace linway_app.Forms
                     {
                         ClienteId = cliente.Id,
                         Cliente = cliente,
-                        Fecha = DateTime.Now.ToString(FormatoDeFecha),
+                        Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
                         NombreCliente = cliente.Direccion
                     };
                     long registroId = addRegistroVentaReturnId(nuevoRegistro);

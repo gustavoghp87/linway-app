@@ -1,6 +1,6 @@
-﻿using linway_app.Models;
-using linway_app.Models.Entities;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -157,7 +157,7 @@ namespace linway_app.Forms
                 textBox1.Visible = false;
                 foreach (Recibo recibo in _lstRecibos)
                 {
-                    if (recibo.Fecha == DateTime.Now.ToString(FormatoDeFecha)) lstRecibosFiltrados.Add(recibo);
+                    if (recibo.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha)) lstRecibosFiltrados.Add(recibo);
                 }
                 ActualizarGridRecibos(lstRecibosFiltrados);
             }
@@ -457,7 +457,7 @@ namespace linway_app.Forms
                 DireccionCliente = label15.Text,
                 ImporteTotal = _subTo,
                 Impreso = 0,
-                Fecha = DateTime.Now.ToString(FormatoDeFecha)
+                Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
             };
             long reciboId = addReciboReturnId(nuevoRecibo);
             if (reciboId == 0) { MessageBox.Show("Algo falló en el proceso"); return; }

@@ -1,7 +1,7 @@
-﻿using linway_app.Models;
-using linway_app.Models.Entities;
-using linway_app.Models.Enums;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Models;
+using Models.Entities;
+using Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,7 +82,7 @@ namespace linway_app.Forms
                 textBox1.Visible = false;
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
-                    if (nota.Fecha == DateTime.UtcNow.ToString(FormatoDeFecha)) lFiltrada.Add(nota);
+                    if (nota.Fecha == DateTime.UtcNow.ToString(Constants.FormatoDeFecha)) lFiltrada.Add(nota);
                 }
                 ActualizarGrid1(lFiltrada);
             }
@@ -193,7 +193,7 @@ namespace linway_app.Forms
             {
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
-                    if (nota.Fecha == DateTime.UtcNow.ToString(FormatoDeFecha)) listaAImprimir.Add(nota);
+                    if (nota.Fecha == DateTime.UtcNow.ToString(Constants.FormatoDeFecha)) listaAImprimir.Add(nota);
                 }
             }
             if (

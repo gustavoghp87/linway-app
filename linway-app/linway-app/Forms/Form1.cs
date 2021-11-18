@@ -1,30 +1,20 @@
 ﻿using AutoMapper;
-using linway_app.Models;
-using linway_app.Models.Entities;
+using InfrasServices.Services;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
-using static linway_app.Services.Delegates.DProducto;
 using static linway_app.Services.Delegates.DDbBackup;
+using static linway_app.Services.Delegates.DProducto;
 
 namespace linway_app.Forms
 {
     public partial class Form1 : Form
     {
-        public static IServiceBase<Cliente> _servCliente;
-        public static IServiceBase<DetalleRecibo> _servDetalleRecibo;
-        public static IServiceBase<DiaReparto> _servDiaReparto;
-        public static IServiceBase<NotaDeEnvio> _servNotaDeEnvio;
-        public static IServiceBase<Pedido> _servPedido;
-        public static IServiceBase<Producto> _servProducto;
-        public static IServiceBase<ProdVendido> _servProdVendido;
-        public static IServiceBase<Recibo> _servRecibo;
-        public static IServiceBase<RegistroVenta> _servRegistroVenta;
-        public static IServiceBase<Reparto> _servReparto;
-        public static IServiceBase<Venta> _servVenta;
         public static IMapper _mapper;
         public Form1(
             IServiceBase<Cliente> servCliente,
@@ -41,17 +31,17 @@ namespace linway_app.Forms
             IMapper mapper
             )
         {
-            _servCliente = servCliente;
-            _servDetalleRecibo = servDetalleRecibo;
-            _servDiaReparto = servDiaReparto;
-            _servNotaDeEnvio = servNotaDeEnvio;
-            _servPedido = servPedido;
-            _servProducto = servProducto;
-            _servProdVendido = servProdVendido;
-            _servRecibo = servRecibo;
-            _servRegistroVenta = servRegistroVenta;
-            _servReparto = servReparto;
-            _servVenta = servVenta;
+            ServicesObjects.ServCliente = servCliente;
+            ServicesObjects.ServDetalleRecibo = servDetalleRecibo;
+            ServicesObjects.ServDiaReparto = servDiaReparto;
+            ServicesObjects.ServNotaDeEnvio = servNotaDeEnvio;
+            ServicesObjects.ServPedido = servPedido;
+            ServicesObjects.ServProducto = servProducto;
+            ServicesObjects.ServProdVendido = servProdVendido;
+            ServicesObjects.ServRecibo = servRecibo;
+            ServicesObjects.ServRegistroVenta = servRegistroVenta;
+            ServicesObjects.ServReparto = servReparto;
+            ServicesObjects.ServVenta = servVenta;
             _mapper = mapper;
             try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.Message); return; }
         }

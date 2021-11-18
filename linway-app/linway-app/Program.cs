@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using Infrastructure.Repositories;
+using Infrastructure.Repositories.DbContexts;
+using Infrastructure.Repositories.Interfaces;
 using linway_app.Forms;
-using linway_app.Models.DbContexts;
-using linway_app.Models.Entities.Mapping;
-using linway_app.Repositories;
-using linway_app.Repositories.Interfaces;
 using linway_app.Services;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Models.Entities.Mapping;
 using System;
 using System.Windows.Forms;
 
@@ -14,7 +14,7 @@ namespace linway_app
 {
     static class Program
     {
-        private static ServiceCollection _services = new ServiceCollection();
+        private static readonly ServiceCollection _services = new ServiceCollection();
         private static ServiceProvider _serviceProvider;
 
         private static void ConfigureServices(IServiceCollection services)

@@ -1,4 +1,4 @@
-using linway_app.Models;
+using Models;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -31,7 +31,7 @@ namespace linway_app.Forms
                 elcodigo = "0" + elcodigo;
             }
             lCodigo.Text = elcodigo;
-            
+
             if (_recibo.DireccionCliente.Contains("-"))
             {
                 int separador = _recibo.DireccionCliente.IndexOf('-');
@@ -47,6 +47,9 @@ namespace linway_app.Forms
             lTotal.Text = "$ " + _recibo.ImporteTotal.ToString(".00");
             foreach (DetalleRecibo detalle in _recibo.DetalleRecibos)
             {
+                if (detalle.Detalle.Contains("Factura")) {
+                    detalle.Detalle = detalle.Detalle.Replace("Factura", "Fc.");
+                }
                 label1.Text = label1.Text + detalle.Detalle + Environment.NewLine;
                 label2.Text = label2.Text + detalle.Importe.ToString(".00") + Environment.NewLine;
             }
