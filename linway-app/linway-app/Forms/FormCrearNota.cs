@@ -37,7 +37,7 @@ namespace linway_app.Forms
                 List<EProdVendido> grid = new List<EProdVendido>();
                 foreach (ProdVendido prodVendido in _lstProdVendidos)
                 {
-                    grid.Add(Form1._mapper.Map<EProdVendido>(prodVendido));
+                    grid.Add(Form1.mapper.Map<EProdVendido>(prodVendido));
                 }
                 dataGridView4.DataSource = grid;
                 dataGridView4.Columns[0].Width = 28;

@@ -15,7 +15,8 @@ namespace linway_app.Forms
 {
     public partial class Form1 : Form
     {
-        public static IMapper _mapper;
+        public static IMapper mapper;
+        public static LoadingForm loadingForm;
         public Form1(
             IServiceBase<Cliente> servCliente,
             IServiceBase<DetalleRecibo> servDetalleRecibo,
@@ -31,6 +32,8 @@ namespace linway_app.Forms
             IMapper mapper
             )
         {
+            loadingForm = new LoadingForm();
+            loadingForm.OpenIt();
             ServicesObjects.ServCliente = servCliente;
             ServicesObjects.ServDetalleRecibo = servDetalleRecibo;
             ServicesObjects.ServDiaReparto = servDiaReparto;
@@ -42,7 +45,7 @@ namespace linway_app.Forms
             ServicesObjects.ServRegistroVenta = servRegistroVenta;
             ServicesObjects.ServReparto = servReparto;
             ServicesObjects.ServVenta = servVenta;
-            _mapper = mapper;
+            Form1.mapper = mapper;
             try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.Message); return; }
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -56,6 +59,7 @@ namespace linway_app.Forms
             CargarGrid1(lstClientes);
             List<Producto> lstProductos = getProductos();
             CargarGrid2(lstProductos);
+            loadingForm.CloseIt();
         }
         private void CargarGrid1(List<Cliente> lstClientes)
         {
@@ -64,7 +68,7 @@ namespace linway_app.Forms
                 List<ECliente> grid = new List<ECliente>();
                 foreach (Cliente cliente in lstClientes)
                 {
-                    grid.Add(_mapper.Map<ECliente>(cliente));
+                    grid.Add(mapper.Map<ECliente>(cliente));
                 }
                 dataGridView1.DataSource = grid.ToArray();
                 dataGridView1.Columns[0].Width = 40;
@@ -88,7 +92,7 @@ namespace linway_app.Forms
                 List<EProducto> grid = new List<EProducto>();
                 foreach (Producto producto in lstProductos)
                 {
-                    grid.Add(_mapper.Map<EProducto>(producto));
+                    grid.Add(mapper.Map<EProducto>(producto));
                 }
                 dataGridView2.DataSource = grid;
                 dataGridView2.Columns[0].Width = 48;

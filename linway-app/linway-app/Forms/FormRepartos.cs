@@ -8,6 +8,7 @@ using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DDiaReparto;
 using static linway_app.Services.Delegates.DPedido;
 using static linway_app.Services.Delegates.DReparto;
+using static linway_app.Forms.LoadingForm;
 
 namespace linway_app.Forms
 {
@@ -59,7 +60,7 @@ namespace linway_app.Forms
                 List<EPedido> grid1 = new List<EPedido>();
                 foreach (Pedido pedido in lstPedidos)
                 {
-                    grid1.Add(Form1._mapper.Map<EPedido>(pedido));
+                    grid1.Add(Form1.mapper.Map<EPedido>(pedido));
                 }
                 grid1 = grid1.OrderBy(x => x.Orden).ToList();
                 dataGridView1.DataSource = grid1;
@@ -232,7 +233,7 @@ namespace linway_app.Forms
                 return;
             }
         }
-        private void TextBox2_TextChanged(object sender, EventArgs e)  // Agregar a destino a recorrido
+        private void TextBox2_TextChanged(object sender, EventArgs e)  // Agregar destino a recorrido
         {
             if (textBox2.Text != "")
             {
@@ -301,6 +302,7 @@ namespace linway_app.Forms
         }
         private void LimpiarRepartos_Click(object sender, EventArgs e)
         {
+            Form1.loadingForm.OpenIt();
             foreach (DiaReparto diaReparto in _lstDiaRepartos)
             {
                 foreach (Reparto reparto in diaReparto.Reparto)
@@ -310,6 +312,7 @@ namespace linway_app.Forms
             }
             LimpiarPantalla();
             Actualizar();
+            Form1.loadingForm.CloseIt();
         }
         private void Button7_Click(object sender, EventArgs e)
         {
@@ -330,6 +333,7 @@ namespace linway_app.Forms
         {
             if (comboBox6.Text != "")
             {
+                Form1.loadingForm.OpenIt();
                 Actualizar();
                 try
                 {
@@ -342,6 +346,7 @@ namespace linway_app.Forms
                     Actualizar();
                 }
                 catch { return; }
+                Form1.loadingForm.CloseIt();
             }
             else MessageBox.Show("Debe seleccionar un día");
         }
@@ -364,6 +369,7 @@ namespace linway_app.Forms
         {
             if (comboBox8.Text != "")
             {
+                Form1.loadingForm.OpenIt();
                 string dia = comboBox8.Text;
                 string nombre = comboBox7.Text;
                 Reparto reparto = _lstDiaRepartos.Find(x => x.Dia == dia).Reparto.ToList()
@@ -374,6 +380,7 @@ namespace linway_app.Forms
                 VerDatos(reparto);
                 LimpiarPantalla();
                 Actualizar();
+                Form1.loadingForm.CloseIt();
             }
             else MessageBox.Show("Debe seleccionar un día");
         }
@@ -400,12 +407,14 @@ namespace linway_app.Forms
             Pedido pedido = _lstPedidos.Find(x => x.Direccion.Equals(direccion));
             if (pedido != null)
             {
+                Form1.loadingForm.OpenIt();
                 Reparto reparto = getReparto(pedido.RepartoId);
                 substractPedidoAReparto(reparto, pedido);
                 cleanPedido(pedido);
                 VerDatos(getReparto(pedido.RepartoId));
                 LimpiarPantalla();
                 Actualizar();
+                Form1.loadingForm.CloseIt();
             }
             else MessageBox.Show("Verifique que los datos sean correctos");
         }
@@ -441,6 +450,7 @@ namespace linway_app.Forms
             {
                 try
                 {
+                    Form1.loadingForm.OpenIt();
                     string pedidoAMover = label30.Text;
                     string pedidoReferencia = label31.Text;
                     Pedido pedido1 = getPedidoPorDireccion(pedidoAMover);
@@ -482,8 +492,9 @@ namespace linway_app.Forms
                     }
                     LimpiarPantalla();
                     Actualizar();
-                    _lstPedidos = getPedidosPorRepartoId(pedido1.RepartoId);
-                    ActualizarGrid(_lstPedidos);
+                    //_lstPedidos = getPedidosPorRepartoId(pedido1.RepartoId);
+                    //ActualizarGrid(_lstPedidos);
+                    Form1.loadingForm.CloseIt();
                 }
                 catch (Exception ex) { MessageBox.Show("Algo falló: " + ex.Message, "No se pudo reposicionar"); }
             }

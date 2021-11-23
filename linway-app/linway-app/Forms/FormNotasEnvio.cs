@@ -43,7 +43,7 @@ namespace linway_app.Forms
                 List<ENotaDeEnvio> grid = new List<ENotaDeEnvio>();
                 foreach (NotaDeEnvio nota in lstNotadeEnvios)
                 {
-                    grid.Add(Form1._mapper.Map<ENotaDeEnvio>(nota));
+                    grid.Add(Form1.mapper.Map<ENotaDeEnvio>(nota));
                 }
                 dataGridView1.DataSource = grid;
                 dataGridView1.Columns[0].Width = 30;
@@ -61,7 +61,7 @@ namespace linway_app.Forms
                 List<EProdVendido> grid = new List<EProdVendido>();
                 foreach (ProdVendido prodVendido in lstProdVendidos)
                 {
-                    grid.Add(Form1._mapper.Map<EProdVendido>(prodVendido));
+                    grid.Add(Form1.mapper.Map<EProdVendido>(prodVendido));
                 }
                 dataGridView2.DataSource = grid;
                 dataGridView2.Columns[0].Width = 25;

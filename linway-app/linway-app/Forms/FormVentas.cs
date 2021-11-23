@@ -45,7 +45,7 @@ namespace linway_app.Forms
             if (lstRegistroVentas != null)
             {
                 List<ERegistroVenta> grid = new List<ERegistroVenta>();
-                lstRegistroVentas.ForEach(x => grid.Add(Form1._mapper.Map<ERegistroVenta>(x)));
+                lstRegistroVentas.ForEach(x => grid.Add(Form1.mapper.Map<ERegistroVenta>(x)));
                 dataGridView1.DataSource = grid;
                 dataGridView1.Columns[0].Width = 30;
                 dataGridView1.Columns[1].Width = 150;
@@ -59,7 +59,7 @@ namespace linway_app.Forms
                 List<EProdVendido> grid = new List<EProdVendido>();
                 foreach (ProdVendido prodVendido in lstProdVendidos)
                 {
-                    grid.Add(Form1._mapper.Map<EProdVendido>(prodVendido));
+                    grid.Add(Form1.mapper.Map<EProdVendido>(prodVendido));
                 }
                 dataGridView2.DataSource = grid;
                 if (showing == "agregarReg")
@@ -76,7 +76,7 @@ namespace linway_app.Forms
                 List<EVenta> grid = new List<EVenta>();
                 foreach (Venta venta in _lstVentas)
                 {
-                    grid.Add(Form1._mapper.Map<EVenta>(venta));
+                    grid.Add(Form1.mapper.Map<EVenta>(venta));
                 }
                 grid = grid.OrderBy(x => x.Detalle).ToList();
                 dataGridView3.DataSource = grid;
@@ -91,7 +91,7 @@ namespace linway_app.Forms
                 List<EVenta> grid = new List<EVenta>();
                 foreach (Venta venta in lstVentas)
                 {
-                    grid.Add(Form1._mapper.Map<EVenta>(venta));
+                    grid.Add(Form1.mapper.Map<EVenta>(venta));
                 }
                 grid = grid.OrderBy(x => x.Detalle).ToList();
                 dataGridView5.DataSource = grid;

@@ -49,11 +49,11 @@ namespace linway_app.Services.Delegates
             reparto.Tae = 0;
             reparto.TotalB = 0;
             reparto.Tl = 0;
+            editReparto(reparto);
             foreach (Pedido pedido in reparto.Pedidos)
             {
                 cleanPedido(pedido);
             }
-            editReparto(reparto);
             return getReparto(reparto.Id);
         }
         private static void EditReparto(Reparto reparto)

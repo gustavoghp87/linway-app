@@ -43,7 +43,7 @@ namespace linway_app.Forms
                 List<ERecibo> grid1 = new List<ERecibo>();
                 foreach (Recibo recibo in lstRecibos)
                 {
-                    grid1.Add(Form1._mapper.Map<ERecibo>(recibo));
+                    grid1.Add(Form1.mapper.Map<ERecibo>(recibo));
                 }
                 dataGridView1.DataSource = grid1;
                 dataGridView1.Columns[0].Width = 50;
@@ -60,7 +60,7 @@ namespace linway_app.Forms
                 List<EDetalleRecibo> grid2 = new List<EDetalleRecibo>();
                 foreach (DetalleRecibo detalleRecibo in _lstDetallesAAgregar)
                 {
-                    grid2.Add(Form1._mapper.Map<EDetalleRecibo>(detalleRecibo));
+                    grid2.Add(Form1.mapper.Map<EDetalleRecibo>(detalleRecibo));
                 }
                 dataGridView2.DataSource = grid2;
                 dataGridView2.Columns[0].Width = 140;
