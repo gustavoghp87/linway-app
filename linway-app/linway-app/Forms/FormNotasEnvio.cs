@@ -82,7 +82,7 @@ namespace linway_app.Forms
                 textBox1.Visible = false;
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
-                    if (nota.Fecha == DateTime.UtcNow.ToString(Constants.FormatoDeFecha)) lFiltrada.Add(nota);
+                    if (nota.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha)) lFiltrada.Add(nota);
                 }
                 ActualizarGrid1(lFiltrada);
             }
@@ -453,6 +453,7 @@ namespace linway_app.Forms
                 ActualizarGrid2(_lstProdVendidos);
             }
         }
+
         // Agregar
         private void TextBox9_TextChanged(object sender, EventArgs e)     // id producto
         {
@@ -540,9 +541,9 @@ namespace linway_app.Forms
                 nuevoProdVendido.Precio *= -1;
             }
 
-            _lstProdVendidos.Add(nuevoProdVendido);
-
+            nuevoProdVendido = addProdVendidoReturnsWithId(nuevoProdVendido);
             editNotaDeEnvioAgregar(notaDeEnvio, new List<ProdVendido>() { nuevoProdVendido } );
+            _lstProdVendidos.Add(nuevoProdVendido);
             ActualizarNotas();
             ActualizarGrid1(_lstNotaDeEnvios);
             ActualizarGrid2(_lstProdVendidos);
@@ -602,13 +603,10 @@ namespace linway_app.Forms
                 editProdVendido(prodVendido);
                 ActualizarNotas();
                 ActualizarGrid1(_lstNotaDeEnvios);
-                var aux = new List<ProdVendido>();
-                aux.AddRange(_lstProdVendidos);
-                _lstProdVendidos.Clear();
-                aux.ForEach(prodVend =>
-                {
-                    if (prodVend.Id != prodVendido.Id) _lstProdVendidos.Add(prodVend);
-                });
+                try { long.Parse(textBox7.Text); } catch { return; };
+                notaDeEnvio = getNotaDeEnvio(long.Parse(textBox7.Text));
+                if (notaDeEnvio == null || notaDeEnvio.ProdVendidos == null) return;
+                _lstProdVendidos = notaDeEnvio.ProdVendidos.ToList();
                 ActualizarGrid2(_lstProdVendidos);
                 label20.Text = notaDeEnvio.ImporteTotal.ToString();
                 textBox8.Text = "";

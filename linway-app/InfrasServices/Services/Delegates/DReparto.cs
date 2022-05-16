@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static linway_app.Services.Delegates.DDiaReparto;
 using static linway_app.Services.Delegates.DPedido;
+using static linway_app.Services.Delegates.DProdVendido;
 
 namespace linway_app.Services.Delegates
 {
@@ -14,7 +15,7 @@ namespace linway_app.Services.Delegates
     {
         public readonly static Action<Reparto, Pedido> addPedidoARepartoSimple = AddPedidoARepartoSimple;
         public readonly static Action<Reparto> addReparto = AddReparto;
-        public readonly static Func<Reparto, Reparto> cleanReparto = CleanReparto;
+        public readonly static Action<ICollection<Reparto>> cleanRepartos = CleanRepartos;
         public readonly static Action<Reparto> editReparto = EditReparto;
         public readonly static Func<string, string, bool> exportReparto = ExportReparto;
         public readonly static Func<long, Reparto> getReparto = GetReparto;
@@ -40,26 +41,44 @@ namespace linway_app.Services.Delegates
             bool response = _service.Add(reparto);
             if (!response) Console.WriteLine("Algo falló al agregar nuevo Reparto a la base de datos");
         }
-        private static Reparto CleanReparto(Reparto reparto)
+        private static void CleanRepartos(ICollection<Reparto> repartos)
         {
-            reparto.Ta = 0;
-            reparto.Te = 0;
-            reparto.Td = 0;
-            reparto.Tt = 0;
-            reparto.Tae = 0;
-            reparto.TotalB = 0;
-            reparto.Tl = 0;
-            editReparto(reparto);
-            foreach (Pedido pedido in reparto.Pedidos)
+            if (repartos == null || repartos.Count == 0) return;
+            var pedidosAEditar = new List<Pedido>();
+            var prodVendidosAEditar = new List<ProdVendido>();
+            foreach (Reparto reparto in repartos)
             {
-                cleanPedido(pedido);
+                reparto.Ta = 0;
+                reparto.Te = 0;
+                reparto.Td = 0;
+                reparto.Tt = 0;
+                reparto.Tae = 0;
+                reparto.TotalB = 0;
+                reparto.Tl = 0;
+                pedidosAEditar.AddRange(reparto.Pedidos);
+                foreach (Pedido pedido in reparto.Pedidos)
+                {
+                    if (pedido.ProdVendidos == null || pedido.ProdVendidos.Count == 0) continue;
+                    foreach (ProdVendido prodVendido in pedido.ProdVendidos)
+                    {
+                        prodVendido.PedidoId = null;
+                        prodVendidosAEditar.Add(prodVendido);
+                    }
+                }
             }
-            return getReparto(reparto.Id);
+            EditRepartos(repartos);
+            cleanPedidos(pedidosAEditar);
+            editProdVendidos(prodVendidosAEditar);
         }
         private static void EditReparto(Reparto reparto)
         {
             bool response = _service.Edit(reparto);
             if (!response) Console.WriteLine("Algo falló al editar el Reparto en la base de datos");
+        }
+        private static void EditRepartos(ICollection<Reparto> repartos)
+        {
+            bool response = _service.EditMany(repartos);
+            if (!response) Console.WriteLine("Algo falló al editar los Repartos en la base de datos");
         }
         private static bool ExportReparto(string dia, string nombreReparto)
         {

@@ -7,6 +7,7 @@ namespace Infrastructure.Repositories.Interfaces
         bool Add(T t);
         bool Delete(T t);
         bool Edit(T t);
+        bool EditMany(ICollection<T> t);
         T Get(long id);
         List<T> GetAll();
     }

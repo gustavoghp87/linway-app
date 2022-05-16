@@ -1,14 +1,14 @@
-﻿using linway_app.Services.Interfaces;
+﻿using InfrasServices.Services;
+using linway_app.Services.Interfaces;
 using Models;
 using System;
 using System.Collections.Generic;
-using InfrasServices.Services;
 
 namespace linway_app.Services.Delegates
 {
     public static class DCliente
     {
-        public readonly static Func<Cliente, bool> addCliente = AddCliente;
+        public readonly static Predicate<Cliente> addCliente = AddCliente;
         public readonly static Func<bool> addClientePrimero = AddClientePrimero;
         public readonly static Action<Cliente> deleteCliente = DeleteCliente;
         public readonly static Action<Cliente> editCliente = EditCliente;

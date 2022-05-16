@@ -8,7 +8,6 @@ using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DDiaReparto;
 using static linway_app.Services.Delegates.DPedido;
 using static linway_app.Services.Delegates.DReparto;
-using static linway_app.Forms.LoadingForm;
 
 namespace linway_app.Forms
 {
@@ -294,22 +293,25 @@ namespace linway_app.Forms
 
 
         //_LImpiar DATOS_ 
-        // 1. todos los dias
+        // 1. limpiar los repartos de todos los dias
         private void TodasLuAVi_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
+            ActualizarGrid(new List<Pedido>());
             groupBox4.Visible = true;
         }
         private void LimpiarRepartos_Click(object sender, EventArgs e)
         {
             Form1.loadingForm.OpenIt();
+            var repartosALimpiar = new List<Reparto>();
             foreach (DiaReparto diaReparto in _lstDiaRepartos)
             {
                 foreach (Reparto reparto in diaReparto.Reparto)
                 {
-                    cleanReparto(reparto);
+                    repartosALimpiar.Add(reparto);
                 }
             }
+            cleanRepartos(repartosALimpiar);
             LimpiarPantalla();
             Actualizar();
             Form1.loadingForm.CloseIt();
@@ -319,10 +321,11 @@ namespace linway_app.Forms
             LimpiarPantalla();
         }
 
-        // 2. dia seleccionado
+        // 2. limpiar los repartos de un dia
         private void DiaEspecífico_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
+            ActualizarGrid(new List<Pedido>());
             groupBox5.Visible = true;
         }
         private void Button8_Click(object sender, EventArgs e)
@@ -338,10 +341,7 @@ namespace linway_app.Forms
                 try
                 {
                     List<Reparto> lstRepartos = _lstDiaRepartos.Find(x => x.Dia == comboBox6.Text).Reparto.ToList();
-                    foreach (Reparto reparto in lstRepartos)
-                    {
-                        cleanReparto(reparto);
-                    }
+                    cleanRepartos(lstRepartos);
                     LimpiarPantalla();
                     Actualizar();
                 }
@@ -351,10 +351,11 @@ namespace linway_app.Forms
             else MessageBox.Show("Debe seleccionar un día");
         }
 
-        // 3. reparto seleccionado
+        // 3. limpiar un reparto
         private void RepartoSeleccionado_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
+            ActualizarGrid(new List<Pedido>());
             groupBox6.Visible = true;
         }
         private void ComboBox8_SelectedIndexChanged(object sender, EventArgs e)
@@ -372,11 +373,12 @@ namespace linway_app.Forms
                 Form1.loadingForm.OpenIt();
                 string dia = comboBox8.Text;
                 string nombre = comboBox7.Text;
-                Reparto reparto = _lstDiaRepartos.Find(x => x.Dia == dia).Reparto.ToList()
+                Reparto reparto = _lstDiaRepartos
+                    .Find(x => x.Dia == dia).Reparto.ToList()
                     .Find(x => x.Nombre == nombre);
                 comboBox1.SelectedIndex = comboBox8.SelectedIndex;
                 comboBox2.SelectedIndex = comboBox7.SelectedIndex;
-                cleanReparto(reparto);
+                cleanRepartos(new List<Reparto>() { reparto });
                 VerDatos(reparto);
                 LimpiarPantalla();
                 Actualizar();
@@ -385,16 +387,18 @@ namespace linway_app.Forms
             else MessageBox.Show("Debe seleccionar un día");
         }
 
-        // 4. limpiar un destino
+        // 4. limpiar un pedido
         private void Destino_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LimpiarPantalla();
+            ActualizarGrid(new List<Pedido>());
             groupBox9.Visible = true;
             label39.Text = "Día " + comboBox1.Text + " -> Reparto: " + comboBox2.Text;
         }
         private void TextBox7_TextChanged(object sender, EventArgs e)
         {
-            Pedido pedido = _lstPedidos.Find(x => x.Direccion.ToLower().Contains(textBox7.Text.ToLower()) && x.Estado != null && x.Estado != "Eliminado");
+            Pedido pedido = _lstPedidos
+                .Find(x => x.Direccion.ToLower().Contains(textBox7.Text.ToLower()) && x.Estado != null && x.Estado != "Eliminado");
             if (pedido != null) label36.Text = pedido.Direccion;
             else label36.Text = "No encontrado";
         }
@@ -410,7 +414,7 @@ namespace linway_app.Forms
                 Form1.loadingForm.OpenIt();
                 Reparto reparto = getReparto(pedido.RepartoId);
                 substractPedidoAReparto(reparto, pedido);
-                cleanPedido(pedido);
+                cleanPedidos(new List<Pedido>() { pedido });
                 VerDatos(getReparto(pedido.RepartoId));
                 LimpiarPantalla();
                 Actualizar();
@@ -453,13 +457,11 @@ namespace linway_app.Forms
                     Form1.loadingForm.OpenIt();
                     string pedidoAMover = label30.Text;
                     string pedidoReferencia = label31.Text;
-                    Pedido pedido1 = getPedidoPorDireccion(pedidoAMover);
-                    Pedido pedido2 = getPedidoPorDireccion(pedidoReferencia);
-                    Reparto reparto = getReparto(pedido1.RepartoId);
-                    if (!reparto.Pedidos.Any()) return;
+                    Reparto reparto = _lstRepartos.Find(x => x.DiaReparto.Dia == comboBox1.Text && x.Nombre == comboBox2.Text);
+                    Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoAMover);
+                    Pedido pedido2 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoReferencia);
                     long order1 = pedido1.Orden;
                     long order2 = pedido2.Orden;
-
                     if (order2 == order1) return;
                     if (order2 > order1)
                     {

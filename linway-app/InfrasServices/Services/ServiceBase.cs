@@ -40,6 +40,10 @@ namespace linway_app.Services
         {
             return _service.Edit(t);
         }
+        public bool EditMany(ICollection<T> t)
+        {
+            return _service.EditMany(t);
+        }
         public T Get(long id)
         {
             T t = (T)_service.Get(id);

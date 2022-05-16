@@ -50,6 +50,21 @@ namespace Infrastructure.Repositories
                 return false;
             }
         }
+        public bool EditMany(ICollection<T> t)
+        {
+            using var context = new LinwayDbContext();
+            try
+            {
+                _entities.UpdateRange(t);
+                _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
         public T Get(long id)
         {
             try

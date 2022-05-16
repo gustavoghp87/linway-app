@@ -16,12 +16,12 @@ namespace linway_app.Services.Delegates
     {
         public readonly static Action<Pedido> addPedido = AddPedido;
         public readonly static Action<Reparto, Cliente, List<ProdVendido>> addOrEditPedidoEnReparto = AddOrEditPedidoEnReparto;
-        public readonly static Action<Pedido> cleanPedido = CleanPedido;
+        public readonly static Action<ICollection<Pedido>> cleanPedidos = CleanPedidos;
         public readonly static Action<Pedido> deletePedido = DeletePedido;
         public readonly static Action<Pedido> editPedido = EditPedido;
         public readonly static Func<string, Pedido> getPedidoPorDireccion = GetPedidoPorDireccion;
-        public readonly static Func<List<Pedido>> getPedidos = GetPedidos;
-        public readonly static Func<long, List<Pedido>> getPedidosPorRepartoId = GetPedidosPorRepartoId;
+        public readonly static Func<ICollection<Pedido>> getPedidos = GetPedidos;
+        public readonly static Func<long, ICollection<Pedido>> getPedidosPorRepartoId = GetPedidosPorRepartoId;
 
         private static readonly IServiceBase<Pedido> _service = ServicesObjects.ServPedido;
         private static void AddPedido(Pedido pedido)
@@ -35,23 +35,21 @@ namespace linway_app.Services.Delegates
             bool response = AgregarOEditarPedido(cliente.Id, reparto.DiaReparto.Dia, reparto.Nombre, lstProdVendidos);
             if (!response) Console.WriteLine("Algo falló al agregar Pedido a Reparto en base de datos");
         }
-        private static void CleanPedido(Pedido pedido)
+        private static void CleanPedidos(ICollection<Pedido> pedidos)
         {
-            pedido.Entregar = 0;
-            pedido.L = 0;
-            pedido.ProductosText = "";
-            pedido.A = 0;
-            pedido.E = 0;
-            pedido.D = 0;
-            pedido.T = 0;
-            pedido.Ae = 0;
-            editPedido(pedido);
-            if (pedido.ProdVendidos != null)
-                foreach (ProdVendido prodVendido in pedido.ProdVendidos.ToList())
-                {
-                    prodVendido.PedidoId = null;
-                    editProdVendido(prodVendido);
-                }
+            if (pedidos == null || pedidos.Count == 0) return;
+            foreach (Pedido pedido in pedidos)
+            {
+                pedido.Entregar = 0;
+                pedido.L = 0;
+                pedido.ProductosText = "";
+                pedido.A = 0;
+                pedido.E = 0;
+                pedido.D = 0;
+                pedido.T = 0;
+                pedido.Ae = 0;
+            }
+            EditPedidos(pedidos);
         }
         private static void DeletePedido(Pedido pedido)
         {
@@ -63,22 +61,27 @@ namespace linway_app.Services.Delegates
             bool response = _service.Edit(pedido);
             if (!response) Console.WriteLine("Algo falló al editar el Pedido en la base de datos");
         }
+        private static void EditPedidos(ICollection<Pedido> pedidos)
+        {
+            bool response = _service.EditMany(pedidos);
+            if (!response) Console.WriteLine("Algo falló al editar los Pedidos en la base de datos");
+        }
         private static Pedido GetPedido(long pedidoId)
         {
             return _service.Get(pedidoId);
         }
         private static Pedido GetPedidoPorDireccion(string direccion)
         {
-            List<Pedido> lstPedidos = getPedidos();
+            List<Pedido> lstPedidos = (List<Pedido>)getPedidos();
             if (lstPedidos == null) return null;
             return lstPedidos.Find(x => x.Direccion.Equals(direccion) && x.Estado != null && x.Estado != "Eliminado");
         }
-        private static List<Pedido> GetPedidosPorRepartoId(long repartoId)
+        private static ICollection<Pedido> GetPedidosPorRepartoId(long repartoId)
         {
             var pedidos = getPedidos();
             return pedidos.Where(x => x.RepartoId == repartoId && x.Estado != null && x.Estado != "Eliminado").ToList();
         }
-        private static List<Pedido> GetPedidos()
+        private static ICollection<Pedido> GetPedidos()
         {
             return _service.GetAll();
         }
@@ -195,7 +198,7 @@ namespace linway_app.Services.Delegates
         }
         private static long GetOrdenMayor(long repartoId)
         {
-            List<Pedido> lstPedidos = GetPedidosPorRepartoId(repartoId);
+            var lstPedidos = (List<Pedido>)GetPedidosPorRepartoId(repartoId);
             if (lstPedidos == null || lstPedidos.Count == 0) return 1;
             long lastOrden = lstPedidos.OrderBy(x => x.Orden).Last().Orden;
             return lastOrden;
