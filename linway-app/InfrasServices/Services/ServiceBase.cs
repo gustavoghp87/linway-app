@@ -34,7 +34,15 @@ namespace linway_app.Services
         public bool Delete(T t)
         {
             t.Estado = "Eliminado";
-            return _service.Edit(t);
+            return Edit(t);
+        }
+        public bool DeleteMany(ICollection<T> t)
+        {
+            foreach (T item in t)
+            {
+                item.Estado = "Eliminado";
+            }
+            return EditMany(t);
         }
         public bool Edit(T t)
         {

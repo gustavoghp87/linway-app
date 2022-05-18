@@ -6,6 +6,7 @@ namespace linway_app.Services.Interfaces
     {
         bool Add(T t);
         bool Delete(T t);
+        bool DeleteMany(ICollection<T> t);
         bool Edit(T t);
         bool EditMany(ICollection<T> t);
         T Get(long id);

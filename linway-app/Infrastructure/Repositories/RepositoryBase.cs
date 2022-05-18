@@ -31,10 +31,10 @@ namespace Infrastructure.Repositories
                 return false;
             }
         }
-        public bool Delete(T t)
-        {
-            return Edit(t);
-        }
+        //public bool Delete(T t)
+        //{
+        //    return Edit(t);   // doing nothing
+        //}
         public bool Edit(T t)
         {
             using var context = new LinwayDbContext();

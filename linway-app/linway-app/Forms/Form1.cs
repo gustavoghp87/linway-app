@@ -61,11 +61,11 @@ namespace linway_app.Forms
             CargarGrid2(lstProductos);
             loadingForm.CloseIt();
         }
-        private void CargarGrid1(List<Cliente> lstClientes)
+        private void CargarGrid1(ICollection<Cliente> lstClientes)
         {
             if (lstClientes != null)
             {
-                List<ECliente> grid = new List<ECliente>();
+                var grid = new List<ECliente>();
                 foreach (Cliente cliente in lstClientes)
                 {
                     grid.Add(mapper.Map<ECliente>(cliente));
@@ -85,7 +85,7 @@ namespace linway_app.Forms
                 Actualizar();
             }
         }
-        private void CargarGrid2(List<Producto> lstProductos)
+        private void CargarGrid2(ICollection<Producto> lstProductos)
         {
             if (lstProductos != null)
             {

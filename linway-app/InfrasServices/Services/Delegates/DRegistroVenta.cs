@@ -12,6 +12,7 @@ namespace linway_app.Services.Delegates
         public readonly static Func<RegistroVenta, bool> addRegistroVenta = AddRegistroVenta;
         public readonly static Func<RegistroVenta, long> addRegistroVentaReturnId = AddRegistroVentaReturnId;
         public readonly static Action<RegistroVenta> deleteRegistroVenta = DeleteRegistroVenta;
+        public readonly static Action<ICollection<RegistroVenta>> deleteRegistros = DeleteRegistros;
         public readonly static Action<RegistroVenta> editRegistroVenta = EditRegistroVenta;
         public readonly static Func<long, RegistroVenta> getRegistroVenta = GetRegistroVenta;
         public readonly static Func<List<RegistroVenta>> getRegistroVentas = GetRegistroVentas;
@@ -45,6 +46,11 @@ namespace linway_app.Services.Delegates
         private static void DeleteRegistroVenta(RegistroVenta registroVenta)
         {
             bool success = _service.Delete(registroVenta);
+            if (!success) Console.WriteLine("Algo falló al eliminar Registro de Venta a base de datos");
+        }
+        private static void DeleteRegistros(ICollection<RegistroVenta> registros)
+        {
+            bool success = _service.DeleteMany(registros);
             if (!success) Console.WriteLine("Algo falló al eliminar Registro de Venta a base de datos");
         }
         private static void EditRegistroVenta(RegistroVenta registroVenta)

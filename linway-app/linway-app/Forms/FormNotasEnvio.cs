@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Entities;
-using Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +10,7 @@ using static linway_app.Services.Delegates.DPedido;
 using static linway_app.Services.Delegates.DProducto;
 using static linway_app.Services.Delegates.DProdVendido;
 using static linway_app.Services.Delegates.DReparto;
+using static linway_app.Services.Delegates.DVentas;
 using static linway_app.Services.Delegates.DZGeneral;
 
 namespace linway_app.Forms
@@ -33,14 +33,14 @@ namespace linway_app.Forms
         private void ActualizarNotas()
         {
             _lstNotaDeEnvios = getNotaDeEnvios();
-            if (_lstNotaDeEnvios != null)
-                lCantNotas.Text = _lstNotaDeEnvios.Count.ToString() + " notas de envio.";
+            if (_lstNotaDeEnvios == null) return;
+            lCantNotas.Text = _lstNotaDeEnvios.Count.ToString() + " notas de envio.";
         }
-        private void ActualizarGrid1(List<NotaDeEnvio> lstNotadeEnvios)
+        private void ActualizarGrid1(ICollection<NotaDeEnvio> lstNotadeEnvios)
         {
             if (lstNotadeEnvios != null)
             {
-                List<ENotaDeEnvio> grid = new List<ENotaDeEnvio>();
+                var grid = new List<ENotaDeEnvio>();
                 foreach (NotaDeEnvio nota in lstNotadeEnvios)
                 {
                     grid.Add(Form1.mapper.Map<ENotaDeEnvio>(nota));
@@ -54,26 +54,24 @@ namespace linway_app.Forms
             comboBox1.SelectedItem = "Todas ??";
             comboBox3.SelectedItem = "(Seleccionar)";
         }
-        private void ActualizarGrid2(List<ProdVendido> lstProdVendidos)
+        private void ActualizarGrid2(ICollection<ProdVendido> lstProdVendidos)
         {
-            if (lstProdVendidos != null)
+            if (lstProdVendidos == null) return;
+            var grid = new List<EProdVendido>();
+            foreach (ProdVendido prodVendido in lstProdVendidos)
             {
-                List<EProdVendido> grid = new List<EProdVendido>();
-                foreach (ProdVendido prodVendido in lstProdVendidos)
-                {
-                    grid.Add(Form1.mapper.Map<EProdVendido>(prodVendido));
-                }
-                dataGridView2.DataSource = grid;
-                dataGridView2.Columns[0].Width = 25;
-                dataGridView2.Columns[1].Width = 200;
+                grid.Add(Form1.mapper.Map<EProdVendido>(prodVendido));
             }
+            dataGridView2.DataSource = grid;
+            dataGridView2.Columns[0].Width = 25;
+            dataGridView2.Columns[1].Width = 200;
         }
 
 
         //_________________________FILTRAR DATOS_________________________________
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            List<NotaDeEnvio> lFiltrada = new List<NotaDeEnvio>();
+            var lFiltrada = new List<NotaDeEnvio>();
             //todas - hoy - impresas- no impresas
             if (comboBox1.SelectedItem.ToString() == "Hoy")
             {
@@ -132,7 +130,7 @@ namespace linway_app.Forms
         void FiltrarDatos(string texto, char x)
         {
             ActualizarNotas();
-            List<NotaDeEnvio> lstFiltrada = new List<NotaDeEnvio>();
+            var lstFiltrada = new List<NotaDeEnvio>();
             foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
             {
                 if (x == 'c' && nota.Cliente != null
@@ -181,7 +179,7 @@ namespace linway_app.Forms
         }
         public List<NotaDeEnvio> ObtenerListaAImprimir()
         {
-            List<NotaDeEnvio> listaAImprimir = new List<NotaDeEnvio>();
+            var listaAImprimir = new List<NotaDeEnvio>();
             if (comboBox2.SelectedItem.ToString() == "No impresas")
             {
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
@@ -272,7 +270,7 @@ namespace linway_app.Forms
         public List<NotaDeEnvio> ObtenerListaABorrar()
         {
             ActualizarNotas();
-            List<NotaDeEnvio> listaABorrar = new List<NotaDeEnvio>();
+            var listaABorrar = new List<NotaDeEnvio>();
             if (
                 comboBox3.SelectedItem.ToString() == "Establecer rango"
                 && textBox5.Text != ""
@@ -529,24 +527,28 @@ namespace linway_app.Forms
             ProdVendido nuevoProdVendido = new ProdVendido()
             {
                 Cantidad = int.Parse(textBox10.Text),
-                Precio = productoNuevo.Precio,
-                ProductoId = productoNuevo.Id,
-                NotaDeEnvioId = getNotaDeEnvio(long.Parse(textBox7.Text)).Id,
-                Descripcion = productoNuevo.Nombre
+                Descripcion = productoNuevo.Nombre,
+                NotaDeEnvioId = notaDeEnvio.Id,
+                Precio = isNegativePrice(productoNuevo) ? (-1)*productoNuevo.Precio : productoNuevo.Precio,
+                ProductoId = productoNuevo.Id
             };
-
-            if (productoNuevo.Tipo == TipoProducto.Saldo.ToString() &&
-                (productoNuevo.SubTipo == TipoSaldo.Bonificacion.ToString() || productoNuevo.SubTipo == TipoSaldo.Devolucion.ToString()))
+            var existingProdVendido = notaDeEnvio.ProdVendidos.ToList().Find(x => x.Producto.Nombre == productoNuevo.Nombre);
+            if (existingProdVendido == null)
             {
-                nuevoProdVendido.Precio *= -1;
+                nuevoProdVendido = addProdVendidoReturnsWithId(nuevoProdVendido);
             }
+            else
+            {
+                existingProdVendido.Cantidad += nuevoProdVendido.Cantidad;
+                editProdVendido(existingProdVendido);
+            }
+            editNotaDeEnvioAgregar(notaDeEnvio);
+            updateVenta(nuevoProdVendido, false);
 
-            nuevoProdVendido = addProdVendidoReturnsWithId(nuevoProdVendido);
-            editNotaDeEnvioAgregar(notaDeEnvio, new List<ProdVendido>() { nuevoProdVendido } );
-            _lstProdVendidos.Add(nuevoProdVendido);
             ActualizarNotas();
             ActualizarGrid1(_lstNotaDeEnvios);
-            ActualizarGrid2(_lstProdVendidos);
+            NotaDeEnvio updatedNote = getNotaDeEnvio(long.Parse(textBox7.Text));
+            ActualizarGrid2(updatedNote.ProdVendidos.ToList());
             decimal impTotal = 0;
             foreach (ProdVendido prodVend in _lstProdVendidos)
             {
@@ -587,32 +589,32 @@ namespace linway_app.Forms
         }
         private void Quitar_btn8_Click(object sender, EventArgs e)
         {
-            if (label18.Text != "" && label18.Text != "No encontrado" && textBox7.Text != "")
+            if (label18.Text == "" || label18.Text == "No encontrado" || textBox7.Text == "") return;
+            try { long.Parse(textBox7.Text); } catch { return; };
+            NotaDeEnvio notaDeEnvio = getNotaDeEnvio(long.Parse(textBox7.Text));
+            ProdVendido prodVendido = notaDeEnvio.ProdVendidos.ToList().Find(x => x.Descripcion == label22.Text);
+            if (notaDeEnvio == null || prodVendido == null) return;
+            if (_lstProdVendidos.Count < 2)
             {
-                try { long.Parse(textBox7.Text); } catch { return; };
-                NotaDeEnvio notaDeEnvio = getNotaDeEnvio(long.Parse(textBox7.Text));
-                ProdVendido prodVendido = getProdVendidoPorNombre(label22.Text);
-                if (notaDeEnvio == null || prodVendido == null) return;
-                if (_lstProdVendidos.Count < 2)
-                {
-                    MessageBox.Show("No se puede quitar el único producto que tiene una nota, hay que eliminarla");
-                    return;
-                }
-                notaDeEnvio = editNotaDeEnvioQuitar(notaDeEnvio, prodVendido);
-                prodVendido.NotaDeEnvioId = null;
-                editProdVendido(prodVendido);
-                ActualizarNotas();
-                ActualizarGrid1(_lstNotaDeEnvios);
-                try { long.Parse(textBox7.Text); } catch { return; };
-                notaDeEnvio = getNotaDeEnvio(long.Parse(textBox7.Text));
-                if (notaDeEnvio == null || notaDeEnvio.ProdVendidos == null) return;
-                _lstProdVendidos = notaDeEnvio.ProdVendidos.ToList();
-                ActualizarGrid2(_lstProdVendidos);
-                label20.Text = notaDeEnvio.ImporteTotal.ToString();
-                textBox8.Text = "";
-                label22.Text = "";
-                button8.Enabled = false;
+                MessageBox.Show("No se puede quitar el único producto que tiene una nota, hay que eliminarla");
+                return;
             }
+
+            notaDeEnvio = editNotaDeEnvioQuitar(notaDeEnvio, prodVendido);
+            prodVendido.NotaDeEnvioId = null;
+            editProdVendido(prodVendido);
+            updateVenta(prodVendido, false);
+
+            ActualizarNotas();
+            ActualizarGrid1(_lstNotaDeEnvios);
+            notaDeEnvio = getNotaDeEnvio(long.Parse(textBox7.Text));
+            if (notaDeEnvio == null || notaDeEnvio.ProdVendidos == null) return;
+            _lstProdVendidos = notaDeEnvio.ProdVendidos.ToList();
+            ActualizarGrid2(_lstProdVendidos);
+            label20.Text = notaDeEnvio.ImporteTotal.ToString();
+            textBox8.Text = "";
+            label22.Text = "";
+            button8.Enabled = false;
         }
     }
 }

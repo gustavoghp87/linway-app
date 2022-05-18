@@ -4,6 +4,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static linway_app.Services.Delegates.DProdVendido;
 
 namespace linway_app.Services.Delegates
 {
@@ -13,7 +14,7 @@ namespace linway_app.Services.Delegates
         public readonly static Func<NotaDeEnvio, long> addNotaDeEnvioReturnId = AddNotaDeEnvioReturnId;
         public readonly static Action<NotaDeEnvio> deleteNotaDeEnvio = DeleteNotaDeEnvio;
         public readonly static Func<NotaDeEnvio, bool> editNotaDeEnvio = EditNotaDeEnvio;
-        public readonly static Func<NotaDeEnvio, List<ProdVendido>, NotaDeEnvio> editNotaDeEnvioAgregar = EditNotaDeEnvioAgregar;
+        public readonly static Func<NotaDeEnvio, NotaDeEnvio> editNotaDeEnvioAgregar = EditNotaDeEnvioAgregar;
         public readonly static Func<NotaDeEnvio, ProdVendido, NotaDeEnvio> editNotaDeEnvioQuitar = EditNotaDeEnvioQuitar;
         public readonly static Func<List<ProdVendido>, string> extraerDetalleDeNotaDeEnvio = ExtraerDetalleDeNotaDeEnvio;
         public readonly static Func<List<ProdVendido>, decimal> extraerImporteDeNotaDeEnvio = ExtraerImporteDeNotaDeEnvio;
@@ -53,42 +54,19 @@ namespace linway_app.Services.Delegates
             if (!response) Console.WriteLine("Algo falló al editar Nota de Envío en base de datos");
             return response;
         }
-        private static NotaDeEnvio EditNotaDeEnvioAgregar(NotaDeEnvio notaDeEnvio, List<ProdVendido> lstProdVendidos)
+        private static NotaDeEnvio EditNotaDeEnvioAgregar(NotaDeEnvio nota)
         {
-            if (notaDeEnvio.ProdVendidos == null || notaDeEnvio.ProdVendidos.Count == 0)
-            {
-                notaDeEnvio.ProdVendidos = new List<ProdVendido>();
-                notaDeEnvio.ProdVendidos.ToList().AddRange(lstProdVendidos);
-                notaDeEnvio.ImporteTotal = ExtraerImporteDeNotaDeEnvio(lstProdVendidos);
-                notaDeEnvio.Detalle = ExtraerDetalleDeNotaDeEnvio(lstProdVendidos);
-            }
-            else
-            {
-                foreach (ProdVendido prodVendidoNuevo in lstProdVendidos)
-                {
-                    bool exists = false;
-                    foreach (ProdVendido prodVendidoNDC in notaDeEnvio.ProdVendidos)
-                    {
-                        if (prodVendidoNDC.Id == prodVendidoNuevo.ProductoId)
-                        {
-                            exists = true;
-                            prodVendidoNDC.Cantidad += prodVendidoNuevo.Cantidad;
-                        }
-                    }
-                    if (!exists) notaDeEnvio.ProdVendidos.Add(prodVendidoNuevo);
-                    notaDeEnvio.ImporteTotal += prodVendidoNuevo.Precio * prodVendidoNuevo.Cantidad;
-                    string descripcion = DProdVendido.editDescripcion(prodVendidoNuevo.Descripcion);
-                    notaDeEnvio.Detalle += prodVendidoNuevo.Cantidad.ToString() + "x " + descripcion + ". ";
-                }
-            }
-            bool success = editNotaDeEnvio(notaDeEnvio);
+            if (nota == null || nota.ProdVendidos == null || nota.ProdVendidos.Count == 0) return null;
+            nota.ImporteTotal = ExtraerImporteDeNotaDeEnvio(nota.ProdVendidos);
+            nota.Detalle = ExtraerDetalleDeNotaDeEnvio(nota.ProdVendidos);
+            bool success = editNotaDeEnvio(nota);
             if (!success) return null;
-            return notaDeEnvio;
+            return nota;
         }
         private static NotaDeEnvio EditNotaDeEnvioQuitar(NotaDeEnvio notaDeEnvio, ProdVendido prodVendidoAEliminar)
         {
-            DProdVendido.deleteProdVendido(prodVendidoAEliminar);
-            List<ProdVendido> lstAuxiliar = new List<ProdVendido>();
+            deleteProdVendido(prodVendidoAEliminar);
+            var lstAuxiliar = new List<ProdVendido>();
             foreach (ProdVendido prodVendido in notaDeEnvio.ProdVendidos)
             {
                 if (prodVendido.ProductoId != prodVendidoAEliminar.ProductoId) lstAuxiliar.Add(prodVendido);
@@ -97,30 +75,26 @@ namespace linway_app.Services.Delegates
             notaDeEnvio.ImporteTotal = ExtraerImporteDeNotaDeEnvio(lstAuxiliar);
             notaDeEnvio.Detalle = ExtraerDetalleDeNotaDeEnvio(lstAuxiliar);
             editNotaDeEnvio(notaDeEnvio);
-            // falta eliminar producto vendido
             return notaDeEnvio;
         }
-        private static string ExtraerDetalleDeNotaDeEnvio(List<ProdVendido> lstProdVendidos)
+        private static string ExtraerDetalleDeNotaDeEnvio(ICollection<ProdVendido> lstProdVendidos)
         {
             string detalle = "";
-            if (lstProdVendidos != null && lstProdVendidos.Count != 0)
+            if (lstProdVendidos == null || lstProdVendidos.Count == 0) return "";
+            foreach (ProdVendido prodVendido in lstProdVendidos)
             {
-                foreach (ProdVendido prodVendido in lstProdVendidos)
-                {
-                    detalle = detalle + prodVendido.Cantidad.ToString() + "x " + prodVendido.Descripcion + ". ";
-                }
+                string description = editDescripcion(prodVendido.Descripcion);
+                detalle += prodVendido.Cantidad.ToString() + "x " + description + ". ";
             }
             return detalle;
         }
-        private static decimal ExtraerImporteDeNotaDeEnvio(List<ProdVendido> lstProdVendidos)
+        private static decimal ExtraerImporteDeNotaDeEnvio(ICollection<ProdVendido> lstProdVendidos)
         {
             decimal importeTotal = 0;
-            if (lstProdVendidos != null && lstProdVendidos.Count != 0)
+            if (lstProdVendidos == null || lstProdVendidos.Count == 0) return 0;
+            foreach (ProdVendido prodVendido in lstProdVendidos)
             {
-                foreach (ProdVendido prodVendido in lstProdVendidos)
-                {
-                    importeTotal += prodVendido.Cantidad * prodVendido.Precio;
-                }
+                importeTotal += prodVendido.Cantidad * prodVendido.Precio;
             }
             return importeTotal;
         }

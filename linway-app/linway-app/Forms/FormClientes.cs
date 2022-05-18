@@ -20,7 +20,7 @@ namespace linway_app.Forms
             {
                 TipoR tipo = TipoR.Monotributo;
                 if (radioButton2.Checked) tipo = TipoR.Inscripto;
-                Cliente nuevoCliente = new Cliente
+                var nuevoCliente = new Cliente
                 {
                     Direccion = textBox18.Text != "" ? textBox2.Text + " - " + textBox18.Text : textBox2.Text,
                     CodigoPostal = textBox4.Text,

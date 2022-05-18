@@ -38,7 +38,7 @@ namespace linway_app.Forms
         }
         private void CrearDias()
         {
-            DiaReparto nuevoDia = new DiaReparto();
+            var nuevoDia = new DiaReparto();
             string[] dias = new string[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" };
             foreach (string dia in dias)
             {
@@ -52,11 +52,11 @@ namespace linway_app.Forms
                 Close();
             }
         }
-        private void ActualizarGrid(List<Pedido> lstPedidos)
+        private void ActualizarGrid(ICollection<Pedido> lstPedidos)
         {
             if (lstPedidos != null)
             {
-                List<EPedido> grid1 = new List<EPedido>();
+                var grid1 = new List<EPedido>();
                 foreach (Pedido pedido in lstPedidos)
                 {
                     grid1.Add(Form1.mapper.Map<EPedido>(pedido));

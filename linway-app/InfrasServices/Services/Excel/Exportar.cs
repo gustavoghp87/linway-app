@@ -18,7 +18,7 @@ namespace linway_app.Excel
         {
             return DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
         }
-        public bool ExportarVentas(List<Venta> lstVentas)
+        public bool ExportarVentas(ICollection<Venta> lstVentas)
         {
             if (lstVentas == null) return false;
             string path = @"Excels/ventas-" + DateTime.UtcNow.ToString(Constants.FormatoDeFecha) + "-" + GetTimestamp() + ".";

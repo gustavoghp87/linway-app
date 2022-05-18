@@ -15,8 +15,6 @@ namespace linway_app.Services.Delegates
         public readonly static Action<ProdVendido> editProdVendido = EditProdVendido;
         public readonly static Action<ICollection<ProdVendido>> editProdVendidos = EditProdVendidos;
         public readonly static Func<List<ProdVendido>> getProdVendido = GetProdVendidos;
-        public readonly static Func<string, ProdVendido> getProdVendidoPorNombre = GetProdVendidoPorNombre;
-        public readonly static Func<string, ProdVendido> getProdVendidoPorNombreExacto = GetProdVendidoPorNombreExacto;
 
         private static readonly IServiceBase<ProdVendido> _service = ServicesObjects.ServProdVendido;
         private static void AddProdVendido(ProdVendido prodVendido)
@@ -35,11 +33,11 @@ namespace linway_app.Services.Delegates
             bool response = _service.Delete(prodVendido);
             if (!response) Console.WriteLine("Algo falló al eliminar Producto Vendido de la base de datos");
         }
-        private static string EditDescripcion(string descripcion)
+        private static string EditDescripcion(string description)
         {
-            if (descripcion.Contains("-")) { descripcion = descripcion.Substring(0, descripcion.IndexOf("-")); };
-            if (descripcion.Contains(".")) { descripcion = descripcion.Substring(0, descripcion.IndexOf(".")); };
-            return descripcion;
+            if (description.Contains("-")) { description = description.Substring(0, description.IndexOf("-") - 1); };
+            if (description.Contains(".")) { description = description.Substring(0, description.IndexOf(".") - 1); };
+            return description;
         }
         private static void EditProdVendido(ProdVendido prodVendido)
         {
@@ -54,16 +52,6 @@ namespace linway_app.Services.Delegates
         private static List<ProdVendido> GetProdVendidos()
         {
             return _service.GetAll();
-        }
-        private static ProdVendido GetProdVendidoPorNombre(string descripcion)
-        {
-            List<ProdVendido> lst = GetProdVendidos();
-            return lst.Find(x => x.Descripcion.ToLower().Contains(descripcion.ToLower()) && x.Estado != null && x.Estado != "Eliminado");
-        }
-        private static ProdVendido GetProdVendidoPorNombreExacto(string descripcion)
-        {
-            List<ProdVendido> lst = GetProdVendidos();
-            return lst.Find(x => x.Descripcion.Contains(descripcion) && x.Estado != null && x.Estado != "Eliminado");
         }
     }
 }

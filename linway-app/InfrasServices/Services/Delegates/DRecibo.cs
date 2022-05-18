@@ -11,7 +11,8 @@ namespace linway_app.Services.Delegates
         public readonly static Func<Recibo, bool> addRecibo = AddRecibo;
         public readonly static Func<Recibo, long> addReciboReturnId = AddReciboReturnId;
         public readonly static Func<Recibo, decimal> calculateTotalRecibo = CalculateTotalRecibo;
-        public readonly static Action<Recibo> deleteRecibo = DeleteRecibo;
+        //public readonly static Action<Recibo> deleteRecibo = DeleteRecibo;
+        public readonly static Action<ICollection<Recibo>> deleteRecibos = DeleteRecibos;
         public readonly static Action<Recibo> editRecibo = EditRecibo;
         public readonly static Func<long, Recibo> getRecibo = GetRecibo;
         public readonly static Func<List<Recibo>> getRecibos = GetRecibos;
@@ -41,10 +42,15 @@ namespace linway_app.Services.Delegates
                 }
             return subTo;
         }
-        private static void DeleteRecibo(Recibo recibo)
+        //private static void DeleteRecibo(Recibo recibo)
+        //{
+        //    bool response = _service.Delete(recibo);
+        //    if (!response) Console.WriteLine("Algo falló al eliminar el Recibo de la base de datos");
+        //}
+        private static void DeleteRecibos(ICollection<Recibo> recibos)
         {
-            bool response = _service.Delete(recibo);
-            if (!response) Console.WriteLine("Algo falló al eliminar el Recibo de la base de datos");
+            bool response = _service.DeleteMany(recibos);
+            if (!response) Console.WriteLine("Algo falló al eliminar los Recibos de la base de datos");
         }
         private static void EditRecibo(Recibo recibo)
         {

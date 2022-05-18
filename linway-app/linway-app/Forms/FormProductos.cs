@@ -88,7 +88,7 @@ namespace linway_app.Forms
             if (TodoOKagregarP())
             {
                 try { decimal.Parse(textBox7.Text); } catch { return; };
-                Producto nuevoProducto = new Producto
+                var nuevoProducto = new Producto
                 {
                     Nombre = textBox6.Text,
                     Precio = decimal.Parse(textBox7.Text),

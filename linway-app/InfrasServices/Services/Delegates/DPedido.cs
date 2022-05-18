@@ -72,9 +72,9 @@ namespace linway_app.Services.Delegates
         }
         private static Pedido GetPedidoPorDireccion(string direccion)
         {
-            List<Pedido> lstPedidos = (List<Pedido>)getPedidos();
+            var lstPedidos = getPedidos();
             if (lstPedidos == null) return null;
-            return lstPedidos.Find(x => x.Direccion.Equals(direccion) && x.Estado != null && x.Estado != "Eliminado");
+            return lstPedidos.ToList().Find(x => x.Direccion.Equals(direccion) && x.Estado != null && x.Estado != "Eliminado");
         }
         private static ICollection<Pedido> GetPedidosPorRepartoId(long repartoId)
         {
@@ -198,7 +198,7 @@ namespace linway_app.Services.Delegates
         }
         private static long GetOrdenMayor(long repartoId)
         {
-            var lstPedidos = (List<Pedido>)GetPedidosPorRepartoId(repartoId);
+            var lstPedidos = GetPedidosPorRepartoId(repartoId);
             if (lstPedidos == null || lstPedidos.Count == 0) return 1;
             long lastOrden = lstPedidos.OrderBy(x => x.Orden).Last().Orden;
             return lastOrden;

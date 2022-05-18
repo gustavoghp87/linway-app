@@ -14,7 +14,6 @@ using static linway_app.Services.Delegates.DProdVendido;
 using static linway_app.Services.Delegates.DRegistroVenta;
 using static linway_app.Services.Delegates.DReparto;
 using static linway_app.Services.Delegates.DVentas;
-using static linway_app.Services.Delegates.DZGeneral;
 
 namespace linway_app.Forms
 {
@@ -34,7 +33,7 @@ namespace linway_app.Forms
         {
             if (_lstProdVendidos != null)
             {
-                List<EProdVendido> grid = new List<EProdVendido>();
+                var grid = new List<EProdVendido>();
                 foreach (ProdVendido prodVendido in _lstProdVendidos)
                 {
                     grid.Add(Form1.mapper.Map<EProdVendido>(prodVendido));
@@ -266,30 +265,7 @@ namespace linway_app.Forms
                     foreach (var prodVendido in _lstProdVendidos)
                     {
                         prodVendido.RegistroVentaId = registroId;
-                        if (esProducto(prodVendido.Producto))
-                        {
-                            List<Venta> lstVentas = getVentas();
-                            bool exists = false;
-                            foreach (var venta in lstVentas)
-                            {
-                                if (venta.ProductoId == prodVendido.ProductoId)
-                                {
-                                    exists = true;
-                                    venta.Cantidad += prodVendido.Cantidad;
-                                    editVenta(venta);
-                                }
-                            }
-                            if (!exists)
-                            {
-                                Venta nuevaVenta = new Venta
-                                {
-                                    ProductoId = prodVendido.ProductoId,
-                                    Cantidad = prodVendido.Cantidad,
-                                    Producto = getProducto(prodVendido.ProductoId)
-                                };
-                                addVenta(nuevaVenta);
-                            }
-                        }
+                        updateVenta(prodVendido, true);
                     }
                 }
                 if (checkBox1.Checked)      // imprimir checkbox
