@@ -4,7 +4,6 @@ using Models.Entities;
 using Models.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DNotaDeEnvio;
@@ -19,11 +18,11 @@ namespace linway_app.Forms
 {
     public partial class FormCrearNota : Form
     {
-        private readonly List<ProdVendido> _lstProdVendidos;
+        private readonly List<ProdVendido> _lstProdVendidosAAgregar;
         public FormCrearNota()
         {
             InitializeComponent();
-            _lstProdVendidos = new List<ProdVendido>();
+            _lstProdVendidosAAgregar = new List<ProdVendido>();
         }
         private void FormCrearNota_Load(object sender, EventArgs e)
         {
@@ -31,25 +30,19 @@ namespace linway_app.Forms
         }
         private void ActualizarGrid()
         {
-            if (_lstProdVendidos != null)
+            if (_lstProdVendidosAAgregar == null) return;
+            var grid = new List<EProdVendido>();
+            foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
             {
-                var grid = new List<EProdVendido>();
-                foreach (ProdVendido prodVendido in _lstProdVendidos)
-                {
-                    grid.Add(Form1.mapper.Map<EProdVendido>(prodVendido));
-                }
-                dataGridView4.DataSource = grid;
-                dataGridView4.Columns[0].Width = 28;
-                dataGridView4.Columns[1].Width = 200;
+                grid.Add(Form1.mapper.Map<EProdVendido>(prodVendido));
             }
+            dataGridView4.DataSource = grid;
+            dataGridView4.Columns[0].Width = 28;
+            dataGridView4.Columns[1].Width = 200;
         }
         private void SoloNumero_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
-            {
-                e.Handled = true;
-                return;
-            }
+            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
         }
         private void TextBox15_TextChanged(object sender, EventArgs e)
         {
@@ -116,11 +109,11 @@ namespace linway_app.Forms
                 labelProductoId.Text = "";
             }
         }
-        private void TextBox2_TextChanged(object sender, EventArgs e)  // prod x nombr
+        private void TextBox2_TextChanged(object sender, EventArgs e)  // producto por nombre
         {
             if (textBox2.Text != "")
             {
-                var producto = getProductoPorNombre(textBox2.Text);
+                Producto producto = getProductoPorNombre(textBox2.Text);
                 if (producto == null)
                 {
                     label38.Text = "No encontrado";
@@ -140,78 +133,83 @@ namespace linway_app.Forms
         }
         private void TextBox17_TextChanged(object sender, EventArgs e)
         {
-            if (labelProductoId.Text != "")
+            if (labelProductoId.Text == "")
             {
-                try { long.Parse(labelProductoId.Text); } catch { return; };
-                Producto producto = getProducto(long.Parse(labelProductoId.Text));
-                if (producto == null || labelProductoId.Text == "" || textBox17.Text == "")
-                {
-                    label40.Text = "";
-                    return;
-                }
-                label40.Text = (producto.Precio * int.Parse(textBox17.Text)).ToString();   // subtotal
+                label40.Text = "";
+                return;
             }
-            else label40.Text = "";
+            try { long.Parse(labelProductoId.Text); } catch { return; };
+            Producto producto = getProducto(long.Parse(labelProductoId.Text));
+            if (producto == null || labelProductoId.Text == "" || textBox17.Text == "")
+            {
+                label40.Text = "";
+                return;
+            }
+            label40.Text = (producto.Precio * int.Parse(textBox17.Text)).ToString();   // subtotal
         }
         private void LimpiarLista_Click(object sender, EventArgs e)
         {
-            _lstProdVendidos.Clear();
+            _lstProdVendidosAAgregar.Clear();
             ActualizarGrid();
             label42.Text = "";
         }
         private void AnyadirProdVendidos_Click(object sender, EventArgs e)
         {
-            if (labelClienteId.Text != "" && labelProductoId.Text != "")
+            if (labelClienteId.Text == "" || labelProductoId.Text == "") return;
+            try { long.Parse(labelProductoId.Text); int.Parse(textBox17.Text); } catch { return; };
+            Producto producto = getProducto(long.Parse(labelProductoId.Text));
+            if (producto == null) return;
+            int cantidad = int.Parse(textBox17.Text);
+
+            bool exists = false;
+            foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
             {
-                try { long.Parse(labelProductoId.Text); int.Parse(textBox17.Text); } catch { return; };
-                Producto producto = getProducto(long.Parse(labelProductoId.Text));
-                if (producto == null) return;
-                int cantidad = int.Parse(textBox17.Text);
-                ProdVendido nuevoPV = new ProdVendido
+                if (exists) continue;
+                if (prodVendido.ProductoId == producto.Id)
+                {
+                    exists = true;
+                    prodVendido.Cantidad += cantidad;
+                }
+            }
+
+            if (!exists)
+            {
+                var nuevoPV = new ProdVendido
                 {
                     ProductoId = producto.Id,
                     Descripcion = label38.Text,
                     Cantidad = cantidad,
                     Precio = producto.Precio
                 };
-
-                if (producto.Tipo == TipoProducto.Saldo.ToString())
+                if (producto.Tipo == TipoProducto.Saldo.ToString() && producto.SubTipo != TipoSaldo.SaldoPendiente.ToString())
                 {
-                    if (producto.SubTipo == TipoSaldo.SaldoPendiente.ToString()) { }
-                    else if (
-                        producto.SubTipo == TipoSaldo.SaldoAFavor.ToString()
-                        || producto.SubTipo == TipoSaldo.Devolucion.ToString()
-                        || producto.SubTipo == TipoSaldo.Bonificacion.ToString()
-                    )
+                    if (isNegativePrice(producto))
                         nuevoPV.Precio = producto.Precio * -1;
                     else if (producto.SubTipo == TipoSaldo.AFacturar.ToString())
                         nuevoPV.Descripcion = label38.Text + textBox20.Text;
-                    else
-                        nuevoPV.Cantidad = int.Parse(textBox17.Text);
                 }
-                _lstProdVendidos.Add(nuevoPV);
-
-                decimal impTotal = 0;
-                foreach (ProdVendido prodVendido in _lstProdVendidos)
-                {
-                    impTotal += prodVendido.Precio * prodVendido.Cantidad;
-                }
-                label42.Text = impTotal.ToString();
-
-                textBox20.Text = "";
-                textBox20.Visible = false;
-                textBox16.Text = "";
-                textBox17.Text = "";
-                textBox2.Text = "";
-                label38.Text = "";
-                label40.Text = "";
-                labelProductoId.Text = "";
-                ActualizarGrid();
+                _lstProdVendidosAAgregar.Add(nuevoPV);
             }
+
+            decimal impTotal = 0;
+            foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
+            {
+                impTotal += prodVendido.Precio * prodVendido.Cantidad;
+            }
+            label42.Text = impTotal.ToString();
+            textBox20.Text = "";
+            textBox20.Visible = false;
+            textBox16.Text = "";
+            textBox17.Text = "";
+            textBox2.Text = "";
+            label38.Text = "";
+            label40.Text = "";
+            labelProductoId.Text = "";
+            ActualizarGrid();
         }
         private void CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox3.Checked)       // enviar a hoja de reparto checkbox
+            if (checkBox3.Checked)       // enviar a hoja de reparto
             {
                 label33.Visible = true;
                 label34.Visible = true;
@@ -228,73 +226,104 @@ namespace linway_app.Forms
         }
         private void ConfirmarCrearNota_Click(object sender, EventArgs e)
         {
-            if (labelClienteId.Text != "" && labelClienteId.Text != "No encontrado")
+            if (labelClienteId.Text == "" || labelClienteId.Text == "No encontrado" || _lstProdVendidosAAgregar == null || _lstProdVendidosAAgregar.Count == 0)
             {
-                var cliente = getClientePorDireccionExacta(label36.Text);
-                if (cliente == null) return;
+                MessageBox.Show("Verifique los campos");
+                return;
+            }
 
-                NotaDeEnvio nuevaNota = new NotaDeEnvio
+            Form1.loadingForm.OpenIt();
+            Cliente cliente = getClientePorDireccionExacta(label36.Text);
+            if (cliente == null)
+            {
+                Form1.loadingForm.CloseIt();
+                return;
+            }
+            NotaDeEnvio nuevaNota = new NotaDeEnvio
+            {
+                ClienteId = cliente.Id,
+                Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
+                Impresa = 0,
+                Detalle = extraerDetalleDeNotaDeEnvio(_lstProdVendidosAAgregar),
+                ImporteTotal = extraerImporteDeNotaDeEnvio(_lstProdVendidosAAgregar)
+            };
+            long notaId = addNotaDeEnvioReturnId(nuevaNota);
+            if (notaId == 0)
+            {
+                MessageBox.Show("Falló al procesar Nota nueva");
+                Form1.loadingForm.CloseIt();
+                return;
+            }
+            var prodVendidosAAgregar = new List<ProdVendido>();
+            foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
+            {
+                prodVendido.NotaDeEnvioId = notaId;
+                prodVendidosAAgregar.Add(prodVendido);
+            }
+            addProdVendidos(prodVendidosAAgregar);
+
+            if (checkBox4.Checked)      // agregar productos vendidos a lista de registros y a lista de ventas
+            {
+                RegistroVenta nuevoRegistro = new RegistroVenta
                 {
                     ClienteId = cliente.Id,
+                    Cliente = cliente,
                     Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
-                    Impresa = 0,
-                    Detalle = extraerDetalleDeNotaDeEnvio(_lstProdVendidos),
-                    ImporteTotal = extraerImporteDeNotaDeEnvio(_lstProdVendidos)
+                    NombreCliente = cliente.Direccion
                 };
-                long notaId = addNotaDeEnvioReturnId(nuevaNota);
-                if (notaId == 0)
+                long registroId = addRegistroVentaReturnId(nuevoRegistro);
+                var prodVendidosAEditar = new List<ProdVendido>();
+                foreach (var prodVendido in _lstProdVendidosAAgregar)
                 {
-                    MessageBox.Show("Falló al procesar Nota nueva");
+                    prodVendido.RegistroVentaId = registroId;
+                    prodVendidosAEditar.Add(prodVendido);
+                }
+                editProdVendidos(prodVendidosAEditar);
+                updateVentasDesdeProdVendidos(prodVendidosAEditar, true);
+            }
+
+            if (checkBox3.Checked)     // enviar a hoja de reparto
+            {
+                Reparto reparto = getRepartoPorDiaYNombre(comboBox4.Text, comboBox3.Text);
+                if (reparto == null) {
+                    Form1.loadingForm.CloseIt();
+                    MessageBox.Show("Falló enviar al Reparto");
                     return;
                 }
-                foreach (ProdVendido prodVendido in _lstProdVendidos)
+                long pedidoId = addPedidoIfNotExistsAndReturnId(reparto.Id, cliente.Id);
+                Pedido pedido = getPedido(pedidoId);
+                if (pedidoId == 0 || pedido == null)
                 {
-                    prodVendido.NotaDeEnvioId = notaId;
-                    addProdVendido(prodVendido);
+                    Form1.loadingForm.CloseIt();
+                    MessageBox.Show("Falló enviar al Reparto");
+                    return;
                 }
-                if (checkBox4.Checked)      // agregar productos vendidos a lista de registros y a lista de ventas
+                var prodVendidosAEditar = new List<ProdVendido>();
+                foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
                 {
-                    RegistroVenta nuevoRegistro = new RegistroVenta
-                    {
-                        ClienteId = cliente.Id,
-                        Cliente = cliente,
-                        Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
-                        NombreCliente = cliente.Direccion
-                    };
-                    long registroId = addRegistroVentaReturnId(nuevoRegistro);
-                    foreach (var prodVendido in _lstProdVendidos)
-                    {
-                        prodVendido.RegistroVentaId = registroId;
-                        updateVenta(prodVendido, true);
-                    }
+                    prodVendido.PedidoId = pedidoId;
+                    prodVendidosAEditar.Add(prodVendido);
                 }
-                if (checkBox1.Checked)      // imprimir checkbox
-                {
-                    var form = Program.GetConfig().GetRequiredService<FormImprimirNota>();
-                    form.Rellenar_Datos(nuevaNota);
-                    form.Show();
-                }
-                if (checkBox3.Checked)     // enviar a hoja de reparto como pedido nuevo para X reparto
-                {
-                    Reparto reparto = getRepartoPorDiaYNombre(comboBox4.Text, comboBox3.Text);
-                    Pedido pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId != cliente.Id);
-                    if (reparto == null || pedido == null) return;
-                    addOrEditPedidoEnReparto(reparto, cliente, _lstProdVendidos);
-                    foreach (ProdVendido prodVendido in _lstProdVendidos)
-                    {
-                        prodVendido.PedidoId = pedido.Id;
-                        editProdVendido(prodVendido);
-                    }
-                }
-                Close();
+                editProdVendidos(prodVendidosAEditar);
+                pedido = getPedido(pedidoId);
+                updatePedido(pedido);
             }
-            else MessageBox.Show("Verifique los campos");
+
+            if (checkBox1.Checked)      // imprimir
+            {
+                var form = Program.GetConfig().GetRequiredService<FormImprimirNota>();
+                form.Rellenar_Datos(nuevaNota);
+                form.Show();
+            }
+
+            Form1.loadingForm.CloseIt();
+            Close();
         }
         private void EnviarA_HDR_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string diaDeReparto = comboBox4.Text;
-            List<Reparto> repartos = getRepartosPorDia(diaDeReparto);   // partiendo del día seleccionado, buscar sus repartos
-            comboBox3.DataSource = repartos;                            // combobox "día", necesito la lista de dias de rep
+            List<Reparto> repartos = getRepartosPorDia(comboBox4.Text);
+            if (repartos == null) return;
+            comboBox3.DataSource = repartos;
             comboBox3.DisplayMember = "Nombre";
             comboBox3.ValueMember = "Nombre";
         }

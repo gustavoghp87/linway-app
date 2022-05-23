@@ -7,15 +7,9 @@ namespace linway_app.Services.Delegates
 {
     public static class DZGeneral
     {
-        public static readonly Predicate<Producto> isNegativePrice = IsNegativePrice;
         public static readonly Func<string, List<string>> ignorarTildes = IgnorarTildes;
         public static readonly Func<string, string> invertirFecha = InvertirFecha;
 
-        private static bool IsNegativePrice(Producto product)
-        {
-            return product.Tipo == TipoProducto.Saldo.ToString() &&
-                (product.SubTipo == TipoSaldo.Bonificacion.ToString() || product.SubTipo == TipoSaldo.Devolucion.ToString());
-        }
         private static List<string> IgnorarTildes(string palabra)
         {
             palabra = palabra.ToLower().Trim();

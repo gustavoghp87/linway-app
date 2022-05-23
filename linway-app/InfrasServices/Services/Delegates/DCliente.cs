@@ -18,8 +18,13 @@ namespace linway_app.Services.Delegates
         public readonly static Func<List<Cliente>> getClientes = GetClientes;
 
         private static readonly IServiceBase<Cliente> _service = ServicesObjects.ServCliente;
+
         private static bool AddCliente(Cliente cliente)
         {
+            // no permitir direcciones repetidas
+            var clientes = getClientes();
+            if (clientes == null || clientes.Count == 0) return false;
+            if (clientes.Exists(x => x.Direccion == cliente.Direccion)) return false;
             while (cliente.Direccion.Contains("'")) cliente.Direccion = cliente.Direccion.Replace(char.Parse("'"), '"');
             while (cliente.Nombre.Contains("'")) cliente.Nombre = cliente.Nombre.Replace(char.Parse("'"), '"');
             return _service.Add(cliente);

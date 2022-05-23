@@ -56,49 +56,45 @@ namespace linway_app.Forms
         public void Actualizar()
         {
             List<Cliente> lstClientes = getClientes();
-            CargarGrid1(lstClientes);
+            CargarGridClientes(lstClientes);
             List<Producto> lstProductos = getProductos();
-            CargarGrid2(lstProductos);
+            CargarGridProductos(lstProductos);
             loadingForm.CloseIt();
         }
-        private void CargarGrid1(ICollection<Cliente> lstClientes)
+        private void CargarGridClientes(ICollection<Cliente> lstClientes)
         {
-            if (lstClientes != null)
-            {
-                var grid = new List<ECliente>();
-                foreach (Cliente cliente in lstClientes)
-                {
-                    grid.Add(mapper.Map<ECliente>(cliente));
-                }
-                dataGridView1.DataSource = grid.ToArray();
-                dataGridView1.Columns[0].Width = 40;
-                dataGridView1.Columns[1].Width = 350;
-                dataGridView1.Columns[2].Width = 90;
-                dataGridView1.Columns[3].Width = 120;
-                dataGridView1.Columns[4].Width = 65;
-                dataGridView1.Columns[5].Width = 65;
-                dataGridView1.Columns[6].Width = 40;
-            }
-            else
+            if (lstClientes == null)
             {
                 CrearPrimerCliente();
                 Actualizar();
+                return;
             }
-        }
-        private void CargarGrid2(ICollection<Producto> lstProductos)
-        {
-            if (lstProductos != null)
+            var grid = new List<ECliente>();
+            foreach (Cliente cliente in lstClientes)
             {
-                List<EProducto> grid = new List<EProducto>();
-                foreach (Producto producto in lstProductos)
-                {
-                    grid.Add(mapper.Map<EProducto>(producto));
-                }
-                dataGridView2.DataSource = grid;
-                dataGridView2.Columns[0].Width = 48;
-                dataGridView2.Columns[1].Width = 270;
-                dataGridView2.Columns[2].Width = 72;
+                grid.Add(mapper.Map<ECliente>(cliente));
             }
+            dataGridView1.DataSource = grid.ToArray();
+            dataGridView1.Columns[0].Width = 40;
+            dataGridView1.Columns[1].Width = 350;
+            dataGridView1.Columns[2].Width = 90;
+            dataGridView1.Columns[3].Width = 120;
+            dataGridView1.Columns[4].Width = 65;
+            dataGridView1.Columns[5].Width = 65;
+            dataGridView1.Columns[6].Width = 40;
+        }
+        private void CargarGridProductos(ICollection<Producto> lstProductos)
+        {
+            if (lstProductos == null) return;
+            var grid = new List<EProducto>();
+            foreach (Producto producto in lstProductos)
+            {
+                grid.Add(mapper.Map<EProducto>(producto));
+            }
+            dataGridView2.DataSource = grid;
+            dataGridView2.Columns[0].Width = 48;
+            dataGridView2.Columns[1].Width = 270;
+            dataGridView2.Columns[2].Width = 72;
         }
         private void CrearPrimerCliente()
         {
@@ -170,10 +166,11 @@ namespace linway_app.Forms
 
 
         //BUSCAR CLIENTE
-        void FiltrarDatosC(string texto)  // filtra por dirección de clientes
+        void FiltrarDatosC(string texto)                      // filtra por dirección de clientes
         {
             List<Cliente> lstClientes = getClientes();
-            List<Cliente> lstClientesFiltrados = new List<Cliente>();
+            if (lstClientes == null) return;
+            var lstClientesFiltrados = new List<Cliente>();
             foreach (var cliente in lstClientes)
             {
                 if (cliente.Direccion.ToLower().Contains(texto.ToLower()))
@@ -181,7 +178,7 @@ namespace linway_app.Forms
                     lstClientesFiltrados.Add(cliente);
                 }
             }
-            CargarGrid1(lstClientesFiltrados);
+            CargarGridClientes(lstClientesFiltrados);
         }
         private void TextBox8_TextChanged(object sender, EventArgs e)
         {
@@ -209,12 +206,13 @@ namespace linway_app.Forms
         void FiltrarDatosP(string texto)
         {
             List<Producto> lstProductos = getProductos();
-            List<Producto> lstProductosFilstrados = new List<Producto>();
+            if (lstProductos == null) return;
+            var lstProductosFilstrados = new List<Producto>();
             foreach (var producto in lstProductos)
             {
                 if (producto.Nombre.ToLower().Contains(texto.ToLower())) lstProductosFilstrados.Add(producto);
             }
-            CargarGrid2(lstProductosFilstrados);
+            CargarGridProductos(lstProductosFilstrados);
         }
 
         private void Button10_Click(object sender, EventArgs e)

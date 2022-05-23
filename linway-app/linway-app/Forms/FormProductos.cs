@@ -49,7 +49,7 @@ namespace linway_app.Forms
         private void SeleccionarTipo_CheckedChanged(object sender, EventArgs e)
         {
             comboBox1.Visible = true;
-            RadioButton elegido = (RadioButton)sender;
+            var elegido = (RadioButton)sender;
             switch (elegido.Text)
             {
                 case "Líquido":
@@ -81,24 +81,25 @@ namespace linway_app.Forms
         private bool TodoOKagregarP()
         {
             return textBox6.Text != "" && textBox7.Text != ""
-                && (radioButton1.Checked | radioButton2.Checked | radioButton3.Checked | radioButton4.Checked);
+                && (radioButton1.Checked || radioButton2.Checked || radioButton3.Checked || radioButton4.Checked);
         }
         private void AgregarProducto_Click(object sender, EventArgs e)
         {
-            if (TodoOKagregarP())
+            if (!TodoOKagregarP())
             {
-                try { decimal.Parse(textBox7.Text); } catch { return; };
-                var nuevoProducto = new Producto
-                {
-                    Nombre = textBox6.Text,
-                    Precio = decimal.Parse(textBox7.Text),
-                    Tipo = _tipo.ToString()
-                };
-                if (_subTipo != "") nuevoProducto.SubTipo = _subTipo;
-                addProducto(nuevoProducto);
-                limpiarBtn.PerformClick();
+                MessageBox.Show("Verifique los campos.");
+                return;
             }
-            else MessageBox.Show("Verifique los campos.");
+            try { decimal.Parse(textBox7.Text); } catch { return; };
+            var nuevoProducto = new Producto
+            {
+                Nombre = textBox6.Text,
+                Precio = decimal.Parse(textBox7.Text),
+                Tipo = _tipo.ToString()
+            };
+            if (_subTipo != "") nuevoProducto.SubTipo = _subTipo;
+            addProducto(nuevoProducto);
+            limpiarBtn.PerformClick();
         }
         private void SoloImporte_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -109,12 +110,9 @@ namespace linway_app.Forms
             }
             bool IsDec = false;
             int nroDec = 0;
-
             for (int i = 0; i < textBox7.Text.Length; i++)
             {
-                if (textBox7.Text[i] == ',')
-                    IsDec = true;
-
+                if (textBox7.Text[i] == ',') IsDec = true;
                 if (IsDec && nroDec++ >= 2)
                 {
                     e.Handled = true;
@@ -129,11 +127,7 @@ namespace linway_app.Forms
         // MODIFICAR PRODUCTO
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
-            {
-                e.Handled = true;
-                return;
-            }
+            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
         }
         private void CargarDatosAModificar(Producto producto)
         {
@@ -164,7 +158,7 @@ namespace linway_app.Forms
         }
         private void ComboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ComboBox tipoElegido = (ComboBox)sender;
+            var tipoElegido = (ComboBox)sender;
             if (_tipoMod == null) return;
             if (_tipoMod != "" && !_liberado)
             {
@@ -200,7 +194,7 @@ namespace linway_app.Forms
         private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_subTipoMod == null) return;
-            ComboBox tipoElegido = (ComboBox)sender;
+            var tipoElegido = (ComboBox)sender;
             if (_subTipoMod != "" && !_liberado2)
             {
                 tipoElegido.Text = _subTipoMod;
@@ -244,22 +238,24 @@ namespace linway_app.Forms
         }
         bool TodoOKmodificarP()
         {
-            return !(label19.Text == "No encontrado" || label19.Text == "" || textBox9.Text == "");
+            bool subtipoVisibleButEmpty = comboBox2.Visible && comboBox2.Text == "";
+            return label19.Text != "No encontrado" && label19.Text != "" && textBox9.Text != "" && !subtipoVisibleButEmpty;
         }
         private void EditarProducto_Click(object sender, EventArgs e)
         {
-            if (TodoOKmodificarP())
+            if (!TodoOKmodificarP())
             {
-                Producto producto = getProductoPorNombreExacto(label19.Text);
-                if (producto == null) return;
-                try { decimal.Parse(textBox9.Text); } catch { return; };
-                producto.Precio = decimal.Parse(textBox9.Text);
-                producto.Tipo = comboBox3.Text;
-                if (comboBox2.Text != null && comboBox2.Text != "") producto.SubTipo = comboBox2.Text;
-                editProducto(producto);
-                button6.PerformClick();
+                MessageBox.Show("Verifique que se hayan llenado los campos correctamente");
+                return;
             }
-            else MessageBox.Show("Verifique que se hayan llenado los campos correctamente");
+            Producto producto = getProductoPorNombreExacto(label19.Text);
+            if (producto == null) return;
+            try { decimal.Parse(textBox9.Text); } catch { return; };
+            producto.Precio = decimal.Parse(textBox9.Text);
+            producto.Tipo = comboBox3.Text;
+            producto.SubTipo = comboBox2.Visible && comboBox2.Text != "" ? comboBox2.Text : "";
+            editProducto(producto);
+            button6.PerformClick();
         }
 
 
@@ -312,17 +308,18 @@ namespace linway_app.Forms
         }
         private void Eliminar_Click(object sender, EventArgs e)
         {
-            if (cbSeguroBorrar.Checked)
+            if (!cbSeguroBorrar.Checked)
             {
-                Producto producto = getProductoPorNombreExacto(label46.Text);
-                button22.Enabled = false;
-                deleteProducto(producto);
-                textBox21.Text = "";
-                textBox1.Text = "";
-                label46.Text = "";
-                cbSeguroBorrar.Checked = false;
+                MessageBox.Show("Tilde si esta seguro para borrar el producto");
+                return;
             }
-            else MessageBox.Show("Tilde si esta seguro para borrar el producto");
+            Producto producto = getProductoPorNombreExacto(label46.Text);
+            button22.Enabled = false;
+            deleteProducto(producto);
+            textBox21.Text = "";
+            textBox1.Text = "";
+            label46.Text = "";
+            cbSeguroBorrar.Checked = false; 
         }
         private void SalirBtn_Click(object sender, EventArgs e)
         {

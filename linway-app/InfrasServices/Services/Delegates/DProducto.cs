@@ -17,8 +17,10 @@ namespace linway_app.Services.Delegates
         public readonly static Func<string, Producto> getProductoPorNombre = GetProductoPorNombre;
         public readonly static Func<string, Producto> getProductoPorNombreExacto = GetProductoPorNombreExacto;
         public readonly static Func<List<Producto>> getProductos = GetProductos;
+        public static readonly Predicate<Producto> isNegativePrice = IsNegativePrice;
 
         private static readonly IServiceBase<Producto> _service = ServicesObjects.ServProducto;
+
         private static void AddProducto(Producto producto)
         {
             while(producto.Nombre.Contains("'")) producto.Nombre = producto.Nombre.Replace(char.Parse("'"), '"');
@@ -54,6 +56,11 @@ namespace linway_app.Services.Delegates
         private static List<Producto> GetProductos()
         {
             return _service.GetAll();
+        }
+        private static bool IsNegativePrice(Producto product)
+        {
+            return product.Tipo == TipoProducto.Saldo.ToString() &&
+                (product.SubTipo == TipoSaldo.Bonificacion.ToString() || product.SubTipo == TipoSaldo.Devolucion.ToString());
         }
     }
 }

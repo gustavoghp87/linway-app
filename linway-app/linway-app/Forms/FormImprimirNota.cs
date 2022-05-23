@@ -59,11 +59,9 @@ namespace linway_app.Forms
         }
         private void MarcarImpresa()
         {
-            if (_notaDeEnvio.Impresa == 0)
-            {
-                _notaDeEnvio.Impresa = 1;
-                editNotaDeEnvio(_notaDeEnvio);
-            }
+            if (_notaDeEnvio.Impresa == 1) return;
+            _notaDeEnvio.Impresa = 1;
+            editNotaDeEnvio(_notaDeEnvio);
         }
 
 
@@ -104,12 +102,14 @@ namespace linway_app.Forms
             }
             PrintDialog printDialog1 = new PrintDialog { Document = printDocument1 };
             DialogResult result = printDialog1.ShowDialog();
-            if (result == DialogResult.OK)
+            if (result != DialogResult.OK)
             {
-                printDocument1.Print();
-                MarcarImpresa();
-                Close();
+                MessageBox.Show("Algo falló al generar diálogo");
+                return;
             }
+            printDocument1.Print();
+            MarcarImpresa();
+            Close();
         }
     }
 }

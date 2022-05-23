@@ -12,6 +12,7 @@ namespace linway_app.Services.Delegates
         public readonly static Func<List<DiaReparto>> getDiaRepartos = GetDiaRepartos;
 
         private static readonly IServiceBase<DiaReparto> _service = ServicesObjects.ServDiaReparto;
+
         private static void AddDiaReparto(DiaReparto diaReparto)
         {
             bool response = _service.Add(diaReparto);

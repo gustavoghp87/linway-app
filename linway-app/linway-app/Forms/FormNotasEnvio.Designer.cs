@@ -762,7 +762,7 @@ namespace linway_app.Forms
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(71, 13);
             this.label32.TabIndex = 7;
-            this.label32.Text = "si estuviesen)";
+            this.label32.Text = "en uno)";
             // 
             // label31
             // 
@@ -771,7 +771,7 @@ namespace linway_app.Forms
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(183, 13);
             this.label31.TabIndex = 6;
-            this.label31.Text = "Pedidos ni de los Registros de Venta,";
+            this.label31.Text = "y , también del Pedido, si estuviese";
             // 
             // label30
             // 
@@ -780,7 +780,7 @@ namespace linway_app.Forms
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(147, 13);
             this.label30.TabIndex = 5;
-            this.label30.Text = "Nota de Envío pero no de los";
+            this.label30.Text = "Nota de Envío y de los Registros de Venta";
             // 
             // label29
             // 

@@ -11,7 +11,6 @@ using static linway_app.Services.Delegates.DProducto;
 using static linway_app.Services.Delegates.DProdVendido;
 using static linway_app.Services.Delegates.DReparto;
 using static linway_app.Services.Delegates.DVentas;
-using static linway_app.Services.Delegates.DZGeneral;
 
 namespace linway_app.Forms
 {
@@ -38,19 +37,17 @@ namespace linway_app.Forms
         }
         private void ActualizarGrid1(ICollection<NotaDeEnvio> lstNotadeEnvios)
         {
-            if (lstNotadeEnvios != null)
+            if (lstNotadeEnvios == null) return;
+            var grid = new List<ENotaDeEnvio>();
+            foreach (NotaDeEnvio nota in lstNotadeEnvios)
             {
-                var grid = new List<ENotaDeEnvio>();
-                foreach (NotaDeEnvio nota in lstNotadeEnvios)
-                {
-                    grid.Add(Form1.mapper.Map<ENotaDeEnvio>(nota));
-                }
-                dataGridView1.DataSource = grid;
-                dataGridView1.Columns[0].Width = 30;
-                dataGridView1.Columns[1].Width = 70;
-                dataGridView1.Columns[2].Width = 170;
-                dataGridView1.Columns[3].Width = 350;
+                grid.Add(Form1.mapper.Map<ENotaDeEnvio>(nota));
             }
+            dataGridView1.DataSource = grid;
+            dataGridView1.Columns[0].Width = 30;
+            dataGridView1.Columns[1].Width = 70;
+            dataGridView1.Columns[2].Width = 170;
+            dataGridView1.Columns[3].Width = 350;
             comboBox1.SelectedItem = "Todas ??";
             comboBox3.SelectedItem = "(Seleccionar)";
         }
@@ -84,7 +81,7 @@ namespace linway_app.Forms
                 }
                 ActualizarGrid1(lFiltrada);
             }
-            if (comboBox1.SelectedItem.ToString() == "Todas")
+            else if (comboBox1.SelectedItem.ToString() == "Todas")
             {
                 label2.Text = "";
                 textBox1.Text = "";
@@ -92,7 +89,7 @@ namespace linway_app.Forms
                 ActualizarNotas();
                 ActualizarGrid1(_lstNotaDeEnvios);
             }
-            if (comboBox1.SelectedItem.ToString() == "Impresas")
+            else if (comboBox1.SelectedItem.ToString() == "Impresas")
             {
                 label2.Text = "";
                 textBox1.Text = "";
@@ -103,7 +100,7 @@ namespace linway_app.Forms
                 }
                 ActualizarGrid1(lFiltrada);
             }
-            if (comboBox1.SelectedItem.ToString() == "No impresas")
+            else if (comboBox1.SelectedItem.ToString() == "No impresas")
             {
                 label2.Text = "";
                 textBox1.Text = "";
@@ -114,13 +111,13 @@ namespace linway_app.Forms
                 }
                 ActualizarGrid1(lFiltrada);
             }
-            if (comboBox1.SelectedItem.ToString() == "Cliente")
+            else if (comboBox1.SelectedItem.ToString() == "Cliente")
             {
                 label2.Text = "Dirección:";
                 textBox1.Text = "";
                 textBox1.Visible = true;
             }
-            if (comboBox1.SelectedItem.ToString() == "Fecha")
+            else if (comboBox1.SelectedItem.ToString() == "Fecha")
             {
                 label2.Text = "Fecha:";
                 textBox1.Text = "";
@@ -133,18 +130,19 @@ namespace linway_app.Forms
             var lstFiltrada = new List<NotaDeEnvio>();
             foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
             {
-                if (x == 'c' && nota.Cliente != null
-                    && nota.Cliente.Direccion != null
-                    && nota.Cliente.Direccion.ToLower().Contains(texto.ToLower())
-                ) lstFiltrada.Add(nota);
-                if (x == 'f' && nota.Fecha.Contains(texto)) lstFiltrada.Add(nota);
+                if (x == 'c' && nota.Cliente != null && nota.Cliente.Direccion != null && nota.Cliente.Direccion.ToLower().Contains(texto.ToLower()))
+                    lstFiltrada.Add(nota);
+                else if (x == 'f' && nota.Fecha.Contains(texto))
+                    lstFiltrada.Add(nota);
             }
             ActualizarGrid1(lstFiltrada);
         }
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedItem.ToString() == "Cliente") FiltrarDatos(textBox1.Text, 'c');
-            if (comboBox1.SelectedItem.ToString() == "Fecha") FiltrarDatos(textBox1.Text, 'f');
+            if (comboBox1.SelectedItem.ToString() == "Cliente")
+                FiltrarDatos(textBox1.Text, 'c');
+            else if (comboBox1.SelectedItem.ToString() == "Fecha")
+                FiltrarDatos(textBox1.Text, 'f');
         }
 
         //_______________GRUPO IMPRIMIR ________________________________________
@@ -163,19 +161,11 @@ namespace linway_app.Forms
         }
         private void TextBox2_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
-            {
-                e.Handled = true;
-                return;
-            }
+            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
         }
         private void TextBox3_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
-            {
-                e.Handled = true;
-                return;
-            }
+            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
         }
         public List<NotaDeEnvio> ObtenerListaAImprimir()
         {
@@ -187,18 +177,14 @@ namespace linway_app.Forms
                     if (nota.Impresa == 0) listaAImprimir.Add(nota);
                 }
             }
-            if (comboBox2.SelectedItem.ToString() == "Hoy")
+            else if (comboBox2.SelectedItem.ToString() == "Hoy")
             {
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
-                    if (nota.Fecha == DateTime.UtcNow.ToString(Constants.FormatoDeFecha)) listaAImprimir.Add(nota);
+                    if (nota.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha)) listaAImprimir.Add(nota);
                 }
             }
-            if (
-                comboBox2.SelectedItem.ToString() == "Establecer rango"
-                && textBox2.Text != ""
-                && textBox3.Text != ""
-            )
+            else if (comboBox2.SelectedItem.ToString() == "Establecer rango" && textBox2.Text != "" && textBox3.Text != "")
             {
                 try
                 {
@@ -224,7 +210,7 @@ namespace linway_app.Forms
                 textBox3.Text = "";
                 textBox2.Text = "";
             }
-            if (comboBox2.SelectedItem.ToString() == "Establecer rango")
+            else if (comboBox2.SelectedItem.ToString() == "Establecer rango")
             {
                 textBox2.Visible = true;
                 textBox3.Visible = true;
@@ -258,7 +244,7 @@ namespace linway_app.Forms
                 textBox4.Text = "";
                 textBox5.Text = "";
             }
-            if (comboBox3.SelectedItem.ToString() == "Establecer rango")
+            else if (comboBox3.SelectedItem.ToString() == "Establecer rango")
             {
                 textBox4.Visible = true;
                 textBox5.Visible = true;
@@ -271,11 +257,8 @@ namespace linway_app.Forms
         {
             ActualizarNotas();
             var listaABorrar = new List<NotaDeEnvio>();
-            if (
-                comboBox3.SelectedItem.ToString() == "Establecer rango"
-                && textBox5.Text != ""
-                && textBox4.Text != ""
-            )
+            if (_lstNotaDeEnvios == null || _lstNotaDeEnvios.Count == 0) return listaABorrar;
+            if (comboBox3.SelectedItem.ToString() == "Establecer rango" && textBox5.Text != "" && textBox4.Text != "")
             {
                 try
                 {
@@ -287,8 +270,11 @@ namespace linway_app.Forms
                 }
                 catch { MessageBox.Show("Rango establecido incorrecto"); }
             }
-            if (comboBox3.SelectedItem.ToString() == "Todas") listaABorrar.AddRange(_lstNotaDeEnvios);
-            if (comboBox3.SelectedItem.ToString() == "Impresas")
+            else if (comboBox3.SelectedItem.ToString() == "Todas")
+            {
+                listaABorrar.AddRange(_lstNotaDeEnvios);
+            }
+            else if (comboBox3.SelectedItem.ToString() == "Impresas")
             {
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
@@ -330,10 +316,10 @@ namespace linway_app.Forms
         }
         private void Button4_Click(object sender, EventArgs e)
         {
-            foreach (NotaDeEnvio nota in ObtenerListaABorrar())
-            {
-                deleteNotaDeEnvio(nota);
-            }
+            Form1.loadingForm.OpenIt();
+            List<NotaDeEnvio> notas = ObtenerListaABorrar();
+            deleteNotas(notas);
+            Form1.loadingForm.CloseIt();
             comboBox3.SelectedItem = "(Seleccionar)";
             label11.Visible = false;
             button4.Visible = false;
@@ -343,7 +329,7 @@ namespace linway_app.Forms
             ActualizarGrid1(_lstNotaDeEnvios);
         }
 
-        //enviar a hoja de reparto
+        // enviar a hoja de reparto
         private void ComboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (label16.Text != "" && label16.Text != "No encontrado") button6.Enabled = true;
@@ -402,7 +388,20 @@ namespace linway_app.Forms
             NotaDeEnvio notaDeEnvio = getNotaDeEnvio(long.Parse(textBox6.Text));
             Reparto reparto = getRepartoPorDiaYNombre(diaDeReparto, nombreReparto);
             if (notaDeEnvio == null || reparto == null) return;
-            addOrEditPedidoEnReparto(reparto, notaDeEnvio.Cliente, notaDeEnvio.ProdVendidos.ToList());
+            long pedidoId = addPedidoIfNotExistsAndReturnId(reparto.Id, notaDeEnvio.ClienteId);
+            Pedido pedido = getPedido(pedidoId);
+            if (pedidoId == 0 || pedido == null)
+            {
+                MessageBox.Show("Falló mandar a Pedido");
+                return;
+            }
+            foreach (ProdVendido prodVendido in notaDeEnvio.ProdVendidos)
+            {
+                prodVendido.PedidoId = pedidoId;
+            }
+            editProdVendidos(notaDeEnvio.ProdVendidos);
+            updatePedido(pedido);
+
             comboBox5.Text = "";
             comboBox4.Text = "";
             textBox6.Text = "";
@@ -431,8 +430,7 @@ namespace linway_app.Forms
                     label20.Text = impTotal.ToString();
                     if (notaDeEnvio.Cliente != null && notaDeEnvio.Cliente.Direccion != null)
                     {
-                        label18.Text = notaDeEnvio.Cliente.Direccion.ToString() +
-                            " - " + notaDeEnvio.ClienteId.ToString();
+                        label18.Text = notaDeEnvio.Cliente.Direccion.ToString() + " - " + notaDeEnvio.ClienteId.ToString();
                     }
                 }
                 else
@@ -524,13 +522,19 @@ namespace linway_app.Forms
             NotaDeEnvio notaDeEnvio = getNotaDeEnvio(long.Parse(textBox7.Text));
             try { int.Parse(textBox10.Text); } catch { return; };
 
+            Pedido pedido = notaDeEnvio.ProdVendidos != null && notaDeEnvio.ProdVendidos.ToList().Find(x => x.PedidoId != null) != null ?
+                getPedido((long)notaDeEnvio.ProdVendidos.ToList().Find(x => x.PedidoId != null).PedidoId) : null;
+            long pedidoId = (long)(pedido?.Id);
+
             ProdVendido nuevoProdVendido = new ProdVendido()
             {
                 Cantidad = int.Parse(textBox10.Text),
                 Descripcion = productoNuevo.Nombre,
                 NotaDeEnvioId = notaDeEnvio.Id,
+                PedidoId = pedidoId,
                 Precio = isNegativePrice(productoNuevo) ? (-1)*productoNuevo.Precio : productoNuevo.Precio,
-                ProductoId = productoNuevo.Id
+                ProductoId = productoNuevo.Id,
+                RegistroVentaId = notaDeEnvio.ProdVendidos.First().RegistroVentaId
             };
             var existingProdVendido = notaDeEnvio.ProdVendidos.ToList().Find(x => x.Producto.Nombre == productoNuevo.Nombre);
             if (existingProdVendido == null)
@@ -542,8 +546,13 @@ namespace linway_app.Forms
                 existingProdVendido.Cantidad += nuevoProdVendido.Cantidad;
                 editProdVendido(existingProdVendido);
             }
-            editNotaDeEnvioAgregar(notaDeEnvio);
-            updateVenta(nuevoProdVendido, false);
+            editNoteValues(notaDeEnvio);
+            updateVentasDesdeProdVendidos(new List<ProdVendido>() { nuevoProdVendido }, true);
+            if (nuevoProdVendido.PedidoId != null)
+            {
+                pedido = getPedido((long)nuevoProdVendido.PedidoId);
+                updatePedido(pedido);
+            }
 
             ActualizarNotas();
             ActualizarGrid1(_lstNotaDeEnvios);
@@ -599,11 +608,20 @@ namespace linway_app.Forms
                 MessageBox.Show("No se puede quitar el único producto que tiene una nota, hay que eliminarla");
                 return;
             }
-
             notaDeEnvio = editNotaDeEnvioQuitar(notaDeEnvio, prodVendido);
             prodVendido.NotaDeEnvioId = null;
+            prodVendido.RegistroVentaId = null;
+            prodVendido.PedidoId = null;
+
+            var pedidoId = prodVendido.PedidoId;
+            prodVendido.PedidoId = null;
             editProdVendido(prodVendido);
-            updateVenta(prodVendido, false);
+            updateVentasDesdeProdVendidos(new List<ProdVendido>() { prodVendido }, false);
+            if (pedidoId != null)
+            {
+                Pedido pedido = getPedido((long)pedidoId);
+                if (pedido != null) updatePedido(pedido);
+            }
 
             ActualizarNotas();
             ActualizarGrid1(_lstNotaDeEnvios);

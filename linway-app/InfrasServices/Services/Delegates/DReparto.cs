@@ -13,29 +13,17 @@ namespace linway_app.Services.Delegates
 {
     public static class DReparto
     {
-        public readonly static Action<Reparto, Pedido> addPedidoARepartoSimple = AddPedidoARepartoSimple;
         public readonly static Action<Reparto> addReparto = AddReparto;
         public readonly static Action<ICollection<Reparto>> cleanRepartos = CleanRepartos;
-        public readonly static Action<Reparto> editReparto = EditReparto;
         public readonly static Func<string, string, bool> exportReparto = ExportReparto;
         public readonly static Func<long, Reparto> getReparto = GetReparto;
         public readonly static Func<string, string, Reparto> getRepartoPorDiaYNombre = GetRepartoPorDiaYNombre;
         public readonly static Func<List<Reparto>> getRepartos = GetRepartos;
         public readonly static Func<string, List<Reparto>> getRepartosPorDia = GetRepartosPorDia;
-        public readonly static Action<Reparto, Pedido> substractPedidoAReparto = SubstractPedidoAReparto;
+        public readonly static Action<Reparto> updateReparto = UpdateReparto;
 
         private static readonly IServiceBase<Reparto> _service = ServicesObjects.ServReparto;
-        private static void AddPedidoARepartoSimple(Reparto reparto, Pedido pedido)
-        {
-            reparto.Ta += pedido.A;
-            reparto.Te += pedido.E;
-            reparto.Tt += pedido.T;
-            reparto.Tae += pedido.Ae;
-            reparto.Td += pedido.D;
-            reparto.TotalB += pedido.A + pedido.E + pedido.T + pedido.Ae + pedido.D;
-            reparto.Tl += pedido.L;
-            EditReparto(reparto);
-        }
+        
         private static void AddReparto(Reparto reparto)
         {
             bool response = _service.Add(reparto);
@@ -77,6 +65,7 @@ namespace linway_app.Services.Delegates
         }
         private static void EditRepartos(ICollection<Reparto> repartos)
         {
+            if (repartos == null || repartos.Count == 0) return;
             bool response = _service.EditMany(repartos);
             if (!response) Console.WriteLine("Algo falló al editar los Repartos en la base de datos");
         }
@@ -109,7 +98,8 @@ namespace linway_app.Services.Delegates
             try
             {
                 List<DiaReparto> lstDiasRep = getDiaRepartos();
-                List<Reparto> lstRepartos = lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
+                List<Reparto> lstRepartos = lstDiasRep
+                    .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
                 return lstRepartos;
             }
             catch
@@ -117,16 +107,27 @@ namespace linway_app.Services.Delegates
                 return null;
             }
         }
-        private static void SubstractPedidoAReparto(Reparto reparto, Pedido pedido)
+        private static void UpdateReparto(Reparto reparto)
         {
-            reparto.Ta -= pedido.A;
-            reparto.Te -= pedido.E;
-            reparto.Tt -= pedido.T;
-            reparto.Tae -= pedido.Ae;
-            reparto.Td -= pedido.D;
-            reparto.TotalB -= pedido.A + pedido.E + pedido.T + pedido.Ae + pedido.D;
-            reparto.Tl -= pedido.L;
-            editReparto(reparto);
+            if (reparto == null || reparto.Pedidos == null || reparto.Pedidos.Count == 0) return;
+            reparto.Ta = 0;
+            reparto.Te = 0;
+            reparto.Tt = 0;
+            reparto.Tae = 0;
+            reparto.Td = 0;
+            reparto.TotalB = 0;
+            reparto.Tl = 0;
+            reparto.Pedidos.ToList().ForEach(pedido =>
+            {
+                reparto.Ta += pedido.A;
+                reparto.Te += pedido.E;
+                reparto.Tt += pedido.T;
+                reparto.Tae += pedido.Ae;
+                reparto.Td += pedido.D;
+                reparto.TotalB += pedido.A + pedido.E + pedido.T + pedido.Ae + pedido.D;
+                reparto.Tl += pedido.L;
+            });
+            EditReparto(reparto);
         }
     }
 }

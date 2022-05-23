@@ -31,6 +31,14 @@ namespace linway_app.Services
             t.Estado = "Activo";
             return _service.Add(t);
         }
+        public bool AddMany(ICollection<T> t)
+        {
+            foreach (T item in t)
+            {
+                item.Estado = "Activo";
+            }
+            return _service.AddMany(t);
+        }
         public bool Delete(T t)
         {
             t.Estado = "Eliminado";
@@ -65,6 +73,7 @@ namespace linway_app.Services
                    in lst
                    where x.Estado != null && x.Estado != "Eliminado"
                    select x).ToList();
+            if (lst == null || lst.Count == 0) return null;
             return lst;
         }
     }

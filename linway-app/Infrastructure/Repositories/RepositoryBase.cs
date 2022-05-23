@@ -31,6 +31,20 @@ namespace Infrastructure.Repositories
                 return false;
             }
         }
+        public bool AddMany(ICollection<T> t)
+        {
+            try
+            {
+                _entities.AddRange(t);
+                _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
         //public bool Delete(T t)
         //{
         //    return Edit(t);   // doing nothing

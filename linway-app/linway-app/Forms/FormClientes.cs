@@ -16,23 +16,24 @@ namespace linway_app.Forms
         // agregar Cliente
         private void AgregarCliente_Click(object sender, EventArgs e)
         {
-            if (textBox2.Text != "" && (radioButton1.Checked || radioButton2.Checked))
+            if (textBox2.Text == "" || (!radioButton1.Checked && !radioButton2.Checked))
             {
-                TipoR tipo = TipoR.Monotributo;
-                if (radioButton2.Checked) tipo = TipoR.Inscripto;
-                var nuevoCliente = new Cliente
-                {
-                    Direccion = textBox18.Text != "" ? textBox2.Text + " - " + textBox18.Text : textBox2.Text,
-                    CodigoPostal = textBox4.Text,
-                    Telefono = textBox5.Text,
-                    Nombre = textBox1.Text,
-                    Cuit = textBox3.Text,
-                    Tipo = tipo.ToString()
-                };
-                addCliente(nuevoCliente);
-                button2.PerformClick();
+                MessageBox.Show("Los campos Dirección y Responsable Inscr/Monotributo son obligatorios");
+                return;
             }
-            else MessageBox.Show("Los campos Dirección y Responsable Inscr/Monotributo son obligatorios");
+            TipoR tipo = TipoR.Monotributo;
+            if (radioButton2.Checked) tipo = TipoR.Inscripto;
+            var nuevoCliente = new Cliente
+            {
+                Direccion = textBox18.Text != "" ? textBox2.Text + " - " + textBox18.Text : textBox2.Text,
+                CodigoPostal = textBox4.Text,
+                Telefono = textBox5.Text,
+                Nombre = textBox1.Text,
+                Cuit = textBox3.Text,
+                Tipo = tipo.ToString()
+            };
+            addCliente(nuevoCliente);
+            button2.PerformClick();
         }
         private void Limpiar_Click(object sender, EventArgs e)
         {
@@ -75,8 +76,13 @@ namespace linway_app.Forms
         //  modificar cliente
         bool TodoOkModificarC()
         {
-            return label23.Text != "No encontrado" && textBox10.Text != "" && textBox11.Text != ""
-                && textBox23.Text != "" && textBox24.Text != "" && textBox25.Text != "";
+            //var direccionLabel = label23.Text;
+            //var cuit = textBox10.Text;
+            //var nombre = textBox11.Text;
+            //var telefono = textBox24.Text;
+            //var cp = textBox25.Text;
+            var direccion = textBox23.Text;
+            return !string.IsNullOrEmpty(direccion) && direccion != "No encontrado";
         }
         private void DoIt(Cliente cliente)
         {
@@ -144,38 +150,28 @@ namespace linway_app.Forms
         }
         private void Editar_Click(object sender, EventArgs e)
         {
-            if (TodoOkModificarC())
+            if (!TodoOkModificarC())
             {
-                Cliente cliente = getClientePorDireccionExacta(label23.Text);
-                if (cliente == null) return;
-                cliente.Direccion = textBox23.Text;
-                cliente.Telefono = textBox24.Text;
-                cliente.CodigoPostal = textBox25.Text;
-                cliente.Nombre = textBox11.Text;
-                cliente.Cuit = textBox10.Text;
-                if (radioButton3.Checked)
-                    cliente.Tipo = TipoR.Inscripto.ToString();
-                else
-                    cliente.Tipo = TipoR.Monotributo.ToString();
-                editCliente(cliente);
-                button8.PerformClick();
+                MessageBox.Show("Verifique que los campos sean correctos");
+                return;
             }
-            else MessageBox.Show("Verifique que los campos sean correctos");
+            Cliente cliente = getClientePorDireccionExacta(label23.Text);
+            if (cliente == null) return;
+            cliente.Direccion = textBox23.Text;
+            cliente.Telefono = textBox24.Text;
+            cliente.CodigoPostal = textBox25.Text;
+            cliente.Nombre = textBox11.Text;
+            cliente.Cuit = textBox10.Text;
+            if (radioButton3.Checked)
+                cliente.Tipo = TipoR.Inscripto.ToString();
+            else
+                cliente.Tipo = TipoR.Monotributo.ToString();
+            editCliente(cliente);
+            button8.PerformClick();
         }
 
 
         //  Borrar clientes
-        private void EliminarCliente_Click(object sender, EventArgs e)
-        {
-            if (cbSeguroBorrar.Checked)
-            {
-                var cliente = getClientePorDireccion(label47.Text);
-                deleteCliente(cliente);
-                cbSeguroBorrar.Checked = false;
-                label47.Text = "";
-                textBox22.Text = "";
-            }
-        }
         private void BorrarPorId_textBox_TextChanged(object sender, EventArgs e)
         {
             if (textBox22.Text != "")
@@ -220,6 +216,18 @@ namespace linway_app.Forms
                 label47.Text = "";
                 button23.Enabled = false;
             }
+        }
+        private void EliminarCliente_Click(object sender, EventArgs e)
+        {
+            if (!cbSeguroBorrar.Checked) return;
+            var cliente = getClientePorDireccion(label47.Text);
+            deleteCliente(cliente);
+            textBox22.Text = "";
+            textBoxDireEnBorrar.Text = "";
+            label47.Text = "";
+            label47.Visible = false;
+            button23.Enabled = false;
+            cbSeguroBorrar.Checked = false;
         }
     }
 }

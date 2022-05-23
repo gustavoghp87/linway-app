@@ -5,6 +5,7 @@ namespace linway_app.Services.Interfaces
     public interface IServiceBase<T>
     {
         bool Add(T t);
+        bool AddMany(ICollection<T> t);
         bool Delete(T t);
         bool DeleteMany(ICollection<T> t);
         bool Edit(T t);

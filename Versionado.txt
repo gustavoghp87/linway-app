@@ -1,4 +1,28 @@
 
+___________________________________Sistema Linway 13__________________________________    mayo 2022
+
+-Corregido reposicionar en reparto
+-Corregidos problemas de velocidad al modificar muchos datos a la vez, por ejemplo limpiar
+ reparto
+-Corregida modificación de nota de envío que no era permanente
+-Ahora al modificar una nota de envío se actualizan automáticamente: pedido, reparto,
+ venta, y registro de venta
+-Imagen de "Cargando..."
+
+
+Metas para versiones posteriores:
+-Cambiar sistema de cantidades de líquidos y polvos (2x5, etcétera)
+-Separar dirección de localidad
+-Eliminar dobles espaciados
+-Segundo campo para teléfono
+-En los campos de búsqueda por dirección hacer indistinto usar las tildes en las vocales
+-Migrar de Windows Forms a WPS u otro más moderno
+-Lograr que se pueda usar la app sin tener encendida la pc host (base de datos independiente)
+-Lograr que la app sea reactiva a cambios en la base de datos
+-Hacer un logger
+-ClienteId no debería ser obligatorio en Registro de Venta (por venta particular cargada desde Ventas)
+
+
 
 ___________________________________Sistema Linway 12__________________________________    octubre 2021
 
@@ -32,19 +56,7 @@ Octubre:
 -Generación automática de backup en OneDrive al abrir la app por primera vez en el día
 -Lectura de la base de datos con path absoluto para poder usar varias instancias de la app
  a la vez
-
-
-Metas para versión 13:
--Cambiar sistema de cantidades de líquidos y polvos (2x5, etcétera)
--Separar dirección de localidad
--Eliminar dobles espaciados
--Segundo campo para teléfono
--En los campos de búsqueda por dirección hacer indistinto usar las tildes en las vocales
--Cambiar las carpetas del projecto a diferentes projectos para una posterior independización
- de Windows Forms
--Lograr que se pueda usar la app sin tener encendida la pc host
--Lograr que la app sea reactiva a cambios en la base de datos
--Hacer un logger
+-Las carpetas de la solución fueron convertidas en proyectos .NET
 
 
 ______________________________________________________________________________________

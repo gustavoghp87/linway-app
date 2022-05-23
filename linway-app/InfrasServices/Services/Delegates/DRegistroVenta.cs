@@ -9,7 +9,6 @@ namespace linway_app.Services.Delegates
 {
     public static class DRegistroVenta
     {
-        public readonly static Func<RegistroVenta, bool> addRegistroVenta = AddRegistroVenta;
         public readonly static Func<RegistroVenta, long> addRegistroVentaReturnId = AddRegistroVentaReturnId;
         public readonly static Action<RegistroVenta> deleteRegistroVenta = DeleteRegistroVenta;
         public readonly static Action<ICollection<RegistroVenta>> deleteRegistros = DeleteRegistros;
@@ -18,6 +17,7 @@ namespace linway_app.Services.Delegates
         public readonly static Func<List<RegistroVenta>> getRegistroVentas = GetRegistroVentas;
 
         private static readonly IServiceBase<RegistroVenta> _service = ServicesObjects.ServRegistroVenta;
+
         private static bool AddRegistroVenta(RegistroVenta registroVenta)
         {
             bool response = _service.Add(registroVenta);
@@ -34,8 +34,7 @@ namespace linway_app.Services.Delegates
                     Console.WriteLine("Algo falló al agregar Registro de Venta a base de datos");
                     return 0;
                 }
-                var lst = GetRegistroVentas();
-                return lst.Last().Id;
+                return registroVenta.Id;
             }
             catch
             {

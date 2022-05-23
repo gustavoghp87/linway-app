@@ -21,7 +21,7 @@ namespace linway_app.Excel
         public bool ExportarVentas(ICollection<Venta> lstVentas)
         {
             if (lstVentas == null) return false;
-            string path = @"Excels/ventas-" + DateTime.UtcNow.ToString(Constants.FormatoDeFecha) + "-" + GetTimestamp() + ".";
+            string path = @"Excels/ventas-" + DateTime.Now.ToString(Constants.FormatoDeFecha) + "-" + GetTimestamp() + ".";
             try
             {
                 using var fs = new FileStream(path + _extension, FileMode.Create, FileAccess.Write);
@@ -48,7 +48,7 @@ namespace linway_app.Excel
 
                 ICell cell1b = row0.CreateCell(7);
                 cell1b.CellStyle = style1;
-                cell1b.SetCellValue(DateTime.UtcNow.ToString(Constants.FormatoDeFecha));
+                cell1b.SetCellValue(DateTime.Now.ToString(Constants.FormatoDeFecha));
                 cell1b.CellStyle.SetFont(fontBold);
 
                 ICell cell2 = row0.CreateCell(0);
@@ -89,7 +89,7 @@ namespace linway_app.Excel
         {
             if (reparto == null) return false;
             string path = @"Excels/reparto-"
-                + DateTime.UtcNow.ToString(Constants.FormatoDeFecha) + "-"
+                + DateTime.Now.ToString(Constants.FormatoDeFecha) + "-"
                 + reparto.DiaReparto.Dia.ToUpper() + "-" + reparto.Nombre + "-"
                 + GetTimestamp() + ".";
             try
@@ -118,7 +118,7 @@ namespace linway_app.Excel
                 cell2.SetCellValue("Ltrs");
                 cell2.CellStyle = style1;
                 ICell cell3 = row0.CreateCell(2);
-                cell3.SetCellValue("PRODUCTOS      (Impreso " + DateTime.UtcNow.ToString(Constants.FormatoDeFecha) + ")");
+                cell3.SetCellValue("PRODUCTOS      (Impreso " + DateTime.Now.ToString(Constants.FormatoDeFecha) + ")");
                 cell3.CellStyle = style1;
                 ICell cell4 = row0.CreateCell(3);
                 cell4.SetCellValue("A");

@@ -8,25 +8,26 @@ namespace linway_app.Services.Delegates
 {
     public class DProdVendido
     {
-        public readonly static Action<ProdVendido> addProdVendido = AddProdVendido;
         public readonly static Func<ProdVendido, ProdVendido> addProdVendidoReturnsWithId = AddProdVendidoReturnsWithId;
+        public readonly static Action<ICollection<ProdVendido>> addProdVendidos = AddProdVendidos;
         public readonly static Action<ProdVendido> deleteProdVendido = DeleteProdVendido;
         public readonly static Func<string, string> editDescripcion = EditDescripcion;
         public readonly static Action<ProdVendido> editProdVendido = EditProdVendido;
         public readonly static Action<ICollection<ProdVendido>> editProdVendidos = EditProdVendidos;
-        public readonly static Func<List<ProdVendido>> getProdVendido = GetProdVendidos;
+        public readonly static Func<List<ProdVendido>> getProdVendidos = GetProdVendidos;
 
         private static readonly IServiceBase<ProdVendido> _service = ServicesObjects.ServProdVendido;
-        private static void AddProdVendido(ProdVendido prodVendido)
-        {
-            bool response = _service.Add(prodVendido);
-            if (!response) Console.WriteLine("Algo falló al agregar Producto Vendido a la base de datos");
-        }
+
         private static ProdVendido AddProdVendidoReturnsWithId(ProdVendido prodVendido)
         {
             bool response = _service.Add(prodVendido);
             if (!response) Console.WriteLine("Algo falló al agregar Producto Vendido a la base de datos (2)");
             return prodVendido;
+        }
+        private static void AddProdVendidos(ICollection<ProdVendido> prodVendidos)
+        {
+            bool response = _service.AddMany(prodVendidos);
+            if (!response) Console.WriteLine("Algo falló al agregar Producto Vendido a la base de datos");
         }
         private static void DeleteProdVendido(ProdVendido prodVendido)
         {
@@ -46,6 +47,7 @@ namespace linway_app.Services.Delegates
         }
         private static void EditProdVendidos(ICollection<ProdVendido> prodVendidos)
         {
+            if (prodVendidos == null || prodVendidos.Count == 0) return;
             bool response = _service.EditMany(prodVendidos);
             if (!response) Console.WriteLine("Algo falló al editar Productos Vendidos en la base de datos");
         }

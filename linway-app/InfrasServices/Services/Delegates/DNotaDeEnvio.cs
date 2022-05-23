@@ -12,9 +12,9 @@ namespace linway_app.Services.Delegates
     {
         public readonly static Action<NotaDeEnvio> addNotaDeEnvio = AddNotaDeEnvio;
         public readonly static Func<NotaDeEnvio, long> addNotaDeEnvioReturnId = AddNotaDeEnvioReturnId;
-        public readonly static Action<NotaDeEnvio> deleteNotaDeEnvio = DeleteNotaDeEnvio;
+        public readonly static Action<ICollection<NotaDeEnvio>> deleteNotas = DeleteNotas;
         public readonly static Func<NotaDeEnvio, bool> editNotaDeEnvio = EditNotaDeEnvio;
-        public readonly static Func<NotaDeEnvio, NotaDeEnvio> editNotaDeEnvioAgregar = EditNotaDeEnvioAgregar;
+        public readonly static Func<NotaDeEnvio, NotaDeEnvio> editNoteValues = EditNoteValues;
         public readonly static Func<NotaDeEnvio, ProdVendido, NotaDeEnvio> editNotaDeEnvioQuitar = EditNotaDeEnvioQuitar;
         public readonly static Func<List<ProdVendido>, string> extraerDetalleDeNotaDeEnvio = ExtraerDetalleDeNotaDeEnvio;
         public readonly static Func<List<ProdVendido>, decimal> extraerImporteDeNotaDeEnvio = ExtraerImporteDeNotaDeEnvio;
@@ -22,7 +22,13 @@ namespace linway_app.Services.Delegates
         public readonly static Func<List<NotaDeEnvio>> getNotaDeEnvios = GetNotaDeEnvios;
 
         private static readonly IServiceBase<NotaDeEnvio> _service = ServicesObjects.ServNotaDeEnvio;
-        private static long AddAndGetId(NotaDeEnvio notaDeEnvio)
+
+        private static void AddNotaDeEnvio(NotaDeEnvio notaDeEnvio)
+        {
+            bool response = _service.Add(notaDeEnvio);
+            if (!response) Console.WriteLine("Algo falló al agregar Nota de Envío a base de datos");
+        }
+        private static long AddNotaDeEnvioReturnId(NotaDeEnvio notaDeEnvio)
         {
             try
             {
@@ -32,21 +38,11 @@ namespace linway_app.Services.Delegates
             }
             catch { return 0; }
         }
-        private static void AddNotaDeEnvio(NotaDeEnvio notaDeEnvio)
+        private static void DeleteNotas(ICollection<NotaDeEnvio> notas)
         {
-            bool response = _service.Add(notaDeEnvio);
-            if (!response) Console.WriteLine("Algo falló al agregar Nota de Envío a base de datos");
-        }
-        private static long AddNotaDeEnvioReturnId(NotaDeEnvio notaDeEnvio)
-        {
-            long response = AddAndGetId(notaDeEnvio);
-            if (response == 0) Console.WriteLine("Algo falló al agregar Nota de Envío a base de datos");
-            return response;
-        }
-        private static void DeleteNotaDeEnvio(NotaDeEnvio notaDeEnvio)
-        {
-            bool response = _service.Delete(notaDeEnvio);
-            if (!response) Console.WriteLine("Algo falló al eliminar Nota de Envío de la base de datos");
+            if (notas == null || notas.Count == 0) return;
+            bool response = _service.DeleteMany(notas);
+            if (!response) Console.WriteLine("Algo falló al eliminar Notas de Envío de la base de datos");
         }
         private static bool EditNotaDeEnvio(NotaDeEnvio notaDeEnvio)
         {
@@ -54,7 +50,7 @@ namespace linway_app.Services.Delegates
             if (!response) Console.WriteLine("Algo falló al editar Nota de Envío en base de datos");
             return response;
         }
-        private static NotaDeEnvio EditNotaDeEnvioAgregar(NotaDeEnvio nota)
+        private static NotaDeEnvio EditNoteValues(NotaDeEnvio nota)
         {
             if (nota == null || nota.ProdVendidos == null || nota.ProdVendidos.Count == 0) return null;
             nota.ImporteTotal = ExtraerImporteDeNotaDeEnvio(nota.ProdVendidos);

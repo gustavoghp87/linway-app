@@ -56,11 +56,9 @@ namespace linway_app.Forms
         }
         private void MarcarImpresa()
         {
-            if (_recibo.Impreso == 0)
-            {
-                _recibo.Impreso = 1;
-                editRecibo(_recibo);
-            }
+            if (_recibo.Impreso == 1) return;
+            _recibo.Impreso = 1;
+            editRecibo(_recibo);
         }
         private void CaptureScreen()
         {
@@ -95,10 +93,12 @@ namespace linway_app.Forms
                 DialogResult result = printDialog1.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    printDocument1.Print();
-                    Close();
+                    MessageBox.Show("Falló impresión en generación de diálogo");
+                    return;
                 }
+                printDocument1.Print();
                 MarcarImpresa();
+                Close();
             }
             catch (Exception eee)
             {
