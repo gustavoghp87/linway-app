@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using linway_app.Excel;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Entities;
 using System;
@@ -44,10 +45,15 @@ namespace linway_app.Forms
                 grid.Add(Form1.mapper.Map<ENotaDeEnvio>(nota));
             }
             dataGridView1.DataSource = grid;
-            dataGridView1.Columns[0].Width = 30;
+            //foreach (var item in dataGridView1.Rows)   muy lento
+            //{
+            //    ((DataGridViewRow)item).Height = 35;
+            //}
+            dataGridView1.Columns[0].Width = 40;
             dataGridView1.Columns[1].Width = 70;
             dataGridView1.Columns[2].Width = 170;
-            dataGridView1.Columns[3].Width = 350;
+            dataGridView1.Columns[3].Width = 320;
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;        // lento
             comboBox1.SelectedItem = "Todas ??";
             comboBox3.SelectedItem = "(Seleccionar)";
         }
@@ -400,8 +406,7 @@ namespace linway_app.Forms
                 prodVendido.PedidoId = pedidoId;
             }
             editProdVendidos(notaDeEnvio.ProdVendidos);
-            updatePedido(pedido);
-
+            updatePedido(pedido, true);
             comboBox5.Text = "";
             comboBox4.Text = "";
             textBox6.Text = "";
@@ -504,14 +509,12 @@ namespace linway_app.Forms
         }
         private void TextBox10_TextChanged(object sender, EventArgs e)     // cantidad a agregar
         {
-            if (label25.Text != "No encontrado" && textBox10.Text != "")
-            {
-                try { int.Parse(textBox10.Text); } catch { return; };
-                var producto = getProductoPorNombreExacto(label25.Text);
-                if (producto == null) return;
-                label26.Text = (producto.Precio * int.Parse(textBox10.Text)).ToString();
-                button9.Enabled = true;
-            }
+            if (label25.Text == "No encontrado" || textBox10.Text == "") return;
+            try { int.Parse(textBox10.Text); } catch { return; };
+            var producto = getProductoPorNombreExacto(label25.Text);
+            if (producto == null) return;
+            label26.Text = (producto.Precio * int.Parse(textBox10.Text)).ToString();
+            button9.Enabled = true;
         }
         private void AgregarProductoVendido_btn9_Click(object sender, EventArgs e)
         {
@@ -522,22 +525,27 @@ namespace linway_app.Forms
             NotaDeEnvio notaDeEnvio = getNotaDeEnvio(long.Parse(textBox7.Text));
             try { int.Parse(textBox10.Text); } catch { return; };
 
-            Pedido pedido = notaDeEnvio.ProdVendidos != null && notaDeEnvio.ProdVendidos.ToList().Find(x => x.PedidoId != null) != null ?
-                getPedido((long)notaDeEnvio.ProdVendidos.ToList().Find(x => x.PedidoId != null).PedidoId) : null;
-            long pedidoId = (long)(pedido?.Id);
-
             ProdVendido nuevoProdVendido = new ProdVendido()
             {
                 Cantidad = int.Parse(textBox10.Text),
                 Descripcion = productoNuevo.Nombre,
                 NotaDeEnvioId = notaDeEnvio.Id,
-                PedidoId = pedidoId,
                 Precio = isNegativePrice(productoNuevo) ? (-1)*productoNuevo.Precio : productoNuevo.Precio,
                 ProductoId = productoNuevo.Id,
                 RegistroVentaId = notaDeEnvio.ProdVendidos.First().RegistroVentaId
             };
+            Pedido pedido = null;
+            if (notaDeEnvio.ProdVendidos != null)
+            {
+                var prodVendidoEnPedido = notaDeEnvio.ProdVendidos.ToList().Find(x => x.PedidoId != null);
+                if (prodVendidoEnPedido != null)
+                {
+                    pedido = getPedido((long)prodVendidoEnPedido.PedidoId);
+                    if (pedido != null) nuevoProdVendido.PedidoId = pedido.Id;
+                }
+            }
             var existingProdVendido = notaDeEnvio.ProdVendidos.ToList().Find(x => x.Producto.Nombre == productoNuevo.Nombre);
-            if (existingProdVendido == null)
+            if (existingProdVendido == null || isSaldo(existingProdVendido.Producto))
             {
                 nuevoProdVendido = addProdVendidoReturnsWithId(nuevoProdVendido);
             }
@@ -546,12 +554,13 @@ namespace linway_app.Forms
                 existingProdVendido.Cantidad += nuevoProdVendido.Cantidad;
                 editProdVendido(existingProdVendido);
             }
+            _lstProdVendidos.Add(nuevoProdVendido);
             editNoteValues(notaDeEnvio);
             updateVentasDesdeProdVendidos(new List<ProdVendido>() { nuevoProdVendido }, true);
             if (nuevoProdVendido.PedidoId != null)
             {
                 pedido = getPedido((long)nuevoProdVendido.PedidoId);
-                updatePedido(pedido);
+                updatePedido(pedido, true);
             }
 
             ActualizarNotas();
@@ -569,6 +578,7 @@ namespace linway_app.Forms
             textBox9.Text = "";
             textBox10.Text = "";
             textBox11.Text = "";
+            textBox12.Text = "";
             textBox11.Visible = false;
             button9.Enabled = false;
         }
@@ -620,9 +630,8 @@ namespace linway_app.Forms
             if (pedidoId != null)
             {
                 Pedido pedido = getPedido((long)pedidoId);
-                if (pedido != null) updatePedido(pedido);
+                if (pedido != null) updatePedido(pedido, true);
             }
-
             ActualizarNotas();
             ActualizarGrid1(_lstNotaDeEnvios);
             notaDeEnvio = getNotaDeEnvio(long.Parse(textBox7.Text));
@@ -633,6 +642,14 @@ namespace linway_app.Forms
             textBox8.Text = "";
             label22.Text = "";
             button8.Enabled = false;
+        }
+
+        private void ExportarAExcel_Btn_Click(object sender, EventArgs e)
+        {
+            Form1.loadingForm.OpenIt();
+            bool success = new Exportar().ExportarNotas(getNotaDeEnvios());
+            Form1.loadingForm.CloseIt();
+            if (success) button2.Text = "TERMINADO";
         }
     }
 }

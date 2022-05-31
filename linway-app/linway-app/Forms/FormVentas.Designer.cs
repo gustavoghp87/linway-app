@@ -29,7 +29,7 @@ namespace linway_app.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label27 = new System.Windows.Forms.Label();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.gbNuevaVenta = new System.Windows.Forms.GroupBox();
@@ -110,7 +110,7 @@ namespace linway_app.Forms
             this.label27.AutoSize = true;
             this.label27.BackColor = System.Drawing.Color.Transparent;
             this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label27.Location = new System.Drawing.Point(666, 24);
+            this.label27.Location = new System.Drawing.Point(794, 24);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(59, 18);
             this.label27.TabIndex = 31;
@@ -122,11 +122,11 @@ namespace linway_app.Forms
             this.dataGridView3.AllowUserToDeleteRows = false;
             this.dataGridView3.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView3.Location = new System.Drawing.Point(669, 45);
+            this.dataGridView3.Location = new System.Drawing.Point(792, 45);
             this.dataGridView3.Name = "dataGridView3";
             this.dataGridView3.ReadOnly = true;
             this.dataGridView3.RowHeadersWidth = 10;
-            this.dataGridView3.Size = new System.Drawing.Size(238, 382);
+            this.dataGridView3.Size = new System.Drawing.Size(261, 382);
             this.dataGridView3.TabIndex = 32;
             // 
             // gbNuevaVenta
@@ -157,7 +157,7 @@ namespace linway_app.Forms
             this.gbNuevaVenta.Controls.Add(this.button12);
             this.gbNuevaVenta.Controls.Add(this.textBox12);
             this.gbNuevaVenta.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbNuevaVenta.Location = new System.Drawing.Point(278, 47);
+            this.gbNuevaVenta.Location = new System.Drawing.Point(398, 47);
             this.gbNuevaVenta.Name = "gbNuevaVenta";
             this.gbNuevaVenta.Size = new System.Drawing.Size(385, 432);
             this.gbNuevaVenta.TabIndex = 37;
@@ -423,7 +423,7 @@ namespace linway_app.Forms
             this.accionesToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(922, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1065, 24);
             this.menuStrip1.TabIndex = 38;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -473,7 +473,7 @@ namespace linway_app.Forms
             this.groupBox7.Controls.Add(this.button20);
             this.groupBox7.Controls.Add(this.button19);
             this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox7.Location = new System.Drawing.Point(324, 69);
+            this.groupBox7.Location = new System.Drawing.Point(400, 69);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(319, 106);
             this.groupBox7.TabIndex = 42;
@@ -532,7 +532,7 @@ namespace linway_app.Forms
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 10;
-            this.dataGridView1.Size = new System.Drawing.Size(260, 382);
+            this.dataGridView1.Size = new System.Drawing.Size(380, 382);
             this.dataGridView1.TabIndex = 43;
             // 
             // label1
@@ -558,7 +558,7 @@ namespace linway_app.Forms
             this.gbVerRegistro.Controls.Add(this.label2);
             this.gbVerRegistro.Controls.Add(this.label3);
             this.gbVerRegistro.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbVerRegistro.Location = new System.Drawing.Point(278, 36);
+            this.gbVerRegistro.Location = new System.Drawing.Point(400, 36);
             this.gbVerRegistro.Name = "gbVerRegistro";
             this.gbVerRegistro.Size = new System.Drawing.Size(385, 380);
             this.gbVerRegistro.TabIndex = 45;
@@ -619,14 +619,14 @@ namespace linway_app.Forms
             this.dataGridView2.AllowUserToDeleteRows = false;
             this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView2.Location = new System.Drawing.Point(6, 89);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
@@ -672,16 +672,16 @@ namespace linway_app.Forms
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(12, 427);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(260, 52);
+            this.groupBox1.Size = new System.Drawing.Size(380, 52);
             this.groupBox1.TabIndex = 46;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtrar datos";
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(138, 19);
+            this.textBox2.Location = new System.Drawing.Point(216, 20);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(111, 21);
+            this.textBox2.Size = new System.Drawing.Size(158, 21);
             this.textBox2.TabIndex = 6;
             this.textBox2.Visible = false;
             this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
@@ -697,7 +697,7 @@ namespace linway_app.Forms
             "Fecha"});
             this.comboBox3.Location = new System.Drawing.Point(44, 19);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(88, 24);
+            this.comboBox3.Size = new System.Drawing.Size(135, 24);
             this.comboBox3.TabIndex = 4;
             this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.ComboBox3_SelectedIndexChanged);
             // 
@@ -720,7 +720,7 @@ namespace linway_app.Forms
             this.gbBorrarReg.Controls.Add(this.label4);
             this.gbBorrarReg.Controls.Add(this.bCancelarBorrarReg);
             this.gbBorrarReg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbBorrarReg.Location = new System.Drawing.Point(321, 181);
+            this.gbBorrarReg.Location = new System.Drawing.Point(401, 181);
             this.gbBorrarReg.Name = "gbBorrarReg";
             this.gbBorrarReg.Size = new System.Drawing.Size(322, 182);
             this.gbBorrarReg.TabIndex = 47;
@@ -789,7 +789,7 @@ namespace linway_app.Forms
             // ExportBtn
             // 
             this.ExportBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExportBtn.Location = new System.Drawing.Point(698, 442);
+            this.ExportBtn.Location = new System.Drawing.Point(792, 442);
             this.ExportBtn.Name = "ExportBtn";
             this.ExportBtn.Size = new System.Drawing.Size(179, 30);
             this.ExportBtn.TabIndex = 52;
@@ -801,7 +801,7 @@ namespace linway_app.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(922, 488);
+            this.ClientSize = new System.Drawing.Size(1065, 488);
             this.Controls.Add(this.ExportBtn);
             this.Controls.Add(this.gbVerRegistro);
             this.Controls.Add(this.groupBox1);

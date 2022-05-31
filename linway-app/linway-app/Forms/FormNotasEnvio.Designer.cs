@@ -100,6 +100,7 @@ namespace linway_app.Forms
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.lCantNotas = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -760,7 +761,7 @@ namespace linway_app.Forms
             this.label32.AutoSize = true;
             this.label32.Location = new System.Drawing.Point(226, 61);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(71, 13);
+            this.label32.Size = new System.Drawing.Size(43, 13);
             this.label32.TabIndex = 7;
             this.label32.Text = "en uno)";
             // 
@@ -769,7 +770,7 @@ namespace linway_app.Forms
             this.label31.AutoSize = true;
             this.label31.Location = new System.Drawing.Point(226, 45);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(183, 13);
+            this.label31.Size = new System.Drawing.Size(172, 13);
             this.label31.TabIndex = 6;
             this.label31.Text = "y , también del Pedido, si estuviese";
             // 
@@ -778,7 +779,7 @@ namespace linway_app.Forms
             this.label30.AutoSize = true;
             this.label30.Location = new System.Drawing.Point(226, 27);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(147, 13);
+            this.label30.Size = new System.Drawing.Size(209, 13);
             this.label30.TabIndex = 5;
             this.label30.Text = "Nota de Envío y de los Registros de Venta";
             // 
@@ -913,11 +914,23 @@ namespace linway_app.Forms
             this.lCantNotas.TabIndex = 11;
             this.lCantNotas.Text = "notas de envio";
             // 
+            // button2
+            // 
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(884, 526);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(187, 28);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "EXPORTAR A EXCEL";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.ExportarAExcel_Btn_Click);
+            // 
             // FormNotasEnvio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1218, 552);
+            this.ClientSize = new System.Drawing.Size(1218, 561);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.lCantNotas);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBox4);
@@ -1027,5 +1040,6 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Button button2;
     }
 }

@@ -17,7 +17,12 @@ namespace linway_app.Services.Delegates
         public readonly static Func<string, Producto> getProductoPorNombre = GetProductoPorNombre;
         public readonly static Func<string, Producto> getProductoPorNombreExacto = GetProductoPorNombreExacto;
         public readonly static Func<List<Producto>> getProductos = GetProductos;
+        public static readonly Predicate<Producto> isACobrar = IsACobrar;
+        public static readonly Predicate<Producto> isBlanqueador = IsBlanqueador;
+        public static readonly Predicate<Producto> isLiquido = IsLiquido;
         public static readonly Predicate<Producto> isNegativePrice = IsNegativePrice;
+        public static readonly Predicate<Producto> isPolvo = IsPolvo;
+        public static readonly Predicate<Producto> isSaldo = IsSaldo;
 
         private static readonly IServiceBase<Producto> _service = ServicesObjects.ServProducto;
 
@@ -57,10 +62,34 @@ namespace linway_app.Services.Delegates
         {
             return _service.GetAll();
         }
+        private static bool IsACobrar(Producto product)
+        {
+            return product != null && product.Tipo == TipoProducto.Saldo.ToString()
+                && product.SubTipo != null && product.SubTipo == TipoSaldo.ACobrar.ToString();
+        }
+        private static bool IsBlanqueador(Producto product)
+        {
+            return product != null
+                && product.Tipo == TipoProducto.Polvo.ToString()
+                && product.SubTipo != null
+                && product.SubTipo == TipoPolvo.Blanqueador.ToString();
+        }
+        private static bool IsLiquido(Producto product)
+        {
+            return product != null && product.Tipo == TipoProducto.Líquido.ToString();
+        }
         private static bool IsNegativePrice(Producto product)
         {
             return product.Tipo == TipoProducto.Saldo.ToString() &&
                 (product.SubTipo == TipoSaldo.Bonificacion.ToString() || product.SubTipo == TipoSaldo.Devolucion.ToString());
+        }
+        private static bool IsPolvo(Producto product)
+        {
+            return product != null && product.Tipo == TipoProducto.Polvo.ToString();
+        }
+        private static bool IsSaldo(Producto product)
+        {
+            return product != null && product.Tipo == TipoProducto.Saldo.ToString();
         }
     }
 }

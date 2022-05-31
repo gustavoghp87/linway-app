@@ -254,13 +254,11 @@ namespace linway_app.Forms
                 Form1.loadingForm.CloseIt();
                 return;
             }
-            var prodVendidosAAgregar = new List<ProdVendido>();
             foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
             {
                 prodVendido.NotaDeEnvioId = notaId;
-                prodVendidosAAgregar.Add(prodVendido);
             }
-            addProdVendidos(prodVendidosAAgregar);
+            addProdVendidos(_lstProdVendidosAAgregar);
 
             if (checkBox4.Checked)      // agregar productos vendidos a lista de registros y a lista de ventas
             {
@@ -304,9 +302,11 @@ namespace linway_app.Forms
                     prodVendido.PedidoId = pedidoId;
                     prodVendidosAEditar.Add(prodVendido);
                 }
+                // pedido.Entregar = 1;
+                editPedidos(new List<Pedido>() { pedido });
                 editProdVendidos(prodVendidosAEditar);
                 pedido = getPedido(pedidoId);
-                updatePedido(pedido);
+                updatePedido(pedido, true);
             }
 
             if (checkBox1.Checked)      // imprimir

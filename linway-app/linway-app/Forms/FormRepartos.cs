@@ -15,14 +15,10 @@ namespace linway_app.Forms
     public partial class FormRepartos : Form
     {
         private Pedido _pedidoAEliminar;
-        private List<Reparto> _lstRepartos;
-        private List<Reparto> _lstRepartosFiltrada;
         private List<Pedido> _lstPedidos;
         private List<DiaReparto> _lstDiaRepartos;
         public FormRepartos()
         {
-            _lstRepartos = new List<Reparto>();
-            _lstRepartosFiltrada = new List<Reparto>();
             _lstPedidos = new List<Pedido>();
             _lstDiaRepartos = new List<DiaReparto>();
             InitializeComponent();
@@ -75,12 +71,12 @@ namespace linway_app.Forms
             dataGridView1.Columns[8].Width = 30;
             dataGridView1.Columns[9].Width = 30;
             dataGridView1.Columns[11].Visible = false;      // orden
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
         }
         private void ReCargarHDR(string elDia, string elReparto)
         {
             Actualizar();
-            _lstRepartos = getRepartosPorDia(elDia);
-            long repartoId = _lstRepartos.Find(x => x.Nombre == elReparto).Id;
+            long repartoId = getRepartoPorDiaYNombre(elDia, elReparto).Id;
             _lstPedidos = getPedidosPorRepartoId(repartoId).OrderBy(x => x.Orden).ToList();
         }
         private void Exportar_Click(object sender, EventArgs e)
@@ -91,7 +87,12 @@ namespace linway_app.Forms
             bool success = false;
             DialogResult dialogResult = MessageBox.Show("Exportar " + dia + " - "
                 + nombreReparto + " ¿Confirmar?", "Exportar Reparto a Excel", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes) success = exportReparto(dia, nombreReparto);
+            if (dialogResult == DialogResult.Yes)
+            {
+                Form1.loadingForm.OpenIt();
+                success = exportReparto(dia, nombreReparto);
+                Form1.loadingForm.CloseIt();
+            }
             if (success) exportarButton.Text = "Terminado";
         }
         private void LimpiarPantalla()
@@ -143,23 +144,23 @@ namespace linway_app.Forms
             label2.Visible = true;
             ActualizarGrid(new List<Pedido>());
             if (_lstDiaRepartos.Count == 0) return;
-            _lstRepartos = getRepartosPorDia(comboBox1.SelectedItem.ToString());
-            comboBox2.DataSource = _lstRepartos.Count > 0 ? _lstRepartos : null;
+            var lstRepartos = getRepartosPorDia(comboBox1.SelectedItem.ToString());
+            comboBox2.DataSource = lstRepartos.Count > 0 ? lstRepartos : null;
             comboBox2.DisplayMember = "Nombre";
             comboBox2.ValueMember = "Nombre";
         }
         private void UpdateGrid()
         {
             if (comboBox1.Text == "") return;
-            Reparto reparto = _lstRepartos.Find(x => x.Nombre.Equals(comboBox2.Text));
+            Reparto reparto = getRepartoPorDiaYNombre(comboBox1.SelectedItem.ToString(), comboBox2.Text);
             if (reparto == null) return;
             if (checkBox1.Checked)
             {
-                _lstPedidos = reparto.Pedidos.Where(x => x.Entregar == 1).ToList();
+                _lstPedidos = getPedidosPorRepartoId(reparto.Id).Where(x => x.Entregar == 1).ToList();
             }
             else
             {
-                _lstPedidos = reparto.Pedidos.ToList();
+                _lstPedidos = getPedidosPorRepartoId(reparto.Id).ToList();
             }
             VerDatos(reparto);
             ActualizarGrid(_lstPedidos);
@@ -215,8 +216,7 @@ namespace linway_app.Forms
         //__________________________AGREGAR DESTINO--_____________________
         private void ComboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _lstRepartosFiltrada = _lstDiaRepartos.Find(x => x.Dia == comboBox4.SelectedItem.ToString()).Reparto.ToList();
-            comboBox5.DataSource = _lstRepartosFiltrada;
+            comboBox5.DataSource = getRepartosPorDia(comboBox4.SelectedItem.ToString());
             comboBox5.DisplayMember = "Nombre";
             comboBox5.ValueMember = "Nombre";
         }
@@ -262,7 +262,7 @@ namespace linway_app.Forms
             comboBox1.SelectedIndex = comboBox4.SelectedIndex;
             comboBox2.SelectedIndex = comboBox5.SelectedIndex;
             Cliente cliente = getClientePorDireccionExacta(label8.Text);
-            Reparto reparto = _lstRepartos.Find(x => x.Nombre.Equals(comboBox5.Text));
+            Reparto reparto = getRepartoPorDiaYNombre(comboBox4.Text, comboBox5.Text);
             if (cliente == null || reparto == null)
             {
                 MessageBox.Show("Falló algo, código 44");
@@ -274,6 +274,16 @@ namespace linway_app.Forms
                 return;
             };
             long pedidoId = addPedidoIfNotExistsAndReturnId(reparto.Id, cliente.Id);
+            Pedido pedido = getPedido(pedidoId);
+            if (pedido == null)
+            {
+                MessageBox.Show("Falló poner pedido para entregar");
+            }
+            else
+            {
+                pedido.Entregar = 1;
+                editPedidos(new List<Pedido>() { pedido });
+            }
             LimpiarPantalla();
             Actualizar();
         }
@@ -354,9 +364,7 @@ namespace linway_app.Forms
         }
         private void ComboBox8_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string dia = comboBox8.SelectedItem.ToString();
-            _lstRepartosFiltrada = _lstDiaRepartos.Find(x => x.Dia == dia).Reparto.ToList();
-            comboBox7.DataSource = _lstRepartosFiltrada;
+            comboBox7.DataSource = getRepartosPorDia(comboBox8.SelectedItem.ToString());
             comboBox7.DisplayMember = "Nombre";
             comboBox7.ValueMember = "Nombre";
         }
@@ -370,9 +378,7 @@ namespace linway_app.Forms
             Form1.loadingForm.OpenIt();
             string dia = comboBox8.Text;
             string nombre = comboBox7.Text;
-            Reparto reparto = _lstDiaRepartos
-                .Find(x => x.Dia == dia).Reparto.ToList()
-                .Find(x => x.Nombre == nombre);
+            Reparto reparto = getRepartoPorDiaYNombre(dia, nombre);
             comboBox1.SelectedIndex = comboBox8.SelectedIndex;
             comboBox2.SelectedIndex = comboBox7.SelectedIndex;
             cleanRepartos(new List<Reparto>() { reparto });
@@ -392,8 +398,7 @@ namespace linway_app.Forms
         }
         private void TextBox7_TextChanged(object sender, EventArgs e)
         {
-            Pedido pedido = _lstPedidos
-                .Find(x => x.Direccion.ToLower().Contains(textBox7.Text.ToLower()));
+            Pedido pedido = _lstPedidos.Find(x => x.Direccion.ToLower().Contains(textBox7.Text.ToLower()));
             if (pedido != null) label36.Text = pedido.Direccion;
             else label36.Text = "No encontrado";
         }
@@ -460,9 +465,9 @@ namespace linway_app.Forms
                 Form1.loadingForm.OpenIt();
                 string pedidoAMover = label30.Text;
                 string pedidoReferencia = label31.Text;
-                Reparto reparto = _lstRepartos.Find(x => x.DiaReparto.Dia == comboBox1.Text && x.Nombre == comboBox2.Text);
-                Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoAMover);
-                Pedido pedido2 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoReferencia);
+                Reparto reparto = getRepartoPorDiaYNombre(comboBox1.Text, comboBox2.Text);
+                Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoAMover && x.Estado != "Eliminado");
+                Pedido pedido2 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoReferencia && x.Estado != "Eliminado");
                 long order1 = pedido1.Orden;
                 long order2 = pedido2.Orden;
                 if (order2 == order1)
@@ -534,8 +539,7 @@ namespace linway_app.Forms
         {
             try
             {
-                _lstRepartosFiltrada = _lstDiaRepartos.Find(x => x.Dia == comboBox10.SelectedItem.ToString()).Reparto.ToList();
-                comboBox9.DataSource = _lstRepartosFiltrada;
+                comboBox9.DataSource = getRepartosPorDia(comboBox10.SelectedItem.ToString());
                 comboBox9.DisplayMember = "Nombre";
                 comboBox9.ValueMember = "Nombre";
             }
@@ -581,15 +585,21 @@ namespace linway_app.Forms
             ReCargarHDR(comboBox10.Text, comboBox9.Text);
             if (_pedidoAEliminar == null) return;
             _pedidoAEliminar = getPedido(_pedidoAEliminar.Id);
-            if (_pedidoAEliminar == null || _pedidoAEliminar.ProdVendidos == null || _pedidoAEliminar.ProdVendidos.Count == 0) return;
-            Form1.loadingForm.OpenIt();
-            var prodVendidosAEditar = new List<ProdVendido>();
-            _pedidoAEliminar.ProdVendidos.ToList().ForEach(prodVendido =>
+            if (_pedidoAEliminar == null) return;
+            List<ProdVendido> prodVendidos = getProdVendidos();
+            if (prodVendidos != null && prodVendidos.Count != 0)
             {
-                prodVendido.PedidoId = null;
-                prodVendidosAEditar.Add(prodVendido);
-            });
-            editProdVendidos(prodVendidosAEditar);
+                _pedidoAEliminar.ProdVendidos = prodVendidos.Where(x => x.PedidoId == _pedidoAEliminar.Id).ToList();
+                if (_pedidoAEliminar.ProdVendidos != null && _pedidoAEliminar.ProdVendidos.Count != 0)
+                {
+                    Form1.loadingForm.OpenIt();
+                    foreach (ProdVendido prodVendido in _pedidoAEliminar.ProdVendidos)
+                    {
+                        prodVendido.PedidoId = null;
+                    }
+                    editProdVendidos(_pedidoAEliminar.ProdVendidos);
+                }
+            }
             deletePedido(_pedidoAEliminar);
             Form1.loadingForm.CloseIt();
             Actualizar();

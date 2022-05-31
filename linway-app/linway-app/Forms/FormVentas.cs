@@ -47,8 +47,8 @@ namespace linway_app.Forms
                 grid.Add(Form1.mapper.Map<ERegistroVenta>(x))
             );
             dataGridView1.DataSource = grid;
-            dataGridView1.Columns[0].Width = 30;
-            dataGridView1.Columns[1].Width = 150;
+            dataGridView1.Columns[0].Width = 48;
+            dataGridView1.Columns[1].Width = 240;
             label1.Text = "Registro de ventas (" + lstRegistroVentas.Count.ToString() + ")";
         }
         private void ActualizarGrid2ProdVendidos (ICollection<ProdVendido> lstProdVendidos)
@@ -199,7 +199,8 @@ namespace linway_app.Forms
             var nuevaVenta = new Venta
             {
                 ProductoId = producto.Id,
-                Cantidad = int.Parse(textBox13.Text)
+                Cantidad = int.Parse(textBox13.Text),
+                Producto = producto      // dejar para que cargue el nombre en el grid
             };
             _lstAgregarVentas.Add(nuevaVenta);
             ActualizarGrid5(_lstAgregarVentas);
@@ -208,119 +209,7 @@ namespace linway_app.Forms
             textBox12.Text = "";
             textBox4.Text = "";
         }
-        private void AgregarVenta_Click(object sender, EventArgs e)
-        {
-            if (_lstAgregarVentas == null || _lstAgregarVentas.Count == 0)
-            {
-                MessageBox.Show("No se han ingresado productos");
-                return;
-            }
-            // generar un RegistroVenta con "Venta particular"y devuelve un id para usar en los ProdVendido
-            // generar un Venta por cada ítem en _lstAgregarVentas, no necesita precios
-            // generar un ProdVendido por cada ítem en _lstAgregarVentas con el id de (1)
-
-            ActualizarGrid3Ventas();
-
-            Form1.loadingForm.OpenIt();
-            var lstProdVendidos = new List<ProdVendido>();
-            RegistroVenta nuevoRegistroVenta = new RegistroVenta
-            {   // hacer o editar registros (no puedo editar porque no tengo cliente, se modifica si hay "enviar a hdr")
-                ClienteId = 1,
-                NombreCliente = "Venta particular",
-                Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
-            };
-            long registroId = addRegistroVentaReturnId(nuevoRegistroVenta);
-            if (registroId == 0) {
-                Form1.loadingForm.CloseIt();
-                MessageBox.Show("Falló (1)");
-                return;
-            };
-            var ventasAAgregar = new List<Venta>();
-            var ventasAEditar = new List<Venta>();
-            var prodVendidosAAgregar = new List<ProdVendido>();
-            foreach (Venta ventaParaAgregar in _lstAgregarVentas)
-            {
-                List<Venta> lstVentas = getVentas();
-                bool exists = false;
-                if (lstVentas != null)
-                    foreach (Venta venta in lstVentas)
-                    {
-                        if (venta.ProductoId != ventaParaAgregar.ProductoId) continue;
-                        exists = true;
-                        venta.Cantidad += ventaParaAgregar.Cantidad;
-                        ventasAEditar.Add(venta);
-                    }
-                if (!exists) ventasAAgregar.Add(ventaParaAgregar);
-
-                // hacer ProdVendidos
-                Producto producto = getProducto(ventaParaAgregar.ProductoId);
-                if (producto == null)
-                {
-                    Form1.loadingForm.CloseIt();
-                    MessageBox.Show("Falló (2)");
-                    return;
-                }
-                ProdVendido nuevoProdVendido = new ProdVendido
-                {
-                    Cantidad = ventaParaAgregar.Cantidad,
-                    Descripcion = producto.Nombre,
-                    Precio = producto.Precio,
-                    ProductoId = producto.Id,
-                    RegistroVentaId = registroId
-                };
-                lstProdVendidos.Add(nuevoProdVendido);
-                prodVendidosAAgregar.Add(nuevoProdVendido);
-                Actualizar();
-            }
-            addVentas(ventasAAgregar);
-            editVentas(ventasAEditar);
-            addProdVendidos(prodVendidosAAgregar);
-
-            // si se manda a Pedido:
-            //  generar un Pedido (o modificar), necesita dia, reparto, cliente, lstProdVendidos
-            //  agregar cliente al RegistroVenta
-            if (checkBox2.Checked)   // enviar a reparto, o sea agregar o modificar pedido del cliente
-            {
-                string dia = comboBox1.Text;
-                string nombre = comboBox2.Text;
-                Cliente cliente = getClientePorDireccionExacta(label20.Text);
-                Reparto reparto = getRepartoPorDiaYNombre(dia, nombre);
-                if (cliente == null || reparto == null)
-                {
-                    Form1.loadingForm.CloseIt();
-                    MessageBox.Show("Falló (3)");
-                    return;
-                }
-                long pedidoId = addPedidoIfNotExistsAndReturnId(reparto.Id, cliente.Id);
-                Pedido pedido = getPedido(pedidoId);
-                if (pedidoId == 0 || pedido == null)
-                {
-                    Form1.loadingForm.CloseIt();
-                    MessageBox.Show("Falló (4)");
-                    return;
-                }
-                var prodVendidosAEditar = new List<ProdVendido>();
-                lstProdVendidos.ToList().ForEach(prodVendido =>
-                {
-                    prodVendido.PedidoId = pedido.Id;
-                    prodVendidosAEditar.Add(prodVendido);
-                });
-                editProdVendidos(prodVendidosAEditar);
-                updatePedido(pedido);
-
-                nuevoRegistroVenta.ClienteId = cliente.Id;
-                nuevoRegistroVenta.NombreCliente = cliente.Direccion;
-                editRegistroVenta(nuevoRegistroVenta);
-
-            }
-            Form1.loadingForm.CloseIt();
-            _lstAgregarVentas.Clear();
-            LimpiarPantalla();
-            Actualizar();
-        }
-
-        //enviar HDR
-        private void CheckBox2_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox2_CheckedChanged(object sender, EventArgs e)        //enviar HDR
         {
             if (checkBox2.Checked)
             {
@@ -381,6 +270,139 @@ namespace linway_app.Forms
                 label20.Text = "No encontrado";
             else
                 label20.Text = cliente.Direccion;
+        }
+        private void AgregarVenta_Click(object sender, EventArgs e)
+        {
+            string dia = comboBox1.Text;
+            string nombre = comboBox2.Text;
+            string direccionCliente = label20.Text;
+            Cliente cliente = null;
+            Reparto reparto = null;
+            Pedido pedido = null;
+            if (_lstAgregarVentas == null || _lstAgregarVentas.Count == 0)
+            {
+                MessageBox.Show("No se han ingresado productos");
+                return;
+            }
+            if (checkBox2.Checked)   // enviar a reparto
+            {
+                if (direccionCliente == "" || dia == "" || nombre == "")
+                {
+                    MessageBox.Show("Faltan el cliente o el reparto");
+                    return;
+                }
+                cliente = getClientePorDireccionExacta(label20.Text);
+                reparto = getRepartoPorDiaYNombre(dia, nombre);
+                if (cliente == null || reparto == null)
+                {
+                    Form1.loadingForm.CloseIt();
+                    MessageBox.Show("Falló cliente o reparto");
+                    return;
+                }
+                long pedidoId = addPedidoIfNotExistsAndReturnId(reparto.Id, cliente.Id);
+                pedido = getPedido(pedidoId);
+                if (pedidoId == 0 || pedido == null)
+                {
+                    Form1.loadingForm.CloseIt();
+                    MessageBox.Show("Falló pedido");
+                    return;
+                }
+            }
+            // generar un RegistroVenta con "Venta particular"y devuelve un id para usar en los ProdVendido
+            // generar un Venta por cada ítem en _lstAgregarVentas, no necesita precios
+            // generar un ProdVendido por cada ítem en _lstAgregarVentas con el id de (1)
+            Form1.loadingForm.OpenIt();
+            ActualizarGrid3Ventas();
+            var lstProdVendidos = new List<ProdVendido>();
+            RegistroVenta nuevoRegistroVenta = new RegistroVenta
+            {   // hacer o editar registros (no puedo editar porque no tengo cliente, se modifica si hay "enviar a hdr")
+                ClienteId = 634,
+                NombreCliente = "Venta particular",
+                Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
+            };
+            long registroId = addRegistroVentaReturnId(nuevoRegistroVenta);
+            if (registroId == 0)
+            {
+                Form1.loadingForm.CloseIt();
+                MessageBox.Show("Falló Registro");
+                return;
+            };
+            var ventasAAgregar = new List<Venta>();
+            var ventasAEditar = new List<Venta>();
+            var prodVendidosAAgregar = new List<ProdVendido>();
+            var prodVendidosAEditar = new List<ProdVendido>();
+            foreach (Venta ventaParaAgregar in _lstAgregarVentas)
+            {
+                List<Venta> lstVentas = getVentas();
+                bool exists = false;
+                if (lstVentas != null)
+                    foreach (Venta venta in lstVentas)
+                    {
+                        if (venta.ProductoId != ventaParaAgregar.ProductoId) continue;
+                        exists = true;
+                        venta.Cantidad += ventaParaAgregar.Cantidad;
+                        ventasAEditar.Add(venta);
+                    }
+                if (!exists) ventasAAgregar.Add(ventaParaAgregar);
+
+                Producto producto = getProducto(ventaParaAgregar.ProductoId);
+                if (producto == null)
+                {
+                    Form1.loadingForm.CloseIt();
+                    MessageBox.Show("Falló Producto");
+                    return;
+                }
+
+                exists = false;
+                if (checkBox2.Checked)
+                {
+                    List<ProdVendido> prodVendidos = getProdVendidos();
+                    foreach (ProdVendido prodVendido in prodVendidos)
+                    {
+                        if (exists) continue;
+                        if (prodVendido.ProductoId == producto.Id && prodVendido.PedidoId == pedido.Id)
+                        {
+                            exists = true;
+                            prodVendido.Cantidad += ventaParaAgregar.Cantidad;
+                            prodVendidosAEditar.Add(prodVendido);
+                        }
+                    }
+                }
+                if (!exists)
+                {
+                    ProdVendido nuevoProdVendido = new ProdVendido
+                    {
+                        Cantidad = ventaParaAgregar.Cantidad,
+                        Descripcion = producto.Nombre,
+                        Precio = producto.Precio,
+                        ProductoId = producto.Id,
+                        RegistroVentaId = registroId
+                    };
+                    prodVendidosAAgregar.Add(nuevoProdVendido);
+                    lstProdVendidos.Add(nuevoProdVendido);
+                }
+                Actualizar();
+            }
+            addVentas(ventasAAgregar);
+            editVentas(ventasAEditar);
+            addProdVendidos(prodVendidosAAgregar);
+            editProdVendidos(prodVendidosAEditar);
+            if (checkBox2.Checked)
+            {
+                lstProdVendidos.ToList().ForEach(prodVendido =>
+                {
+                    prodVendido.PedidoId = pedido.Id;
+                });
+                editProdVendidos(lstProdVendidos);
+                updatePedido(pedido, true);
+                nuevoRegistroVenta.ClienteId = cliente.Id;
+                nuevoRegistroVenta.NombreCliente = cliente.Direccion;
+                editRegistroVenta(nuevoRegistroVenta);
+            }
+            Form1.loadingForm.CloseIt();
+            _lstAgregarVentas.Clear();
+            LimpiarPantalla();
+            Actualizar();
         }
 
         // reiniciar ventas
@@ -580,7 +602,9 @@ namespace linway_app.Forms
         private void ExportBtn_Click_1(object sender, EventArgs e)
         {
             Actualizar();
+            Form1.loadingForm.OpenIt();
             bool success = new Exportar().ExportarVentas(_lstVentas);
+            Form1.loadingForm.CloseIt();
             if (success) ExportBtn.Text = "Terminado";
         }
     }

@@ -22,7 +22,7 @@ namespace linway_app.Services.Delegates
         public readonly static Func<long, Pedido> getPedido = GetPedido;
         public readonly static Func<ICollection<Pedido>> getPedidos = GetPedidos;
         public readonly static Func<long, ICollection<Pedido>> getPedidosPorRepartoId = GetPedidosPorRepartoId;
-        public readonly static Func<Pedido, Pedido> updatePedido = UpdatePedido;
+        public readonly static Func<Pedido, bool, Pedido> updatePedido = UpdatePedido;
 
         private static readonly IServiceBase<Pedido> _service = ServicesObjects.ServPedido;
 
@@ -111,21 +111,22 @@ namespace linway_app.Services.Delegates
             long lastOrden = lstPedidos.OrderBy(x => x.Orden).Last().Orden;
             return lastOrden;
         }
-        private static Pedido UpdatePedido(Pedido pedido)
+        private static Pedido UpdatePedido(Pedido pedido, bool entregar)
         {
             if (pedido == null || pedido.ProdVendidos == null || pedido.ProdVendidos.Count == 0) return pedido;
-
+            pedido.ProductosText = "";
+            pedido.A = 0;
+            pedido.Ae = 0;
+            pedido.D = 0;
+            pedido.E = 0;
+            pedido.L = 0;
+            pedido.T = 0;
             pedido.ProdVendidos.ToList().ForEach(prodVendido =>
             {
-                string description = "";
+                string description =
+                    esProducto(prodVendido.Producto) ? editDescripcion(prodVendido.Descripcion) : prodVendido.Descripcion;
 
-                if (esProducto(prodVendido.Producto))
-                {
-                    description = editDescripcion(prodVendido.Descripcion);
-                }
-
-                if (prodVendido.Producto.Tipo == TipoProducto.Polvo.ToString() && prodVendido.Producto.SubTipo != null
-                     && prodVendido.Producto.SubTipo != TipoPolvo.Blanqueador.ToString())
+                if (isPolvo(prodVendido.Producto) && !isBlanqueador(prodVendido.Producto))
                 {
                     int kilos = 20;
                     long cantidadDeBolsas = prodVendido.Cantidad / kilos;
@@ -151,25 +152,30 @@ namespace linway_app.Services.Delegates
                     }
                     pedido.ProductosText += cantidadDeBolsas + "x20 " + description + " | ";
                 }
-                else if (prodVendido.Producto.Tipo != TipoProducto.Saldo.ToString())
+                else if (!isSaldo(prodVendido.Producto))
                 {
-                    if (prodVendido.Producto.Tipo == TipoProducto.Líquido.ToString())
+                    if (isLiquido(prodVendido.Producto))
                     {
                         pedido.L += prodVendido.Cantidad;
                     }
 
-                    if (prodVendido.Producto.Tipo == TipoProducto.Polvo.ToString()
-                         && prodVendido.Producto.SubTipo == TipoPolvo.Blanqueador.ToString())
-                        pedido.ProductosText += prodVendido.Cantidad.ToString() + " kilos " + description + " | ";
+                    if (isBlanqueador(prodVendido.Producto))
+                        pedido.ProductosText += prodVendido.Cantidad.ToString() + " kg " + description + " | ";
                     else
                         pedido.ProductosText += prodVendido.Cantidad.ToString() + "x " + description + " | ";
                 }
-                else if (prodVendido.Producto.SubTipo != null && prodVendido.Producto.SubTipo == TipoSaldo.ACobrar.ToString())
+                else if (isACobrar(prodVendido.Producto))
                 {
                     pedido.ProductosText += "A cobrar | ";
                 }
             });
-
+            if (pedido.ProductosText.Length > 3)
+            {
+                var lastThree = pedido.ProductosText.Substring(pedido.ProductosText.Length - 3, 3);
+                var cleansed = pedido.ProductosText.Substring(0, pedido.ProductosText.Length - 3);
+                if (lastThree == " | ") pedido.ProductosText = cleansed;
+            }
+            pedido.Entregar = entregar ? 1 : 0;
             EditPedidos(new List<Pedido>() { pedido });
             updateReparto(getReparto(pedido.RepartoId));
             return pedido;

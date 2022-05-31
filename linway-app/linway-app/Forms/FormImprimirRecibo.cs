@@ -91,7 +91,7 @@ namespace linway_app.Forms
             {
                 PrintDialog printDialog1 = new PrintDialog { Document = printDocument1 };
                 DialogResult result = printDialog1.ShowDialog();
-                if (result == DialogResult.OK)
+                if (result != DialogResult.OK)
                 {
                     MessageBox.Show("Falló impresión en generación de diálogo");
                     return;

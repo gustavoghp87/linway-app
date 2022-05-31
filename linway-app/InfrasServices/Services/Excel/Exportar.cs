@@ -21,7 +21,11 @@ namespace linway_app.Excel
         public bool ExportarVentas(ICollection<Venta> lstVentas)
         {
             if (lstVentas == null) return false;
-            string path = @"Excels/ventas-" + DateTime.Now.ToString(Constants.FormatoDeFecha) + "-" + GetTimestamp() + ".";
+            string path = @"Excels/ventas-"
+                + DateTime.Now.ToString(Constants.FormatoDeFecha)
+                + "-"
+                + GetTimestamp()
+                + ".";
             try
             {
                 using var fs = new FileStream(path + _extension, FileMode.Create, FileAccess.Write);
@@ -328,6 +332,122 @@ namespace linway_app.Excel
                 return false;
             }
             return true;
+        }
+        public bool ExportarNotas(ICollection<NotaDeEnvio> notas)
+        {
+            if (notas == null || notas.Count == 0) return false;
+            string path = @"Excels/Notas-de-envio-"
+                + DateTime.Now.ToString(Constants.FormatoDeFecha)
+                + "-"
+                + GetTimestamp()
+                + ".";
+            try
+            {
+                using var fs = new FileStream(path + _extension, FileMode.Create, FileAccess.Write);
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet1 = workbook.CreateSheet("Hoja1");
+                sheet1.AddMergedRegion(new CellRangeAddress(0, 0, 0, notas.Count + 2));
+
+                var style1 = workbook.CreateCellStyle();
+                style1.FillForegroundColor = HSSFColor.Blue.Index2;
+                style1.FillPattern = FillPattern.SolidForeground;
+                style1.VerticalAlignment = VerticalAlignment.Center;
+
+                var fontBold = workbook.CreateFont();
+                fontBold.FontHeightInPoints = 11;
+                fontBold.IsBold = true;
+
+                IRow row0 = sheet1.CreateRow(1);
+                row0.Height = 30 * 15;
+
+                ICell cell2 = row0.CreateCell(0);
+                cell2.CellStyle = style1;
+                cell2.SetCellValue("ID");
+                cell2.CellStyle.SetFont(fontBold);
+                cell2.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)HorizontalAlignment.Center;
+
+                ICell cell3 = row0.CreateCell(1);
+                cell3.CellStyle = style1;
+                cell3.SetCellValue("FECHA");
+                cell3.CellStyle.SetFont(fontBold);
+                cell3.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)HorizontalAlignment.Center;
+
+                ICell cell4 = row0.CreateCell(2);
+                cell4.CellStyle = style1;
+                cell4.SetCellValue("CLIENTE");
+                cell4.CellStyle.SetFont(fontBold);
+                cell4.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)HorizontalAlignment.Center;
+
+                ICell cell5 = row0.CreateCell(3);
+                cell5.CellStyle = style1;
+                cell5.SetCellValue("ID CL");
+                cell5.CellStyle.SetFont(fontBold);
+                cell5.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)HorizontalAlignment.Center;
+
+                ICell cell6 = row0.CreateCell(4);
+                cell6.CellStyle = style1;
+                cell6.SetCellValue("IMPORTE");
+                cell6.CellStyle.SetFont(fontBold);
+                cell6.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)HorizontalAlignment.Center;
+
+                ICell cell7 = row0.CreateCell(5);
+                cell7.CellStyle = style1;
+                cell7.SetCellValue("DETALLE");
+                cell7.CellStyle.SetFont(fontBold);
+                cell7.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)HorizontalAlignment.Center;
+                cell7.CellStyle.VerticalAlignment = VerticalAlignment.Center;
+
+                ICell cell1 = row0.CreateCell(6);
+                cell1.CellStyle = style1;
+                cell1.SetCellValue("NOTAS DE ENVÍO");
+                cell1.CellStyle.SetFont(fontBold);
+                cell1.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)HorizontalAlignment.Center;
+
+                ICell cell1b = row0.CreateCell(7);
+                cell1b.CellStyle = style1;
+                cell1b.SetCellValue(DateTime.Now.ToString(Constants.FormatoDeFecha));
+                cell1b.CellStyle.SetFont(fontBold);
+                cell1b.CellStyle.Alignment = (NPOI.SS.UserModel.HorizontalAlignment)HorizontalAlignment.Center;
+
+                var rowIndex = 2;
+                foreach (NotaDeEnvio nota in notas.OrderBy(x => x.Id))
+                {
+                    IRow row = sheet1.CreateRow(rowIndex);
+                    var cellA = row.CreateCell(0);
+                    cellA.SetCellValue(nota.Id);
+                    cellA.CellStyle.SetFont(fontBold);
+                    var cellB = row.CreateCell(1);
+                    cellB.SetCellValue(nota.Fecha);
+                    var cellC = row.CreateCell(2);
+                    cellC.SetCellValue(nota.Cliente.Direccion);
+                    var cellD = row.CreateCell(3);
+                    cellD.SetCellValue(nota.ClienteId);
+                    var cellE = row.CreateCell(4);
+                    cellE.SetCellValue((double)nota.ImporteTotal);
+                    var cellF = row.CreateCell(5);
+                    cellF.SetCellValue(nota.Detalle);
+                    if (nota.Detalle.Length > 40)
+                    {
+                        row.Height = 500;
+                    }
+                    rowIndex++;
+                }
+                sheet1.AutoSizeColumn(0);
+                sheet1.AutoSizeColumn(1);
+                sheet1.AutoSizeColumn(2);
+                sheet1.AutoSizeColumn(3);
+                sheet1.AutoSizeColumn(4);
+                sheet1.SetColumnWidth(5, 25000);
+                sheet1.AutoSizeColumn(6);
+                sheet1.AutoSizeColumn(7);
+                workbook.Write(fs);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message, "Error exportando (3):");
+                return false;
+            }
         }
     }
 }

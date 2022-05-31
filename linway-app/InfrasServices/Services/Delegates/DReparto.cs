@@ -72,8 +72,8 @@ namespace linway_app.Services.Delegates
         private static bool ExportReparto(string dia, string nombreReparto)
         {
             Reparto reparto = getRepartoPorDiaYNombre(dia, nombreReparto);
-            Exportar servExportar = new Exportar();
-            return servExportar.ExportarReparto(reparto);
+            bool success = new Exportar().ExportarReparto(reparto);
+            return success;
         }
         private static Reparto GetReparto(long repartoId)
         {
