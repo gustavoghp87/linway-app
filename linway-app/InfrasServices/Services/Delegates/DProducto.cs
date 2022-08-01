@@ -80,8 +80,11 @@ namespace linway_app.Services.Delegates
         }
         private static bool IsNegativePrice(Producto product)
         {
-            return product.Tipo == TipoProducto.Saldo.ToString() &&
-                (product.SubTipo == TipoSaldo.Bonificacion.ToString() || product.SubTipo == TipoSaldo.Devolucion.ToString());
+            return product.Tipo == TipoProducto.Saldo.ToString() && (
+                product.SubTipo == TipoSaldo.Bonificacion.ToString()
+                || product.SubTipo == TipoSaldo.Devolucion.ToString()
+                || product.SubTipo == TipoSaldo.SaldoAFavor.ToString()
+            );
         }
         private static bool IsPolvo(Producto product)
         {

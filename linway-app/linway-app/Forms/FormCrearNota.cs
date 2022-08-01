@@ -164,7 +164,7 @@ namespace linway_app.Forms
             bool exists = false;
             foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
             {
-                if (exists) continue;
+                if (exists || isSaldo(prodVendido.Producto)) continue;
                 if (prodVendido.ProductoId == producto.Id)
                 {
                     exists = true;
@@ -176,10 +176,11 @@ namespace linway_app.Forms
             {
                 var nuevoPV = new ProdVendido
                 {
-                    ProductoId = producto.Id,
-                    Descripcion = label38.Text,
                     Cantidad = cantidad,
-                    Precio = producto.Precio
+                    Descripcion = label38.Text,
+                    Precio = producto.Precio,
+                    Producto = producto,   // do not remove
+                    ProductoId = producto.Id
                 };
                 if (producto.Tipo == TipoProducto.Saldo.ToString() && producto.SubTipo != TipoSaldo.SaldoPendiente.ToString())
                 {
@@ -285,7 +286,7 @@ namespace linway_app.Forms
                 Reparto reparto = getRepartoPorDiaYNombre(comboBox4.Text, comboBox3.Text);
                 if (reparto == null) {
                     Form1.loadingForm.CloseIt();
-                    MessageBox.Show("Falló enviar al Reparto");
+                    MessageBox.Show("Falló Reparto al enviar al Reparto");
                     return;
                 }
                 long pedidoId = addPedidoIfNotExistsAndReturnId(reparto.Id, cliente.Id);
@@ -293,7 +294,7 @@ namespace linway_app.Forms
                 if (pedidoId == 0 || pedido == null)
                 {
                     Form1.loadingForm.CloseIt();
-                    MessageBox.Show("Falló enviar al Reparto");
+                    MessageBox.Show("Falló Pedido al enviar al Reparto");
                     return;
                 }
                 var prodVendidosAEditar = new List<ProdVendido>();

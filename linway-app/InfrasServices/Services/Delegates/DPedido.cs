@@ -36,7 +36,7 @@ namespace linway_app.Services.Delegates
         {
             Reparto reparto = getReparto(repartoId);
             if (reparto == null) return 0;
-            Pedido pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == clienteId);
+            Pedido pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == clienteId && x.Estado != "Eliminado");
             if (pedido == null)
             {
                 Cliente cliente = getCliente(clienteId);
@@ -57,7 +57,7 @@ namespace linway_app.Services.Delegates
                 };
                 AddPedido(pedido);
                 reparto = getReparto(repartoId);
-                pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == clienteId);
+                pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == clienteId && x.Estado != "Eliminado");
                 if (pedido == null) return 0;
             }
             return pedido.Id;

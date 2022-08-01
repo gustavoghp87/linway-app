@@ -394,6 +394,16 @@ namespace linway_app.Forms
             NotaDeEnvio notaDeEnvio = getNotaDeEnvio(long.Parse(textBox6.Text));
             Reparto reparto = getRepartoPorDiaYNombre(diaDeReparto, nombreReparto);
             if (notaDeEnvio == null || reparto == null) return;
+            if (notaDeEnvio.ProdVendidos != null)
+            {
+                ProdVendido prodVendidoEnPedido = notaDeEnvio.ProdVendidos.FirstOrDefault(x => x.PedidoId != null);
+                if (prodVendidoEnPedido != null)
+                {
+                    long currentPedidoId = (long)prodVendidoEnPedido.PedidoId;
+                    Pedido currentPedido = getPedido(currentPedidoId);
+                    if (currentPedido != null) cleanPedidos(new List<Pedido>() { currentPedido });
+                }
+            }
             long pedidoId = addPedidoIfNotExistsAndReturnId(reparto.Id, notaDeEnvio.ClienteId);
             Pedido pedido = getPedido(pedidoId);
             if (pedidoId == 0 || pedido == null)

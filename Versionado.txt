@@ -1,15 +1,4 @@
 
-___________________________________Sistema Linway 13__________________________________    mayo 2022
-
--Corregido reposicionar en reparto
--Corregidos problemas de velocidad al modificar muchos datos a la vez, por ejemplo limpiar
- reparto
--Corregida modificación de nota de envío que no era permanente
--Ahora al modificar una nota de envío se actualizan automáticamente: pedido, reparto,
- venta, y registro de venta
--Imagen de "Cargando..."
-
-
 Metas para versiones posteriores:
 -Cambiar sistema de cantidades de líquidos y polvos (2x5, etcétera)
 -Separar dirección de localidad
@@ -21,7 +10,22 @@ Metas para versiones posteriores:
 -Lograr que la app sea reactiva a cambios en la base de datos
 -Hacer un logger
 -ClienteId no debería ser obligatorio en Registro de Venta (por venta particular cargada desde Ventas)
+-Que limpiar pedido/reparto cree pedidos nuevos en 0 en vez de vaciar los que están
 
+
+
+
+
+
+___________________________________Sistema Linway 13__________________________________    mayo 2022
+
+-Corregido reposicionar en reparto
+-Corregidos problemas de velocidad al modificar muchos datos a la vez, por ejemplo limpiar
+ reparto
+-Corregida modificación de nota de envío que no era permanente
+-Ahora al modificar una nota de envío se actualizan automáticamente: pedido, reparto,
+ venta, y registro de venta
+-Imagen de "Cargando..."
 
 
 ___________________________________Sistema Linway 12__________________________________    octubre 2021
