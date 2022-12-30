@@ -36,7 +36,7 @@ namespace linway_app.Services.Delegates
         }
         private static List<Venta> GetVentas()
         {
-            return _service.GetAll();
+            return _service.GetAll() ?? new List<Venta>();
         }
         private static void UpdateVentasDesdeProdVendidos(ICollection<ProdVendido> prodVendidos, bool addingUp)
         {
