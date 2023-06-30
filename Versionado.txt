@@ -13,7 +13,8 @@ Metas para versiones posteriores:
 -Que limpiar pedido/reparto cree pedidos nuevos en 0 en vez de vaciar los que están
 
 
-
+___________________________________Sistema Linway 14__________________________________    junio 2023
+-Cambia base de datos de sqlite a MySQL
 
 
 

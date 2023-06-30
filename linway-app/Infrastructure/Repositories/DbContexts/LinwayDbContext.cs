@@ -25,7 +25,8 @@ namespace Infrastructure.Repositories.DbContexts
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite(Constants.ConnectionString);
+                //optionsBuilder.UseSqlite(Constants.ConnectionString);
+                optionsBuilder.UseMySql(Constants.ConnectionString);
                 optionsBuilder.UseLazyLoadingProxies();
             }
         }

@@ -572,6 +572,10 @@ namespace linway_app.Forms
                 pedido = getPedido((long)nuevoProdVendido.PedidoId);
                 updatePedido(pedido, true);
             }
+            else
+            {
+                MessageBox.Show("Esta nota no estaba en ningún reparto");
+            }
 
             ActualizarNotas();
             ActualizarGrid1(_lstNotaDeEnvios);
