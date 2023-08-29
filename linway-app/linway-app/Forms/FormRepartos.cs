@@ -89,9 +89,7 @@ namespace linway_app.Forms
                 + nombreReparto + " ¿Confirmar?", "Exportar Reparto a Excel", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                Form1.loadingForm.OpenIt();
                 success = exportReparto(dia, nombreReparto);
-                Form1.loadingForm.CloseIt();
             }
             if (success) exportarButton.Text = "Terminado";
         }
@@ -299,7 +297,6 @@ namespace linway_app.Forms
         }
         private void LimpiarRepartos_Click(object sender, EventArgs e)
         {
-            Form1.loadingForm.OpenIt();
             var repartosALimpiar = new List<Reparto>();
             foreach (DiaReparto diaReparto in _lstDiaRepartos)
             {
@@ -309,7 +306,6 @@ namespace linway_app.Forms
                 }
             }
             cleanRepartos(repartosALimpiar);
-            Form1.loadingForm.CloseIt();
             LimpiarPantalla();
             Actualizar();
         }
@@ -336,7 +332,6 @@ namespace linway_app.Forms
                 MessageBox.Show("Debe seleccionar un día");
                 return;
             }
-            Form1.loadingForm.OpenIt();
             Actualizar();
             try
             {
@@ -348,10 +343,6 @@ namespace linway_app.Forms
             catch (Exception ex)
             {
                 MessageBox.Show("Falló: ", ex.Message);
-            }
-            finally
-            {
-                Form1.loadingForm.CloseIt();
             }
         }
 
@@ -375,14 +366,12 @@ namespace linway_app.Forms
                 MessageBox.Show("Debe seleccionar un día");
                 return;
             }
-            Form1.loadingForm.OpenIt();
             string dia = comboBox8.Text;
             string nombre = comboBox7.Text;
             Reparto reparto = getRepartoPorDiaYNombre(dia, nombre);
             comboBox1.SelectedIndex = comboBox8.SelectedIndex;
             comboBox2.SelectedIndex = comboBox7.SelectedIndex;
             cleanRepartos(new List<Reparto>() { reparto });
-            Form1.loadingForm.CloseIt();
             VerDatos(reparto);
             LimpiarPantalla();
             Actualizar();
@@ -412,7 +401,6 @@ namespace linway_app.Forms
                 MessageBox.Show("Verifique que los datos sean correctos");
                 return;
             }
-            Form1.loadingForm.OpenIt();
             var prodVendidosAEditar = new List<ProdVendido>();
             pedido.ProdVendidos.ToList().ForEach(prodVendido =>
             {
@@ -421,7 +409,6 @@ namespace linway_app.Forms
             });
             editProdVendidos(prodVendidosAEditar);
             cleanPedidos(new List<Pedido>() { pedido });
-            Form1.loadingForm.CloseIt();
             VerDatos(getReparto(pedido.RepartoId));
             LimpiarPantalla();
             Actualizar();
@@ -462,7 +449,6 @@ namespace linway_app.Forms
                 return;
             try
             {
-                Form1.loadingForm.OpenIt();
                 string pedidoAMover = label30.Text;
                 string pedidoReferencia = label31.Text;
                 Reparto reparto = getRepartoPorDiaYNombre(comboBox1.Text, comboBox2.Text);
@@ -472,7 +458,6 @@ namespace linway_app.Forms
                 long order2 = pedido2.Orden;
                 if (order2 == order1)
                 {
-                    Form1.loadingForm.CloseIt();
                     return;
                 }
                 var pedidosAEditar = new List<Pedido>();
@@ -512,10 +497,6 @@ namespace linway_app.Forms
             catch (Exception ex)
             {
                 MessageBox.Show("Algo falló: " + ex.Message, "No se pudo reposicionar");
-            }
-            finally
-            {
-                Form1.loadingForm.CloseIt();
             }
         }
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
@@ -592,7 +573,6 @@ namespace linway_app.Forms
                 _pedidoAEliminar.ProdVendidos = prodVendidos.Where(x => x.PedidoId == _pedidoAEliminar.Id).ToList();
                 if (_pedidoAEliminar.ProdVendidos != null && _pedidoAEliminar.ProdVendidos.Count != 0)
                 {
-                    Form1.loadingForm.OpenIt();
                     foreach (ProdVendido prodVendido in _pedidoAEliminar.ProdVendidos)
                     {
                         prodVendido.PedidoId = null;
@@ -601,7 +581,6 @@ namespace linway_app.Forms
                 }
             }
             deletePedido(_pedidoAEliminar);
-            Form1.loadingForm.CloseIt();
             Actualizar();
             LimpiarPantalla();
         }

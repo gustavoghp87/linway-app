@@ -16,7 +16,6 @@ namespace linway_app.Forms
     public partial class Form1 : Form
     {
         public static IMapper mapper;
-        public static LoadingForm loadingForm;
         public Form1(
             IServiceBase<Cliente> servCliente,
             IServiceBase<DetalleRecibo> servDetalleRecibo,
@@ -30,10 +29,8 @@ namespace linway_app.Forms
             IServiceBase<Reparto> servReparto,
             IServiceBase<Venta> servVenta,
             IMapper mapper
-            )
+        )
         {
-            loadingForm = new LoadingForm();
-            loadingForm.OpenIt();
             ServicesObjects.ServCliente = servCliente;
             ServicesObjects.ServDetalleRecibo = servDetalleRecibo;
             ServicesObjects.ServDiaReparto = servDiaReparto;
@@ -59,7 +56,6 @@ namespace linway_app.Forms
             CargarGridClientes(lstClientes);
             List<Producto> lstProductos = getProductos();
             CargarGridProductos(lstProductos);
-            loadingForm.CloseIt();
         }
         private void CargarGridClientes(ICollection<Cliente> lstClientes)
         {

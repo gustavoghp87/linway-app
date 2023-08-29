@@ -1,26 +1,24 @@
 ﻿using Infrastructure.Repositories.DbContexts;
 using Infrastructure.Repositories.Interfaces;
-using Models.OModel;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Infrastructure.Repositories
 {
-    public class RepositoryBase<T> : IRepository<T> where T : ObjModel
+    public class RepositoryNotaDeEnvio : IRepository<NotaDeEnvio>
     {
         private readonly LinwayDbContext _context;
-        //private readonly DbSet<T> _entities;
-        public RepositoryBase(LinwayDbContext context)
+        public RepositoryNotaDeEnvio()
         {
-            _context = context;
-            //_entities = context.Set<T>();
+            _context = new LinwayDbContext();
         }
-        public bool Add(T t)
+        public bool Add(NotaDeEnvio t)
         {
             try
             {
-                _context.Set<T>().Add(t);
+                _context.Set<NotaDeEnvio>().Add(t);
                 int id = _context.SaveChanges();
                 if (id != 1) return false;
                 return true;
@@ -31,11 +29,11 @@ namespace Infrastructure.Repositories
                 return false;
             }
         }
-        public bool AddMany(ICollection<T> t)
+        public bool AddMany(ICollection<NotaDeEnvio> t)
         {
             try
             {
-                _context.Set<T>().AddRange(t);
+                _context.Set<NotaDeEnvio>().AddRange(t);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -45,16 +43,12 @@ namespace Infrastructure.Repositories
                 return false;
             }
         }
-        //public bool Delete(T t)
-        //{
-        //    return Edit(t);   // doing nothing
-        //}
-        public bool Edit(T t)
+        public bool Edit(NotaDeEnvio t)
         {
             using var context = new LinwayDbContext();
             try
             {
-                _context.Set<T>().Update(t);
+                _context.Set<NotaDeEnvio>().Update(t);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -64,12 +58,12 @@ namespace Infrastructure.Repositories
                 return false;
             }
         }
-        public bool EditMany(ICollection<T> t)
+        public bool EditMany(ICollection<NotaDeEnvio> t)
         {
             using var context = new LinwayDbContext();
             try
             {
-                _context.Set<T>().UpdateRange(t);
+                _context.Set<NotaDeEnvio>().UpdateRange(t);
                 _context.SaveChangesAsync();
                 return true;
             }
@@ -79,28 +73,26 @@ namespace Infrastructure.Repositories
                 return false;
             }
         }
-        public T Get(long id)
+        public NotaDeEnvio Get(long id)
         {
             try
             {
-                return _context.Set<T>().Find(id);
+                return _context.Set<NotaDeEnvio>().Find(id);
             }
             catch
             {
                 return default;
             }
         }
-        public List<T> GetAll()
+        public List<NotaDeEnvio> GetAll()
         {
             try
             {
-                //using var context = new LinwayDbContext();
-                List<T> lista = _context.Set<T>().ToList();
+                List<NotaDeEnvio> lista = _context.Set<NotaDeEnvio>().ToList();
                 return lista;
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine(e);
                 return default;
             }
         }

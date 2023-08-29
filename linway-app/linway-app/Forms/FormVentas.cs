@@ -295,7 +295,6 @@ namespace linway_app.Forms
                 reparto = getRepartoPorDiaYNombre(dia, nombre);
                 if (cliente == null || reparto == null)
                 {
-                    Form1.loadingForm.CloseIt();
                     MessageBox.Show("Falló cliente o reparto");
                     return;
                 }
@@ -303,7 +302,6 @@ namespace linway_app.Forms
                 pedido = getPedido(pedidoId);
                 if (pedidoId == 0 || pedido == null)
                 {
-                    Form1.loadingForm.CloseIt();
                     MessageBox.Show("Falló pedido");
                     return;
                 }
@@ -311,7 +309,6 @@ namespace linway_app.Forms
             // generar un RegistroVenta con "Venta particular"y devuelve un id para usar en los ProdVendido
             // generar un Venta por cada ítem en _lstAgregarVentas, no necesita precios
             // generar un ProdVendido por cada ítem en _lstAgregarVentas con el id de (1)
-            Form1.loadingForm.OpenIt();
             ActualizarGrid3Ventas();
             var lstProdVendidos = new List<ProdVendido>();
             RegistroVenta nuevoRegistroVenta = new RegistroVenta
@@ -320,10 +317,9 @@ namespace linway_app.Forms
                 NombreCliente = "Venta particular",
                 Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
             };
-            long registroId = addRegistroVentaReturnId(nuevoRegistroVenta);
-            if (registroId == 0)
+            addRegistroVenta(nuevoRegistroVenta);
+            if (nuevoRegistroVenta.Id == 0)
             {
-                Form1.loadingForm.CloseIt();
                 MessageBox.Show("Falló Registro");
                 return;
             };
@@ -348,7 +344,6 @@ namespace linway_app.Forms
                 Producto producto = getProducto(ventaParaAgregar.ProductoId);
                 if (producto == null)
                 {
-                    Form1.loadingForm.CloseIt();
                     MessageBox.Show("Falló Producto");
                     return;
                 }
@@ -376,7 +371,7 @@ namespace linway_app.Forms
                         Descripcion = producto.Nombre,
                         Precio = producto.Precio,
                         ProductoId = producto.Id,
-                        RegistroVentaId = registroId
+                        RegistroVentaId = nuevoRegistroVenta.Id
                     };
                     prodVendidosAAgregar.Add(nuevoProdVendido);
                     lstProdVendidos.Add(nuevoProdVendido);
@@ -399,7 +394,6 @@ namespace linway_app.Forms
                 nuevoRegistroVenta.NombreCliente = cliente.Direccion;
                 editRegistroVenta(nuevoRegistroVenta);
             }
-            Form1.loadingForm.CloseIt();
             _lstAgregarVentas.Clear();
             LimpiarPantalla();
             Actualizar();
@@ -418,9 +412,7 @@ namespace linway_app.Forms
                 MessageBox.Show("Seleccione si esta seguro para borrar la lista de ventas");
                 return;
             }
-            Form1.loadingForm.OpenIt();
             deleteVentas(_lstVentas);
-            Form1.loadingForm.CloseIt();
             LimpiarPantalla();
             Actualizar();
         }
@@ -483,16 +475,13 @@ namespace linway_app.Forms
             }
             long registroVentaId;
             try { registroVentaId = long.Parse(textBox1.Text); } catch { return; };
-            Form1.loadingForm.OpenIt();
             RegistroVenta registro = getRegistroVenta(registroVentaId);
             if (registro == null)
             {
-                Form1.loadingForm.CloseIt();
                 return;
             }
             deleteRegistroVenta(registro);
             updateVentasDesdeProdVendidos(registro.ProdVendido, false);
-            Form1.loadingForm.CloseIt();
             Actualizar();
             LimpiarPantalla();
         }
@@ -584,7 +573,6 @@ namespace linway_app.Forms
         private void BorrarRegVentas_Click(object sender, EventArgs e)
         {
             if (!IntervaloCorrecto()) return;
-            Form1.loadingForm.OpenIt();
             var registrosABorrar = new List<RegistroVenta>();
             var ventasABorrar = new List<ProdVendido>();
             foreach (RegistroVenta registroVenta in _lstRegistros)
@@ -595,16 +583,13 @@ namespace linway_app.Forms
             }
             deleteRegistros(registrosABorrar);
             updateVentasDesdeProdVendidos(ventasABorrar, false);
-            Form1.loadingForm.CloseIt();
             Actualizar();
             LimpiarPantalla();
         }
         private void ExportBtn_Click_1(object sender, EventArgs e)
         {
             Actualizar();
-            Form1.loadingForm.OpenIt();
             bool success = new Exportar().ExportarVentas(_lstVentas);
-            Form1.loadingForm.CloseIt();
             if (success) ExportBtn.Text = "Terminado";
         }
     }

@@ -19,7 +19,6 @@ namespace linway_app
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<LinwayDbContext>();
             services.AddTransient<Form1>();
             services.AddTransient<FormClientes>();
             services.AddTransient<FormCrearNota>();
@@ -30,9 +29,10 @@ namespace linway_app
             services.AddTransient<FormRecibos>();
             services.AddTransient<FormRepartos>();
             services.AddTransient<FormVentas>();
+            services.AddDbContext<LinwayDbContext>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddScoped(typeof(IServiceBase<>), typeof(ServiceBase<>));
-            services.AddScoped(typeof(IRepository<>), typeof(RepositoryBase<>));
+            services.AddTransient(typeof(IServiceBase<>), typeof(ServiceBase<>));    //antes scoped agosto 2023
+            services.AddTransient(typeof(IRepository<>), typeof(RepositoryBase<>));  //antes scoped agosto 2023
             var mapperConfig = new MapperConfiguration(m =>
             {
                 m.AddProfile(new MappingProfile());

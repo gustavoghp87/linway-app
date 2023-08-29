@@ -322,10 +322,8 @@ namespace linway_app.Forms
         }
         private void Button4_Click(object sender, EventArgs e)
         {
-            Form1.loadingForm.OpenIt();
             List<NotaDeEnvio> notas = ObtenerListaABorrar();
             deleteNotas(notas);
-            Form1.loadingForm.CloseIt();
             comboBox3.SelectedItem = "(Seleccionar)";
             label11.Visible = false;
             button4.Visible = false;
@@ -660,9 +658,7 @@ namespace linway_app.Forms
 
         private void ExportarAExcel_Btn_Click(object sender, EventArgs e)
         {
-            Form1.loadingForm.OpenIt();
             bool success = new Exportar().ExportarNotas(getNotaDeEnvios());
-            Form1.loadingForm.CloseIt();
             if (success) button2.Text = "TERMINADO";
         }
     }

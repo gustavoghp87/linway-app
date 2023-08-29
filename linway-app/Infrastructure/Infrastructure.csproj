@@ -153,6 +153,17 @@
     <Compile Include="Repositories\DbContexts\LinwayDbContext.cs" />
     <Compile Include="Repositories\Interfaces\IRepository.cs" />
     <Compile Include="Repositories\Interfaces\IUnitOfWork.cs" />
+    <Compile Include="Repositories\RepositoryDetalleRecibo.cs" />
+    <Compile Include="Repositories\RepositoryRegistroVenta.cs" />
+    <Compile Include="Repositories\RepositoryVenta.cs" />
+    <Compile Include="Repositories\RepositoryRecibo.cs" />
+    <Compile Include="Repositories\RepositoryProducto.cs" />
+    <Compile Include="Repositories\RepositoryProdVendido.cs" />
+    <Compile Include="Repositories\RepositoryPedido.cs" />
+    <Compile Include="Repositories\RepositoryDiaReparto.cs" />
+    <Compile Include="Repositories\RepositoryNotaDeEnvio.cs" />
+    <Compile Include="Repositories\RepositoryReparto.cs" />
+    <Compile Include="Repositories\RepositoryCliente.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
   </ItemGroup>

@@ -8,19 +8,18 @@ namespace linway_app.Services.Delegates
 {
     public static class DRecibo
     {
-        public readonly static Func<Recibo, long> addReciboReturnId = AddReciboReturnId;
+        public readonly static Predicate<Recibo> addRecibo = AddRecibo;
         public readonly static Func<Recibo, decimal> calculateTotalRecibo = CalculateTotalRecibo;   // no se está usando
-        public readonly static Action<ICollection<Recibo>> deleteRecibos = DeleteRecibos;
-        public readonly static Action<Recibo> editRecibo = EditRecibo;
+        public readonly static Predicate<ICollection<Recibo>> deleteRecibos = DeleteRecibos;
+        public readonly static Predicate<Recibo> editRecibo = EditRecibo;
         public readonly static Func<List<Recibo>> getRecibos = GetRecibos;
 
         private static readonly IServiceBase<Recibo> _service = ServicesObjects.ServRecibo;
 
-        private static long AddReciboReturnId(Recibo recibo)
+        private static bool AddRecibo(Recibo recibo)
         {
-            bool response = _service.Add(recibo);
-            if (!response) return 0;
-            return recibo.Id;
+            bool success = _service.Add(recibo);
+            return success;
         }
         private static decimal CalculateTotalRecibo(Recibo recibo)
         {
@@ -32,20 +31,23 @@ namespace linway_app.Services.Delegates
             }
             return total;
         }
-        private static void DeleteRecibos(ICollection<Recibo> recibos)
+        private static bool DeleteRecibos(ICollection<Recibo> recibos)
         {
-            if (recibos == null || recibos.Count == 0) return;
-            bool response = _service.DeleteMany(recibos);
-            if (!response) Console.WriteLine("Algo falló al eliminar los Recibos de la base de datos");
+            if (recibos == null || recibos.Count == 0) return false;
+            bool success = _service.DeleteMany(recibos);
+            if (!success) Console.WriteLine("Algo falló al eliminar los Recibos de la base de datos");
+            return success;
         }
-        private static void EditRecibo(Recibo recibo)
+        private static bool EditRecibo(Recibo recibo)
         {
-            bool response = _service.Edit(recibo);
-            if (!response) Console.WriteLine("Algo falló al editar el Recibo de la base de datos");
+            bool success = _service.Edit(recibo);
+            if (!success) Console.WriteLine("Algo falló al editar el Recibo de la base de datos");
+            return success;
         }
         private static List<Recibo> GetRecibos()
         {
-            return _service.GetAll();
+            List<Recibo> recibos = _service.GetAll();
+            return recibos;
         }
     }
 }

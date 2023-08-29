@@ -233,11 +233,9 @@ namespace linway_app.Forms
                 return;
             }
 
-            Form1.loadingForm.OpenIt();
             Cliente cliente = getClientePorDireccionExacta(label36.Text);
             if (cliente == null)
             {
-                Form1.loadingForm.CloseIt();
                 return;
             }
             NotaDeEnvio nuevaNota = new NotaDeEnvio
@@ -248,16 +246,15 @@ namespace linway_app.Forms
                 Detalle = extraerDetalleDeNotaDeEnvio(_lstProdVendidosAAgregar),
                 ImporteTotal = extraerImporteDeNotaDeEnvio(_lstProdVendidosAAgregar)
             };
-            long notaId = addNotaDeEnvioReturnId(nuevaNota);
-            if (notaId == 0)
+            addNotaDeEnvio(nuevaNota);
+            if (nuevaNota.Id == 0)
             {
                 MessageBox.Show("Falló al procesar Nota nueva");
-                Form1.loadingForm.CloseIt();
                 return;
             }
             foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
             {
-                prodVendido.NotaDeEnvioId = notaId;
+                prodVendido.NotaDeEnvioId = nuevaNota.Id;
             }
             addProdVendidos(_lstProdVendidosAAgregar);
 
@@ -270,11 +267,11 @@ namespace linway_app.Forms
                     Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
                     NombreCliente = cliente.Direccion
                 };
-                long registroId = addRegistroVentaReturnId(nuevoRegistro);
+                addRegistroVenta(nuevoRegistro);
                 var prodVendidosAEditar = new List<ProdVendido>();
                 foreach (var prodVendido in _lstProdVendidosAAgregar)
                 {
-                    prodVendido.RegistroVentaId = registroId;
+                    prodVendido.RegistroVentaId = nuevoRegistro.Id;
                     prodVendidosAEditar.Add(prodVendido);
                 }
                 editProdVendidos(prodVendidosAEditar);
@@ -285,18 +282,16 @@ namespace linway_app.Forms
             {
                 Reparto reparto = getRepartoPorDiaYNombre(comboBox4.Text, comboBox3.Text);
                 if (reparto == null) {
-                    Form1.loadingForm.CloseIt();
                     MessageBox.Show("Falló Reparto al enviar al Reparto");
                     return;
                 }
                 long pedidoId = addPedidoIfNotExistsAndReturnId(reparto.Id, cliente.Id);
                 Pedido pedido = getPedido(pedidoId);
-                if (pedidoId == 0 || pedido == null)
-                {
-                    Form1.loadingForm.CloseIt();
-                    MessageBox.Show("Falló Pedido al enviar al Reparto");
-                    return;
-                }
+                //if (pedidoId == 0 || pedido == null)
+                //{
+                //    MessageBox.Show("Falló Pedido al enviar al Reparto");
+                //    return;
+                //}
                 var prodVendidosAEditar = new List<ProdVendido>();
                 foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
                 {
@@ -317,7 +312,6 @@ namespace linway_app.Forms
                 form.Show();
             }
 
-            Form1.loadingForm.CloseIt();
             Close();
         }
         private void EnviarA_HDR_SelectedIndexChanged(object sender, EventArgs e)

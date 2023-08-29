@@ -19,32 +19,32 @@ namespace Infrastructure.Repositories
         private readonly IRepository<RegistroVenta> _repoRegistroVenta;
         private readonly IRepository<Reparto> _repoReparto;
         private readonly IRepository<Venta> _repoVenta;
-        public UnitOfWork(LinwayDbContext context,
-            IRepository<Cliente> repoCliente,
-            IRepository<DetalleRecibo> repoDetalleRecibo,
-            IRepository<DiaReparto> repoDiaReparto,
-            IRepository<NotaDeEnvio> repoNotaDeEnvio,
-            IRepository<Pedido> repoPedido,
-            IRepository<Producto> repoProducto,
-            IRepository<ProdVendido> repoProdVendido,
-            IRepository<Recibo> repoRecibo,
-            IRepository<RegistroVenta> repoRegistroVenta,
-            IRepository<Reparto> repoReparto,
-            IRepository<Venta> repoVenta
+        public UnitOfWork(LinwayDbContext context
+            //IRepository<Cliente> repoCliente,
+            //IRepository<DetalleRecibo> repoDetalleRecibo,
+            //IRepository<DiaReparto> repoDiaReparto,
+            //IRepository<NotaDeEnvio> repoNotaDeEnvio,
+            //IRepository<Pedido> repoPedido,
+            //IRepository<Producto> repoProducto,
+            //IRepository<ProdVendido> repoProdVendido,
+            //IRepository<Recibo> repoRecibo,
+            //IRepository<RegistroVenta> repoRegistroVenta,
+            //IRepository<Reparto> repoReparto,
+            //IRepository<Venta> repoVenta
         )
         {
             _context = context;
-            _repoCliente = repoCliente;
-            _repoDetalleRecibo = repoDetalleRecibo;
-            _repoDiaReparto = repoDiaReparto;
-            _repoNotaDeEnvio = repoNotaDeEnvio;
-            _repoPedido = repoPedido;
-            _repoProducto = repoProducto;
-            _repoProdVendido = repoProdVendido;
-            _repoRecibo = repoRecibo;
-            _repoRegistroVenta = repoRegistroVenta;
-            _repoReparto = repoReparto;
-            _repoVenta = repoVenta;
+            _repoCliente = new RepositoryCliente();
+            _repoDetalleRecibo = new RepositoryDetalleRecibo();
+            _repoDiaReparto = new RepositoryDiaReparto();
+            _repoNotaDeEnvio = new RepositoryNotaDeEnvio();
+            _repoPedido = new RepositoryPedido();
+            _repoProducto = new RepositoryProducto();
+            _repoProdVendido = new RepositoryProdVendido();
+            _repoRecibo = new RepositoryRecibo();
+            _repoRegistroVenta = new RepositoryRegistroVenta();
+            _repoReparto = new RepositoryReparto();
+            _repoVenta = new RepositoryVenta();
         }
         public IRepository<Cliente> RepoCliente => _repoCliente;
         public IRepository<Producto> RepoProducto => _repoProducto;

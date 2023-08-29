@@ -10,8 +10,8 @@ namespace linway_app.Services.Delegates
     {
         public readonly static Predicate<Cliente> addCliente = AddCliente;
         public readonly static Func<bool> addClientePrimero = AddClientePrimero;
-        public readonly static Action<Cliente> deleteCliente = DeleteCliente;
-        public readonly static Action<Cliente> editCliente = EditCliente;
+        public readonly static Predicate<Cliente> deleteCliente = DeleteCliente;
+        public readonly static Predicate<Cliente> editCliente = EditCliente;
         public readonly static Func<long, Cliente> getCliente = GetCliente;
         public readonly static Func<string, Cliente> getClientePorDireccion = GetClientePorDireccion;
         public readonly static Func<string, Cliente> getClientePorDireccionExacta = GetClientePorDireccionExacta;
@@ -27,29 +27,35 @@ namespace linway_app.Services.Delegates
             if (clientes.Exists(x => x.Direccion == cliente.Direccion)) return false;
             while (cliente.Direccion.Contains("'")) cliente.Direccion = cliente.Direccion.Replace(char.Parse("'"), '"');
             while (cliente.Nombre.Contains("'")) cliente.Nombre = cliente.Nombre.Replace(char.Parse("'"), '"');
-            return _service.Add(cliente);
+            bool success = _service.Add(cliente);
+            return success;
         }
         private static bool AddClientePrimero()
         {
-            return addCliente(new Cliente
+            Cliente cliente = new Cliente
             {
                 Nombre = "Cliente Particular X",
                 Direccion = "Cliente Particular X"
-            });
+            };
+            bool success = addCliente(cliente);
+            return success;
         }
-        private static void DeleteCliente(Cliente cliente)
+        private static bool DeleteCliente(Cliente cliente)
         {
-            bool response = _service.Delete(cliente);
-            if (!response) Console.WriteLine("Falló guardado Cliente en base de datos");
+            bool success = _service.Delete(cliente);
+            if (!success) Console.WriteLine("Falló guardado Cliente en base de datos");
+            return success;
         }
-        private static void EditCliente(Cliente cliente)
+        private static bool EditCliente(Cliente cliente)
         {
-            bool response = _service.Edit(cliente);
-            if (!response) Console.WriteLine("Falló editando Cliente en base de datos");
+            bool success = _service.Edit(cliente);
+            if (!success) Console.WriteLine("Falló editando Cliente en base de datos");
+            return success;
         }
         private static Cliente GetCliente(long clientId)
         {
-            return _service.Get(clientId);
+            Cliente cliente = _service.Get(clientId);
+            return cliente;
         }
         private static Cliente GetClientePorDireccion(string direccion)
         {
@@ -70,11 +76,13 @@ namespace linway_app.Services.Delegates
         }
         private static Cliente GetClientePorDireccionExacta(string direccion)
         {
-            return getClientes().Find(x => x.Direccion.Contains(direccion));
+            Cliente cliente = getClientes().Find(x => x.Direccion.Contains(direccion));
+            return cliente;
         }
         private static List<Cliente> GetClientes()
         {
-            return _service.GetAll();
+            List<Cliente> clientes = _service.GetAll();
+            return clientes;
         }
     }
 }

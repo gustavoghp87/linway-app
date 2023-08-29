@@ -423,7 +423,6 @@ namespace linway_app.Forms
             Cliente cliente = getClientePorDireccionExacta(label15.Text);
             if (cliente == null) return;
 
-            Form1.loadingForm.OpenIt();
             var nuevoRecibo = new Recibo
             {
                 ClienteId = cliente.Id,
@@ -432,19 +431,17 @@ namespace linway_app.Forms
                 Impreso = 0,
                 Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
             };
-            long reciboId = addReciboReturnId(nuevoRecibo);
-            if (reciboId == 0) {
-                Form1.loadingForm.CloseIt();
+            addRecibo(nuevoRecibo);
+            if (nuevoRecibo.Id == 0) {
                 MessageBox.Show("Algo falló en el proceso");
                 return;
             }
             foreach (DetalleRecibo detalle in _lstDetallesAAgregar)
             {
-                detalle.ReciboId = reciboId;
+                detalle.ReciboId = nuevoRecibo.Id;
             }
             addDetalles(_lstDetallesAAgregar);
-            Form1.loadingForm.CloseIt();
-
+            
             LimpiarCampos();
             textBox6.Text = "";
             textBox8.Text = "";
@@ -540,7 +537,6 @@ namespace linway_app.Forms
         }
         private void Button4_Click(object sender, EventArgs e)      // Confirm
         {
-            Form1.loadingForm.OpenIt();
             var detallesAEliminar = new List<DetalleRecibo>();
             var recibosAEliminar = ObtenerListaABorrar();
             foreach (Recibo recibo in recibosAEliminar)
@@ -552,8 +548,7 @@ namespace linway_app.Forms
             }
             deleteDetalles(detallesAEliminar);
             deleteRecibos(recibosAEliminar);
-            Form1.loadingForm.CloseIt();
-
+            
             Actualizar();
             comboBox3.SelectedItem = "(Seleccionar)";
             label11.Visible = false;

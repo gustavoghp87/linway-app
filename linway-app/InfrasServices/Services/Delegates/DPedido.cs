@@ -14,11 +14,11 @@ namespace linway_app.Services.Delegates
 {
     public static class DPedido
     {
-        public readonly static Action<Pedido> addPedido = AddPedido;
+        public readonly static Predicate<Pedido> addPedido = AddPedido;
         public readonly static Func<long, long, long> addPedidoIfNotExistsAndReturnId = AddPedidoIfNotExistsAndReturnId;
         public readonly static Action<ICollection<Pedido>> cleanPedidos = CleanPedidos;
-        public readonly static Action<Pedido> deletePedido = DeletePedido;
-        public readonly static Action<ICollection<Pedido>> editPedidos = EditPedidos;
+        public readonly static Predicate<Pedido> deletePedido = DeletePedido;
+        public readonly static Predicate<ICollection<Pedido>> editPedidos = EditPedidos;
         public readonly static Func<long, Pedido> getPedido = GetPedido;
         public readonly static Func<ICollection<Pedido>> getPedidos = GetPedidos;
         public readonly static Func<long, ICollection<Pedido>> getPedidosPorRepartoId = GetPedidosPorRepartoId;
@@ -26,11 +26,12 @@ namespace linway_app.Services.Delegates
 
         private static readonly IServiceBase<Pedido> _service = ServicesObjects.ServPedido;
 
-        private static void AddPedido(Pedido pedido)
+        private static bool AddPedido(Pedido pedido)
         {
             pedido.Orden = GetOrdenMayor(pedido.RepartoId) + 1;
-            bool response = _service.Add(pedido);
-            if (!response) Console.WriteLine("Algo falló al agregar nuevo Pedido a la base de datos");
+            bool success = _service.Add(pedido);
+            if (!success) Console.WriteLine("Algo falló al agregar nuevo Pedido a la base de datos");
+            return success;
         }
         private static long AddPedidoIfNotExistsAndReturnId(long repartoId, long clienteId)
         {
@@ -55,7 +56,8 @@ namespace linway_app.Services.Delegates
                     E = 0,
                     T = 0
                 };
-                AddPedido(pedido);
+                bool success = AddPedido(pedido);
+                if (!success) Console.WriteLine("Algo falló al agregar nuevo Pedido a la base de datos (2)");
                 reparto = getReparto(repartoId);
                 pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == clienteId && x.Estado != "Eliminado");
                 if (pedido == null) return 0;
@@ -78,16 +80,18 @@ namespace linway_app.Services.Delegates
             }
             EditPedidos(pedidos);
         }
-        private static void DeletePedido(Pedido pedido)
+        private static bool DeletePedido(Pedido pedido)
         {
-            bool response = _service.Delete(pedido);
-            if (!response) Console.WriteLine("Algo falló al eliminar el Pedido de la base de datos");
+            bool success = _service.Delete(pedido);
+            if (!success) Console.WriteLine("Algo falló al eliminar el Pedido de la base de datos");
+            return success;
         }
-        private static void EditPedidos(ICollection<Pedido> pedidos)
+        private static bool EditPedidos(ICollection<Pedido> pedidos)
         {
-            if (pedidos == null || pedidos.Count == 0) return;
-            bool response = _service.EditMany(pedidos);
-            if (!response) Console.WriteLine("Algo falló al editar los Pedidos en la base de datos");
+            if (pedidos == null || pedidos.Count == 0) return false;
+            bool success = _service.EditMany(pedidos);
+            if (!success) Console.WriteLine("Algo falló al editar los Pedidos en la base de datos");
+            return success;
         }
         private static Pedido GetPedido(long pedidoId)
         {
@@ -98,6 +102,12 @@ namespace linway_app.Services.Delegates
             var pedidos = GetPedidos();
             if (pedidos == null || pedidos.Count == 0) return new List<Pedido>();
             pedidos = pedidos.Where(x => x.RepartoId == repartoId && x.Estado != null && x.Estado != "Eliminado").ToList();
+            // ver:
+            //List<Cliente> clientes = getClientes();
+            //foreach (Pedido pedido in pedidos)
+            //{
+            //    pedido.Direccion = clientes.Find(x => x.Id == pedido.ClienteId)?.Direccion;
+            //};
             return pedidos;
         }
         private static ICollection<Pedido> GetPedidos()

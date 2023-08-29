@@ -13,21 +13,22 @@ namespace linway_app.Services.Delegates
 {
     public static class DReparto
     {
-        public readonly static Action<Reparto> addReparto = AddReparto;
+        public readonly static Predicate<Reparto> addReparto = AddReparto;
         public readonly static Action<ICollection<Reparto>> cleanRepartos = CleanRepartos;
         public readonly static Func<string, string, bool> exportReparto = ExportReparto;
         public readonly static Func<long, Reparto> getReparto = GetReparto;
         public readonly static Func<string, string, Reparto> getRepartoPorDiaYNombre = GetRepartoPorDiaYNombre;
         public readonly static Func<List<Reparto>> getRepartos = GetRepartos;
         public readonly static Func<string, List<Reparto>> getRepartosPorDia = GetRepartosPorDia;
-        public readonly static Action<Reparto> updateReparto = UpdateReparto;
+        public readonly static Predicate<Reparto> updateReparto = UpdateReparto;
 
         private static readonly IServiceBase<Reparto> _service = ServicesObjects.ServReparto;
         
-        private static void AddReparto(Reparto reparto)
+        private static bool AddReparto(Reparto reparto)
         {
-            bool response = _service.Add(reparto);
-            if (!response) Console.WriteLine("Algo falló al agregar nuevo Reparto a la base de datos");
+            bool success = _service.Add(reparto);
+            if (!success) Console.WriteLine("Algo falló al agregar nuevo Reparto a la base de datos");
+            return success;
         }
         private static void CleanRepartos(ICollection<Reparto> repartos)
         {
@@ -58,10 +59,11 @@ namespace linway_app.Services.Delegates
             cleanPedidos(pedidosAEditar);
             editProdVendidos(prodVendidosAEditar);
         }
-        private static void EditReparto(Reparto reparto)
+        private static bool EditReparto(Reparto reparto)
         {
-            bool response = _service.Edit(reparto);
-            if (!response) Console.WriteLine("Algo falló al editar el Reparto en la base de datos");
+            bool success = _service.Edit(reparto);
+            if (!success) Console.WriteLine("Algo falló al editar el Reparto en la base de datos");
+            return success;
         }
         private static void EditRepartos(ICollection<Reparto> repartos)
         {
@@ -77,21 +79,26 @@ namespace linway_app.Services.Delegates
         }
         private static Reparto GetReparto(long repartoId)
         {
-            return _service.Get(repartoId);
+            Reparto reparto = _service.Get(repartoId);
+            return reparto;
         }
         private static Reparto GetRepartoPorDiaYNombre(string dia, string nombre)
         {
             try
             {
-                return getDiaRepartos()
+                List<DiaReparto> lstDiasRep = getDiaRepartos();
+                if (lstDiasRep == null) return null;
+                Reparto reparto = lstDiasRep
                     .Find(x => x.Dia == dia && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
                     .Find(x => x.Nombre == nombre && x.Estado != null && x.Estado != "Eliminado");
+                return reparto;
             }
             catch { return null; }
         }
         private static List<Reparto> GetRepartos()
         {
-            return _service.GetAll();
+            List<Reparto> repartos = _service.GetAll();
+            return repartos;
         }
         private static List<Reparto> GetRepartosPorDia(string diaReparto)
         {
@@ -107,9 +114,9 @@ namespace linway_app.Services.Delegates
                 return null;
             }
         }
-        private static void UpdateReparto(Reparto reparto)
+        private static bool UpdateReparto(Reparto reparto)
         {
-            if (reparto == null || reparto.Pedidos == null || reparto.Pedidos.Count == 0) return;
+            if (reparto == null || reparto.Pedidos == null || reparto.Pedidos.Count == 0) return false;
             reparto.Ta = 0;
             reparto.Te = 0;
             reparto.Tt = 0;
@@ -127,7 +134,8 @@ namespace linway_app.Services.Delegates
                 reparto.TotalB += pedido.A + pedido.E + pedido.T + pedido.Ae + pedido.D;
                 reparto.Tl += pedido.L;
             });
-            EditReparto(reparto);
+            bool success = EditReparto(reparto);
+            return success;
         }
     }
 }
