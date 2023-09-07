@@ -17,7 +17,7 @@ namespace Infrastructure.Repositories.Interfaces
         IRepository<DiaReparto> RepoDiaReparto { get; }
         IRepository<Pedido> RepoPedido{ get; }
         IRepository<DetalleRecibo> RepoDetalleRecibo { get; }
-        void SaveChanges();
-        Task SaveChangesAsync();
+        //void SaveChanges();
+        //Task SaveChangesAsync();
     }
 }

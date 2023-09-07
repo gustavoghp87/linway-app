@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.IO;
 
 namespace linway_app.Services.Delegates
 {
-    public static class DDbBackup
+    public static class AutoBackup
     {
         public readonly static Action generateDbBackup = Generate;
         public readonly static string windowsUserName = Environment.UserName;
@@ -23,17 +24,18 @@ namespace linway_app.Services.Delegates
             {
                 if (Directory.Exists(destinationFolder))
                 {
-                    Console.WriteLine(destinationFolder + " path already exists");
+                    Console.WriteLine(destinationFolder + " ya existe");
                     return;
                 }
                 //Directory.CreateDirectory(destinationFolder);
-                Console.WriteLine("The directory was created successfully at {0}", Directory.GetCreationTime(destinationFolder));
+                Console.WriteLine("Se creó la carpeta para el archivo de backup en {0}", Directory.GetCreationTime(destinationFolder));
                 // File.Copy(Path.Combine(currentFolder, nameFile), filePath, true);
-                Console.WriteLine("The backup file was created successfully at {0}", Directory.GetCreationTime(destinationFolder));
+                Console.WriteLine("Se generó el archivo de backup en {0}", Directory.GetCreationTime(destinationFolder));
             }
             catch (Exception e)
             {
-                Console.WriteLine("The process failed: {0}", e.ToString());
+                Console.WriteLine("No se pudo generar el archivo backup: {0}", e.ToString());
+                Logger.LogException(e);
             }
         }
     }

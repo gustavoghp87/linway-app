@@ -58,7 +58,11 @@ namespace linway_app.Forms
         {
             if (_recibo.Impreso == 1) return;
             _recibo.Impreso = 1;
-            editRecibo(_recibo);
+            bool success = editRecibo(_recibo);
+            if (!success)
+            {
+                MessageBox.Show("No se pudo marcar Recibo como Imprimido");
+            }
         }
         private void CaptureScreen()
         {
@@ -74,16 +78,17 @@ namespace linway_app.Forms
                 mygraphics.ReleaseHdc(dc1);
                 memoryGraphics.ReleaseHdc(dc2);
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                MessageBox.Show("Falló captura de pantalla:", exception.Message);
+                Logger.LogException(e);
+                MessageBox.Show("Falló captura de pantalla:", e.Message);
             }
         }
-        private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs ev)
         {
-            e.Graphics.DrawImage(memoryImage, 0, 0);
+            ev.Graphics.DrawImage(memoryImage, 0, 0);
         }
-        private void Button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs ev)
         {
             button1.Visible = false;
             CaptureScreen();
@@ -93,16 +98,17 @@ namespace linway_app.Forms
                 DialogResult result = printDialog1.ShowDialog();
                 if (result != DialogResult.OK)
                 {
-                    MessageBox.Show("Falló impresión en generación de diálogo");
+                    MessageBox.Show("Falló impresión en generación de Diálogo");
                     return;
                 }
                 printDocument1.Print();
                 MarcarImpresa();
                 Close();
             }
-            catch (Exception eee)
+            catch (Exception e)
             {
-                MessageBox.Show("Falló impresión: " + eee.Message);
+                Logger.LogException(e);
+                MessageBox.Show("Falló impresión: " + e.Message);
             }
         }
     }

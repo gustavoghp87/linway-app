@@ -9,9 +9,9 @@ namespace linway_app.Services.Delegates
 {
     public static class DProducto
     {
-        public readonly static Action<Producto> addProducto = AddProducto;
-        public readonly static Action<Producto> deleteProducto = DeleteProducto;
-        public readonly static Action<Producto> editProducto = EditProducto;
+        public readonly static Predicate<Producto> addProducto = AddProducto;
+        public readonly static Predicate<Producto> deleteProducto = DeleteProducto;
+        public readonly static Predicate<Producto> editProducto = EditProducto;
         public readonly static Func<Producto, bool> esProducto = EsProducto;
         public readonly static Func<long, Producto> getProducto = GetProducto;
         public readonly static Func<string, Producto> getProductoPorNombre = GetProductoPorNombre;
@@ -26,73 +26,86 @@ namespace linway_app.Services.Delegates
 
         private static readonly IServiceBase<Producto> _service = ServicesObjects.ServProducto;
 
-        private static void AddProducto(Producto producto)
+        private static bool AddProducto(Producto producto)
         {
             while(producto.Nombre.Contains("'")) producto.Nombre = producto.Nombre.Replace(char.Parse("'"), '"');
-            bool response = _service.Add(producto);
-            if (!response) Console.WriteLine("Algo falló al guardar Producto en la base de datos");
+            bool success = _service.Add(producto);
+            return success;
         }
-        private static void DeleteProducto(Producto producto)
+        private static bool DeleteProducto(Producto producto)
         {
-            bool response = _service.Delete(producto);
-            if (!response) Console.WriteLine("Algo falló al eliminar Producto de la base de datos");
+            bool success = _service.Delete(producto);
+            return success;
         }
-        private static void EditProducto(Producto producto)
+        private static bool EditProducto(Producto producto)
         {
-            bool response = _service.Edit(producto);
-            if (!response) Console.WriteLine("Algo falló al editar Producto en la base de datos");
+            bool success = _service.Edit(producto);
+            return success;
         }
         private static bool EsProducto(Producto producto)
         {
-            return producto.Tipo != TipoProducto.Saldo.ToString();
+            bool esProducto = producto.Tipo != TipoProducto.Saldo.ToString();
+            return esProducto;
         }
         private static Producto GetProducto(long productId)
         {
-            return _service.Get(productId);
+            Producto producto = _service.Get(productId);
+            return producto;
         }
         private static Producto GetProductoPorNombre(string nombre)
         {
-            return GetProductos().Find(x => x.Nombre.ToLower().Contains(nombre.ToLower()) && x.Estado != null && x.Estado != "Eliminado");
+            Producto producto = GetProductos().Find(x => x.Nombre.ToLower().Contains(nombre.ToLower()) && x.Estado != null && x.Estado != "Eliminado");
+            return producto;
         }
         private static Producto GetProductoPorNombreExacto(string nombre)
         {
-            return GetProductos().Find(x => x.Nombre.Equals(nombre) && x.Estado != null && x.Estado != "Eliminado");
+            Producto producto = GetProductos().Find(x => x.Nombre.Equals(nombre) && x.Estado != null && x.Estado != "Eliminado");
+            return producto;
         }
         private static List<Producto> GetProductos()
         {
-            return _service.GetAll();
+            List<Producto> producto = _service.GetAll();
+            return producto;
         }
-        private static bool IsACobrar(Producto product)
+        private static bool IsACobrar(Producto producto)
         {
-            return product != null && product.Tipo == TipoProducto.Saldo.ToString()
-                && product.SubTipo != null && product.SubTipo == TipoSaldo.ACobrar.ToString();
+            bool isACobrar = producto != null
+                && producto.Tipo == TipoProducto.Saldo.ToString()
+                && producto.SubTipo != null
+                && producto.SubTipo == TipoSaldo.ACobrar.ToString();
+            return isACobrar;
         }
         private static bool IsBlanqueador(Producto product)
         {
-            return product != null
+            bool isBlanqueador = product != null
                 && product.Tipo == TipoProducto.Polvo.ToString()
                 && product.SubTipo != null
                 && product.SubTipo == TipoPolvo.Blanqueador.ToString();
+            return isBlanqueador;
         }
         private static bool IsLiquido(Producto product)
         {
-            return product != null && product.Tipo == TipoProducto.Líquido.ToString();
+            bool isLiquido = product != null && product.Tipo == TipoProducto.Líquido.ToString();
+            return isLiquido;
         }
         private static bool IsNegativePrice(Producto product)
         {
-            return product.Tipo == TipoProducto.Saldo.ToString() && (
-                product.SubTipo == TipoSaldo.Bonificacion.ToString()
-                || product.SubTipo == TipoSaldo.Devolucion.ToString()
-                || product.SubTipo == TipoSaldo.SaldoAFavor.ToString()
-            );
+            bool isNegativePrice = product.Tipo == TipoProducto.Saldo.ToString()
+                && (product.SubTipo == TipoSaldo.Bonificacion.ToString()
+                    || product.SubTipo == TipoSaldo.Devolucion.ToString()
+                    || product.SubTipo == TipoSaldo.SaldoAFavor.ToString()
+                );
+            return isNegativePrice;
         }
         private static bool IsPolvo(Producto product)
         {
-            return product != null && product.Tipo == TipoProducto.Polvo.ToString();
+            bool isPolvo = product != null && product.Tipo == TipoProducto.Polvo.ToString();
+            return isPolvo;
         }
         private static bool IsSaldo(Producto product)
         {
-            return product != null && product.Tipo == TipoProducto.Saldo.ToString();
+            bool isSaldo = product != null && product.Tipo == TipoProducto.Saldo.ToString();
+            return isSaldo;
         }
     }
 }

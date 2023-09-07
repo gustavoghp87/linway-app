@@ -14,9 +14,9 @@ namespace Models
             }
             else
             {
-                connectionString = "Server=192.168.1.3;";
+                connectionString = "Server=192.168.0.82;";
             }
-            connectionString += "Port=3306;Database=linway;Uid=root;Pwd=password;";
+            connectionString += "Port=3306;Database=linway;Uid=linway;Pwd=password;";
             return connectionString;
         }
 

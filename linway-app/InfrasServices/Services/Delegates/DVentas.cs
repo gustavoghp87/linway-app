@@ -10,43 +10,43 @@ namespace linway_app.Services.Delegates
 {
     public static class DVentas
     {
-        public readonly static Action<ICollection<Venta>> addVentas = AddVentas;
-        public readonly static Action<ICollection<Venta>> deleteVentas = DeleteVentas;
-        public readonly static Action<ICollection<Venta>> editVentas = EditVentas;
+        public readonly static Predicate<ICollection<Venta>> addVentas = AddVentas;
+        public readonly static Predicate<ICollection<Venta>> deleteVentas = DeleteVentas;
+        public readonly static Predicate<ICollection<Venta>> editVentas = EditVentas;
         public readonly static Func<List<Venta>> getVentas = GetVentas;
-        public readonly static Action<ICollection<ProdVendido>, bool> updateVentasDesdeProdVendidos = UpdateVentasDesdeProdVendidos;
+        public readonly static Func<ICollection<ProdVendido>, bool, bool> updateVentasDesdeProdVendidos = UpdateVentasDesdeProdVendidos;
 
         private static readonly IServiceBase<Venta> _service = ServicesObjects.ServVenta;
 
-        private static void AddVentas(ICollection<Venta> ventas)
+        private static bool AddVentas(ICollection<Venta> ventas)
         {
-            if (ventas == null || ventas.Count == 0) return;
-            bool response = _service.AddMany(ventas);
-            if (!response) Console.WriteLine("Algo falló al agregar Ventas a la base de datos");
+            if (ventas == null || ventas.Count == 0) return false;
+            bool success = _service.AddMany(ventas);
+            return success;
         }
-        private static void DeleteVentas(ICollection<Venta> ventas)
+        private static bool DeleteVentas(ICollection<Venta> ventas)
         {
-            bool response = _service.DeleteMany(ventas);
-            if (!response) Console.WriteLine("Algo falló al eliminar Ventas de la base de datos");
+            bool success = _service.DeleteMany(ventas);
+            return success;
         }
-        private static void EditVentas(ICollection<Venta> ventas)
+        private static bool EditVentas(ICollection<Venta> ventas)
         {
-            bool response = _service.EditMany(ventas);
-            if (!response) Console.WriteLine("Algo falló al editar Ventas en la base de datos");
+            bool succcess = _service.EditMany(ventas);
+            return succcess;
         }
         private static List<Venta> GetVentas()
         {
-            return _service.GetAll() ?? new List<Venta>();
+            List<Venta> ventas = _service.GetAll() ?? new List<Venta>();
+            return ventas;
         }
-        private static void UpdateVentasDesdeProdVendidos(ICollection<ProdVendido> prodVendidos, bool addingUp)
+        private static bool UpdateVentasDesdeProdVendidos(ICollection<ProdVendido> prodVendidos, bool addingUp)
         {
-            if (prodVendidos == null) return;
+            if (prodVendidos == null) return false;
             var ventasAAgregar = new List<Venta>();
             var ventasAEditar = new List<Venta>();
             List<Venta> lstVentas = getVentas();
             List<Producto> productos = getProductos().ToList();
-            if (lstVentas == null || productos == null) return;
-
+            if (lstVentas == null || productos == null) return false;
             foreach (ProdVendido prodVendido in prodVendidos)
             {
                 Producto producto = productos.Find(x => x.Id == prodVendido.ProductoId);
@@ -72,8 +72,24 @@ namespace linway_app.Services.Delegates
                     ventasAAgregar.Add(nuevaVenta);
                 }
             }
-            if (ventasAAgregar.Count > 0) AddVentas(ventasAAgregar);
-            if (ventasAEditar.Count > 0) EditVentas(ventasAEditar);
+            bool success = true;
+            if (ventasAAgregar.Count > 0)
+            {
+                bool successAV = AddVentas(ventasAAgregar);
+                if (!successAV)
+                {
+                    success = false;
+                }
+            }
+            if (ventasAEditar.Count > 0)
+            {
+                bool successEV = EditVentas(ventasAEditar);
+                if (!successEV)
+                {
+                    success = false;
+                }
+            }
+            return success;
         }
     }
 }

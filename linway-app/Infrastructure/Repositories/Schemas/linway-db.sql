@@ -1,4 +1,9 @@
+-- my.ini: bind-address = 198.162.0.82 que es la dirección local del equipo host
+
 CREATE DATABASE IF NOT EXISTS linway;
+CREATE USER 'linway'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON linway.* TO 'linway'@'%';
+FLUSH PRIVILEGES;
 USE linway;
 CREATE TABLE IF NOT EXISTS DiaReparto (
 	Id INT NOT NULL AUTO_INCREMENT,
@@ -127,3 +132,16 @@ CREATE TABLE IF NOT EXISTS DetalleRecibo (
 	PRIMARY KEY (Id),
 	FOREIGN KEY (ReciboId) REFERENCES Recibo(Id)
 );
+
+
+DiaReparto (Id, Dia, Estado)
+Producto (Id, Nombre, Precio, Estado, Tipo, SubTipo)
+Cliente (Id, Direccion, CodigoPostal, Telefono, Nombre, CUIT, Tipo, Estado)
+Venta (Id, ProductoId, Cantidad, Estado)
+Reparto (Id, Nombre, DiaRepartoId, TA, TE, TD, TT, TAE, TotalB, TL, Estado)
+RegistroVenta (Id, ClienteId, NombreCliente, Fecha, Estado)
+NotaDeEnvio (Id, ClienteId, Fecha, Impresa, Detalle, ImporteTotal, Estado)
+Recibo (Id, ClienteId, Fecha, Impreso, DireccionCliente, ImporteTotal, Estado)
+Pedido (Id, Direccion, ClienteId, RepartoId, Entregar, L, A, E, D, T, AE, ProductosText, Orden, Estado)
+ProdVendido (Id, ProductoId, NotaDeEnvioId, RegistroVentaId, PedidoId, Cantidad, Descripcion, Precio, Estado)
+DetalleRecibo (Id, ReciboId, Detalle, Importe, Estado)

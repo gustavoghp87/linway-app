@@ -14,7 +14,7 @@ namespace linway_app.Forms
         }
 
         // agregar Cliente
-        private void AgregarCliente_Click(object sender, EventArgs e)
+        private void AgregarCliente_Click(object sender, EventArgs ev)
         {
             if (textBox2.Text == "" || (!radioButton1.Checked && !radioButton2.Checked))
             {
@@ -32,10 +32,14 @@ namespace linway_app.Forms
                 Cuit = textBox3.Text,
                 Tipo = tipo.ToString()
             };
-            addCliente(nuevoCliente);
+            bool success = addCliente(nuevoCliente);
+            if (!success)
+            {
+                MessageBox.Show("No se agregó Cliente");
+            }
             button2.PerformClick();
         }
-        private void Limpiar_Click(object sender, EventArgs e)
+        private void Limpiar_Click(object sender, EventArgs ev)
         {
             label23.Text = "";
             textBox1.Text = "";
@@ -56,14 +60,14 @@ namespace linway_app.Forms
             radioButton3.Checked = false;
             radioButton4.Checked = false;
         }
-        //private void KeyPress_SoloLetras(object sender, KeyPressEventArgs e)
+        //private void KeyPress_SoloLetras(object sender, KeyPressEventArgs ev)
         //{
         //    if (Char.IsLetter(e.KeyChar)) e.Handled = false;
         //    else if (Char.IsControl(e.KeyChar)) e.Handled = false;
         //    else if (Char.IsSeparator(e.KeyChar)) e.Handled = false;
         //    else e.Handled = true;
         //}
-        //private void KeyPress_SoloNumeros(object sender, KeyPressEventArgs e)
+        //private void KeyPress_SoloNumeros(object sender, KeyPressEventArgs ev)
         //{
         //    if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back)
         //    {
@@ -109,11 +113,18 @@ namespace linway_app.Forms
                 radioButton4.Checked = false;
             }
         }
-        private void TextBox14_TextChanged(object sender, EventArgs e)
+        private void TextBox14_TextChanged(object sender, EventArgs ev)
         {
             if (textBox14.Text != "")
             {
-                try { long.Parse(textBox14.Text); } catch { return; };
+                try {
+                    long.Parse(textBox14.Text);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogException(e);
+                    return;
+                };
                 Cliente cliente = getCliente(long.Parse(textBox14.Text));
                 DoIt(cliente);
             }
@@ -129,7 +140,7 @@ namespace linway_app.Forms
                 radioButton4.Checked = false;
             }
         }
-        private void TextBox6_TextChanged(object sender, EventArgs e)
+        private void TextBox6_TextChanged(object sender, EventArgs ev)
         {
             if (textBox6.Text != "")
             {
@@ -148,7 +159,7 @@ namespace linway_app.Forms
                 radioButton4.Checked = false;
             }
         }
-        private void Editar_Click(object sender, EventArgs e)
+        private void Editar_Click(object sender, EventArgs ev)
         {
             if (!TodoOkModificarC())
             {
@@ -166,13 +177,17 @@ namespace linway_app.Forms
                 cliente.Tipo = TipoR.Inscripto.ToString();
             else
                 cliente.Tipo = TipoR.Monotributo.ToString();
-            editCliente(cliente);
+            bool success = editCliente(cliente);
+            if (!success)
+            {
+                MessageBox.Show("No se modificó Cliente o no se pudo actualizar dirección en los Repartos");
+            }
             button8.PerformClick();
         }
 
 
         //  Borrar clientes
-        private void BorrarPorId_textBox_TextChanged(object sender, EventArgs e)
+        private void BorrarPorId_textBox_TextChanged(object sender, EventArgs ev)
         {
             if (textBox22.Text != "")
             {
@@ -195,7 +210,7 @@ namespace linway_app.Forms
                 button23.Enabled = false;
             }
         }
-        private void BorrarPorDire_textBox_TextChanged(object sender, EventArgs e)
+        private void BorrarPorDire_textBox_TextChanged(object sender, EventArgs ev)
         {
             if (textBoxDireEnBorrar.Text != "")
             {
@@ -217,11 +232,15 @@ namespace linway_app.Forms
                 button23.Enabled = false;
             }
         }
-        private void EliminarCliente_Click(object sender, EventArgs e)
+        private void EliminarCliente_Click(object sender, EventArgs ev)
         {
             if (!cbSeguroBorrar.Checked) return;
             var cliente = getClientePorDireccion(label47.Text);
-            deleteCliente(cliente);
+            bool success = deleteCliente(cliente);
+            if (!success)
+            {
+                MessageBox.Show("No se eliminó Cliente");
+            }
             textBox22.Text = "";
             textBoxDireEnBorrar.Text = "";
             label47.Text = "";

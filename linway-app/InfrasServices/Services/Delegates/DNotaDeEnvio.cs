@@ -25,20 +25,17 @@ namespace linway_app.Services.Delegates
         private static bool AddNotaDeEnvio(NotaDeEnvio notaDeEnvio)
         {
             bool success = _service.Add(notaDeEnvio);
-            if (!success) Console.WriteLine("Algo falló al agregar Nota de Envío a base de datos");
             return success;
         }
         private static bool DeleteNotas(ICollection<NotaDeEnvio> notas)
         {
             if (notas == null || notas.Count == 0) return false;
             bool success = _service.DeleteMany(notas);
-            if (!success) Console.WriteLine("Algo falló al eliminar Notas de Envío de la base de datos");
             return success;
         }
         private static bool EditNotaDeEnvio(NotaDeEnvio notaDeEnvio)
         {
             bool success = _service.Edit(notaDeEnvio);
-            if (!success) Console.WriteLine("Algo falló al editar Nota de Envío en base de datos");
             return success;
         }
         private static NotaDeEnvio EditNoteValues(NotaDeEnvio nota)

@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
-using static linway_app.Services.Delegates.DDbBackup;
+//using static linway_app.Services.Delegates.AutoBackup;
 using static linway_app.Services.Delegates.DProducto;
 
 namespace linway_app.Forms
@@ -43,12 +43,20 @@ namespace linway_app.Forms
             ServicesObjects.ServReparto = servReparto;
             ServicesObjects.ServVenta = servVenta;
             Form1.mapper = mapper;
-            try { InitializeComponent(); } catch (Exception e) { MessageBox.Show(e.Message); return; }
+            try {
+                InitializeComponent();
+            }
+            catch (Exception e)
+            {
+                Logger.LogException(e);
+                MessageBox.Show(e.Message);
+                return;
+            }
         }
-        private void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs ev)
         {
             Actualizar();
-            generateDbBackup();
+            //generateDbBackup();
         }
         public void Actualizar()
         {
@@ -96,63 +104,64 @@ namespace linway_app.Forms
         {
             try
             {
-                bool response = addClientePrimero();
-                if (!response)
+                bool success = addClientePrimero();
+                if (!success)
                 {
                     MessageBox.Show("Hay problemas con la base de datos y no se puede seguir");
                     Close();
                 }
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                MessageBox.Show("Hay problemas con la base de datos y no se puede seguir: " + exception.Message);
+                Logger.LogException(e);
+                MessageBox.Show("Hay problemas con la base de datos y no se puede seguir: " + e.Message);
                 Close();
             }
         }
 
 
         // MENUES
-        void Frm_FormClosing(object sender, FormClosingEventArgs e)
+        void Frm_FormClosing(object sender, FormClosingEventArgs ev)
         {
             Actualizar();
         }
-        private void AbrirClientes_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AbrirClientes_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             var form = Program.GetConfig().GetRequiredService<FormClientes>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
-        private void AbrirProductos_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AbrirProductos_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             var form = Program.GetConfig().GetRequiredService<FormProductos>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
-        private void AbrirCrearNotaDeEnvío_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AbrirCrearNotaDeEnvío_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             var form = Program.GetConfig().GetRequiredService<FormCrearNota>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
-        private void AbrirNotasDeEnvio_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AbrirNotasDeEnvio_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             var form = Program.GetConfig().GetRequiredService<FormNotasEnvio>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
-        private void AbrirHojasDeReparto_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AbrirHojasDeReparto_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             var form = Program.GetConfig().GetRequiredService<FormRepartos>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
-        private void AbrirRecibos_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AbrirRecibos_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             var form = Program.GetConfig().GetRequiredService<FormRecibos>();
             form.FormClosing += Frm_FormClosing;
             form.Show();
         }
-        private void AbrirVentas_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AbrirVentas_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             var form = Program.GetConfig().GetRequiredService<FormVentas>();
             form.FormClosing += Frm_FormClosing;
@@ -176,11 +185,11 @@ namespace linway_app.Forms
             }
             CargarGridClientes(lstClientesFiltrados);
         }
-        private void TextBox8_TextChanged(object sender, EventArgs e)
+        private void TextBox8_TextChanged(object sender, EventArgs ev)
         {
             FiltrarDatosC(BuscadorClientes.Text);
         }
-        private void Button5_Click(object sender, EventArgs e)
+        private void Button5_Click(object sender, EventArgs ev)
         {
             if (BuscadorClientes.Visible)
             {
@@ -211,7 +220,7 @@ namespace linway_app.Forms
             CargarGridProductos(lstProductosFilstrados);
         }
 
-        private void Button10_Click(object sender, EventArgs e)
+        private void Button10_Click(object sender, EventArgs ev)
         {
             if (BuscadorProductos.Visible)
             {
@@ -228,7 +237,7 @@ namespace linway_app.Forms
                 BuscadorClientes.Text = "";
             }
         }
-        private void BuscadorProductos_TextChanged(object sender, EventArgs e)
+        private void BuscadorProductos_TextChanged(object sender, EventArgs ev)
         {
             FiltrarDatosP(BuscadorProductos.Text);
         }

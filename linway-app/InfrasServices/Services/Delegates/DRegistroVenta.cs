@@ -20,26 +20,22 @@ namespace linway_app.Services.Delegates
 
         private static bool AddRegistroVenta(RegistroVenta registroVenta)
         {
-            bool response = _service.Add(registroVenta);
-            if (!response) Console.WriteLine("Algo falló al agregar Registro de Venta a base de datos");
-            return response;
+            bool success = _service.Add(registroVenta);
+            return success;
         }
         private static bool DeleteRegistroVenta(RegistroVenta registroVenta)
         {
             bool success = _service.Delete(registroVenta);
-            if (!success) Console.WriteLine("Algo falló al eliminar Registro de Venta a base de datos");
             return success;
         }
         private static bool DeleteRegistros(ICollection<RegistroVenta> registros)
         {
             bool success = _service.DeleteMany(registros);
-            if (!success) Console.WriteLine("Algo falló al eliminar Registro de Venta a base de datos");
             return success;
         }
         private static bool EditRegistroVenta(RegistroVenta registroVenta)
         {
             bool success = _service.Edit(registroVenta);
-            if (!success) Console.WriteLine("Algo falló al editar Registro de Venta en la base de datos");
             return success;
         }
         private static RegistroVenta GetRegistroVenta(long registroVentaId)

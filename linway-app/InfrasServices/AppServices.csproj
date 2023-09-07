@@ -62,7 +62,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Delegates\DCliente.cs" />
-    <Compile Include="Services\Delegates\DDbBackup.cs" />
+    <Compile Include="Services\AutoBackup.cs" />
     <Compile Include="Services\Delegates\DDetalleRecibo.cs" />
     <Compile Include="Services\Delegates\DDiaReparto.cs" />
     <Compile Include="Services\Delegates\DNotaDeEnvio.cs" />

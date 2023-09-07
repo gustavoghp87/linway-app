@@ -85,6 +85,7 @@ namespace linway_app.Excel
             catch (Exception e)
             {
                 Console.WriteLine(e.Message, "Error exportando (1):");
+                Logger.LogException(e);
                 return false;
             }
             return true;
@@ -329,6 +330,7 @@ namespace linway_app.Excel
             catch (Exception e)
             {
                 Console.WriteLine(e.Message, "Error exportando (1):");
+                Logger.LogException(e);
                 return false;
             }
             return true;
@@ -446,6 +448,7 @@ namespace linway_app.Excel
             catch (Exception e)
             {
                 Console.WriteLine(e.Message, "Error exportando (3):");
+                Logger.LogException(e);
                 return false;
             }
         }

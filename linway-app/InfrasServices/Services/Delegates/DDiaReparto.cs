@@ -16,7 +16,6 @@ namespace linway_app.Services.Delegates
         private static bool AddDiaReparto(DiaReparto diaReparto)
         {
             bool success = _service.Add(diaReparto);
-            if (!success) Console.WriteLine("Algo falló al agregar nuevo Día de Reparto a la base de datos");
             return success;
         }
         private static List<DiaReparto> GetDiaRepartos()

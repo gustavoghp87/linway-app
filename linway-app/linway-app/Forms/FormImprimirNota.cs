@@ -40,7 +40,6 @@ namespace linway_app.Forms
                 //lLocalidad.Text = nota_notaDeEnvioDeEnvio.Client.Direccion.Substring(separador + 1);
                 lLocalidad.Text = " ";
                 lTotal.Text = "$ " + _notaDeEnvio.ImporteTotal.ToString(".00");
-
                 foreach (ProdVendido pvActual in _notaDeEnvio.ProdVendidos)
                 {
                     if (pvActual.Producto.Tipo == TipoProducto.Saldo.ToString())
@@ -52,18 +51,22 @@ namespace linway_app.Forms
                     label3.Text = label3.Text + (pvActual.Precio * pvActual.Cantidad).ToString(".00") + Environment.NewLine;
                 }
             }
-            catch (Exception exc)
+            catch (Exception e)
             {
-                MessageBox.Show("Error rellenando los datos: " + exc.Message);
+                Logger.LogException(e);
+                MessageBox.Show("Error rellenando los datos: " + e.Message);
             }
         }
         private void MarcarImpresa()
         {
             if (_notaDeEnvio.Impresa == 1) return;
             _notaDeEnvio.Impresa = 1;
-            editNotaDeEnvio(_notaDeEnvio);
+            bool success = editNotaDeEnvio(_notaDeEnvio);
+            if (!success)
+            {
+                MessageBox.Show("No se pudo marcar la Nota de Envío como Imprimida");
+            }
         }
-
 
         /// IMPRIMIR
         private void CaptureScreen()
@@ -82,29 +85,31 @@ namespace linway_app.Forms
             }
             catch (Exception e)
             {
+                Logger.LogException(e);
                 MessageBox.Show("Error al capturar pantalla para imprimir: " + e.Message);
             }
         }
-        private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs ev)
         {
-            e.Graphics.DrawImage(memoryImage, 0, 0);
+            ev.Graphics.DrawImage(memoryImage, 0, 0);
         }
-        private void Imprimir_Click(object sender, System.EventArgs e)
+        private void Imprimir_Click(object sender, System.EventArgs ev)
         {
             button1.Visible = false;
             try
             {
                 CaptureScreen();
             }
-            catch (Exception h)
+            catch (Exception e)
             {
-                MessageBox.Show("Error al imprimir screen: " + h.Message);
+                Logger.LogException(e);
+                MessageBox.Show("Error al imprimir screen: " + e.Message);
             }
             PrintDialog printDialog1 = new PrintDialog { Document = printDocument1 };
             DialogResult result = printDialog1.ShowDialog();
             if (result != DialogResult.OK)
             {
-                MessageBox.Show("Algo falló al generar diálogo");
+                MessageBox.Show("Algo falló al generar Diálogo");
                 return;
             }
             printDocument1.Print();

@@ -4,6 +4,7 @@ using Models.Entities;
 using Models.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using static linway_app.Services.Delegates.DCliente;
 using static linway_app.Services.Delegates.DNotaDeEnvio;
@@ -19,12 +20,14 @@ namespace linway_app.Forms
     public partial class FormCrearNota : Form
     {
         private readonly List<ProdVendido> _lstProdVendidosAAgregar;
+        private readonly List<Producto> _lstProductosAAgregar;
         public FormCrearNota()
         {
             InitializeComponent();
             _lstProdVendidosAAgregar = new List<ProdVendido>();
+            _lstProductosAAgregar = new List<Producto>();
         }
-        private void FormCrearNota_Load(object sender, EventArgs e)
+        private void FormCrearNota_Load(object sender, EventArgs ev)
         {
             ActualizarGrid();
         }
@@ -40,11 +43,11 @@ namespace linway_app.Forms
             dataGridView4.Columns[0].Width = 28;
             dataGridView4.Columns[1].Width = 200;
         }
-        private void SoloNumero_KeyPress(object sender, KeyPressEventArgs e)
+        private void SoloNumero_KeyPress(object sender, KeyPressEventArgs ev)
         {
-            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
+            if (!char.IsNumber(ev.KeyChar) && ev.KeyChar != (char)Keys.Back) ev.Handled = true;
         }
-        private void TextBox15_TextChanged(object sender, EventArgs e)
+        private void TextBox15_TextChanged(object sender, EventArgs ev)
         {
             textBox1.Text = "";
             if (textBox15.Text != "")
@@ -66,7 +69,7 @@ namespace linway_app.Forms
                 labelClienteId.Text = "";
             }
         }
-        private void TextBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs ev)
         {
             if (textBox1.Text != "")
             {
@@ -86,7 +89,7 @@ namespace linway_app.Forms
                 labelClienteId.Text = "";
             }
         }
-        private void TextBox16_TextChanged(object sender, EventArgs e)
+        private void TextBox16_TextChanged(object sender, EventArgs ev)
         {
             if (textBox16.Text != "")
             {
@@ -109,7 +112,7 @@ namespace linway_app.Forms
                 labelProductoId.Text = "";
             }
         }
-        private void TextBox2_TextChanged(object sender, EventArgs e)  // producto por nombre
+        private void TextBox2_TextChanged(object sender, EventArgs ev)  // producto por nombre
         {
             if (textBox2.Text != "")
             {
@@ -131,7 +134,7 @@ namespace linway_app.Forms
                 labelProductoId.Text = "";
             }
         }
-        private void TextBox17_TextChanged(object sender, EventArgs e)
+        private void TextBox17_TextChanged(object sender, EventArgs ev)
         {
             if (labelProductoId.Text == "")
             {
@@ -147,13 +150,14 @@ namespace linway_app.Forms
             }
             label40.Text = (producto.Precio * int.Parse(textBox17.Text)).ToString();   // subtotal
         }
-        private void LimpiarLista_Click(object sender, EventArgs e)
+        private void LimpiarLista_Click(object sender, EventArgs ev)
         {
             _lstProdVendidosAAgregar.Clear();
+            _lstProductosAAgregar.Clear();
             ActualizarGrid();
             label42.Text = "";
         }
-        private void AnyadirProdVendidos_Click(object sender, EventArgs e)
+        private void AnyadirProdVendidos_Click(object sender, EventArgs ev)
         {
             if (labelClienteId.Text == "" || labelProductoId.Text == "") return;
             try { long.Parse(labelProductoId.Text); int.Parse(textBox17.Text); } catch { return; };
@@ -179,7 +183,6 @@ namespace linway_app.Forms
                     Cantidad = cantidad,
                     Descripcion = label38.Text,
                     Precio = producto.Precio,
-                    Producto = producto,   // do not remove
                     ProductoId = producto.Id
                 };
                 if (producto.Tipo == TipoProducto.Saldo.ToString() && producto.SubTipo != TipoSaldo.SaldoPendiente.ToString())
@@ -190,6 +193,7 @@ namespace linway_app.Forms
                         nuevoPV.Descripcion = label38.Text + textBox20.Text;
                 }
                 _lstProdVendidosAAgregar.Add(nuevoPV);
+                _lstProductosAAgregar.Add(producto);
             }
 
             decimal impTotal = 0;
@@ -208,7 +212,7 @@ namespace linway_app.Forms
             labelProductoId.Text = "";
             ActualizarGrid();
         }
-        private void CheckedChanged(object sender, EventArgs e)
+        private void CheckedChanged(object sender, EventArgs ev)
         {
             if (checkBox3.Checked)       // enviar a hoja de reparto
             {
@@ -225,7 +229,7 @@ namespace linway_app.Forms
                 comboBox4.Visible = false;
             }
         }
-        private void ConfirmarCrearNota_Click(object sender, EventArgs e)
+        private void ConfirmarCrearNota_Click(object sender, EventArgs ev)
         {
             if (labelClienteId.Text == "" || labelClienteId.Text == "No encontrado" || _lstProdVendidosAAgregar == null || _lstProdVendidosAAgregar.Count == 0)
             {
@@ -246,8 +250,8 @@ namespace linway_app.Forms
                 Detalle = extraerDetalleDeNotaDeEnvio(_lstProdVendidosAAgregar),
                 ImporteTotal = extraerImporteDeNotaDeEnvio(_lstProdVendidosAAgregar)
             };
-            addNotaDeEnvio(nuevaNota);
-            if (nuevaNota.Id == 0)
+            bool success = addNotaDeEnvio(nuevaNota);
+            if (!success || nuevaNota.Id == 0)
             {
                 MessageBox.Show("Falló al procesar Nota nueva");
                 return;
@@ -256,26 +260,41 @@ namespace linway_app.Forms
             {
                 prodVendido.NotaDeEnvioId = nuevaNota.Id;
             }
-            addProdVendidos(_lstProdVendidosAAgregar);
+            success = addProdVendidos(_lstProdVendidosAAgregar);
+            if (!success)
+            {
+                MessageBox.Show("No se agregaron Productos Vendidos");
+            }
 
             if (checkBox4.Checked)      // agregar productos vendidos a lista de registros y a lista de ventas
             {
                 RegistroVenta nuevoRegistro = new RegistroVenta
                 {
                     ClienteId = cliente.Id,
-                    Cliente = cliente,
                     Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
                     NombreCliente = cliente.Direccion
                 };
-                addRegistroVenta(nuevoRegistro);
-                var prodVendidosAEditar = new List<ProdVendido>();
-                foreach (var prodVendido in _lstProdVendidosAAgregar)
+                success = addRegistroVenta(nuevoRegistro);
+                if (!success || nuevoRegistro.Id == 0)
                 {
-                    prodVendido.RegistroVentaId = nuevoRegistro.Id;
-                    prodVendidosAEditar.Add(prodVendido);
+                    MessageBox.Show("Falló agregar Registro de Venta");
                 }
-                editProdVendidos(prodVendidosAEditar);
-                updateVentasDesdeProdVendidos(prodVendidosAEditar, true);
+                else
+                {
+                    var prodVendidosAEditar = new List<ProdVendido>();
+                    foreach (var prodVendido in _lstProdVendidosAAgregar)
+                    {
+                        prodVendido.RegistroVentaId = nuevoRegistro.Id;
+                        prodVendidosAEditar.Add(prodVendido);
+                        _lstProdVendidosAAgregar.Find(x => x.Id == prodVendido.Id).RegistroVentaId = nuevoRegistro.Id;  // para que el siguiente checkbox no pise los cambios
+                    }
+                    success = editProdVendidos(prodVendidosAEditar);
+                    if (!success)
+                    {
+                        MessageBox.Show("No se pudieron modificar los Productos Vendidos para agregarlos al Registro de Ventas");
+                    }
+                    updateVentasDesdeProdVendidos(prodVendidosAEditar, true);
+                }
             }
 
             if (checkBox3.Checked)     // enviar a hoja de reparto
@@ -286,7 +305,11 @@ namespace linway_app.Forms
                     return;
                 }
                 long pedidoId = addPedidoIfNotExistsAndReturnId(reparto.Id, cliente.Id);
-                Pedido pedido = getPedido(pedidoId);
+                if (pedidoId == 0)
+                {
+                    MessageBox.Show("Falló al agregar Pedido");
+                }
+                Pedido pedido = reparto.Pedidos.ToList().Find(p => p.Id == pedidoId);
                 //if (pedidoId == 0 || pedido == null)
                 //{
                 //    MessageBox.Show("Falló Pedido al enviar al Reparto");
@@ -299,14 +322,27 @@ namespace linway_app.Forms
                     prodVendidosAEditar.Add(prodVendido);
                 }
                 // pedido.Entregar = 1;
-                editPedidos(new List<Pedido>() { pedido });
-                editProdVendidos(prodVendidosAEditar);
-                pedido = getPedido(pedidoId);
-                updatePedido(pedido, true);
+                //bool success = editPedidos(new List<Pedido>() { pedido });
+                success = editProdVendidos(prodVendidosAEditar);
+                if (!success)
+                {
+                    MessageBox.Show("No se pudieron modificar los Productos Vendidos para incluirlos al Reparto");
+                }
+                Pedido pedidoActualizado = updatePedido(pedido, true);
+                if (pedidoActualizado == null)
+                {
+                    MessageBox.Show("No se actualizó el Pedido");
+                }
             }
 
             if (checkBox1.Checked)      // imprimir
             {
+                nuevaNota.Cliente = cliente;  // para que no falle la dirección
+                foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
+                {
+                    prodVendido.Producto = _lstProductosAAgregar.Find(p => p.Id == prodVendido.ProductoId);  // para que no falten los productos
+                }
+                nuevaNota.ProdVendidos = _lstProdVendidosAAgregar;
                 var form = Program.GetConfig().GetRequiredService<FormImprimirNota>();
                 form.Rellenar_Datos(nuevaNota);
                 form.Show();
@@ -314,7 +350,7 @@ namespace linway_app.Forms
 
             Close();
         }
-        private void EnviarA_HDR_SelectedIndexChanged(object sender, EventArgs e)
+        private void EnviarA_HDR_SelectedIndexChanged(object sender, EventArgs ev)
         {
             List<Reparto> repartos = getRepartosPorDia(comboBox4.Text);
             if (repartos == null) return;
@@ -322,7 +358,7 @@ namespace linway_app.Forms
             comboBox3.DisplayMember = "Nombre";
             comboBox3.ValueMember = "Nombre";
         }
-        private void CerrarBtn_Click(object sender, EventArgs e)
+        private void CerrarBtn_Click(object sender, EventArgs ev)
         {
             Close();
         }

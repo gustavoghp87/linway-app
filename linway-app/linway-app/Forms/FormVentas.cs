@@ -28,7 +28,7 @@ namespace linway_app.Forms
             _lstRegistros = new List<RegistroVenta>();
             _lstAgregarVentas = new List<Venta>();
         }
-        private void FormVentas_Load(object sender, EventArgs e)
+        private void FormVentas_Load(object sender, EventArgs ev)
         {
             Actualizar();
         }
@@ -117,7 +117,7 @@ namespace linway_app.Forms
         }
 
         //nueva venta
-        private void NuevaVenta_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NuevaVenta_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             showing = "agregarReg";
@@ -125,20 +125,20 @@ namespace linway_app.Forms
             _lstAgregarVentas.Clear();
             ActualizarGrid5(_lstAgregarVentas);
         }
-        private void CancelarClick_Click(object sender, EventArgs e)
+        private void CancelarClick_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
         }
-        private void SoloNumero_KeyPress(object sender, KeyPressEventArgs e)
+        private void SoloNumero_KeyPress(object sender, KeyPressEventArgs ev)
         {
-            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
+            if (!char.IsNumber(ev.KeyChar) && ev.KeyChar != (char)Keys.Back) ev.Handled = true;
         }
-        private void SoloNumeroYNegativo_KeyPress(object sender, KeyPressEventArgs e)
+        private void SoloNumeroYNegativo_KeyPress(object sender, KeyPressEventArgs ev)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '-') e.Handled = true;
-            if (e.KeyChar == '-' && (sender as TextBox).Text.Length > 0) e.Handled = true;
+            if (!char.IsControl(ev.KeyChar) && !char.IsDigit(ev.KeyChar) && ev.KeyChar != '-') ev.Handled = true;
+            if (ev.KeyChar == '-' && (sender as TextBox).Text.Length > 0) ev.Handled = true;
         }
-        private void InputProductoId_TextChanged(object sender, EventArgs e)
+        private void InputProductoId_TextChanged(object sender, EventArgs ev)
         {
             if (textBox12.Text != "")
             {
@@ -161,7 +161,7 @@ namespace linway_app.Forms
                 labelPrecio.Text = "";
             }
         }
-        private void TextBox4_TextChanged(object sender, EventArgs e)
+        private void TextBox4_TextChanged(object sender, EventArgs ev)
         {
             if (textBox4.Text != "")
             {
@@ -183,7 +183,7 @@ namespace linway_app.Forms
                 labelPrecio.Text = "";
             }
         }
-        private void Limpiar_Click(object sender, EventArgs e)
+        private void Limpiar_Click(object sender, EventArgs ev)
         {
             _lstAgregarVentas.Clear();
             ActualizarGrid5(_lstAgregarVentas);
@@ -191,7 +191,7 @@ namespace linway_app.Forms
             textBox13.Text = "";
             textBox12.Text = "";
         }
-        private void Anyadir_Click(object sender, EventArgs e)
+        private void Anyadir_Click(object sender, EventArgs ev)
         {
             try { int.Parse(textBox13.Text); } catch { return; }
             Producto producto = getProductoPorNombreExacto(label28.Text);
@@ -209,7 +209,7 @@ namespace linway_app.Forms
             textBox12.Text = "";
             textBox4.Text = "";
         }
-        private void CheckBox2_CheckedChanged(object sender, EventArgs e)        //enviar HDR
+        private void CheckBox2_CheckedChanged(object sender, EventArgs ev)        //enviar HDR
         {
             if (checkBox2.Checked)
             {
@@ -236,7 +236,7 @@ namespace linway_app.Forms
                 textBox3.Text = "";
             }
         }
-        private void AgregarAReparto_SelectedIndexChanged(object sender, EventArgs e)
+        private void AgregarAReparto_SelectedIndexChanged(object sender, EventArgs ev)
         {
             List<Reparto> repartos = getRepartosPorDia(comboBox1.Text);
             if (repartos == null) return;
@@ -244,7 +244,7 @@ namespace linway_app.Forms
             comboBox2.DisplayMember = "Nombre";
             comboBox2.ValueMember = "Nombre";
         }
-        private void TextBox19_TextChanged(object sender, EventArgs e)
+        private void TextBox19_TextChanged(object sender, EventArgs ev)
         {
             if (textBox19.Text == "")
             {
@@ -258,7 +258,7 @@ namespace linway_app.Forms
             else
                 label20.Text = cliente.Direccion;
         }
-        private void TextBox3_TextChanged(object sender, EventArgs e)
+        private void TextBox3_TextChanged(object sender, EventArgs ev)
         {
             if (textBox3.Text == "")
             {
@@ -271,7 +271,7 @@ namespace linway_app.Forms
             else
                 label20.Text = cliente.Direccion;
         }
-        private void AgregarVenta_Click(object sender, EventArgs e)
+        private void AgregarVenta_Click(object sender, EventArgs ev)
         {
             string dia = comboBox1.Text;
             string nombre = comboBox2.Text;
@@ -317,8 +317,8 @@ namespace linway_app.Forms
                 NombreCliente = "Venta particular",
                 Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
             };
-            addRegistroVenta(nuevoRegistroVenta);
-            if (nuevoRegistroVenta.Id == 0)
+            bool success = addRegistroVenta(nuevoRegistroVenta);
+            if (!success || nuevoRegistroVenta.Id == 0)
             {
                 MessageBox.Show("Falló Registro");
                 return;
@@ -378,21 +378,49 @@ namespace linway_app.Forms
                 }
                 Actualizar();
             }
-            addVentas(ventasAAgregar);
-            editVentas(ventasAEditar);
-            addProdVendidos(prodVendidosAAgregar);
-            editProdVendidos(prodVendidosAEditar);
+            success = addVentas(ventasAAgregar);
+            if (!success)
+            {
+                MessageBox.Show("No se agregaron las Ventas");
+            }
+            success = editVentas(ventasAEditar);
+            if (!success)
+            {
+                MessageBox.Show("No se modificaron las Ventas");
+            }
+            success = addProdVendidos(prodVendidosAAgregar);
+            if (!success)
+            {
+                MessageBox.Show("No se agregaron los Productos Vendidos");
+            }
+            success = editProdVendidos(prodVendidosAEditar);
+            if (!success)
+            {
+                MessageBox.Show("No se modificaron los Productos Vendidos");
+            }
             if (checkBox2.Checked)
             {
                 lstProdVendidos.ToList().ForEach(prodVendido =>
                 {
                     prodVendido.PedidoId = pedido.Id;
                 });
-                editProdVendidos(lstProdVendidos);
-                updatePedido(pedido, true);
+                success = editProdVendidos(lstProdVendidos);
+                if (!success)
+                {
+                    MessageBox.Show("No se modificaron los Productos Vendidos para incluirlos en el Pedido");
+                }
+                Pedido pedidoActualizado = updatePedido(pedido, true);
+                if (pedidoActualizado == null)
+                {
+                    MessageBox.Show("No se pudo actualizar el Pedido");
+                }
                 nuevoRegistroVenta.ClienteId = cliente.Id;
                 nuevoRegistroVenta.NombreCliente = cliente.Direccion;
-                editRegistroVenta(nuevoRegistroVenta);
+                success = editRegistroVenta(nuevoRegistroVenta);
+                if (!success)
+                {
+                    MessageBox.Show("No se modificó el Registro de Venta para asociarlo al Cliente");
+                }
             }
             _lstAgregarVentas.Clear();
             LimpiarPantalla();
@@ -400,19 +428,23 @@ namespace linway_app.Forms
         }
 
         // reiniciar ventas
-        private void ReiniciarVentas_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ReiniciarVentas_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             groupBox7.Visible = true;
         }
-        private void ReiniciarVentas_Click(object sender, EventArgs e)
+        private void ReiniciarVentas_Click(object sender, EventArgs ev)
         {
             if (!cbSeguroBorrar.Checked)
             {
                 MessageBox.Show("Seleccione si esta seguro para borrar la lista de ventas");
                 return;
             }
-            deleteVentas(_lstVentas);
+            bool success = deleteVentas(_lstVentas);
+            if (!success)
+            {
+                MessageBox.Show("No se pudieron eliminar las Ventas");
+            }
             LimpiarPantalla();
             Actualizar();
         }
@@ -420,7 +452,7 @@ namespace linway_app.Forms
 
         ///////////////////////////////REGISTRO DE VENTAS//////////////////////////////////////
         ///
-        private void VerRegistro_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void VerRegistro_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             showing = "verReg";
@@ -429,7 +461,7 @@ namespace linway_app.Forms
         }
 
         // Ver y deshacer una venta
-        private void TextBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs ev)
         {
             if (textBox1.Text != "")
             {
@@ -466,7 +498,7 @@ namespace linway_app.Forms
                 bDeshacerVenta.Enabled = false;
             }
         }
-        private void DeshacerVenta_Click(object sender, EventArgs e)
+        private void DeshacerVenta_Click(object sender, EventArgs ev)
         {
             if (!cbSeguro.Checked)
             {
@@ -480,14 +512,22 @@ namespace linway_app.Forms
             {
                 return;
             }
-            deleteRegistroVenta(registro);
-            updateVentasDesdeProdVendidos(registro.ProdVendido, false);
+            bool success = deleteRegistroVenta(registro);
+            if (!success)
+            {
+                MessageBox.Show("No se pudo eliminar el Registro de Venta");
+            }
+            success = updateVentasDesdeProdVendidos(registro.ProdVendido, false);
+            if (!success)
+            {
+                MessageBox.Show("No se pudieron modificar las Ventas");
+            }
             Actualizar();
             LimpiarPantalla();
         }
 
         ////// Filtrar datos. 
-        private void ComboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox3_SelectedIndexChanged(object sender, EventArgs ev)
         {
             List<RegistroVenta> lFiltrada = new List<RegistroVenta>();
             if (comboBox3.SelectedItem.ToString() == "Hoy")
@@ -512,7 +552,7 @@ namespace linway_app.Forms
                 textBox2.Visible = true;
             }
         }
-        private void TextBox2_TextChanged(object sender, EventArgs e)
+        private void TextBox2_TextChanged(object sender, EventArgs ev)
         {
             if (comboBox3.SelectedItem.ToString() == "Cliente") FiltrarDatos(textBox2.Text, 'c');
             if (comboBox3.SelectedItem.ToString() == "Fecha") FiltrarDatos(textBox2.Text, 'f');
@@ -531,12 +571,12 @@ namespace linway_app.Forms
         }
 
         //Borrar registro de ventas
-        private void BorrarRegistros_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void BorrarRegistros_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             gbBorrarReg.Visible = true;
         }
-        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox1_CheckedChanged(object sender, EventArgs ev)
         {
             if (bBorrarRegVentas.Enabled)
                 bBorrarRegVentas.Enabled = false;
@@ -566,11 +606,12 @@ namespace linway_app.Forms
             {
                 long primero = long.Parse(tbDesde.Text);
                 long segundo = long.Parse(tbHasta.Text);
-                return (primero <= id & segundo >= id);
+                bool seEncuentraEnIntervalo = primero <= id && segundo >= id;
+                return seEncuentraEnIntervalo;
             }
             catch { return false; }
         }
-        private void BorrarRegVentas_Click(object sender, EventArgs e)
+        private void BorrarRegVentas_Click(object sender, EventArgs ev)
         {
             if (!IntervaloCorrecto()) return;
             var registrosABorrar = new List<RegistroVenta>();
@@ -581,16 +622,31 @@ namespace linway_app.Forms
                 registrosABorrar.Add(registroVenta);
                 ventasABorrar.AddRange(registroVenta.ProdVendido);
             }
-            deleteRegistros(registrosABorrar);
-            updateVentasDesdeProdVendidos(ventasABorrar, false);
+            bool success = deleteRegistros(registrosABorrar);
+            if (!success)
+            {
+                MessageBox.Show("No se pudieron eliminar los Registros de Venta");
+            }
+            success = updateVentasDesdeProdVendidos(ventasABorrar, false);
+            if (!success)
+            {
+                MessageBox.Show("No se pudieron actualizar las Ventas desde Productos Vendidos");
+            }
             Actualizar();
             LimpiarPantalla();
         }
-        private void ExportBtn_Click_1(object sender, EventArgs e)
+        private void ExportBtn_Click_1(object sender, EventArgs ev)
         {
             Actualizar();
             bool success = new Exportar().ExportarVentas(_lstVentas);
-            if (success) ExportBtn.Text = "Terminado";
+            if (success)
+            {
+                ExportBtn.Text = "Terminado";
+            }
+            else
+            {
+                MessageBox.Show("No se pudieron exportar Ventas");
+            }
         }
     }
 }

@@ -150,20 +150,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Conversor.cs" />
     <Compile Include="Repositories\DbContexts\LinwayDbContext.cs" />
     <Compile Include="Repositories\Interfaces\IRepository.cs" />
     <Compile Include="Repositories\Interfaces\IUnitOfWork.cs" />
-    <Compile Include="Repositories\RepositoryDetalleRecibo.cs" />
-    <Compile Include="Repositories\RepositoryRegistroVenta.cs" />
-    <Compile Include="Repositories\RepositoryVenta.cs" />
-    <Compile Include="Repositories\RepositoryRecibo.cs" />
-    <Compile Include="Repositories\RepositoryProducto.cs" />
-    <Compile Include="Repositories\RepositoryProdVendido.cs" />
-    <Compile Include="Repositories\RepositoryPedido.cs" />
-    <Compile Include="Repositories\RepositoryDiaReparto.cs" />
-    <Compile Include="Repositories\RepositoryNotaDeEnvio.cs" />
-    <Compile Include="Repositories\RepositoryReparto.cs" />
-    <Compile Include="Repositories\RepositoryCliente.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
   </ItemGroup>
@@ -176,6 +166,11 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Repositories\Schemas\autocharge-db.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Repositories\Schemas\linway-db-viejo-sqlite.sql" />
+    <Content Include="Repositories\Schemas\linway-db.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

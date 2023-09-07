@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static linway_app.Services.Delegates.DCliente;
+using static linway_app.Services.Delegates.DDiaReparto;
 using static linway_app.Services.Delegates.DProducto;
 using static linway_app.Services.Delegates.DProdVendido;
 using static linway_app.Services.Delegates.DReparto;
@@ -16,12 +17,13 @@ namespace linway_app.Services.Delegates
     {
         public readonly static Predicate<Pedido> addPedido = AddPedido;
         public readonly static Func<long, long, long> addPedidoIfNotExistsAndReturnId = AddPedidoIfNotExistsAndReturnId;
-        public readonly static Action<ICollection<Pedido>> cleanPedidos = CleanPedidos;
+        public readonly static Predicate<ICollection<Pedido>> cleanPedidos = CleanPedidos;
         public readonly static Predicate<Pedido> deletePedido = DeletePedido;
         public readonly static Predicate<ICollection<Pedido>> editPedidos = EditPedidos;
         public readonly static Func<long, Pedido> getPedido = GetPedido;
         public readonly static Func<ICollection<Pedido>> getPedidos = GetPedidos;
         public readonly static Func<long, ICollection<Pedido>> getPedidosPorRepartoId = GetPedidosPorRepartoId;
+        public readonly static Predicate<Cliente> editDireccionClienteEnPedidos = EditDireccionClienteEnPedidos;
         public readonly static Func<Pedido, bool, Pedido> updatePedido = UpdatePedido;
 
         private static readonly IServiceBase<Pedido> _service = ServicesObjects.ServPedido;
@@ -30,7 +32,6 @@ namespace linway_app.Services.Delegates
         {
             pedido.Orden = GetOrdenMayor(pedido.RepartoId) + 1;
             bool success = _service.Add(pedido);
-            if (!success) Console.WriteLine("Algo falló al agregar nuevo Pedido a la base de datos");
             return success;
         }
         private static long AddPedidoIfNotExistsAndReturnId(long repartoId, long clienteId)
@@ -57,16 +58,17 @@ namespace linway_app.Services.Delegates
                     T = 0
                 };
                 bool success = AddPedido(pedido);
-                if (!success) Console.WriteLine("Algo falló al agregar nuevo Pedido a la base de datos (2)");
-                reparto = getReparto(repartoId);
-                pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == clienteId && x.Estado != "Eliminado");
-                if (pedido == null) return 0;
+                if (!success)
+                {
+                    Console.WriteLine("Algo falló al agregar nuevo Pedido a la base de datos (2)");
+                }
             }
-            return pedido.Id;
+            long pedidoId = pedido == null ? 0 : pedido.Id;
+            return pedidoId;
         }
-        private static void CleanPedidos(ICollection<Pedido> pedidos)
+        private static bool CleanPedidos(ICollection<Pedido> pedidos)
         {
-            if (pedidos == null || pedidos.Count == 0) return;
+            if (pedidos == null || pedidos.Count == 0) return false;
             foreach (Pedido pedido in pedidos)
             {
                 pedido.Entregar = 0;
@@ -78,24 +80,45 @@ namespace linway_app.Services.Delegates
                 pedido.T = 0;
                 pedido.Ae = 0;
             }
-            EditPedidos(pedidos);
+            bool success = EditPedidos(pedidos);
+            return success;
         }
         private static bool DeletePedido(Pedido pedido)
         {
             bool success = _service.Delete(pedido);
-            if (!success) Console.WriteLine("Algo falló al eliminar el Pedido de la base de datos");
+            return success;
+        }
+        private static bool EditDireccionClienteEnPedidos(Cliente cliente)
+        {
+            List<DiaReparto> dias = getDiaRepartos();
+            bool success = true;
+            foreach (var dia in dias)
+            {
+                foreach (var reparto in dia.Reparto)
+                {
+                    foreach (var pedido in reparto.Pedidos)
+                    {
+                        if (pedido.ClienteId == cliente.Id)
+                        {
+                            pedido.Direccion = cliente.Direccion;
+                            bool successUpdate = EditPedidos(new List<Pedido>() { pedido });
+                            if (!successUpdate) success = false;
+                        }
+                    }
+                }
+            }
             return success;
         }
         private static bool EditPedidos(ICollection<Pedido> pedidos)
         {
             if (pedidos == null || pedidos.Count == 0) return false;
             bool success = _service.EditMany(pedidos);
-            if (!success) Console.WriteLine("Algo falló al editar los Pedidos en la base de datos");
             return success;
         }
         private static Pedido GetPedido(long pedidoId)
         {
-            return _service.Get(pedidoId);
+            Pedido pedido = _service.Get(pedidoId);
+            return pedido;
         }
         private static ICollection<Pedido> GetPedidosPorRepartoId(long repartoId)
         {
@@ -112,7 +135,8 @@ namespace linway_app.Services.Delegates
         }
         private static ICollection<Pedido> GetPedidos()
         {
-            return _service.GetAll();
+            ICollection<Pedido> pedidos = _service.GetAll();
+            return pedidos;
         }
         private static long GetOrdenMayor(long repartoId)
         {
@@ -186,8 +210,11 @@ namespace linway_app.Services.Delegates
                 if (lastThree == " | ") pedido.ProductosText = cleansed;
             }
             pedido.Entregar = entregar ? 1 : 0;
-            EditPedidos(new List<Pedido>() { pedido });
-            updateReparto(getReparto(pedido.RepartoId));
+            bool success = EditPedidos(new List<Pedido>() { pedido });
+            if (!success) Console.WriteLine("No se editó el Pedido");
+            Reparto reparto = getReparto(pedido.RepartoId);
+            success = updateReparto(reparto);
+            if (!success) Console.WriteLine("No se actualizó el Pedido");
             return pedido;
         }
     }

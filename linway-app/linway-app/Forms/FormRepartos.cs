@@ -23,7 +23,7 @@ namespace linway_app.Forms
             _lstDiaRepartos = new List<DiaReparto>();
             InitializeComponent();
         }
-        private void FormReparto_Load(object sender, EventArgs e)
+        private void FormReparto_Load(object sender, EventArgs ev)
         {
             Actualizar();
             checkBox1.Checked = true;
@@ -41,7 +41,11 @@ namespace linway_app.Forms
             foreach (string dia in dias)
             {
                 nuevoDia.Dia = dia;
-                addDiaReparto(nuevoDia);
+                bool success = addDiaReparto(nuevoDia);
+                if (!success)
+                {
+                    MessageBox.Show("No se crearon los Días de Reparto");
+                }
             }
             _lstDiaRepartos = getDiaRepartos();
             if (_lstDiaRepartos == null || _lstDiaRepartos.Count == 0)
@@ -79,7 +83,7 @@ namespace linway_app.Forms
             long repartoId = getRepartoPorDiaYNombre(elDia, elReparto).Id;
             _lstPedidos = getPedidosPorRepartoId(repartoId).OrderBy(x => x.Orden).ToList();
         }
-        private void Exportar_Click(object sender, EventArgs e)
+        private void Exportar_Click(object sender, EventArgs ev)
         {
             string dia = comboBox1.Text;
             string nombreReparto = comboBox2.Text;
@@ -136,7 +140,7 @@ namespace linway_app.Forms
             label21.Text = reparto.TotalB.ToString();
             label22.Text = reparto.Tl.ToString() + " litros";
         }
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
         {
             comboBox2.Visible = true;
             label2.Visible = true;
@@ -163,13 +167,13 @@ namespace linway_app.Forms
             VerDatos(reparto);
             ActualizarGrid(_lstPedidos);
         }
-        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)
         {
             UpdateGrid();
         }
 
         // MENUES
-        private void AgregarReparto_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AgregarReparto_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             gpNuevoReparto.Visible = true;
@@ -178,14 +182,14 @@ namespace linway_app.Forms
             comboBox3.ValueMember = "Dia";
         }
 
-        private void AgregarDestino_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AgregarDestino_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             groupBox2.Visible = true;
         }
 
         //_______________AGREGAR Reparto A DIA______________________________-
-        private void AgregarRepartoADIA_btn2_Click(object sender, EventArgs e)
+        private void AgregarRepartoADIA_btn2_Click(object sender, EventArgs ev)
         {
             Actualizar();
             if (textBox1.Text == "") return;
@@ -202,31 +206,35 @@ namespace linway_app.Forms
                 TotalB = 0,
                 Tt = 0
             };
-            addReparto(nuevoReparto);
+            bool success = addReparto(nuevoReparto);
+            if (!success)
+            {
+                MessageBox.Show("No se pudo agregar Reparto");
+            }
             LimpiarPantalla();
         }
 
-        private void Button5_Click(object sender, EventArgs e)
+        private void Button5_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
         }
 
         //__________________________AGREGAR DESTINO--_____________________
-        private void ComboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox4_SelectedIndexChanged(object sender, EventArgs ev)
         {
             comboBox5.DataSource = getRepartosPorDia(comboBox4.SelectedItem.ToString());
             comboBox5.DisplayMember = "Nombre";
             comboBox5.ValueMember = "Nombre";
         }
-        private void Button4_Click(object sender, EventArgs e)
+        private void Button4_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
         }
-        private void TextBox2_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBox2_KeyPress(object sender, KeyPressEventArgs ev)
         {
-            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
+            if (!char.IsNumber(ev.KeyChar) && ev.KeyChar != (char)Keys.Back) ev.Handled = true;
         }
-        private void TextBox2_TextChanged(object sender, EventArgs e)  // Agregar destino a recorrido
+        private void TextBox2_TextChanged(object sender, EventArgs ev)  // Agregar destino a recorrido
         {
             if (textBox2.Text == "")
             {
@@ -238,7 +246,7 @@ namespace linway_app.Forms
             if (cliente != null) label8.Text = cliente.Direccion;
             else label8.Text = "No encontrado";
         }
-        private void TextBox6_TextChanged(object sender, EventArgs e)
+        private void TextBox6_TextChanged(object sender, EventArgs ev)
         {
             if (textBox6.Text == "")
             {
@@ -249,7 +257,7 @@ namespace linway_app.Forms
             if (cliente != null) label8.Text = cliente.Direccion;
             else label8.Text = "No encontrado";
         }
-        private void AgregarDestinoAReparto_btn1_Click(object sender, EventArgs e)
+        private void AgregarDestinoAReparto_btn1_Click(object sender, EventArgs ev)
         {
             if (label8.Text == "No encontrado" || comboBox4.Text == "")
             {
@@ -268,19 +276,23 @@ namespace linway_app.Forms
             };
             if (_lstPedidos.Exists(x => x.Id == cliente.Id && x.RepartoId == reparto.Id))
             {
-                MessageBox.Show("Ese cliente ya estaba en el reparto");
+                MessageBox.Show("Ese cliente ya estaba en el Reparto");
                 return;
             };
             long pedidoId = addPedidoIfNotExistsAndReturnId(reparto.Id, cliente.Id);
             Pedido pedido = getPedido(pedidoId);
             if (pedido == null)
             {
-                MessageBox.Show("Falló poner pedido para entregar");
+                MessageBox.Show("Falló poner Pedido para entregar");
             }
             else
             {
                 pedido.Entregar = 1;
-                editPedidos(new List<Pedido>() { pedido });
+                bool success = editPedidos(new List<Pedido>() { pedido });
+                if (!success)
+                {
+                    MessageBox.Show("No se pudo pasar el Pedido para entregar");
+                }
             }
             LimpiarPantalla();
             Actualizar();
@@ -289,13 +301,13 @@ namespace linway_app.Forms
 
         //_LImpiar DATOS_ 
         // 1. limpiar los repartos de todos los dias
-        private void TodasLuAVi_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void TodasLuAVi_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             ActualizarGrid(new List<Pedido>());
             groupBox4.Visible = true;
         }
-        private void LimpiarRepartos_Click(object sender, EventArgs e)
+        private void LimpiarRepartos_Click(object sender, EventArgs ev)
         {
             var repartosALimpiar = new List<Reparto>();
             foreach (DiaReparto diaReparto in _lstDiaRepartos)
@@ -305,27 +317,31 @@ namespace linway_app.Forms
                     repartosALimpiar.Add(reparto);
                 }
             }
-            cleanRepartos(repartosALimpiar);
+            bool success = cleanRepartos(repartosALimpiar);
+            if (!success)
+            {
+                MessageBox.Show("Algo falló al limpiar Repartos");
+            }
             LimpiarPantalla();
             Actualizar();
         }
-        private void Button7_Click(object sender, EventArgs e)
+        private void Button7_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
         }
 
         // 2. limpiar los repartos de un dia
-        private void DiaEspecífico_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DiaEspecífico_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             ActualizarGrid(new List<Pedido>());
             groupBox5.Visible = true;
         }
-        private void Button8_Click(object sender, EventArgs e)
+        private void Button8_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
         }
-        private void Button9_Click(object sender, EventArgs e)
+        private void Button9_Click(object sender, EventArgs ev)
         {
             if (comboBox6.Text == "")
             {
@@ -333,33 +349,30 @@ namespace linway_app.Forms
                 return;
             }
             Actualizar();
-            try
+            List<Reparto> lstRepartos = _lstDiaRepartos?.Find(x => x.Dia == comboBox6.Text)?.Reparto?.ToList();
+            bool success = cleanRepartos(lstRepartos);
+            if (!success)
             {
-                List<Reparto> lstRepartos = _lstDiaRepartos.Find(x => x.Dia == comboBox6.Text).Reparto.ToList();
-                cleanRepartos(lstRepartos);
-                LimpiarPantalla();
-                Actualizar();
+                MessageBox.Show("Falló limpiar Repartos");
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Falló: ", ex.Message);
-            }
+            LimpiarPantalla();
+            Actualizar();
         }
 
         // 3. limpiar un reparto
-        private void RepartoSeleccionado_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RepartoSeleccionado_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             ActualizarGrid(new List<Pedido>());
             groupBox6.Visible = true;
         }
-        private void ComboBox8_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox8_SelectedIndexChanged(object sender, EventArgs ev)
         {
             comboBox7.DataSource = getRepartosPorDia(comboBox8.SelectedItem.ToString());
             comboBox7.DisplayMember = "Nombre";
             comboBox7.ValueMember = "Nombre";
         }
-        private void Button11_Click(object sender, EventArgs e)
+        private void Button11_Click(object sender, EventArgs ev)
         {
             if (comboBox8.Text == "")
             {
@@ -371,27 +384,31 @@ namespace linway_app.Forms
             Reparto reparto = getRepartoPorDiaYNombre(dia, nombre);
             comboBox1.SelectedIndex = comboBox8.SelectedIndex;
             comboBox2.SelectedIndex = comboBox7.SelectedIndex;
-            cleanRepartos(new List<Reparto>() { reparto });
+            bool success = cleanRepartos(new List<Reparto>() { reparto });
+            if (!success)
+            {
+                MessageBox.Show("No se limpió Reparto");
+            }
             VerDatos(reparto);
             LimpiarPantalla();
             Actualizar();
         }
 
         // 4. limpiar un pedido
-        private void Destino_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Destino_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             //LimpiarPantalla();
             //ActualizarGrid(new List<Pedido>());
             groupBox9.Visible = true;
             label39.Text = "Día " + comboBox1.Text + " -> Reparto: " + comboBox2.Text;
         }
-        private void TextBox7_TextChanged(object sender, EventArgs e)
+        private void TextBox7_TextChanged(object sender, EventArgs ev)
         {
             Pedido pedido = _lstPedidos.Find(x => x.Direccion.ToLower().Contains(textBox7.Text.ToLower()));
             if (pedido != null) label36.Text = pedido.Direccion;
             else label36.Text = "No encontrado";
         }
-        private void Button18_Click(object sender, EventArgs e)
+        private void Button18_Click(object sender, EventArgs ev)
         {
             ReCargarHDR(comboBox1.Text, comboBox2.Text);
             string direccion = label36.Text;
@@ -407,8 +424,16 @@ namespace linway_app.Forms
                 prodVendido.PedidoId = null;
                 prodVendidosAEditar.Add(prodVendido);
             });
-            editProdVendidos(prodVendidosAEditar);
-            cleanPedidos(new List<Pedido>() { pedido });
+            bool success = editProdVendidos(prodVendidosAEditar);
+            if (!success)
+            {
+                MessageBox.Show("No se modificaron Productos Vendidos");
+            }
+            success = cleanPedidos(new List<Pedido>() { pedido });
+            if (!success)
+            {
+                MessageBox.Show("No se limpió Pedido");
+            }
             VerDatos(getReparto(pedido.RepartoId));
             LimpiarPantalla();
             Actualizar();
@@ -416,17 +441,18 @@ namespace linway_app.Forms
 
 
         //__________REPOSICIONAR DESTINO____________________
-        private void PosicionarDestino_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void PosicionarDestino_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             groupBox7.Visible = true;
             label27.Text = "Día " + comboBox1.Text + " -> Reparto: " + comboBox2.Text;
         }
-        private void TextBox3_TextChanged(object sender, EventArgs e)
+        private void TextBox3_TextChanged(object sender, EventArgs ev)
         {
             try
             {
-                var auxList = _lstPedidos.Where(x => x.Entregar == 1).ToList();
+                //var auxList = _lstPedidos.Where(x => x.Entregar == 1).ToList();
+                var auxList = _lstPedidos.ToList();
                 var aux = auxList.Find(x => x.Direccion.ToLower().Contains(textBox3.Text.ToLower()));
                 if (aux == null) label30.Text = "No encontrado";
                 else label30.Text = aux.Direccion;
@@ -436,14 +462,15 @@ namespace linway_app.Forms
                 label30.Text = "No encontrado";
             }
         }
-        private void TextBox4_TextChanged(object sender, EventArgs e)
+        private void TextBox4_TextChanged(object sender, EventArgs ev)
         {
-            var auxList = _lstPedidos.Where(x => x.Entregar == 1).ToList();
+            //var auxList = _lstPedidos.Where(x => x.Entregar == 1).ToList();
+            var auxList = _lstPedidos.ToList();
             var aux = auxList.Find(x => x.Direccion.ToLower().Contains(textBox4.Text.ToLower()));
             if (aux == null) label31.Text = "No encontrado";
             else label31.Text = aux.Direccion;
         }
-        private void Button14_Click(object sender, EventArgs e)           //   aceptar
+        private void Button14_Click(object sender, EventArgs ev)           //   aceptar
         {
             if (label30.Text == "No encontrado" || label30.Text == "" || label31.Text == "No encontrado" || label31.Text == "")
                 return;
@@ -463,7 +490,8 @@ namespace linway_app.Forms
                 var pedidosAEditar = new List<Pedido>();
                 if (order2 > order1)
                 {
-                    foreach (Pedido pedido in reparto.Pedidos.Where(x => x.Entregar == 1))
+                    //foreach (Pedido pedido in reparto.Pedidos.Where(x => x.Entregar == 1))
+                    foreach (Pedido pedido in reparto.Pedidos)
                     {
                         if (pedido.Orden > order1 && pedido.Orden < order2)
                         {
@@ -478,7 +506,8 @@ namespace linway_app.Forms
                 }
                 else
                 {
-                    foreach (Pedido pedido in reparto.Pedidos.Where(x => x.Entregar == 1))
+                    //foreach (Pedido pedido in reparto.Pedidos.Where(x => x.Entregar == 1))
+                    foreach (Pedido pedido in reparto.Pedidos)
                     {
                         if (pedido.Orden < order1 && pedido.Orden > order2)
                         {
@@ -490,7 +519,11 @@ namespace linway_app.Forms
                     pedidosAEditar.Add(pedido1);
                     pedidosAEditar.Add(pedido2);
                 }
-                editPedidos(pedidosAEditar);
+                bool success = editPedidos(pedidosAEditar);
+                if (!success)
+                {
+                    MessageBox.Show("No se pudieron reordenar los Pedidos");
+                }
                 LimpiarPantalla();
                 Actualizar();
             }
@@ -499,7 +532,7 @@ namespace linway_app.Forms
                 MessageBox.Show("Algo falló: " + ex.Message, "No se pudo reposicionar");
             }
         }
-        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox1_CheckedChanged(object sender, EventArgs ev)
         {
             if (!checkBox1.Checked)
             {
@@ -516,7 +549,7 @@ namespace linway_app.Forms
 
 
         // BORRAR PEDIDO //
-        private void ComboBox10_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox10_SelectedIndexChanged(object sender, EventArgs ev)
         {
             try
             {
@@ -528,7 +561,7 @@ namespace linway_app.Forms
             label32.Text = "";
             textBox5.Text = "";
         }
-        private void ComboBox9_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox9_SelectedIndexChanged(object sender, EventArgs ev)
         {
             try
             {
@@ -541,7 +574,7 @@ namespace linway_app.Forms
             label32.Text = "";
             textBox5.Text = "";
         }
-        private void TextBox5_TextChanged(object sender, EventArgs e)
+        private void TextBox5_TextChanged(object sender, EventArgs ev)
         {
             if (_lstPedidos == null || _lstPedidos.Count == 0)
             {
@@ -561,7 +594,7 @@ namespace linway_app.Forms
                 _pedidoAEliminar = pedido;
             }
         }
-        private void Button16_Click(object sender, EventArgs e)
+        private void Button16_Click(object sender, EventArgs ev)
         {
             ReCargarHDR(comboBox10.Text, comboBox9.Text);
             if (_pedidoAEliminar == null) return;
@@ -577,18 +610,26 @@ namespace linway_app.Forms
                     {
                         prodVendido.PedidoId = null;
                     }
-                    editProdVendidos(_pedidoAEliminar.ProdVendidos);
+                    bool successEpv = editProdVendidos(_pedidoAEliminar.ProdVendidos);
+                    if (!successEpv)
+                    {
+                        MessageBox.Show("No se pudieron modificar todos los Productos Vendidos");
+                    }
                 }
             }
-            deletePedido(_pedidoAEliminar);
+            bool success = deletePedido(_pedidoAEliminar);
+            if (!success)
+            {
+                MessageBox.Show("No se eliminó el Pedido");
+            }
             Actualizar();
             LimpiarPantalla();
         }
-        private void Button15_Click(object sender, EventArgs e)
+        private void Button15_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
         }
-        private void BorrarUnDestino_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void BorrarUnDestino_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             groupBox8.Visible = true;

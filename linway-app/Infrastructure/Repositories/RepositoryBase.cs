@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Repositories.DbContexts;
 using Infrastructure.Repositories.Interfaces;
+using Models;
 using Models.OModel;
 using System;
 using System.Collections.Generic;
@@ -21,13 +22,13 @@ namespace Infrastructure.Repositories
             try
             {
                 _context.Set<T>().Add(t);
-                int id = _context.SaveChanges();
-                if (id != 1) return false;
-                return true;
+                int n = _context.SaveChanges();
+                bool success = n == 1;
+                return success;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Logger.LogException(e);
                 return false;
             }
         }
@@ -36,12 +37,14 @@ namespace Infrastructure.Repositories
             try
             {
                 _context.Set<T>().AddRange(t);
-                _context.SaveChangesAsync();
-                return true;
+                int n = _context.SaveChanges();
+                Console.WriteLine($"Se agregaron {n} elementos");
+                bool success = n != 0;
+                return success;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Logger.LogException(e);
                 return false;
             }
         }
@@ -55,12 +58,13 @@ namespace Infrastructure.Repositories
             try
             {
                 _context.Set<T>().Update(t);
-                _context.SaveChangesAsync();
-                return true;
+                int n = _context.SaveChanges();
+                bool success = n != 0;
+                return success;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Logger.LogException(e);
                 return false;
             }
         }
@@ -70,12 +74,14 @@ namespace Infrastructure.Repositories
             try
             {
                 _context.Set<T>().UpdateRange(t);
-                _context.SaveChangesAsync();
-                return true;
+                int n = _context.SaveChanges();
+                Console.WriteLine($"Se editaron {n} elementos");
+                bool success = n != 0;
+                return success;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Logger.LogException(e);
                 return false;
             }
         }
@@ -83,10 +89,12 @@ namespace Infrastructure.Repositories
         {
             try
             {
-                return _context.Set<T>().Find(id);
+                T t = _context.Set<T>().Find(id);
+                return t;
             }
-            catch
+            catch (Exception e)
             {
+                Logger.LogException(e);
                 return default;
             }
         }
@@ -100,7 +108,7 @@ namespace Infrastructure.Repositories
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger.LogException(e);
                 return default;
             }
         }

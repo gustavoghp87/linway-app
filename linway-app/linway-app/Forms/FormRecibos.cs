@@ -22,7 +22,7 @@ namespace linway_app.Forms
             _lstDetallesAAgregar = new List<DetalleRecibo>();
             InitializeComponent();
         }
-        private void FormRecibos_Load(object sender, EventArgs e)
+        private void FormRecibos_Load(object sender, EventArgs ev)
         {
             Actualizar();
         }
@@ -68,22 +68,22 @@ namespace linway_app.Forms
             form.Rellenar_Datos(recibo);
             form.Show();
         }
-        private void RadioButton1_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton1_CheckedChanged(object sender, EventArgs ev)
         {
             if (radioButton4.Checked) textBox7.Enabled = true;
             else textBox7.Enabled = false;
         }
-        private void SoloNumeros(object sender, KeyPressEventArgs e)
+        private void SoloNumeros(object sender, KeyPressEventArgs ev)
         {
-            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
+            if (!char.IsNumber(ev.KeyChar) && ev.KeyChar != (char)Keys.Back) ev.Handled = true;
         }
-        private void TextBox8_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBox8_KeyPress(object sender, KeyPressEventArgs ev)
         {
             bool IsDec = false;
             int nroDec = 0;
-            if (e.KeyChar == 8)
+            if (ev.KeyChar == 8)
             {
-                e.Handled = false;
+                ev.Handled = false;
                 return;
             }
             for (int i = 0; i < textBox8.Text.Length; i++)
@@ -92,16 +92,16 @@ namespace linway_app.Forms
                     IsDec = true;
                 if (IsDec && nroDec++ >= 2)
                 {
-                    e.Handled = true;
+                    ev.Handled = true;
                     return;
                 }
             }
-            if (e.KeyChar >= 48 && e.KeyChar <= 57)
-                e.Handled = false;
-            else if (e.KeyChar == 44)
-                e.Handled = IsDec;
+            if (ev.KeyChar >= 48 && ev.KeyChar <= 57)
+                ev.Handled = false;
+            else if (ev.KeyChar == 44)
+                ev.Handled = IsDec;
             else
-                e.Handled = true;
+                ev.Handled = true;
         }
         void LimpiarCampos()
         {
@@ -112,7 +112,7 @@ namespace linway_app.Forms
             textBox7.Text = "";
             textBox8.Text = "";
         }
-        private void Button8_Click(object sender, EventArgs e)
+        private void Button8_Click(object sender, EventArgs ev)
         {
             LimpiarCampos();
             button6.Enabled = false;
@@ -137,7 +137,7 @@ namespace linway_app.Forms
 
 
         // ____________ filtrar datos________________
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
         {
             List<Recibo> lstRecibosFiltrados = new List<Recibo>();
             if (comboBox1.SelectedItem.ToString() == "Hoy")
@@ -205,7 +205,7 @@ namespace linway_app.Forms
             }
             ActualizarGridRecibos(lstFiltrados);
         }
-        private void TextBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs ev)
         {
             if (comboBox1.SelectedItem.ToString() == "Cliente")
                 FiltrarDatos(textBox1.Text, 'c');
@@ -215,7 +215,7 @@ namespace linway_app.Forms
 
         
         //_____________grupo imprimir_______________
-        private void Button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs ev)
         {
             if (comboBox2.Text == "") return;
             int i = 0;
@@ -226,19 +226,19 @@ namespace linway_app.Forms
             }
             Close();
         }
-        private void TextBox2_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBox2_KeyPress(object sender, KeyPressEventArgs ev)
         {
-            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
+            if (!char.IsNumber(ev.KeyChar) && ev.KeyChar != (char)Keys.Back) ev.Handled = true;
         }
-        private void TextBox3_KeyPress(object sender, KeyPressEventArgs e)
+        private void TextBox3_KeyPress(object sender, KeyPressEventArgs ev)
         {
-            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
+            if (!char.IsNumber(ev.KeyChar) && ev.KeyChar != (char)Keys.Back) ev.Handled = true;
         }
-        private void TextBox5_TextChanged(object sender, EventArgs e)
+        private void TextBox5_TextChanged(object sender, EventArgs ev)
         {
             label10.Text = ObtenerListaABorrar().Count.ToString();
         }
-        private void TextBox4_TextChanged(object sender, EventArgs e)
+        private void TextBox4_TextChanged(object sender, EventArgs ev)
         {
             label10.Text = ObtenerListaABorrar().Count.ToString();
         }
@@ -279,7 +279,7 @@ namespace linway_app.Forms
             }
             return listaAImprimir;
         }
-        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)
         {
             if (comboBox2.SelectedItem.ToString() == "No impresas" || (comboBox2.SelectedItem.ToString() == "Hoy"))
             {
@@ -299,17 +299,17 @@ namespace linway_app.Forms
             }
             label7.Text = ObtenerListaAImprimir().Count.ToString();
         }
-        private void TextBox3_TextChanged(object sender, EventArgs e)
+        private void TextBox3_TextChanged(object sender, EventArgs ev)
         {
             label7.Text = ObtenerListaAImprimir().Count.ToString();
         }
-        private void TextBox2_TextChanged(object sender, EventArgs e)
+        private void TextBox2_TextChanged(object sender, EventArgs ev)
         {
             label7.Text = ObtenerListaAImprimir().Count.ToString();
         }
 
         // AGREGAR RECIBO
-        private void ClienteId_TextChanged(object sender, EventArgs e)
+        private void ClienteId_TextChanged(object sender, EventArgs ev)
         {
             if (textBox6.Text != "")
             {
@@ -336,7 +336,7 @@ namespace linway_app.Forms
                 button6.Enabled = false;
             }
         }
-        private void TextBox9_TextChanged(object sender, EventArgs e)
+        private void TextBox9_TextChanged(object sender, EventArgs ev)
         {
             if (textBox9.Text != "")
             {
@@ -359,7 +359,7 @@ namespace linway_app.Forms
                 button6.Enabled = false;
             }
         }
-        private void AgregarDetalle_Click(object sender, EventArgs e)
+        private void AgregarDetalle_Click(object sender, EventArgs ev)
         {
             if (textBox8.Text == "" || !AlgunDetSeleccionado())
             {
@@ -405,7 +405,7 @@ namespace linway_app.Forms
                 button6.Enabled = true;
             }
         }
-        private void Limpiar_Click(object sender, EventArgs e)
+        private void Limpiar_Click(object sender, EventArgs ev)
         {
             LimpiarCampos();
             textBox6.Text = "";
@@ -417,7 +417,7 @@ namespace linway_app.Forms
             _lstDetallesAAgregar.Clear();
             ActualizarGridDetalles();
         }
-        private void CrearRecibo_Click(object sender, EventArgs e)
+        private void CrearRecibo_Click(object sender, EventArgs ev)
         {
             CargarRecibos();
             Cliente cliente = getClientePorDireccionExacta(label15.Text);
@@ -431,9 +431,9 @@ namespace linway_app.Forms
                 Impreso = 0,
                 Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
             };
-            addRecibo(nuevoRecibo);
-            if (nuevoRecibo.Id == 0) {
-                MessageBox.Show("Algo falló en el proceso");
+            bool success = addRecibo(nuevoRecibo);
+            if (!success || nuevoRecibo.Id == 0) {
+                MessageBox.Show("Algo falló al agregar Recibo");
                 return;
             }
             foreach (DetalleRecibo detalle in _lstDetallesAAgregar)
@@ -454,7 +454,7 @@ namespace linway_app.Forms
 
 
         //BORRAR RECIBOS
-        private void ComboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox3_SelectedIndexChanged(object sender, EventArgs ev)
         {
             if (comboBox3.SelectedItem == null) return;
             if (
@@ -512,7 +512,7 @@ namespace linway_app.Forms
             }
             return listaABorrar;
         }
-        private void Button3_Click(object sender, EventArgs e)      // Accept
+        private void Button3_Click(object sender, EventArgs ev)      // Accept
         {
             if (comboBox3.SelectedItem == null || comboBox3.SelectedItem.ToString() == "(Seleccionar)") return;
             if (
@@ -527,7 +527,7 @@ namespace linway_app.Forms
             button5.Visible = true;
             button3.Visible = false;
         }
-        private void Button5_Click(object sender, EventArgs e)      // Cancel
+        private void Button5_Click(object sender, EventArgs ev)      // Cancel
         {
             comboBox3.SelectedItem = "(Seleccionar)";
             label11.Visible = false;
@@ -535,7 +535,7 @@ namespace linway_app.Forms
             button5.Visible = false;
             button3.Visible = true;
         }
-        private void Button4_Click(object sender, EventArgs e)      // Confirm
+        private void Button4_Click(object sender, EventArgs ev)      // Confirm
         {
             var detallesAEliminar = new List<DetalleRecibo>();
             var recibosAEliminar = ObtenerListaABorrar();

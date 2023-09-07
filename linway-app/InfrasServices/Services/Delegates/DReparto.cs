@@ -14,7 +14,7 @@ namespace linway_app.Services.Delegates
     public static class DReparto
     {
         public readonly static Predicate<Reparto> addReparto = AddReparto;
-        public readonly static Action<ICollection<Reparto>> cleanRepartos = CleanRepartos;
+        public readonly static Predicate<ICollection<Reparto>> cleanRepartos = CleanRepartos;
         public readonly static Func<string, string, bool> exportReparto = ExportReparto;
         public readonly static Func<long, Reparto> getReparto = GetReparto;
         public readonly static Func<string, string, Reparto> getRepartoPorDiaYNombre = GetRepartoPorDiaYNombre;
@@ -27,12 +27,11 @@ namespace linway_app.Services.Delegates
         private static bool AddReparto(Reparto reparto)
         {
             bool success = _service.Add(reparto);
-            if (!success) Console.WriteLine("Algo falló al agregar nuevo Reparto a la base de datos");
             return success;
         }
-        private static void CleanRepartos(ICollection<Reparto> repartos)
+        private static bool CleanRepartos(ICollection<Reparto> repartos)
         {
-            if (repartos == null || repartos.Count == 0) return;
+            if (repartos == null || repartos.Count == 0) return false;
             var pedidosAEditar = new List<Pedido>();
             var prodVendidosAEditar = new List<ProdVendido>();
             foreach (Reparto reparto in repartos)
@@ -55,21 +54,21 @@ namespace linway_app.Services.Delegates
                     }
                 }
             }
-            EditRepartos(repartos);
-            cleanPedidos(pedidosAEditar);
-            editProdVendidos(prodVendidosAEditar);
+            bool success = EditRepartos(repartos);
+            bool successClean = cleanPedidos(pedidosAEditar);
+            bool successEditPV = editProdVendidos(prodVendidosAEditar);
+            return success && successClean && successEditPV;
         }
         private static bool EditReparto(Reparto reparto)
         {
             bool success = _service.Edit(reparto);
-            if (!success) Console.WriteLine("Algo falló al editar el Reparto en la base de datos");
             return success;
         }
-        private static void EditRepartos(ICollection<Reparto> repartos)
+        private static bool EditRepartos(ICollection<Reparto> repartos)
         {
-            if (repartos == null || repartos.Count == 0) return;
-            bool response = _service.EditMany(repartos);
-            if (!response) Console.WriteLine("Algo falló al editar los Repartos en la base de datos");
+            if (repartos == null || repartos.Count == 0) return false;
+            bool success = _service.EditMany(repartos);
+            return success;
         }
         private static bool ExportReparto(string dia, string nombreReparto)
         {
@@ -93,7 +92,11 @@ namespace linway_app.Services.Delegates
                     .Find(x => x.Nombre == nombre && x.Estado != null && x.Estado != "Eliminado");
                 return reparto;
             }
-            catch { return null; }
+            catch (Exception e)
+            {
+                Logger.LogException(e);
+                return null;
+            }
         }
         private static List<Reparto> GetRepartos()
         {
@@ -109,8 +112,9 @@ namespace linway_app.Services.Delegates
                     .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
                 return lstRepartos;
             }
-            catch
+            catch (Exception e)
             {
+                Logger.LogException(e);
                 return null;
             }
         }

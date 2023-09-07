@@ -8,31 +8,24 @@ namespace linway_app.Services.Delegates
 {
     public class DProdVendido
     {
-        public readonly static Func<ProdVendido, ProdVendido> addProdVendidoReturnsWithId = AddProdVendidoReturnsWithId;
-        public readonly static Action<ICollection<ProdVendido>> addProdVendidos = AddProdVendidos;
-        public readonly static Action<ProdVendido> deleteProdVendido = DeleteProdVendido;
+        public readonly static Predicate<ICollection<ProdVendido>> addProdVendidos = AddProdVendidos;
+        public readonly static Predicate<ProdVendido> deleteProdVendido = DeleteProdVendido;
         public readonly static Func<string, string> editDescripcion = EditDescripcion;
-        public readonly static Action<ProdVendido> editProdVendido = EditProdVendido;
-        public readonly static Action<ICollection<ProdVendido>> editProdVendidos = EditProdVendidos;
+        public readonly static Predicate<ProdVendido> editProdVendido = EditProdVendido;
+        public readonly static Predicate<ICollection<ProdVendido>> editProdVendidos = EditProdVendidos;
         public readonly static Func<List<ProdVendido>> getProdVendidos = GetProdVendidos;
 
         private static readonly IServiceBase<ProdVendido> _service = ServicesObjects.ServProdVendido;
 
-        private static ProdVendido AddProdVendidoReturnsWithId(ProdVendido prodVendido)
+        private static bool AddProdVendidos(ICollection<ProdVendido> prodVendidos)
         {
-            bool response = _service.Add(prodVendido);
-            if (!response) Console.WriteLine("Algo falló al agregar Producto Vendido a la base de datos (2)");
-            return prodVendido;
+            bool success = _service.AddMany(prodVendidos);
+            return success;
         }
-        private static void AddProdVendidos(ICollection<ProdVendido> prodVendidos)
+        private static bool DeleteProdVendido(ProdVendido prodVendido)
         {
-            bool response = _service.AddMany(prodVendidos);
-            if (!response) Console.WriteLine("Algo falló al agregar Producto Vendido a la base de datos");
-        }
-        private static void DeleteProdVendido(ProdVendido prodVendido)
-        {
-            bool response = _service.Delete(prodVendido);
-            if (!response) Console.WriteLine("Algo falló al eliminar Producto Vendido de la base de datos");
+            bool success = _service.Delete(prodVendido);
+            return success;
         }
         private static string EditDescripcion(string description)
         {
@@ -40,20 +33,21 @@ namespace linway_app.Services.Delegates
             if (description.Contains(".")) { description = description.Substring(0, description.IndexOf(".") - 1); };
             return description;
         }
-        private static void EditProdVendido(ProdVendido prodVendido)
+        private static bool EditProdVendido(ProdVendido prodVendido)
         {
-            bool response = _service.Edit(prodVendido);
-            if (!response) Console.WriteLine("Algo falló al editar Producto Vendido en la base de datos");
+            bool success = _service.Edit(prodVendido);
+            return success;
         }
-        private static void EditProdVendidos(ICollection<ProdVendido> prodVendidos)
+        private static bool EditProdVendidos(ICollection<ProdVendido> prodVendidos)
         {
-            if (prodVendidos == null || prodVendidos.Count == 0) return;
-            bool response = _service.EditMany(prodVendidos);
-            if (!response) Console.WriteLine("Algo falló al editar Productos Vendidos en la base de datos");
+            if (prodVendidos == null || prodVendidos.Count == 0) return false;
+            bool success = _service.EditMany(prodVendidos);
+            return success;
         }
         private static List<ProdVendido> GetProdVendidos()
         {
-            return _service.GetAll();
+            List<ProdVendido> prodVendidos = _service.GetAll();
+            return prodVendidos;
         }
     }
 }

@@ -142,6 +142,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LogsService.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Models\DetalleRecibo.cs" />

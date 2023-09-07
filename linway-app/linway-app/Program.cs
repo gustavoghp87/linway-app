@@ -53,6 +53,7 @@ namespace linway_app
             Application.SetCompatibleTextRenderingDefault(false);
             ConfigureServices(_services);
             _serviceProvider = _services.BuildServiceProvider();
+            //SqliteToMysqlConverter.ConvertSqliteToMysql();
             var form1 = _serviceProvider.GetRequiredService<Form1>();
             Application.Run(form1);
         }

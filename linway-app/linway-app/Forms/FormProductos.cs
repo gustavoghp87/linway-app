@@ -25,7 +25,7 @@ namespace linway_app.Forms
             _liberado = false;
             _liberado2 = false;
         }
-        private void Limpiar_Click(object sender, EventArgs e)
+        private void Limpiar_Click(object sender, EventArgs ev)
         {
             textBox21.Text = "";
             textBox6.Text = "";
@@ -46,7 +46,7 @@ namespace linway_app.Forms
         }
 
         // AGREGAR PRODUCTO
-        private void SeleccionarTipo_CheckedChanged(object sender, EventArgs e)
+        private void SeleccionarTipo_CheckedChanged(object sender, EventArgs ev)
         {
             comboBox1.Visible = true;
             var elegido = (RadioButton)sender;
@@ -73,7 +73,7 @@ namespace linway_app.Forms
                     break;
             }
         }
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
         {
             if (comboBox1.SelectedItem != null) _subTipo = comboBox1.SelectedItem.ToString();
             else _subTipo = "";
@@ -83,7 +83,7 @@ namespace linway_app.Forms
             return textBox6.Text != "" && textBox7.Text != ""
                 && (radioButton1.Checked || radioButton2.Checked || radioButton3.Checked || radioButton4.Checked);
         }
-        private void AgregarProducto_Click(object sender, EventArgs e)
+        private void AgregarProducto_Click(object sender, EventArgs ev)
         {
             if (!TodoOKagregarP())
             {
@@ -101,11 +101,11 @@ namespace linway_app.Forms
             addProducto(nuevoProducto);
             limpiarBtn.PerformClick();
         }
-        private void SoloImporte_KeyPress(object sender, KeyPressEventArgs e)
+        private void SoloImporte_KeyPress(object sender, KeyPressEventArgs ev)
         {
-            if (e.KeyChar == 8)
+            if (ev.KeyChar == 8)
             {
-                e.Handled = false;
+                ev.Handled = false;
                 return;
             }
             bool IsDec = false;
@@ -115,19 +115,19 @@ namespace linway_app.Forms
                 if (textBox7.Text[i] == ',') IsDec = true;
                 if (IsDec && nroDec++ >= 2)
                 {
-                    e.Handled = true;
+                    ev.Handled = true;
                     return;
                 }
             }
-            if (e.KeyChar >= 48 && e.KeyChar <= 57) e.Handled = false;
-            else if (e.KeyChar == 44) e.Handled = IsDec;
-            else e.Handled = true;
+            if (ev.KeyChar >= 48 && ev.KeyChar <= 57) ev.Handled = false;
+            else if (ev.KeyChar == 44) ev.Handled = IsDec;
+            else ev.Handled = true;
         }
 
         // MODIFICAR PRODUCTO
-        private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
+        private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs ev)
         {
-            if (!char.IsNumber(e.KeyChar) && e.KeyChar != (char)Keys.Back) e.Handled = true;
+            if (!char.IsNumber(ev.KeyChar) && ev.KeyChar != (char)Keys.Back) ev.Handled = true;
         }
         private void CargarDatosAModificar(Producto producto)
         {
@@ -156,7 +156,7 @@ namespace linway_app.Forms
                 comboBox2.Visible = false;
             }
         }
-        private void ComboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox3_SelectedIndexChanged(object sender, EventArgs ev)
         {
             var tipoElegido = (ComboBox)sender;
             if (_tipoMod == null) return;
@@ -191,7 +191,7 @@ namespace linway_app.Forms
             comboBox2.Text = _subTipoMod;
             _liberado = true;
         }
-        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)
         {
             if (_subTipoMod == null) return;
             var tipoElegido = (ComboBox)sender;
@@ -201,7 +201,7 @@ namespace linway_app.Forms
                 _liberado2 = true;
             }
         }
-        private void TextBox8_TextChanged(object sender, EventArgs e)   // buscar por id
+        private void TextBox8_TextChanged(object sender, EventArgs ev)   // buscar por id
         {
             if (textBox8.Text != "")
             {
@@ -219,7 +219,7 @@ namespace linway_app.Forms
                 comboBox2.Visible = false;
             }
         }
-        private void TextBox2_TextChanged(object sender, EventArgs e)  // buscar por nombre
+        private void TextBox2_TextChanged(object sender, EventArgs ev)  // buscar por nombre
         {
             if (textBox2.Text != "")
             {
@@ -241,7 +241,7 @@ namespace linway_app.Forms
             bool subtipoVisibleButEmpty = comboBox2.Visible && comboBox2.Text == "";
             return label19.Text != "No encontrado" && label19.Text != "" && textBox9.Text != "" && !subtipoVisibleButEmpty;
         }
-        private void EditarProducto_Click(object sender, EventArgs e)
+        private void EditarProducto_Click(object sender, EventArgs ev)
         {
             if (!TodoOKmodificarP())
             {
@@ -261,7 +261,7 @@ namespace linway_app.Forms
 
 
         //Borrar
-        private void TextBox21_TextChanged(object sender, EventArgs e)  // por id
+        private void TextBox21_TextChanged(object sender, EventArgs ev)  // por id
         {
             if (textBox21.Text != "")
             {
@@ -284,7 +284,7 @@ namespace linway_app.Forms
                 button22.Enabled = false;
             }
         }
-        private void TextBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs ev)
         {
             if (textBox1.Text != "")
             {
@@ -306,7 +306,7 @@ namespace linway_app.Forms
                 button22.Enabled = false;
             }
         }
-        private void Eliminar_Click(object sender, EventArgs e)
+        private void Eliminar_Click(object sender, EventArgs ev)
         {
             if (!cbSeguroBorrar.Checked)
             {
@@ -321,7 +321,7 @@ namespace linway_app.Forms
             label46.Text = "";
             cbSeguroBorrar.Checked = false; 
         }
-        private void SalirBtn_Click(object sender, EventArgs e)
+        private void SalirBtn_Click(object sender, EventArgs ev)
         {
             Close();
         }

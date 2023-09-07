@@ -10,7 +10,7 @@ namespace linway_app.Forms
         {
             InitializeComponent();
         }
-        private void LoadingForm_Load(object sender, EventArgs e)
+        private void LoadingForm_Load(object sender, EventArgs ev)
         {
             // pictureBox1.Image = Image.FromFile(@"Forms\src\cargando.jpg");
         }

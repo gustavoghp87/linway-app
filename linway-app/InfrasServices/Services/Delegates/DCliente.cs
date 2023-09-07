@@ -3,6 +3,7 @@ using linway_app.Services.Interfaces;
 using Models;
 using System;
 using System.Collections.Generic;
+using static linway_app.Services.Delegates.DPedido;
 
 namespace linway_app.Services.Delegates
 {
@@ -43,13 +44,15 @@ namespace linway_app.Services.Delegates
         private static bool DeleteCliente(Cliente cliente)
         {
             bool success = _service.Delete(cliente);
-            if (!success) Console.WriteLine("Falló guardado Cliente en base de datos");
             return success;
         }
         private static bool EditCliente(Cliente cliente)
         {
             bool success = _service.Edit(cliente);
-            if (!success) Console.WriteLine("Falló editando Cliente en base de datos");
+            if (success)
+            {
+                success = editDireccionClienteEnPedidos(cliente);
+            }
             return success;
         }
         private static Cliente GetCliente(long clientId)
