@@ -271,7 +271,9 @@ namespace linway_app.Forms
                     int j = int.Parse(textBox4.Text);
                     for (int i = int.Parse(textBox5.Text); i <= j; i++)
                     {
-                        listaABorrar.Add(_lstNotaDeEnvios.Find(x => x.Id == i));
+                        NotaDeEnvio nota = _lstNotaDeEnvios.Find(x => x.Id == i);
+                        if (nota == null) continue;
+                        listaABorrar.Add(nota);
                     }
                 }
                 catch { MessageBox.Show("Rango establecido incorrecto"); }

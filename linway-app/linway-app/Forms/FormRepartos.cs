@@ -17,6 +17,7 @@ namespace linway_app.Forms
         private Pedido _pedidoAEliminar;
         private List<Pedido> _lstPedidos;
         private List<DiaReparto> _lstDiaRepartos;
+        private bool _usandoDialogo = false;
         public FormRepartos()
         {
             _lstPedidos = new List<Pedido>();
@@ -27,6 +28,7 @@ namespace linway_app.Forms
         {
             Actualizar();
             checkBox1.Checked = true;
+            dataGridView1.CellClick += new DataGridViewCellEventHandler(DataGridView1_CellClick);
         }
         private void Actualizar()
         {
@@ -63,6 +65,7 @@ namespace linway_app.Forms
                 grid1.Add(Form1.mapper.Map<EPedido>(pedido));
             }
             grid1 = grid1.OrderBy(x => x.Orden).ToList();
+            dataGridView1.Columns.Clear();
             dataGridView1.DataSource = grid1;
             dataGridView1.Columns[0].Visible = false;
             dataGridView1.Columns[1].Width = 37;
@@ -76,6 +79,17 @@ namespace linway_app.Forms
             dataGridView1.Columns[9].Width = 30;
             dataGridView1.Columns[11].Visible = false;      // orden
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+            var eliminarColumna = new DataGridViewButtonColumn
+            {
+                Name = "Eliminar",
+                HeaderText = "Eliminar",
+                Text = "Eliminar",
+                UseColumnTextForButtonValue = true,
+                Visible = true,
+                Width = 36
+            };
+            dataGridView1.Columns.RemoveAt(12);
+            dataGridView1.Columns.Insert(12, eliminarColumna);
         }
         private void ReCargarHDR(string elDia, string elReparto)
         {
@@ -634,5 +648,36 @@ namespace linway_app.Forms
             LimpiarPantalla();
             groupBox8.Visible = true;
         }
+
+        //__________ELIMINAR DESTINO____________________
+        private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (_usandoDialogo || !(e.RowIndex >= 0 && e.ColumnIndex >= 0))
+            {
+                return;
+            }
+            _usandoDialogo = true;
+            var cell = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            if (cell != null && cell.EditedFormattedValue != null && cell.EditedFormattedValue.ToString() == "Eliminar")
+            {
+                int row = e.RowIndex;
+                Pedido pedido = _lstPedidos.OrderBy(x => x.Orden).ToList()[row];
+                string direccion = pedido.Direccion;
+                DialogResult result = MessageBox.Show(
+                    $"¿Eliminar {direccion} ? Cliente: {pedido.ClienteId}",
+                    "Se va a eliminar " + direccion,
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Question
+                );
+                if (result == DialogResult.OK)
+                {
+                    deletePedido(pedido);
+                    MessageBox.Show($"Eliminado {direccion} ID: {pedido.Id}");
+                    UpdateGrid();
+                }
+            }
+            _usandoDialogo = false;
+        }
+
     }
 }

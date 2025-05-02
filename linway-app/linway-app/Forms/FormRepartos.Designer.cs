@@ -232,7 +232,7 @@ namespace linway_app.Forms
             // 
             this.agregarDestinoToolStripMenuItem.Name = "agregarDestinoToolStripMenuItem";
             this.agregarDestinoToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.agregarDestinoToolStripMenuItem.Text = "Agregar Pedido a Reparto";
+            this.agregarDestinoToolStripMenuItem.Text = "Agregar Cliente a Reparto";
             this.agregarDestinoToolStripMenuItem.Click += new System.EventHandler(this.AgregarDestino_ToolStripMenuItem_Click);
             // 
             // limpiarPlanillaToolStripMenuItem
@@ -271,21 +271,21 @@ namespace linway_app.Forms
             // 
             this.destinoToolStripMenuItem.Name = "destinoToolStripMenuItem";
             this.destinoToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.destinoToolStripMenuItem.Text = "Pedido";
+            this.destinoToolStripMenuItem.Text = "Cliente";
             this.destinoToolStripMenuItem.Click += new System.EventHandler(this.Destino_ToolStripMenuItem_Click);
             // 
             // posicionarDestinoToolStripMenuItem
             // 
             this.posicionarDestinoToolStripMenuItem.Name = "posicionarDestinoToolStripMenuItem";
             this.posicionarDestinoToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.posicionarDestinoToolStripMenuItem.Text = "Reposicionar Pedido";
+            this.posicionarDestinoToolStripMenuItem.Text = "Reposicionar Cliente";
             this.posicionarDestinoToolStripMenuItem.Click += new System.EventHandler(this.PosicionarDestino_ToolStripMenuItem_Click);
             // 
             // borrarUnDestinoToolStripMenuItem
             // 
             this.borrarUnDestinoToolStripMenuItem.Name = "borrarUnDestinoToolStripMenuItem";
             this.borrarUnDestinoToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.borrarUnDestinoToolStripMenuItem.Text = "Borrar un Pedido";
+            this.borrarUnDestinoToolStripMenuItem.Text = "Borrar Cliente de Recorrido";
             this.borrarUnDestinoToolStripMenuItem.Click += new System.EventHandler(this.BorrarUnDestino_ToolStripMenuItem_Click);
             // 
             // groupBox3
@@ -1014,7 +1014,7 @@ namespace linway_app.Forms
             this.groupBox8.Size = new System.Drawing.Size(244, 200);
             this.groupBox8.TabIndex = 17;
             this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Borrar Pedido de recorrido";
+            this.groupBox8.Text = "Borrar Cliente de recorrido";
             this.groupBox8.Visible = false;
             // 
             // button1
@@ -1147,7 +1147,7 @@ namespace linway_app.Forms
             this.groupBox2.Size = new System.Drawing.Size(346, 226);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Agregar a Pedido a recorrido";
+            this.groupBox2.Text = "Agregar Cliente a recorrido";
             this.groupBox2.Visible = false;
             // 
             // FormRepartos

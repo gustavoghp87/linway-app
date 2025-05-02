@@ -27,5 +27,6 @@ namespace Models.Entities
         public long T { get; set; }
         public long Ae { get; set; }
         public long Orden { get; set; }
+        public bool Eliminar { get; set; }
     }
 }
