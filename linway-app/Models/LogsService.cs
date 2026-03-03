@@ -10,12 +10,13 @@ namespace Models
         {
             string logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs.txt");
             //string logMessage = $"{DateTime.UtcNow.AddHours(-3):yyyy-MM-dd HH:mm:ss} - {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}";
-            string logMessage = $"{DateTime.UtcNow.AddHours(-3):yyyy-MM-dd HH:mm:ss} - {ex.GetType().Name}: {ex.Message}\n" +
+            string logMessage = $"{DateTime.UtcNow.AddHours(-3):yyyy-MM-dd HH:mm:ss} - {ex.GetType().Name}: {ex.Message}\n{ex}\n" +
                 $"Source: {ex.Source}\n" +
                 $"StackTrace: {ex.StackTrace}\n" +
                 $"Line Number: {GetLineNumber(ex)}\n";
             try
             {
+                Console.WriteLine(ex.ToString());
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(logMessage);
                 using StreamWriter writer = new StreamWriter(logFilePath, true);

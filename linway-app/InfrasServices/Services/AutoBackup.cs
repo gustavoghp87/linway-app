@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace linway_app.Services.Delegates
+namespace linway_app.Services
 {
     public static class AutoBackup
     {

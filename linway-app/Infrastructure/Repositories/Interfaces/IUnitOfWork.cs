@@ -1,23 +1,15 @@
-﻿using Models;
+﻿using Models.OModel;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork : IDisposable, IAsyncDisposable
     {
-        IRepository<Cliente> RepoCliente { get; }
-        IRepository<Producto> RepoProducto { get; }
-        IRepository<ProdVendido> RepoProdVendido { get; }
-        IRepository<NotaDeEnvio> RepoNotaDeEnvio { get; }
-        IRepository<Venta> RepoVenta { get; }
-        IRepository<RegistroVenta> RepoRegistroVenta { get; }
-        IRepository<Recibo> RepoRecibo { get; }
-        IRepository<Reparto> RepoReparto { get; }
-        IRepository<DiaReparto> RepoDiaReparto { get; }
-        IRepository<Pedido> RepoPedido{ get; }
-        IRepository<DetalleRecibo> RepoDetalleRecibo { get; }
-        //void SaveChanges();
-        //Task SaveChangesAsync();
+        //int Save();
+        Task<int> SaveAsync(CancellationToken cancellationToken = default);
+        void ExecuteInTransaction(Action action);
+        Task ExecuteInTransactionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default);
     }
 }

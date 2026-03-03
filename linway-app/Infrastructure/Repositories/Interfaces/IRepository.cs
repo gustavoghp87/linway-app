@@ -1,15 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories.Interfaces
 {
     public interface IRepository<T>
     {
-        bool Add(T t);
-        bool AddMany(ICollection<T> t);
-        //bool Delete(T t);
-        bool Edit(T t);
-        bool EditMany(ICollection<T> t);
+        void Add(T entity);
+        void AddMany(IEnumerable<T> entities);
+        void Edit(T entity);
+        void EditMany(IEnumerable<T> entities);
         T Get(long id);
-        List<T> GetAll();
+        IQueryable<T> Query();
+        Task<T> FirstOrDefaultAsync(IQueryable<T> query, CancellationToken cancellationToken = default);
+        Task<List<T>> ToListAsync(IQueryable<T> query, CancellationToken cancellationToken = default);
     }
 }
