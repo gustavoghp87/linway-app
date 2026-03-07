@@ -29,20 +29,28 @@ namespace linway_app.Forms
             dataGridView1.Columns[2].Width = 170;
             dataGridView1.Columns[3].Width = 320;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;        // lento
+            //
+            comboBox1.SelectedIndexChanged -= ComboBox1_SelectedIndexChanged;  // evita error de concurrencia de DbContext
             comboBox1.SelectedItem = "Todas ??";
+            comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
+            //
             comboBox3.SelectedIndexChanged -= ComboBox3_SelectedIndexChanged;  // evita error de concurrencia de DbContext
             comboBox3.SelectedItem = "(Seleccionar)";
             comboBox3.SelectedIndexChanged += ComboBox3_SelectedIndexChanged;
         }
         private async void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
         {
+            string opcion = comboBox1.SelectedItem.ToString();  // todas - hoy - impresas- no impresas
             var lFiltrada = new List<NotaDeEnvio>();
-            //todas - hoy - impresas- no impresas
-            if (comboBox1.SelectedItem.ToString() == "Hoy")
+            if (opcion == "Hoy")
             {
                 label2.Text = "";
+                //
+                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";
                 textBox1.Visible = false;
+                textBox1.TextChanged += TextBox1_TextChanged;
+                //
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
                     if (nota.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha))
@@ -52,19 +60,27 @@ namespace linway_app.Forms
                 }
                 ActualizarGrid1(lFiltrada);
             }
-            else if (comboBox1.SelectedItem.ToString() == "Todas")
+            else if (opcion == "Todas")
             {
                 label2.Text = "";
+                //
+                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";
                 textBox1.Visible = false;
+                textBox1.TextChanged += TextBox1_TextChanged;
+                //
                 await ActualizarNotas();
                 ActualizarGrid1(_lstNotaDeEnvios);
             }
-            else if (comboBox1.SelectedItem.ToString() == "Impresas")
+            else if (opcion == "Impresas")
             {
                 label2.Text = "";
+                //
+                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";
                 textBox1.Visible = false;
+                textBox1.TextChanged += TextBox1_TextChanged;
+                //
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
                     if (nota.Impresa == 1)
@@ -74,11 +90,15 @@ namespace linway_app.Forms
                 }
                 ActualizarGrid1(lFiltrada);
             }
-            else if (comboBox1.SelectedItem.ToString() == "No impresas")
+            else if (opcion == "No impresas")
             {
                 label2.Text = "";
+                //
+                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";
                 textBox1.Visible = false;
+                textBox1.TextChanged += TextBox1_TextChanged;
+                //
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
                     if (nota.Impresa == 0)
@@ -88,21 +108,45 @@ namespace linway_app.Forms
                 }
                 ActualizarGrid1(lFiltrada);
             }
-            else if (comboBox1.SelectedItem.ToString() == "Cliente")
+            else if (opcion == "Cliente")
             {
                 label2.Text = "Dirección:";
+                //
+                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";
                 textBox1.Visible = true;
+                textBox1.TextChanged += TextBox1_TextChanged;
+                //
             }
-            else if (comboBox1.SelectedItem.ToString() == "Fecha")
+            else if (opcion== "Fecha")
             {
                 label2.Text = "Fecha:";
+                //
+                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";
                 textBox1.Visible = true;
+                textBox1.TextChanged += TextBox1_TextChanged;
+                //
             }
         }
-        private async void FiltrarDatos(string texto, char x)
+        private async void TextBox1_TextChanged(object sender, EventArgs ev)
         {
+            // filtrar datos
+            string opcion = comboBox1.SelectedItem.ToString();
+            string texto = textBox1.Text;
+            char x;
+            if (opcion == "Cliente")
+            {
+                x = 'c';
+            }
+            else if (opcion == "Fecha")
+            {
+                x = 'f';
+            }
+            else
+            {
+                return;
+            }
             await ActualizarNotas();
             var lstFiltrada = new List<NotaDeEnvio>();
             foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
@@ -117,17 +161,6 @@ namespace linway_app.Forms
                 }
             }
             ActualizarGrid1(lstFiltrada);
-        }
-        private void TextBox1_TextChanged(object sender, EventArgs ev)
-        {
-            if (comboBox1.SelectedItem.ToString() == "Cliente")
-            {
-                FiltrarDatos(textBox1.Text, 'c');
-            }
-            else if (comboBox1.SelectedItem.ToString() == "Fecha")
-            {
-                FiltrarDatos(textBox1.Text, 'f');
-            }
         }
     }
 }

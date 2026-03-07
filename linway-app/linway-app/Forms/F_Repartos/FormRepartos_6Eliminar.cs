@@ -14,12 +14,13 @@ namespace linway_app.Forms
         private Pedido _pedidoAEliminar;
         private async void ComboBox10_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            string dia = comboBox10.SelectedItem.ToString();
+            string diaReparto = comboBox10.SelectedItem.ToString();
             List<Reparto> repartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
-                    return await orquestacionServices.GetRepartosPorDiaAsync(dia);
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
                 },
                 "No se pudieron buscar los Repartos",
                 null
@@ -105,18 +106,25 @@ namespace linway_app.Forms
                     //    prodVendidoServices.EditProdVendidos(_pedidoAEliminar.ProdVendidos);
                     //}
                     pedidoServices.DeletePedido(_pedidoAEliminar);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo realizar",
                 this
             );
             if (!logrado)
             {
-                MessageBox.Show("No se eliminó el Pedido");
                 return;
             }
             await Actualizar();
             LimpiarPantalla();
+            await ActualizarCombobox1();
+            await UpdateGrid();
         }
         private void Button15_Click(object sender, EventArgs ev)
         {

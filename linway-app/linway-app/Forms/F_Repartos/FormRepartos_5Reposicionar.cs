@@ -46,16 +46,19 @@ namespace linway_app.Forms
             }
             string pedidoAMover = label30.Text;
             string pedidoReferencia = label31.Text;
-            string dia = comboBox1.Text;
-            string nombre = comboBox2.Text;
+            string diaReparto = comboBox1.Text;
+            string nombreReparto = comboBox2.Text;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     //
-                    Reparto reparto = await orquestacionServices.GetRepartoPorDiaYNombreAsync(dia, nombre);
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    Reparto reparto = lstDiasRep
+                        .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
+                        .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
                     Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoAMover && x.Estado != "Eliminado");
                     Pedido pedido2 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoReferencia && x.Estado != "Eliminado");
                     long order1 = pedido1.Orden;
@@ -97,7 +100,13 @@ namespace linway_app.Forms
                         pedidosAEditar.Add(pedido2);
                     }
                     pedidoServices.EditPedidos(pedidosAEditar);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo reposicionar",
                 this
@@ -108,20 +117,8 @@ namespace linway_app.Forms
             }
             LimpiarPantalla();
             await Actualizar();
-        }
-        private async void CheckBox1_CheckedChanged(object sender, EventArgs ev)
-        {
-            if (!checkBox1.Checked)
-            {
-                await Actualizar();
-                return;
-            }
-            var ldFiltrada = new List<Pedido>();
-            foreach (Pedido pedido in _lstPedidos)
-            {
-                if (pedido.Entregar == 1) ldFiltrada.Add(pedido);
-            }
-            ActualizarGrid(ldFiltrada);
+            await ActualizarCombobox1();
+            await UpdateGrid();
         }
     }
 }

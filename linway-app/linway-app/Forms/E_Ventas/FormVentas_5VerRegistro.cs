@@ -81,10 +81,16 @@ namespace linway_app.Forms
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
+                    var ventaServices = sp.GetRequiredService<IVentaServices>();
                     RegistroVenta registro = await registroVentaServices.GetRegistroVentaPorIdAsync(registroVentaId);
-                    await orquestacionServices.UpdateVentasDesdeProdVendidosAsync(registro.ProdVendido, false);
-                    return await savingServices.SaveAsync();
+                    await ventaServices.UpdateVentasDesdeProdVendidosAsync(registro.ProdVendido, false);
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo eliminar el Registro de Venta",
                 this

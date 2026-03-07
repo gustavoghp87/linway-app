@@ -28,10 +28,6 @@ namespace linway_app.Services.FormServices
         //}
         public void DeleteRecibos(ICollection<Recibo> recibos)
         {
-            if (recibos == null || recibos.Count == 0)
-            {
-                return;
-            }
             _services.DeleteMany(recibos);
         }
         public void EditRecibo(Recibo recibo)

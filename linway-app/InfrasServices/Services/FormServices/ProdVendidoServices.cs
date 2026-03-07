@@ -26,13 +26,9 @@ namespace linway_app.Services.FormServices
         }
         public void EditProdVendidos(ICollection<ProdVendido> prodVendidos)
         {
-            if (prodVendidos == null || prodVendidos.Count == 0)
-            {
-                return;
-            }
             _services.EditMany(prodVendidos);
         }
-        public async Task<List<ProdVendido>> GetProdVendidos()
+        public async Task<List<ProdVendido>> GetProdVendidosAsync()
         {
             List<ProdVendido> prodVendidos = await _services.GetAllAsync();
             return prodVendidos;

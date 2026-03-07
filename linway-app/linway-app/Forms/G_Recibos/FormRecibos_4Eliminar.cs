@@ -151,7 +151,13 @@ namespace linway_app.Forms
                     var detalleReciboService = sp.GetRequiredService<IDetalleReciboServices>();
                     detalleReciboService.DeleteDetalles(detallesAEliminar);
                     reciboService.DeleteRecibos(recibosAEliminar);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudieron eliminar los Recibos",
                 this

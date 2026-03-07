@@ -99,7 +99,7 @@ namespace linway_app.Forms
             this.label17 = new System.Windows.Forms.Label();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.lCantNotas = new System.Windows.Forms.Label();
+            this.labelCantidadDeNotas = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -905,14 +905,14 @@ namespace linway_app.Forms
             // 
             // lCantNotas
             // 
-            this.lCantNotas.AutoSize = true;
-            this.lCantNotas.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lCantNotas.ForeColor = System.Drawing.Color.Red;
-            this.lCantNotas.Location = new System.Drawing.Point(592, 525);
-            this.lCantNotas.Name = "lCantNotas";
-            this.lCantNotas.Size = new System.Drawing.Size(118, 18);
-            this.lCantNotas.TabIndex = 11;
-            this.lCantNotas.Text = "notas de envio";
+            this.labelCantidadDeNotas.AutoSize = true;
+            this.labelCantidadDeNotas.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCantidadDeNotas.ForeColor = System.Drawing.Color.Red;
+            this.labelCantidadDeNotas.Location = new System.Drawing.Point(592, 525);
+            this.labelCantidadDeNotas.Name = "lCantNotas";
+            this.labelCantidadDeNotas.Size = new System.Drawing.Size(118, 18);
+            this.labelCantidadDeNotas.TabIndex = 11;
+            this.labelCantidadDeNotas.Text = "notas de envio";
             // 
             // button2
             // 
@@ -931,7 +931,7 @@ namespace linway_app.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1218, 561);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.lCantNotas);
+            this.Controls.Add(this.labelCantidadDeNotas);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
@@ -1033,7 +1033,7 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Label lCantNotas;
+        private System.Windows.Forms.Label labelCantidadDeNotas;
         private System.Windows.Forms.TextBox textBox12;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label32;

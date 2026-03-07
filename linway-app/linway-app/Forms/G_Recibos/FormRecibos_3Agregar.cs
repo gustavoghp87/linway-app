@@ -155,7 +155,7 @@ namespace linway_app.Forms
                     var nuevoRecibo = new Recibo
                     {
                         ClienteId = cliente.Id,
-                        DireccionCliente = label15.Text,
+                        DireccionCliente = cliente.Direccion,
                         ImporteTotal = _subTo,
                         Impreso = 0,
                         Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
@@ -166,7 +166,13 @@ namespace linway_app.Forms
                         detalle.Recibo = nuevoRecibo;
                     }
                     detalleReciboService.AddDetalles(_lstDetallesAAgregar);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo agregar el Recibo",
                 this

@@ -19,10 +19,8 @@ namespace linway_app.Forms
             {
                 var form = Program.LinwayServiceProvider.GetRequiredService<FormImprimirNota>();
                 form.Rellenar_Datos(nota);
-                form.Show();
-                form.BringToFront();
+                form.Show(this);
             }
-            SendToBack();
         }
         private void TextBox2_KeyPress(object sender, KeyPressEventArgs ev)
         {
@@ -40,8 +38,9 @@ namespace linway_app.Forms
         }
         private List<NotaDeEnvio> ObtenerListaAImprimir()
         {
+            string opcion = comboBox2.SelectedItem.ToString();
             var listaAImprimir = new List<NotaDeEnvio>();
-            if (comboBox2.SelectedItem.ToString() == "No impresas")
+            if (opcion == "No impresas")
             {
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
@@ -51,7 +50,7 @@ namespace linway_app.Forms
                     }
                 }
             }
-            else if (comboBox2.SelectedItem.ToString() == "Hoy")
+            else if (opcion == "Hoy")
             {
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
@@ -61,7 +60,7 @@ namespace linway_app.Forms
                     }
                 }
             }
-            else if (comboBox2.SelectedItem.ToString() == "Establecer rango" && textBox2.Text != "" && textBox3.Text != "")
+            else if (opcion == "Establecer rango" && textBox2.Text != "" && textBox3.Text != "")
             {
                 try
                 {
@@ -77,25 +76,39 @@ namespace linway_app.Forms
                 }
                 catch {
                     MessageBox.Show("Rango establecido incorrecto");
+                    return new List<NotaDeEnvio>();
                 }
             }
             return listaAImprimir;
         }
         private void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            if (comboBox2.SelectedItem.ToString() == "No impresas" || comboBox2.SelectedItem.ToString() == "Hoy")
+            string opcion = comboBox2.SelectedItem.ToString();
+            if (opcion == "No impresas" || opcion == "Hoy")
             {
+                textBox2.TextChanged -= TextBox2_TextChanged;  // evita error de concurrencia de DbContext
                 textBox2.Visible = false;
+                textBox2.Text = "";
+                textBox2.TextChanged += TextBox2_TextChanged;
+                //
+                textBox3.TextChanged -= TextBox3_TextChanged;  // evita error de concurrencia de DbContext
                 textBox3.Visible = false;
+                textBox3.Text = "";
+                textBox3.TextChanged += TextBox3_TextChanged;
+                //
                 label4.Visible = false;
                 label5.Visible = false;
-                textBox3.Text = "";
-                textBox2.Text = "";
             }
-            else if (comboBox2.SelectedItem.ToString() == "Establecer rango")
+            else if (opcion == "Establecer rango")
             {
+                textBox2.TextChanged -= TextBox2_TextChanged;  // evita error de concurrencia de DbContext
                 textBox2.Visible = true;
+                textBox2.TextChanged += TextBox2_TextChanged;
+                //
+                textBox3.TextChanged -= TextBox3_TextChanged;  // evita error de concurrencia de DbContext
                 textBox3.Visible = true;
+                textBox3.TextChanged += TextBox3_TextChanged;
+                //
                 label4.Visible = true;
                 label5.Visible = true;
             }

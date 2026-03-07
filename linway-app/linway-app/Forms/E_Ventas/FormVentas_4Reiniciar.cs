@@ -26,7 +26,13 @@ namespace linway_app.Forms
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
                     ventaServices.DeleteVentas(_lstVentas);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudieron eliminar las Ventas",
                 this

@@ -15,14 +15,14 @@ namespace linway_app.Forms
             {
                 grid.Add(Mapper.Map<ECliente>(cliente));
             }
-            dataGridView1.DataSource = grid.ToArray();
-            dataGridView1.Columns[0].Width = 40;
-            dataGridView1.Columns[1].Width = 350;
-            dataGridView1.Columns[2].Width = 90;
-            dataGridView1.Columns[3].Width = 120;
-            dataGridView1.Columns[4].Width = 65;
-            dataGridView1.Columns[5].Width = 65;
-            dataGridView1.Columns[6].Width = 40;
+            dataGridViewClientes.DataSource = grid.ToArray();
+            dataGridViewClientes.Columns[0].Width = 40;
+            dataGridViewClientes.Columns[1].Width = 350;
+            dataGridViewClientes.Columns[2].Width = 90;
+            dataGridViewClientes.Columns[3].Width = 120;
+            dataGridViewClientes.Columns[4].Width = 65;
+            dataGridViewClientes.Columns[5].Width = 65;
+            dataGridViewClientes.Columns[6].Width = 40;
         }
         private void FiltrarDatosC(string texto)                      // filtra por dirección de clientes
         {
@@ -44,15 +44,15 @@ namespace linway_app.Forms
         {
             if (BuscadorClientes.Visible)
             {
-                button5.Text = ">>";
-                label11.Visible = false;
+                buttonMostrarFiltroClientes.Text = ">>";
+                labelBuscarPorNombreCliente.Visible = false;
                 BuscadorClientes.Visible = false;
                 BuscadorClientes.Text = "";
             }
             else
             {
-                button5.Text = "<<";
-                label11.Visible = true;
+                buttonMostrarFiltroClientes.Text = "<<";
+                labelBuscarPorNombreCliente.Visible = true;
                 BuscadorClientes.Visible = true;
                 BuscadorClientes.Text = "";
             }

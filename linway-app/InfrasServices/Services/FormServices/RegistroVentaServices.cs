@@ -1,5 +1,4 @@
-﻿using Infrastructure.Repositories.Interfaces;
-using linway_app.Services.Interfaces;
+﻿using linway_app.Services.Interfaces;
 using Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;

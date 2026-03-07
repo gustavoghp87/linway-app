@@ -81,7 +81,13 @@ namespace linway_app.Forms
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
                     Cliente cliente = await clienteServices.GetClientePorDireccionExactaAsync(direccion);
                     clienteServices.DeleteCliente(cliente);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo eliminar el Cliente",
                 this

@@ -303,7 +303,7 @@ namespace linway_app.Forms
             this.comboBox1.Size = new System.Drawing.Size(99, 23);
             this.comboBox1.TabIndex = 23;
             this.comboBox1.Visible = false;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.AgregarAReparto_SelectedIndexChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // checkBox2
             // 

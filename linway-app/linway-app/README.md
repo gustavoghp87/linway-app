@@ -1,4 +1,5 @@
 ﻿
+Eliminar realmente Detalles de Recibos y Recibos; ProdVendido, RegistroVenta, NotaDeEnvio, Venta... o sea dejar solamente cliente y producto
 
 Metas para versiones posteriores:
 -Cambiar sistema de cantidades de líquidos y polvos (2x5, etcétera)

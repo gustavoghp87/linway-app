@@ -1,4 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
+using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
@@ -14,13 +15,14 @@ namespace linway_app.Forms
         private async void ComboBox4_SelectedIndexChanged(object sender, EventArgs ev)
         {
             button6.Enabled = label16.Text != "" && label16.Text != "No encontrado";
-            string dia = comboBox4.Text;
+            string diaReparto = comboBox4.Text;
             List<Reparto> repartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
-                    return await orquestacionServices.GetRepartosPorDiaAsync(dia);
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -61,8 +63,14 @@ namespace linway_app.Forms
         private void Button7_Click(object sender, EventArgs ev)     // limpiar
         {
             comboBox5.Text = "";
+            comboBox4.SelectedIndexChanged -= ComboBox4_SelectedIndexChanged;  // evita error de concurrencia de DbContext
             comboBox4.Text = "";
+            comboBox4.SelectedIndexChanged += ComboBox4_SelectedIndexChanged;
+            //
+            textBox6.TextChanged -= TextBox6_TextChanged;  // evita error de concurrencia de DbContext
             textBox6.Text = "";
+            textBox6.TextChanged += TextBox6_TextChanged;
+            //
             button6.Enabled = false;
             label16.Text = "";
         }
@@ -73,40 +81,75 @@ namespace linway_app.Forms
             {
                 return;
             }
-            string diaDeReparto = comboBox4.Text;
+            string diaReparto = comboBox4.Text;
             string nombreReparto = comboBox5.Text;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
+                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     NotaDeEnvio notaDeEnvio = await notaDeEnvioServices.GetNotaDeEnvioPorIdAsync(notaDeEnvioId);
-                    Reparto reparto = await orquestacionServices.GetRepartoPorDiaYNombreAsync(diaDeReparto, nombreReparto);
-                    if (notaDeEnvio.ProdVendidos != null)
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    Reparto reparto = lstDiasRep
+                        .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
+                        .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
+                    Pedido pedido;
                     {
-                        ProdVendido prodVendidoEnPedido = notaDeEnvio.ProdVendidos.FirstOrDefault(x => x.PedidoId != null);
-                        if (prodVendidoEnPedido != null)
-                        {
-                            long currentPedidoId = (long)prodVendidoEnPedido.PedidoId;
-                            Pedido currentPedido = await pedidoServices.GetPedido(currentPedidoId);
-                            if (currentPedido != null)
-                            {
-                                pedidoServices.CleanPedidos(new List<Pedido>() { currentPedido });
-                            }
-                        }
+                        var pedidos = await pedidoServices.GetPedidosAsync();  // evita error de concurrencia de DbContext
+                        pedido = pedidos.ToList().Find(x => x.ClienteId == notaDeEnvio.ClienteId && x.Estado != "Eliminado");
                     }
-                    Pedido pedido = await orquestacionServices.GetPedidoPorRepartoYClienteGenerarSiNoExisteAsync(reparto.Id, notaDeEnvio.ClienteId);
-                    foreach (ProdVendido prodVendido in notaDeEnvio.ProdVendidos)
+                    Cliente cliente = await clienteServices.GetClientePorIdAsync(notaDeEnvio.ClienteId);
+                    bool existiaPedido = pedido != null;
+                    if (!existiaPedido)
+                    {
+                        pedido = new Pedido()
+                        {
+                            Cliente = cliente,
+                            Direccion = cliente.Direccion,
+                            Reparto = reparto,
+                            Entregar = 1,
+                            Estado = "Activo",
+                            ProductosText = "",
+                            L = 0,
+                            A = 0,
+                            Ae = 0,
+                            D = 0,
+                            E = 0,
+                            T = 0
+                        };
+                    }
+                    var prodVendidos = await prodVendidoServices.GetProdVendidosAsync();  // evita error de concurrencia de DbContext
+                    var prodVendidosAActualizar = new List<ProdVendido>();
+                    foreach (ProdVendido prodVendido in prodVendidos.Where(x => x.NotaDeEnvioId == notaDeEnvio.Id))
                     {
                         prodVendido.Pedido = pedido;
+                        prodVendidosAActualizar.Add(prodVendido);
                     }
-                    prodVendidoServices.EditProdVendidos(notaDeEnvio.ProdVendidos);
-                    await orquestacionServices.UpdatePedidoAsync(pedido, true);
-                    return await savingServices.SaveAsync();
+                    prodVendidoServices.EditProdVendidos(prodVendidosAActualizar);
+                    RepartoServices.ActualizarEtiquetasDeReparto(reparto);
+                    repartoServices.EditReparto(reparto);
+                    if (existiaPedido)
+                    {
+                        PedidoServices.ActualizarEtiquetasDePedido(pedido, true);
+                        pedidoServices.EditPedido(pedido);
+                    }
+                    else
+                    {
+                        await pedidoServices.AddPedidoAsync(pedido);
+                    }
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo agregar a reparto",
                 this
@@ -116,8 +159,15 @@ namespace linway_app.Forms
                 return;
             }
             comboBox5.Text = "";
+            //
+            comboBox4.SelectedIndexChanged -= ComboBox4_SelectedIndexChanged;  // evita error de concurrencia de DbContext
             comboBox4.Text = "";
+            comboBox4.SelectedIndexChanged += ComboBox4_SelectedIndexChanged;
+            //
+            textBox6.TextChanged -= TextBox6_TextChanged;  // evita error de concurrencia de DbContext
             textBox6.Text = "";
+            textBox6.TextChanged += TextBox6_TextChanged;
+            //
             button6.Enabled = false;
             label16.Text = "";
         }

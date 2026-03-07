@@ -1,9 +1,11 @@
 ﻿using linway_app.PresentationHelpers;
+using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -145,15 +147,16 @@ namespace linway_app.Forms
                 textBox3.Text = "";
             }
         }
-        private async void AgregarAReparto_SelectedIndexChanged(object sender, EventArgs ev)
+        private async void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)  // agregar a reparto
         {
-            string dia = comboBox1.Text;
+            string diaReparto = comboBox1.Text;
             List<Reparto> repartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
-                    return await orquestacionServices.GetRepartosPorDiaAsync(dia);
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -226,13 +229,17 @@ namespace linway_app.Forms
                 MessageBox.Show("No se han ingresado productos");
                 return;
             }
+            string diaReparto = comboBox1.Text;
+            string nombreReparto = comboBox2.Text;
+            string direccionCliente = label20.Text;
+            bool enviarAReparto = checkBox2.Checked;
             //Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms] Punto 1");
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     var productoServices = sp.GetRequiredService<IProductoServices>();
                     var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
@@ -240,30 +247,52 @@ namespace linway_app.Forms
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
                     //
-                    string dia = comboBox1.Text;
-                    string nombre = comboBox2.Text;
-                    string direccionCliente = label20.Text;
                     Cliente cliente = null;
                     Reparto reparto = null;
                     Pedido pedido = null;
-                    bool enviarAReparto = checkBox2.Checked;
                     if (enviarAReparto)   // enviar a reparto
                     {
-                        if (direccionCliente == "" || dia == "" || nombre == "")
+                        if (direccionCliente == "" || diaReparto == "" || nombreReparto == "")
                         {
+                            savingServices.DiscardChanges();
                             MessageBox.Show("Faltan el cliente o el reparto");
                             return false;
                         }
-                        cliente = await clienteServices.GetClientePorDireccionExactaAsync(label20.Text);
-                        reparto = await orquestacionServices.GetRepartoPorDiaYNombreAsync(dia, nombre);
+                        cliente = await clienteServices.GetClientePorDireccionExactaAsync(direccionCliente);
+                        List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                        reparto = lstDiasRep
+                            .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
+                            .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
                         if (cliente == null || reparto == null)
                         {
+                            savingServices.DiscardChanges();
                             MessageBox.Show("Falló cliente o reparto");
                             return false;
                         }
-                        pedido = await orquestacionServices.GetPedidoPorRepartoYClienteGenerarSiNoExisteAsync(reparto.Id, cliente.Id);
+                        //pedido = await orquestacionServices.GetPedidoPorRepartoYClienteGenerarSiNoExisteAsync(reparto.Id, cliente.Id);
+                        pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == cliente.Id && x.Estado != "Eliminado");
                         if (pedido == null)
                         {
+                            pedido = new Pedido()
+                            {
+                                Cliente = cliente,
+                                Direccion = cliente.Direccion,
+                                Reparto = reparto,
+                                Entregar = 1,
+                                Estado = "Activo",
+                                ProductosText = "",
+                                L = 0,
+                                A = 0,
+                                Ae = 0,
+                                D = 0,
+                                E = 0,
+                                T = 0
+                            };
+                            //await _pedidoServices.AddPedido(pedido);
+                        }
+                        if (pedido == null)
+                        {
+                            savingServices.DiscardChanges();
                             MessageBox.Show("Falló pedido");
                             return false;
                         }
@@ -285,7 +314,7 @@ namespace linway_app.Forms
                     int counter = 0;
                     List<Venta> lstVentas = await ventaServices.GetVentasAsync();
                     List<Producto> productos = await productoServices.GetProductosAsync();
-                    List<ProdVendido> prodVendidos = enviarAReparto ? await prodVendidoServices.GetProdVendidos() : null;
+                    List<ProdVendido> prodVendidos = enviarAReparto ? await prodVendidoServices.GetProdVendidosAsync() : null;
                     foreach (Venta ventaParaAgregar in _lstAgregarVentas)
                     {
                         counter++;
@@ -307,6 +336,7 @@ namespace linway_app.Forms
                         Producto producto = productos.Find(x => x.Id == ventaParaAgregar.ProductoId);
                         if (producto == null)
                         {
+                            savingServices.DiscardChanges();
                             MessageBox.Show("Falló Producto");
                             return false;
                         }
@@ -349,10 +379,14 @@ namespace linway_app.Forms
                         prodVendidoServices.AddProdVendidos(prodVendidosAAgregar);
                         if (pedido.Id == 0)
                         {
-                            pedidoServices.AddPedido(pedido);
-                        } else
+                            await pedidoServices.AddPedidoAsync(pedido);
+                        }
+                        else
                         {
-                            await orquestacionServices.UpdatePedidoAsync(pedido, true);
+                            PedidoServices.ActualizarEtiquetasDePedido(pedido, true);
+                            pedidoServices.EditPedido(pedido);
+                            RepartoServices.ActualizarEtiquetasDeReparto(pedido.Reparto);
+                            repartoServices.EditReparto(pedido.Reparto);
                         }
                         nuevoRegistroVenta.ClienteId = cliente.Id;
                         nuevoRegistroVenta.NombreCliente = cliente.Direccion;
@@ -363,7 +397,13 @@ namespace linway_app.Forms
                         prodVendidoServices.EditProdVendidos(prodVendidosAEditar);
                     }
                     registroVentaServices.AddRegistroVenta(nuevoRegistroVenta);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo realizar",
                 this
@@ -375,7 +415,6 @@ namespace linway_app.Forms
             _lstAgregarVentas.Clear();
             LimpiarPantalla();
             await Actualizar();
-            //Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms] Punto 8");
         }
     }
 }

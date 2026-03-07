@@ -50,15 +50,7 @@ namespace linway_app.Forms
         }
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            string subtipo = comboBox1.SelectedItem?.ToString();
-            _subTipo = subtipo ?? "";
-            //if (subtipo != null)
-            //{
-            //}
-            //else
-            //{
-            //    _subTipo = "";
-            //}
+            _subTipo = comboBox1.SelectedItem?.ToString() ?? "";
         }
         private bool TodoOKagregarP()
         {
@@ -92,7 +84,13 @@ namespace linway_app.Forms
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var productoServices = sp.GetRequiredService<IProductoServices>();
                     productoServices.AddProducto(nuevoProducto);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo agregar Producto",
                 this

@@ -86,7 +86,13 @@ namespace linway_app.Forms
                     var productoServices = sp.GetRequiredService<IProductoServices>();
                     Producto producto = await productoServices.GetProductoPorNombreExactoAsync(nombreDeProducto);
                     productoServices.DeleteProducto(producto);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo eliminar el Producto",
                 this

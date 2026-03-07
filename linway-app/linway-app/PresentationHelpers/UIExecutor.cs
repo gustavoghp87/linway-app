@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using linway_app.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace linway_app.PresentationHelpers
             catch (Exception ex)
             {
                 Logger.LogException(ex);
+                scope.ServiceProvider.GetRequiredService<ISavingServices>().DiscardChanges();
                 MessageBox.Show($"{errorMessage}: {ex.Message}");
                 return default;
             }

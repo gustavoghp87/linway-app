@@ -15,21 +15,30 @@ namespace linway_app.Forms
         {
             if ((new List<string>() { "Impresas", "(Seleccionar)", "Todas" }).Contains(comboBox3.SelectedItem.ToString()))
             {
-                textBox4.Visible = false;
+                label13.Visible = false;
+                label12.Visible = false;
+                //
                 textBox5.TextChanged -= TextBox5_TextChanged;  // evita error de concurrencia de DbContext
                 textBox5.Visible = false;
                 textBox5.Text = "";
                 textBox5.TextChanged += TextBox5_TextChanged;
-                label13.Visible = false;
-                label12.Visible = false;
+                //
+                textBox4.TextChanged -= TextBox4_TextChanged;  // evita error de concurrencia de DbContext
+                textBox4.Visible = false;
                 textBox4.Text = "";
+                textBox4.TextChanged += TextBox4_TextChanged;
             }
             else if (comboBox3.SelectedItem.ToString() == "Establecer rango")
             {
+                textBox4.TextChanged -= TextBox4_TextChanged;  // evita error de concurrencia de DbContext
                 textBox4.Visible = true;
+                textBox4.Text = "";
+                textBox4.TextChanged += TextBox4_TextChanged;
+                //
                 textBox5.TextChanged -= TextBox5_TextChanged;  // evita error de concurrencia de DbContext
                 textBox5.Visible = true;
                 textBox5.TextChanged += TextBox5_TextChanged;
+                //
                 label13.Visible = true;
                 label12.Visible = true;
             }
@@ -44,7 +53,8 @@ namespace linway_app.Forms
             {
                 return listaABorrar;
             }
-            if (comboBox3.SelectedItem.ToString() == "Establecer rango" && textBox5.Text != "" && textBox4.Text != "")
+            string opcion = comboBox3.SelectedItem.ToString();
+            if (opcion == "Establecer rango" && textBox5.Text != "" && textBox4.Text != "")
             {
                 try
                 {
@@ -63,7 +73,7 @@ namespace linway_app.Forms
                     return new List<NotaDeEnvio>();
                 }
             }
-            else if (comboBox3.SelectedItem.ToString() == "Todas")
+            else if (opcion == "Todas")
             {
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
@@ -73,7 +83,7 @@ namespace linway_app.Forms
                     }
                 }
             }
-            else if (comboBox3.SelectedItem.ToString() == "Impresas")
+            else if (opcion == "Impresas")
             {
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
                 {
@@ -111,6 +121,7 @@ namespace linway_app.Forms
             comboBox3.SelectedIndexChanged -= ComboBox3_SelectedIndexChanged;  // evita error de concurrencia de DbContext
             comboBox3.SelectedItem = "(Seleccionar)";
             comboBox3.SelectedIndexChanged += ComboBox3_SelectedIndexChanged;
+            //
             label11.Visible = false;
             button4.Visible = false;
             button5.Visible = false;
@@ -134,9 +145,11 @@ namespace linway_app.Forms
             {
                 return;
             }
+            //
             comboBox3.SelectedIndexChanged -= ComboBox3_SelectedIndexChanged;  // evita error de concurrencia de DbContext
             comboBox3.SelectedItem = "(Seleccionar)";
             comboBox3.SelectedIndexChanged += ComboBox3_SelectedIndexChanged;
+            //
             label11.Visible = false;
             button4.Visible = false;
             button5.Visible = false;

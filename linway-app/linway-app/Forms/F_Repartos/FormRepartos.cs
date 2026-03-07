@@ -33,7 +33,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    return await diaRepartoServices.GetDiaRepartos();
+                    return await diaRepartoServices.GetDiaRepartosAsync();
                 },
                 "No se pudieron buscar los Días de Reparto",
                 null
@@ -69,7 +69,7 @@ namespace linway_app.Forms
                         MessageBox.Show("No se crearon los Días de Reparto");
                         return null;
                     }
-                    return await diaRepartoServicios.GetDiaRepartos();
+                    return await diaRepartoServicios.GetDiaRepartosAsync();
                 },
                 "Algo falló",
                 this
@@ -82,25 +82,20 @@ namespace linway_app.Forms
             }
             _lstDiaRepartos = diaDeRepartos;
         }
-        private async Task ReCargarHDR(string elDia, string elReparto)
+        private async Task ReCargarHDR(string diaReparto, string nombreReparto)
         {
             await Actualizar();
             List<Pedido> pedidos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    Reparto reparto = await orquestacionServices.GetRepartoPorDiaYNombreAsync(elDia, elReparto);
-                    if (reparto == null)
-                    {
-                        throw new Exception("No se pudo encontrar el Reparto");
-                    }
-                    var pedidos = await pedidoServices.GetPedidosPorRepartoId(reparto.Id);
-                    if (pedidos == null)
-                    {
-                        throw new Exception("No se pudieron encontrar los Pedidos");
-                    }
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    Reparto reparto = lstDiasRep
+                        .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
+                        .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
+                    var pedidos = await pedidoServices.GetPedidosPorRepartoIdAsync(reparto.Id);
                     return pedidos.OrderBy(x => x.Orden).ToList();
                 },
                 "No se pudieron buscar los Pedidos",

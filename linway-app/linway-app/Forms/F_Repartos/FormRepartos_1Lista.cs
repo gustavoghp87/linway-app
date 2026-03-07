@@ -54,21 +54,26 @@ namespace linway_app.Forms
         }
         private async void Exportar_Click(object sender, EventArgs ev)
         {
-            string dia = comboBox1.Text;
+            string diaReparto = comboBox1.Text;
             string nombreReparto = comboBox2.Text;
-            if (dia == "" || nombreReparto == "")
+            if (diaReparto == "" || nombreReparto == "")
             {
                 return;
             }
-            DialogResult dialogResult = MessageBox.Show("Exportar " + dia + " - " + nombreReparto + " ¿Confirmar?", "Exportar Reparto a Excel", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Exportar " + diaReparto + " - " + nombreReparto + " ¿Confirmar?", "Exportar Reparto a Excel", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 bool logrado = await UIExecutor.ExecuteAsync(
                     _scope,
                     async sp =>
                     {
-                        var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
-                        await orquestacionServices.ExportRepartoAsync(dia, nombreReparto);
+                        var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                        var exportarServices = sp.GetRequiredService<IExportarServices>();
+                        List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                        Reparto reparto = lstDiasRep
+                            .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
+                            .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
+                        exportarServices.ExportarReparto(reparto);
                         return true;
                     },
                     "No se pudo exportar",
@@ -95,7 +100,7 @@ namespace linway_app.Forms
             label21.Text = reparto.TotalB.ToString();
             label22.Text = reparto.Tl.ToString() + " litros";
         }
-        private async void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
+        private async Task ActualizarCombobox1()
         {
             comboBox2.Visible = true;
             label2.Visible = true;
@@ -104,13 +109,14 @@ namespace linway_app.Forms
             {
                 return;
             }
-            string dia = comboBox1.SelectedItem.ToString();
+            string diaReparto = comboBox1.SelectedItem.ToString();
             List<Reparto> repartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
-                    return await orquestacionServices.GetRepartosPorDiaAsync(dia);
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -125,28 +131,31 @@ namespace linway_app.Forms
             comboBox2.DisplayMember = "Nombre";
             comboBox2.ValueMember = "Nombre";
         }
+        private async void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
+        {
+            await ActualizarCombobox1();
+        }
         private async Task UpdateGrid()
         {
-            string dia = comboBox1.Text;  // .SelectedItem.ToString();
-            if (dia == "")
+            string diaReparto = comboBox1.Text;  // .SelectedItem.ToString();
+            if (diaReparto == "")
             {
                 return;
             }
-            string nombre = comboBox2.Text;
+            string nombreReparto = comboBox2.Text;
             bool soloAEntregar = checkBox1.Checked;
             var respuesta = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    Reparto reparto = await orquestacionServices.GetRepartoPorDiaYNombreAsync(dia, nombre);
-                    if (reparto == null)
-                    {
-                        throw new Exception("No se encontró Reparto");
-                    }
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    Reparto reparto = lstDiasRep
+                        .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
+                        .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado") ?? throw new Exception("No se encontró Reparto");
                     List<Pedido> pedidos;
-                    var pedidos1 = await pedidoServices.GetPedidosPorRepartoId(reparto.Id);
+                    var pedidos1 = await pedidoServices.GetPedidosPorRepartoIdAsync(reparto.Id);
                     if (soloAEntregar)
                     {
                         pedidos = pedidos1.Where(x => x.Entregar == 1).ToList();
@@ -172,8 +181,21 @@ namespace linway_app.Forms
         {
             await UpdateGrid();
         }
-        // eliminar destino
-        private async void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        private async void CheckBox1_CheckedChanged(object sender, EventArgs ev)
+        {
+            if (!checkBox1.Checked)
+            {
+                await Actualizar();
+                return;
+            }
+            var ldFiltrada = new List<Pedido>();
+            foreach (Pedido pedido in _lstPedidos)
+            {
+                if (pedido.Entregar == 1) ldFiltrada.Add(pedido);
+            }
+            ActualizarGrid(ldFiltrada);
+        }
+        private async void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)  // eliminar destino desde la lista
         {
             if (_usandoDialogo || !(e.RowIndex >= 0 && e.ColumnIndex >= 0))
             {
@@ -200,7 +222,13 @@ namespace linway_app.Forms
                             var savingServices = sp.GetRequiredService<ISavingServices>();
                             var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                             pedidoServices.DeletePedido(pedido);
-                            return await savingServices.SaveAsync();
+                            bool guardado = await savingServices.SaveAsync();
+                            if (!guardado)
+                            {
+                                savingServices.DiscardChanges();
+                                MessageBox.Show("No se hicieron cambios");
+                            }
+                            return guardado;
                         },
                         "No se pudo realizar",
                         this

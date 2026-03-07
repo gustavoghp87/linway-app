@@ -50,7 +50,13 @@ namespace linway_app.Forms
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
                     await clienteServices.AddClienteAsync(nuevoCliente);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo agregar el Cliente",
                 this

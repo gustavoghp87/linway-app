@@ -12,6 +12,10 @@ namespace linway_app.Services.FormServices
         {
             _unitOfWork = unitOfWork;
         }
+        public void DiscardChanges(CancellationToken ct = default)
+        {
+            _unitOfWork.DiscardChanges();
+        }
         public async Task<bool> SaveAsync(CancellationToken ct = default)
         {
             int entries = await _unitOfWork.SaveAsync(ct);

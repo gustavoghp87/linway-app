@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -12,13 +13,14 @@ namespace linway_app.Forms
     {
         private async void ComboBox4_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            string dia = comboBox4.SelectedItem.ToString();
+            string diaReparto = comboBox4.SelectedItem.ToString();
             List<Reparto> repartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
-                    return await orquestacionServices.GetRepartosPorDiaAsync(dia);
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -86,15 +88,15 @@ namespace linway_app.Forms
         }
         private async void AgregarDestinoAReparto_btn1_Click(object sender, EventArgs ev)
         {
-            if (label8.Text == "No encontrado" || comboBox4.Text == "")
+            string diaReparto = comboBox4.Text;
+            string direccion = label8.Text;
+            if (direccion == "" || direccion == "No encontrado" || diaReparto == "")
             {
                 MessageBox.Show("Error, verificar los campos");
                 return;
             }
-            string dia = comboBox4.Text;
-            string nombre = comboBox5.Text;
-            string direccion = label8.Text;
-            await ReCargarHDR(comboBox4.Text, comboBox5.Text);                // día y reparto
+            string nombreReparto = comboBox5.Text;
+            await ReCargarHDR(diaReparto, nombreReparto);
             //comboBox1.SelectedIndex = comboBox4.SelectedIndex;
             //comboBox2.SelectedIndex = comboBox5.SelectedIndex;
             bool logrado = await UIExecutor.ExecuteAsync(
@@ -102,27 +104,42 @@ namespace linway_app.Forms
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    Cliente cliente = await clienteServices.GetClientePorDireccionExactaAsync(direccion);
-                    if (cliente == null)
-                    {
-                        throw new Exception("No se pudo encontrar el Cliente");  // no debería pasar por el chequeo previo
-                    }
-                    Reparto reparto = await orquestacionServices.GetRepartoPorDiaYNombreAsync(dia, nombre);
-                    if (reparto == null)
-                    {
-                        throw new Exception("No se pudo encontrar el Reparto");
-                    }
+                    Cliente cliente = await clienteServices.GetClientePorDireccionExactaAsync(direccion) ?? throw new Exception("No se pudo encontrar el Cliente");
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    Reparto reparto = lstDiasRep
+                        .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
+                        .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado") ?? throw new Exception("No se pudo encontrar el Reparto");
                     if (_lstPedidos.Exists(x => x.ClienteId == cliente.Id && x.RepartoId == reparto.Id))
                     {
+                        savingServices.DiscardChanges();
                         MessageBox.Show("Ese cliente ya estaba en el Reparto");
                         return false;
+                    }
+                    var pedido = new Pedido()
+                    {
+                        Cliente = cliente,
+                        Direccion = cliente.Direccion,
+                        Reparto = reparto,
+                        Entregar = 1,
+                        Estado = "Activo",
+                        ProductosText = "",
+                        L = 0,
+                        A = 0,
+                        Ae = 0,
+                        D = 0,
+                        E = 0,
+                        T = 0
                     };
-                    Pedido pedido = await orquestacionServices.GetPedidoPorRepartoYClienteGenerarSiNoExisteAsync(reparto.Id, cliente.Id);
-                    pedido.Entregar = 1;
-                    pedidoServices.AddPedido(pedido);
-                    return await savingServices.SaveAsync();
+                    await pedidoServices.AddPedidoAsync(pedido);
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo realizar",
                 this
@@ -133,6 +150,8 @@ namespace linway_app.Forms
             }
             LimpiarPantalla();
             await Actualizar();
+            await ActualizarCombobox1();
+            await UpdateGrid();
         }
     }
 }

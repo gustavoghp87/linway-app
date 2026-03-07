@@ -1,6 +1,8 @@
 ﻿using Infrastructure.Repositories.DbContexts;
 using Infrastructure.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,13 +15,30 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        //public int Save()
-        //{
-        //    return _context.SaveChanges();
-        //}
-        public Task<int> SaveAsync(CancellationToken cancellationToken = default)
+        public void Dispose()
         {
-            return _context.SaveChangesAsync(cancellationToken);
+            _context.Dispose();
+        }
+        public ValueTask DisposeAsync()
+        {
+            return _context.DisposeAsync();
+        }
+        public void DiscardChanges()
+        {
+            foreach (var entry in _context.ChangeTracker.Entries().ToList())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.State = EntityState.Detached;
+                        break;
+
+                    case EntityState.Modified:
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Unchanged;
+                        break;
+                }
+            }
         }
         public void ExecuteInTransaction(Action action)
         {
@@ -51,13 +70,9 @@ namespace Infrastructure.Repositories
                 throw;
             }
         }
-        public void Dispose()
+        public Task<int> SaveAsync(CancellationToken cancellationToken = default)
         {
-            _context.Dispose();
-        }
-        public ValueTask DisposeAsync()
-        {
-            return _context.DisposeAsync();
+            return _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

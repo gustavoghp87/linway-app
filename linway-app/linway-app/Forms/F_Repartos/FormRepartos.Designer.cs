@@ -250,7 +250,7 @@ namespace linway_app.Forms
             // 
             this.todasLuAViToolStripMenuItem.Name = "todasLuAViToolStripMenuItem";
             this.todasLuAViToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.todasLuAViToolStripMenuItem.Text = "Todas (Lu a Vi)";
+            this.todasLuAViToolStripMenuItem.Text = "Todas (Lu a Sa)";
             this.todasLuAViToolStripMenuItem.Click += new System.EventHandler(this.TodasLuAVi_ToolStripMenuItem_Click);
             // 
             // diaEspecíficoToolStripMenuItem

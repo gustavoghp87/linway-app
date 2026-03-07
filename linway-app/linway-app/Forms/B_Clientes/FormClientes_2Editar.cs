@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Enums;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -33,7 +35,7 @@ namespace linway_app.Forms
             var direccion = textBox23.Text;
             return !string.IsNullOrEmpty(direccion) && direccion != "No encontrado";
         }
-        private void DoIt(Cliente cliente)
+        private void ActualizarEtiquetasDeClienteAEDitar(Cliente cliente)
         {
             if (cliente == null)
             {
@@ -90,7 +92,7 @@ namespace linway_app.Forms
                 "No se pudo buscar el Cliente",
                 null
             );
-            DoIt(cliente);
+            ActualizarEtiquetasDeClienteAEDitar(cliente);
         }
         private async void TextBox6_TextChanged(object sender, EventArgs ev)
         {
@@ -116,7 +118,7 @@ namespace linway_app.Forms
                 "No se pudo buscar el Cliente",
                 null
             );
-            DoIt(cliente);
+            ActualizarEtiquetasDeClienteAEDitar(cliente);
         }
         private async void Editar_Click(object sender, EventArgs ev)
         {
@@ -132,7 +134,8 @@ namespace linway_app.Forms
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     Cliente cliente = await clienteServices.GetClientePorDireccionExactaAsync(direccion);
                     if (cliente == null)
                     {
@@ -143,16 +146,26 @@ namespace linway_app.Forms
                     cliente.CodigoPostal = textBox25.Text;
                     cliente.Nombre = textBox11.Text;
                     cliente.Cuit = textBox10.Text;
-                    if (radioButton3.Checked)
+                    cliente.Tipo = radioButton3.Checked ? TipoR.Inscripto.ToString() : TipoR.Monotributo.ToString();
+                    clienteServices.EditCliente(cliente);
+                    List<DiaReparto> dias = await diaRepartoServices.GetDiaRepartosAsync();
+                    List<Pedido> pedidosAEditar = dias
+                        .SelectMany(dia => dia.Reparto)
+                        .SelectMany(reparto => reparto.Pedidos)
+                        .Where(pedido => pedido.ClienteId == cliente.Id)
+                        .ToList();
+                    foreach (var pedido in pedidosAEditar)
                     {
-                        cliente.Tipo = TipoR.Inscripto.ToString();
+                        pedido.Direccion = cliente.Direccion;
                     }
-                    else
+                    pedidoServices.EditPedidos(pedidosAEditar);
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
                     {
-                        cliente.Tipo = TipoR.Monotributo.ToString();
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
                     }
-                    await orquestacionServices.EditClienteYDireccionEnPedidosAsync(cliente);
-                    return await savingServices.SaveAsync();
+                    return guardado;
                 },
                 "No se pudo buscar el cliente, no se modificó o no se pudo actualizar dirección en los Repartos",
                 this

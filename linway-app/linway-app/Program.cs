@@ -58,8 +58,6 @@ namespace linway_app
             services.AddScoped<IRepartoServices, RepartoServices>();
             services.AddScoped<IVentaServices, VentaServices>();
             //
-            services.AddScoped<IOrquestacionServices, OrquestacionServices>();
-            //
             LinwayServiceProvider = services.BuildServiceProvider();
         }
 

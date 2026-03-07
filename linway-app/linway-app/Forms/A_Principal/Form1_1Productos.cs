@@ -18,10 +18,10 @@ namespace linway_app.Forms
             {
                 grid.Add(Mapper.Map<EProducto>(producto));
             }
-            dataGridView2.DataSource = grid;
-            dataGridView2.Columns[0].Width = 48;
-            dataGridView2.Columns[1].Width = 270;
-            dataGridView2.Columns[2].Width = 72;
+            dataGridViewProductos.DataSource = grid;
+            dataGridViewProductos.Columns[0].Width = 48;
+            dataGridViewProductos.Columns[1].Width = 270;
+            dataGridViewProductos.Columns[2].Width = 72;
         }
         private void FiltrarDatosP(string texto)
         {
@@ -39,15 +39,15 @@ namespace linway_app.Forms
         {
             if (BuscadorProductos.Visible)
             {
-                button10.Text = ">>";
-                label26.Visible = false;
+                buttonMostrarFiltroProductos.Text = ">>";
+                labelBuscarPorDireccion.Visible = false;
                 BuscadorProductos.Visible = false;
                 BuscadorProductos.Text = "";
             }
             else
             {
-                button10.Text = "<<";
-                label26.Visible = true;
+                buttonMostrarFiltroProductos.Text = "<<";
+                labelBuscarPorDireccion.Visible = true;
                 BuscadorProductos.Visible = true;
                 BuscadorClientes.Text = "";
             }

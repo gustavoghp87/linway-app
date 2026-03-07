@@ -1,6 +1,7 @@
 ﻿using linway_app.Services.Interfaces;
 using Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace linway_app.Services.FormServices
@@ -14,10 +15,6 @@ namespace linway_app.Services.FormServices
         }
         public void AddVentas(ICollection<Venta> ventas)
         {
-            if (ventas == null || ventas.Count == 0)
-            {
-                return;
-            }
             _services.AddMany(ventas);
         }
         public void DeleteVentas(ICollection<Venta> ventas)
@@ -30,8 +27,47 @@ namespace linway_app.Services.FormServices
         }
         public async Task<List<Venta>> GetVentasAsync()
         {
-            List<Venta> ventas = await _services.GetAllAsync() ?? new List<Venta>();
+            List<Venta> ventas = await _services.GetAllAsync();
             return ventas;
+        }
+        public async Task UpdateVentasDesdeProdVendidosAsync(ICollection<ProdVendido> prodVendidos, bool addingUp)
+        {
+            var ventasAAgregar = new List<Venta>();
+            var ventasAEditar = new List<Venta>();
+            List<Venta> lstVentas = await GetVentasAsync();
+            foreach (ProdVendido prodVendido in prodVendidos.Where(x => ProductoServices.IsProducto(x.Producto)))
+            {
+                bool exists = false;
+                foreach (var venta in lstVentas)
+                {
+                    if (venta.ProductoId == prodVendido.ProductoId)
+                    {
+                        exists = true;
+                        venta.Cantidad = addingUp
+                            ? venta.Cantidad + prodVendido.Cantidad
+                            : venta.Cantidad - prodVendido.Cantidad;
+                        ventasAEditar.Add(venta);
+                        break;
+                    }
+                }
+                if (!exists && addingUp)
+                {
+                    Venta nuevaVenta = new Venta
+                    {
+                        ProductoId = prodVendido.ProductoId,
+                        Cantidad = prodVendido.Cantidad
+                    };
+                    ventasAAgregar.Add(nuevaVenta);
+                }
+            }
+            if (ventasAAgregar.Count > 0)
+            {
+                _services.AddMany(ventasAAgregar);
+            }
+            if (ventasAEditar.Count > 0)
+            {
+                _services.EditMany(ventasAEditar);
+            }
         }
     }
 }

@@ -6,12 +6,12 @@ namespace linway_app.Services.Interfaces
 {
     public interface IPedidoServices
     {
-        void AddPedido(Pedido pedido);
-        void CleanPedidos(ICollection<Pedido> pedidos);
+        Task AddPedidoAsync(Pedido pedido);
         void DeletePedido(Pedido pedido);
+        void EditPedido(Pedido pedido);
         void EditPedidos(ICollection<Pedido> pedidos);
-        Task<Pedido> GetPedido(long pedidoId);
-        Task<ICollection<Pedido>> GetPedidos();
-        Task<ICollection<Pedido>> GetPedidosPorRepartoId(long repartoId);
+        Task<Pedido> GetPedidoPorIdAsync(long pedidoId);
+        Task<ICollection<Pedido>> GetPedidosAsync();
+        Task<ICollection<Pedido>> GetPedidosPorRepartoIdAsync(long repartoId);
     }
 }

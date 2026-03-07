@@ -1,4 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
+using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
@@ -17,31 +18,47 @@ namespace linway_app.Forms
             ActualizarGrid(new List<Pedido>());
             groupBox4.Visible = true;
         }
-        private async void LimpiarRepartos_Click(object sender, EventArgs ev)
+        private async void LimpiarRepartos_Click(object sender, EventArgs ev)  // limpiar todos los repartos
         {
-            var repartosALimpiar = new List<Reparto>();
-            foreach (DiaReparto diaReparto in _lstDiaRepartos)
-            {
-                foreach (Reparto reparto in diaReparto.Reparto)
-                {
-                    repartosALimpiar.Add(reparto);
-                }
-            }
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
-                    orquestacionServices.CleanRepartos(repartosALimpiar);
-                    return await savingServices.SaveAsync();
+                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
+                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
+                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
+                    List<Reparto> repartosALimpiar = _lstDiaRepartos.SelectMany(x => x.Reparto).ToList();
+                    List<Pedido> pedidosALimpiar = repartosALimpiar.SelectMany(x => x.Pedidos).ToList();
+                    List<ProdVendido> prodVendidosALimpiar = pedidosALimpiar.SelectMany(x => x.ProdVendidos).ToList();
+                    foreach (ProdVendido prodVendido in prodVendidosALimpiar)
+                    {
+                        prodVendido.PedidoId = null;
+                    }
+                    prodVendidoServices.EditProdVendidos(prodVendidosALimpiar);
+                    foreach (Reparto reparto in repartosALimpiar)
+                    {
+                        foreach (Pedido pedido in reparto.Pedidos)
+                        {
+                            PedidoServices.ActualizarEtiquetasDePedido(pedido, false);
+                        }
+                        RepartoServices.ActualizarEtiquetasDeReparto(reparto);
+                    }
+                    repartoServices.EditRepartos(repartosALimpiar);
+                    pedidoServices.EditPedidos(pedidosALimpiar);
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
-                "No se pudieron limpiar los Repartos",
+                "No se pudieron limpiar los Repartos o no había nada para limpiar",
                 this
             );
             if (!logrado)
             {
-                MessageBox.Show("Algo falló al limpiar Repartos");
                 return;
             }
             LimpiarPantalla();
@@ -51,7 +68,7 @@ namespace linway_app.Forms
         {
             LimpiarPantalla();
         }
-        // 2. limpiar los repartos de un dia
+        // 2. limpiar los repartos de un día
         private void DiaEspecífico_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
@@ -62,31 +79,54 @@ namespace linway_app.Forms
         {
             LimpiarPantalla();
         }
-        private async void Button9_Click(object sender, EventArgs ev)
+        private async void Button9_Click(object sender, EventArgs ev)  // limpiar los repartos de un dia
         {
-            string dia = comboBox6.Text;
-            if (dia == "")
+            string diaReparto = comboBox6.Text;
+            if (diaReparto == "")
             {
                 MessageBox.Show("Debe seleccionar un día");
                 return;
             }
             await Actualizar();
-            List<Reparto> lstRepartos = _lstDiaRepartos?.Find(x => x.Dia == dia)?.Reparto?.ToList();
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
-                    orquestacionServices.CleanRepartos(lstRepartos);
-                    return await savingServices.SaveAsync();
+                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
+                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
+                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
+                    List<Reparto> repartosALimpiar = _lstDiaRepartos.Find(x => x.Dia == diaReparto).Reparto.ToList();
+                    List<Pedido> pedidosALimpiar = repartosALimpiar.SelectMany(x => x.Pedidos).ToList();
+                    List<ProdVendido> prodVendidosALimpiar = pedidosALimpiar.SelectMany(x => x.ProdVendidos).ToList();
+                    foreach (ProdVendido prodVendido in prodVendidosALimpiar)
+                    {
+                        prodVendido.PedidoId = null;
+                    }
+                    prodVendidoServices.EditProdVendidos(prodVendidosALimpiar);
+                    foreach (var reparto in repartosALimpiar)
+                    {
+                        RepartoServices.ActualizarEtiquetasDeReparto(reparto);
+                    }
+                    repartoServices.EditRepartos(repartosALimpiar);
+                    foreach (Pedido pedido in pedidosALimpiar)
+                    {
+                        PedidoServices.ActualizarEtiquetasDePedido(pedido, false);
+                    }
+                    pedidoServices.EditPedidos(pedidosALimpiar);
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudieron limpiar los Repartos",
                 this
             );
             if (!logrado)
             {
-                MessageBox.Show("Algo falló al limpiar Repartos");
                 return;
             }
             LimpiarPantalla();
@@ -101,13 +141,14 @@ namespace linway_app.Forms
         }
         private async void ComboBox8_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            string dia = comboBox8.SelectedItem.ToString();
+            string diaReparto = comboBox8.SelectedItem.ToString();
             List<Reparto> repartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
-                    return await orquestacionServices.GetRepartosPorDiaAsync(dia);
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -120,10 +161,10 @@ namespace linway_app.Forms
             comboBox7.DisplayMember = "Nombre";
             comboBox7.ValueMember = "Nombre";
         }
-        private async void Button11_Click(object sender, EventArgs ev)
+        private async void Button11_Click(object sender, EventArgs ev)  // limpiar un reparto
         {
-            string dia = comboBox8.Text;
-            string nombre = comboBox7.Text;
+            string diaReparto = comboBox8.Text;
+            string nombreReparto = comboBox7.Text;
             if (comboBox8.Text == "")
             {
                 MessageBox.Show("Debe seleccionar un día");
@@ -134,21 +175,36 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    Reparto reparto = await orquestacionServices.GetRepartoPorDiaYNombreAsync(dia, nombre);
-                    if (reparto == null)
+                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
+                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    Reparto repartoALimpiar = lstDiasRep
+                        .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
+                        .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado") ?? throw new Exception("No se pudo encontrar el Reparto");
+                    List<Pedido> pedidosALimpiar = repartoALimpiar.Pedidos.ToList();
+                    List<ProdVendido> prodVendidosALimpiar = pedidosALimpiar.SelectMany(x => x.ProdVendidos).ToList();
+                    foreach (ProdVendido prodVendido in prodVendidosALimpiar)
                     {
-                        throw new Exception("No se pudo encontrar el Reparto");
+                        prodVendido.PedidoId = null;
                     }
-                    orquestacionServices.CleanRepartos(new List<Reparto>() { reparto });
-                    bool logrado = await savingServices.SaveAsync();
-                    if (!logrado)
+                    prodVendidoServices.EditProdVendidos(prodVendidosALimpiar);
+                    RepartoServices.ActualizarEtiquetasDeReparto(repartoALimpiar);
+                    repartoServices.EditReparto(repartoALimpiar);
+                    foreach (Pedido pedido in pedidosALimpiar)
                     {
-                        MessageBox.Show("No habían cambios para hacer");
+                        PedidoServices.ActualizarEtiquetasDePedido(pedido, false);
+                    }
+                    pedidoServices.EditPedidos(pedidosALimpiar);
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
                         return null;
                     }
-                    return reparto;
+                    return repartoALimpiar;
                 },
                 "No se pudo realizar",
                 this
@@ -176,35 +232,41 @@ namespace linway_app.Forms
             Pedido pedido = _lstPedidos.Find(x => x.Direccion.ToLower().Contains(textBox7.Text.ToLower()));
             label36.Text = pedido != null ? pedido.Direccion : "No encontrado";
         }
-        private async void Button18_Click(object sender, EventArgs ev)
+        private async void Button18_Click(object sender, EventArgs ev)  // limpiar un pedido
         {
             await ReCargarHDR(comboBox1.Text, comboBox2.Text);
             string direccion = label36.Text;
-            Pedido pedido = _lstPedidos.Find(x => x.Direccion.Equals(direccion));
-            if (pedido == null)
-            {
-                MessageBox.Show("Verifique que los datos sean correctos");
-                return;
-            }
-            var prodVendidosAEditar = new List<ProdVendido>();
-            pedido.ProdVendidos.ToList().ForEach(prodVendido =>
-            {
-                prodVendido.PedidoId = null;
-                prodVendidosAEditar.Add(prodVendido);
-            });
             Reparto reparto = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    //
+
+                    // no hay que quitar las referencias de los productos vendidos a los pedidos?
+                    Pedido pedidoAEditar = _lstPedidos.Find(x => x.Direccion.Equals(direccion));
+                    if (pedidoAEditar == null)
+                    {
+                        MessageBox.Show("Verifique que los datos sean correctos");
+                        return null;
+                    }
+                    var prodVendidosAEditar = pedidoAEditar.ProdVendidos;
+                    foreach (var prodVendido in prodVendidosAEditar)
+                    {
+                        prodVendido.PedidoId = null;
+                    }
                     prodVendidoServices.EditProdVendidos(prodVendidosAEditar);
-                    pedidoServices.CleanPedidos(new List<Pedido>() { pedido });
-                    await savingServices.SaveAsync();
-                    return await repartoServices.GetRepartoPorIdAsync(pedido.RepartoId);
+                    PedidoServices.ActualizarEtiquetasDePedido(pedidoAEditar, false);
+                    pedidoServices.EditPedido(pedidoAEditar);
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                        return null;
+                    }
+                    return await repartoServices.GetRepartoPorIdAsync(pedidoAEditar.RepartoId);
                 },
                 "No se pudo realizar",
                 this
@@ -216,6 +278,8 @@ namespace linway_app.Forms
             VerDatos(reparto);
             LimpiarPantalla();
             await Actualizar();
+            await ActualizarCombobox1();
+            await UpdateGrid();
         }
     }
 }

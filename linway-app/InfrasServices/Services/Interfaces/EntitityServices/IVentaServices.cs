@@ -10,5 +10,6 @@ namespace linway_app.Services.Interfaces
         void DeleteVentas(ICollection<Venta> ventas);
         void EditVentas(ICollection<Venta> ventas);
         Task<List<Venta>> GetVentasAsync();
+        Task UpdateVentasDesdeProdVendidosAsync(ICollection<ProdVendido> prodVendidos, bool addingUp);
     }
 }

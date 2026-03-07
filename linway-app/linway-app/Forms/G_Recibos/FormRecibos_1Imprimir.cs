@@ -31,7 +31,7 @@ namespace linway_app.Forms
                 {
                     var form = Program.LinwayServiceProvider.GetRequiredService<FormImprimirRecibo>();
                     form.Rellenar_Datos(recibo);
-                    form.Show();
+                    form.Show(this);
                 }
             }
             Close();

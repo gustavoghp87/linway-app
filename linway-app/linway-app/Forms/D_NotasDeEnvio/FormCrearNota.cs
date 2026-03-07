@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -41,15 +42,20 @@ namespace linway_app.Forms
             string direccion = label36.Text;
             bool agregarProdVendidosARegistrosYVentas = checkBox4.Checked;
             bool enviarAHojaDeReparto = checkBox3.Checked;
+            string diaReparto = comboBox4.Text;
+            string nombreReparto = comboBox3.Text;
             NotaDeEnvio nuevaNota = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
+                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
+                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
+                    var ventaServices = sp.GetRequiredService<IVentaServices>();
                     Cliente cliente = await clienteServices.GetClientePorDireccionExactaAsync(direccion);
                     NotaDeEnvio nuevaNota = new NotaDeEnvio
                     {
@@ -78,18 +84,52 @@ namespace linway_app.Forms
                             prodVendido.RegistroVenta = nuevoRegistro;
                             _lstProdVendidosAAgregar.Find(x => x.Id == prodVendido.Id).RegistroVenta = nuevoRegistro;  // para que el siguiente checkbox no pise los cambios
                         }
-                        await orquestacionServices.UpdateVentasDesdeProdVendidosAsync(_lstProdVendidosAAgregar, true);
+                        await ventaServices.UpdateVentasDesdeProdVendidosAsync(_lstProdVendidosAAgregar, true);
                     }
                     if (enviarAHojaDeReparto)
                     {
-                        Reparto reparto = await orquestacionServices.GetRepartoPorDiaYNombreAsync(comboBox4.Text, comboBox3.Text);
-                        Pedido pedido = await orquestacionServices.GetPedidoPorRepartoYClienteGenerarSiNoExisteAsync(reparto.Id, cliente.Id);
+                        List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                        Reparto reparto = lstDiasRep
+                            .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
+                            .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
+
+                        //Pedido pedido = await orquestacionServices.GetPedidoPorRepartoYClienteGenerarSiNoExisteAsync(reparto.Id, cliente.Id);
+                        Pedido pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == cliente.Id && x.Estado != "Eliminado");
+                        bool existiaPedido = pedido != null;
+                        if (!existiaPedido)
+                        {
+                            pedido = new Pedido()
+                            {
+                                Cliente = cliente,
+                                Direccion = cliente.Direccion,
+                                Reparto = reparto,
+                                Entregar = 1,
+                                Estado = "Activo",
+                                ProductosText = "",
+                                L = 0,
+                                A = 0,
+                                Ae = 0,
+                                D = 0,
+                                E = 0,
+                                T = 0
+                            };
+                        }
                         foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
                         {
                             prodVendido.Pedido = pedido;
                         }
                         // pedido.Entregar = 1;
-                        await orquestacionServices.UpdatePedidoAsync(pedido, true);
+                        PedidoServices.ActualizarEtiquetasDePedido(pedido, true);
+                        RepartoServices.ActualizarEtiquetasDeReparto(pedido.Reparto);
+                        if (existiaPedido)
+                        {
+                            pedidoServices.EditPedido(pedido);
+                        }
+                        else
+                        {
+                            await pedidoServices.AddPedidoAsync(pedido);
+                        }
+                        repartoServices.EditReparto(pedido.Reparto);
                     }
                     prodVendidoServices.AddProdVendidos(_lstProdVendidosAAgregar);
                     nuevaNota.Cliente = cliente;  // para que no falle la dirección al imprimir
@@ -98,9 +138,10 @@ namespace linway_app.Forms
                         prodVendido.Producto = _lstProductosAAgregar.Find(p => p.Id == prodVendido.ProductoId);  // para que no falten los productos al imprimir
                     }
                     nuevaNota.ProdVendidos = _lstProdVendidosAAgregar;
-                    bool logrado = await savingServices.SaveAsync();
-                    if (!logrado)
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
                     {
+                        savingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                         return null;
                     }
@@ -117,7 +158,7 @@ namespace linway_app.Forms
             {
                 var form = Program.LinwayServiceProvider.GetRequiredService<FormImprimirNota>();
                 form.Rellenar_Datos(nuevaNota);
-                form.Show();
+                form.Show(this);
             }
             Close();
         }

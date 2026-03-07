@@ -22,6 +22,7 @@ namespace Infrastructure.Repositories.DbContexts
             {
                 optionsBuilder.UseMySql(Constants.GetConnectionString());
                 optionsBuilder.UseLazyLoadingProxies();
+                optionsBuilder.AddInterceptors(new EfCommandInterceptor());
             }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

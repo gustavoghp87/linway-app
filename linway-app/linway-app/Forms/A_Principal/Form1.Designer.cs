@@ -50,20 +50,20 @@ namespace linway_app.Forms
             this.verHojasDeRepartoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.remitosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.verRecibosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label26 = new System.Windows.Forms.Label();
+            this.labelBuscarPorDireccion = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.buttonMostrarFiltroProductos = new System.Windows.Forms.Button();
+            this.buttonMostrarFiltroClientes = new System.Windows.Forms.Button();
             this.BuscadorProductos = new System.Windows.Forms.TextBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.label11 = new System.Windows.Forms.Label();
+            this.dataGridViewClientes = new System.Windows.Forms.DataGridView();
+            this.labelBuscarPorNombreCliente = new System.Windows.Forms.Label();
             this.BuscadorClientes = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewProductos = new System.Windows.Forms.DataGridView();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClientes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProductos)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -182,12 +182,12 @@ namespace linway_app.Forms
             // 
             // label26
             // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(139, 50);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(96, 13);
-            this.label26.TabIndex = 27;
-            this.label26.Text = "Buscar por nombre";
+            this.labelBuscarPorDireccion.AutoSize = true;
+            this.labelBuscarPorDireccion.Location = new System.Drawing.Point(139, 50);
+            this.labelBuscarPorDireccion.Name = "label26";
+            this.labelBuscarPorDireccion.Size = new System.Drawing.Size(96, 13);
+            this.labelBuscarPorDireccion.TabIndex = 27;
+            this.labelBuscarPorDireccion.Text = "Buscar por nombre";
             // 
             // label10
             // 
@@ -201,25 +201,25 @@ namespace linway_app.Forms
             // 
             // button10
             // 
-            this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button10.Location = new System.Drawing.Point(104, 45);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(29, 23);
-            this.button10.TabIndex = 26;
-            this.button10.Text = "<<";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.Button10_Click);
+            this.buttonMostrarFiltroProductos.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.buttonMostrarFiltroProductos.Location = new System.Drawing.Point(104, 45);
+            this.buttonMostrarFiltroProductos.Name = "button10";
+            this.buttonMostrarFiltroProductos.Size = new System.Drawing.Size(29, 23);
+            this.buttonMostrarFiltroProductos.TabIndex = 26;
+            this.buttonMostrarFiltroProductos.Text = "<<";
+            this.buttonMostrarFiltroProductos.UseVisualStyleBackColor = true;
+            this.buttonMostrarFiltroProductos.Click += new System.EventHandler(this.Button10_Click);
             // 
             // button5
             // 
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button5.Location = new System.Drawing.Point(104, 377);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(29, 23);
-            this.button5.TabIndex = 22;
-            this.button5.Text = "<<";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.Button5_Click);
+            this.buttonMostrarFiltroClientes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.buttonMostrarFiltroClientes.Location = new System.Drawing.Point(104, 377);
+            this.buttonMostrarFiltroClientes.Name = "button5";
+            this.buttonMostrarFiltroClientes.Size = new System.Drawing.Size(29, 23);
+            this.buttonMostrarFiltroClientes.TabIndex = 22;
+            this.buttonMostrarFiltroClientes.Text = "<<";
+            this.buttonMostrarFiltroClientes.UseVisualStyleBackColor = true;
+            this.buttonMostrarFiltroClientes.Click += new System.EventHandler(this.Button5_Click);
             // 
             // BuscadorProductos
             // 
@@ -231,9 +231,9 @@ namespace linway_app.Forms
             // 
             // dataGridView1
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewClientes.AllowUserToAddRows = false;
+            this.dataGridViewClientes.AllowUserToDeleteRows = false;
+            this.dataGridViewClientes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -241,8 +241,8 @@ namespace linway_app.Forms
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewClientes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridViewClientes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -250,22 +250,22 @@ namespace linway_app.Forms
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 411);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersWidth = 10;
-            this.dataGridView1.Size = new System.Drawing.Size(898, 281);
-            this.dataGridView1.TabIndex = 1;
+            this.dataGridViewClientes.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridViewClientes.Location = new System.Drawing.Point(12, 411);
+            this.dataGridViewClientes.Name = "dataGridView1";
+            this.dataGridViewClientes.ReadOnly = true;
+            this.dataGridViewClientes.RowHeadersWidth = 10;
+            this.dataGridViewClientes.Size = new System.Drawing.Size(898, 281);
+            this.dataGridViewClientes.TabIndex = 1;
             // 
             // label11
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(139, 383);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(107, 13);
-            this.label11.TabIndex = 23;
-            this.label11.Text = "Buscar por dirección:";
+            this.labelBuscarPorNombreCliente.AutoSize = true;
+            this.labelBuscarPorNombreCliente.Location = new System.Drawing.Point(139, 383);
+            this.labelBuscarPorNombreCliente.Name = "label11";
+            this.labelBuscarPorNombreCliente.Size = new System.Drawing.Size(107, 13);
+            this.labelBuscarPorNombreCliente.TabIndex = 23;
+            this.labelBuscarPorNombreCliente.Text = "Buscar por dirección:";
             // 
             // BuscadorClientes
             // 
@@ -287,9 +287,9 @@ namespace linway_app.Forms
             // 
             // dataGridView2
             // 
-            this.dataGridView2.AllowUserToAddRows = false;
-            this.dataGridView2.AllowUserToDeleteRows = false;
-            this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewProductos.AllowUserToAddRows = false;
+            this.dataGridViewProductos.AllowUserToDeleteRows = false;
+            this.dataGridViewProductos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -297,8 +297,8 @@ namespace linway_app.Forms
             dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewProductos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.dataGridViewProductos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -306,23 +306,23 @@ namespace linway_app.Forms
             dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle4;
-            this.dataGridView2.Location = new System.Drawing.Point(12, 82);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.ReadOnly = true;
+            this.dataGridViewProductos.DefaultCellStyle = dataGridViewCellStyle4;
+            this.dataGridViewProductos.Location = new System.Drawing.Point(12, 82);
+            this.dataGridViewProductos.Name = "dataGridView2";
+            this.dataGridViewProductos.ReadOnly = true;
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
-            this.dataGridView2.RowHeadersWidth = 10;
-            this.dataGridView2.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridViewProductos.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            this.dataGridViewProductos.RowHeadersWidth = 10;
+            this.dataGridViewProductos.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridView2.RowsDefaultCellStyle = dataGridViewCellStyle6;
-            this.dataGridView2.Size = new System.Drawing.Size(635, 272);
-            this.dataGridView2.TabIndex = 19;
+            this.dataGridViewProductos.RowsDefaultCellStyle = dataGridViewCellStyle6;
+            this.dataGridViewProductos.Size = new System.Drawing.Size(635, 272);
+            this.dataGridViewProductos.TabIndex = 19;
             // 
             // openFileDialog1
             // 
@@ -336,17 +336,17 @@ namespace linway_app.Forms
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(925, 699);
-            this.Controls.Add(this.dataGridView2);
+            this.Controls.Add(this.dataGridViewProductos);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.BuscadorClientes);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.labelBuscarPorNombreCliente);
+            this.Controls.Add(this.dataGridViewClientes);
             this.Controls.Add(this.BuscadorProductos);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button10);
+            this.Controls.Add(this.buttonMostrarFiltroClientes);
+            this.Controls.Add(this.buttonMostrarFiltroProductos);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.label26);
+            this.Controls.Add(this.labelBuscarPorDireccion);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -357,8 +357,8 @@ namespace linway_app.Forms
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClientes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProductos)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -373,16 +373,16 @@ namespace linway_app.Forms
         private System.Windows.Forms.ToolStripMenuItem crearNotaDeEnvíoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem verNotasDeEnvíoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ventaDeProductosToolStripMenuItem;
-        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label labelBuscarPorDireccion;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button buttonMostrarFiltroProductos;
+        private System.Windows.Forms.Button buttonMostrarFiltroClientes;
         private System.Windows.Forms.TextBox BuscadorProductos;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.DataGridView dataGridViewClientes;
+        private System.Windows.Forms.Label labelBuscarPorNombreCliente;
         private System.Windows.Forms.TextBox BuscadorClientes;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.DataGridView dataGridViewProductos;
         private System.Windows.Forms.ToolStripMenuItem remitosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hojaDeRepartoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem verHojasDeRepartoToolStripMenuItem;

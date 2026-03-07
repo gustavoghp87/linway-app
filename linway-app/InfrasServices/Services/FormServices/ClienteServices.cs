@@ -35,15 +35,15 @@ namespace linway_app.Services.FormServices
             }
             _services.Add(cliente);
         }
-        public async Task AddClientePrimeroAsync()
-        {
-            var cliente = new Cliente
-            {
-                Nombre = "Cliente Particular X",
-                Direccion = "Cliente Particular X"
-            };
-            await AddClienteAsync(cliente);
-        }
+        //public async Task AddClientePrimeroAsync()
+        //{
+        //    var cliente = new Cliente
+        //    {
+        //        Nombre = "Cliente Particular X",
+        //        Direccion = "Cliente Particular X"
+        //    };
+        //    await AddClienteAsync(cliente);
+        //}
         public void DeleteCliente(Cliente cliente)
         {
             _services.Delete(cliente);

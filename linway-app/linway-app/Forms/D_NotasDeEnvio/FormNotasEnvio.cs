@@ -42,7 +42,7 @@ namespace linway_app.Forms
                 return;
             }
             _lstNotaDeEnvios = notas;
-            lCantNotas.Text = _lstNotaDeEnvios.Count.ToString() + " notas de envio.";
+            labelCantidadDeNotas.Text = _lstNotaDeEnvios.Count.ToString() + " notas de envio.";
         }
         private void ActualizarGrid2(ICollection<ProdVendido> lstProdVendidos)
         {

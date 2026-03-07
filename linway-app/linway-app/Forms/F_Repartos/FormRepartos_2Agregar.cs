@@ -16,8 +16,8 @@ namespace linway_app.Forms
             {
                 return;
             }
-            string dia = comboBox3.Text;
-            DiaReparto diaRep = _lstDiaRepartos.Find(x => x.Dia.Contains(dia));
+            string diaReparto = comboBox3.Text;
+            DiaReparto diaRep = _lstDiaRepartos.Find(x => x.Dia.Contains(diaReparto));
             Reparto nuevoReparto = new Reparto
             {
                 Nombre = textBox1.Text,
@@ -36,7 +36,13 @@ namespace linway_app.Forms
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     repartoServices.AddReparto(nuevoReparto);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo agregar el Reparto",
                 this
@@ -46,7 +52,10 @@ namespace linway_app.Forms
                 MessageBox.Show("No se pudo agregar Reparto");
                 return;
             }
+            await Actualizar();
             LimpiarPantalla();
+            await ActualizarCombobox1();
+            await UpdateGrid();
         }
         private void Button5_Click(object sender, EventArgs ev)
         {

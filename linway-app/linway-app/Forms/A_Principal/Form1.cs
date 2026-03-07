@@ -16,7 +16,7 @@ namespace linway_app.Forms
         public static IMapper Mapper;
         private List<Cliente> _lstClientes;
         private List<Producto> _lstProductos;
-        private IServiceScope _scope;
+        private IServiceScope _scope;  // scope por formulario para que no se pierdan los atributos generados por Lazy Loading
         public Form1(IMapper mapper)
         {
             Mapper = mapper;
@@ -36,12 +36,6 @@ namespace linway_app.Forms
         {
             await Actualizar();
             //generateDbBackup();
-            //if (_lstClientes == null)
-            //{
-            //    CrearPrimerCliente();
-            //    await Actualizar();
-            //    return;
-            //}
         }
         private async Task Actualizar()
         {
@@ -68,28 +62,11 @@ namespace linway_app.Forms
             CargarGridProductos(_lstProductos);
             FiltrarDatosC(BuscadorClientes.Text);
             FiltrarDatosP(BuscadorProductos.Text);
-
         }
-        //private async void CrearPrimerCliente()
-        //{
-        //    try
-        //    {
-        //        using var scope = Program.LinwayServiceProvider.CreateScope();
-        //        var appService = scope.ServiceProvider.GetRequiredService<IClienteServices>();
-        //        await appService.AddClientePrimero();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Logger.LogException(e);
-        //        MessageBox.Show("Hay problemas con la base de datos y no se puede seguir: " + e.Message);
-        //        Close();
-        //    }
-        //}
-        // MENUES
         private async void Frm_FormClosing(object sender, FormClosingEventArgs ev)
         {
             _scope.Dispose();
-            _scope = Program.LinwayServiceProvider.CreateScope();
+            _scope = Program.LinwayServiceProvider.CreateScope();  // renueva scope para que tome los cambios hechos en otros scopes
             await Actualizar();
         }
         private void AbrirClientes_ToolStripMenuItem_Click(object sender, EventArgs ev)

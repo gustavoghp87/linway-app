@@ -10,6 +10,6 @@ namespace linway_app.Services.Interfaces
         void DeleteProdVendido(ProdVendido prodVendido);
         void EditProdVendido(ProdVendido prodVendido);
         void EditProdVendidos(ICollection<ProdVendido> prodVendidos);
-        Task<List<ProdVendido>> GetProdVendidos();
+        Task<List<ProdVendido>> GetProdVendidosAsync();
     }
 }

@@ -166,6 +166,12 @@ namespace linway_app.Forms
                 MessageBox.Show("Verifique que se hayan llenado los campos correctamente");
                 return;
             }
+            if (!decimal.TryParse(textBox9.Text, out decimal precio))
+            {
+                return;
+            }
+            string tipo = comboBox3.Text;
+            string subtipo = comboBox2.Visible && comboBox2.Text != "" ? comboBox2.Text : "";
             string nombreDeProducto = label19.Text;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
@@ -178,12 +184,18 @@ namespace linway_app.Forms
                     {
                         return false;  // nunca debería pasar
                     }
-                    decimal.TryParse(textBox9.Text, out decimal precio);
+                    
                     producto.Precio = precio;
-                    producto.Tipo = comboBox3.Text;
-                    producto.SubTipo = comboBox2.Visible && comboBox2.Text != "" ? comboBox2.Text : "";
+                    producto.Tipo = tipo;
+                    producto.SubTipo = subtipo;
                     productoServices.EditProducto(producto);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo editar el Producto",
                 this

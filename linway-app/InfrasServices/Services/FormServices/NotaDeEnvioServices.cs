@@ -19,10 +19,6 @@ namespace linway_app.Services.FormServices
         }
         public void DeleteNotas(ICollection<NotaDeEnvio> notas)
         {
-            if (notas == null || notas.Count == 0)
-            {
-                return;
-            }
             _services.DeleteMany(notas);
         }
 
@@ -32,10 +28,6 @@ namespace linway_app.Services.FormServices
         }
         public void EditValores(NotaDeEnvio nota)
         {
-            if (nota == null || nota.ProdVendidos == null || nota.ProdVendidos.Count == 0)
-            {
-                return;
-            }
             nota.ImporteTotal = ExtraerImporteDeNotaDeEnvio(nota.ProdVendidos);
             nota.Detalle = ExtraerDetalleDeNotaDeEnvio(nota.ProdVendidos);
             EditNotaDeEnvio(nota);

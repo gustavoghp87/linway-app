@@ -75,18 +75,17 @@ namespace linway_app.Forms
             await Actualizar();
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
-                sp =>
+                async sp =>
                 {
                     var exportarServices = sp.GetRequiredService<IExportarServices>();
                     exportarServices.ExportarVentas(_lstVentas);
-                    return Task.FromResult(true);
+                    return true;
                 },
                 "No se pudieron buscar las Ventas y los Registros de Ventas",
                 null
             );
             if (!logrado)
             {
-                MessageBox.Show("No se pudieron exportar Ventas");
                 return;
             }
             ExportBtn.Text = "Terminado";

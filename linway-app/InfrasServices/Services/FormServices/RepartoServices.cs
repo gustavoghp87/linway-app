@@ -23,9 +23,6 @@ namespace linway_app.Services.FormServices
         }
         public void EditRepartos(ICollection<Reparto> repartos)
         {
-            if (repartos == null || repartos.Count == 0) {
-                return;
-            }
             _services.EditMany(repartos);
         }
         public async Task<Reparto> GetRepartoPorIdAsync(long repartoId)
@@ -38,12 +35,9 @@ namespace linway_app.Services.FormServices
             List<Reparto> repartos = await _services.GetAllAsync();
             return repartos;
         }
-        public void UpdateReparto(Reparto reparto)
+        #region static methods
+        public static void ActualizarEtiquetasDeReparto(Reparto reparto)
         {
-            if (reparto == null || reparto.Pedidos == null || reparto.Pedidos.Count == 0)
-            {
-                return;
-            }
             reparto.Ta = 0;
             reparto.Te = 0;
             reparto.Tt = 0;
@@ -61,7 +55,7 @@ namespace linway_app.Services.FormServices
                 reparto.TotalB += pedido.A + pedido.E + pedido.T + pedido.Ae + pedido.D;
                 reparto.Tl += pedido.L;
             });
-            EditReparto(reparto);
         }
+        #endregion
     }
 }

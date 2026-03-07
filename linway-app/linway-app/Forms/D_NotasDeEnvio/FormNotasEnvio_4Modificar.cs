@@ -6,6 +6,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -173,10 +174,11 @@ namespace linway_app.Forms
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     var productoServices = sp.GetRequiredService<IProductoServices>();
                     var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
+                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
+                    var ventaServices = sp.GetRequiredService<IVentaServices>();
                     //
                     Producto productoNuevo = await productoServices.GetProductoPorNombreExactoAsync(nombreDeProducto);
                     NotaDeEnvio notaDeEnvio = await notaDeEnvioServices.GetNotaDeEnvioPorIdAsync(notaDeEnvioId);
@@ -195,7 +197,7 @@ namespace linway_app.Forms
                         var prodVendidoEnPedido = notaDeEnvio.ProdVendidos.ToList().Find(x => x.PedidoId != null);  // se puede tomar directamente el pedido...
                         if (prodVendidoEnPedido != null)
                         {
-                            pedido = await pedidoServices.GetPedido((long)prodVendidoEnPedido.PedidoId);
+                            pedido = await pedidoServices.GetPedidoPorIdAsync((long)prodVendidoEnPedido.PedidoId);
                             if (pedido != null)
                             {
                                 nuevoProdVendido.Pedido = pedido;
@@ -214,17 +216,28 @@ namespace linway_app.Forms
                     }
                     _lstProdVendidos.Add(nuevoProdVendido);
                     notaDeEnvioServices.EditValores(notaDeEnvio);
-                    await orquestacionServices.UpdateVentasDesdeProdVendidosAsync(new List<ProdVendido>() { nuevoProdVendido }, true);
+                    await ventaServices.UpdateVentasDesdeProdVendidosAsync(new List<ProdVendido>() { nuevoProdVendido }, true);
                     if (nuevoProdVendido.Pedido != null)
                     {
                         //pedido = await getPedido((long)nuevoProdVendido.PedidoId);
-                        await orquestacionServices.UpdatePedidoAsync(pedido, true);
+                        PedidoServices.ActualizarEtiquetasDePedido(pedido, true);
+                        await pedidoServices.AddPedidoAsync(pedido);  // no hay pedido para agregar
+                        RepartoServices.ActualizarEtiquetasDeReparto(pedido.Reparto);
+                        repartoServices.EditReparto(pedido.Reparto);
                     }
                     else
                     {
                         MessageBox.Show("Esta Nota no estaba en ningún Reparto");
+                        savingServices.DiscardChanges();
+                        return null;
                     }
-                    await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                        return null;
+                    }
                     //NotaDeEnvio updatedNote = await notaDeEnvioServices.GetNotaDeEnvio(notaDeEnvioId);
                     return notaDeEnvio;
                 },
@@ -290,14 +303,9 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    var exportarServices = sp.GetRequiredService<IExportarServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    var orquestacionServices = sp.GetRequiredService<IOrquestacionServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    var productoServices = sp.GetRequiredService<IProductoServices>();
                     var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
-                    var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
                     //
@@ -309,27 +317,49 @@ namespace linway_app.Forms
                     }
                     if (_lstProdVendidos.Count < 2)
                     {
+                        savingServices.DiscardChanges();
                         MessageBox.Show("No se puede quitar el único producto que tiene una nota, hay que eliminarla");
                         return null;
                     }
-                    notaDeEnvio = orquestacionServices.EditNotaDeEnvioQuitar(notaDeEnvio, prodVendido);
+                    prodVendidoServices.DeleteProdVendido(prodVendido);
+                    var lstAuxiliar = new List<ProdVendido>();
+                    foreach (ProdVendido pv in notaDeEnvio.ProdVendidos)
+                    {
+                        if (pv.ProductoId != prodVendido.ProductoId)
+                        {
+                            lstAuxiliar.Add(pv);
+                        }
+                    }
+                    notaDeEnvio.ProdVendidos = lstAuxiliar;
+                    notaDeEnvio.ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(lstAuxiliar);
+                    notaDeEnvio.Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(lstAuxiliar);
+                    notaDeEnvioServices.EditNotaDeEnvio(notaDeEnvio);
                     prodVendido.NotaDeEnvioId = null;
                     prodVendido.RegistroVentaId = null;
                     prodVendido.PedidoId = null;
                     var pedidoId = prodVendido.PedidoId;
                     prodVendido.PedidoId = null;
                     prodVendidoServices.EditProdVendido(prodVendido);
-                    await orquestacionServices.UpdateVentasDesdeProdVendidosAsync(new List<ProdVendido>() { prodVendido }, false);
+                    await ventaServices.UpdateVentasDesdeProdVendidosAsync(new List<ProdVendido>() { prodVendido }, false);
                     if (pedidoId != null)
                     {
-                        Pedido pedido = await pedidoServices.GetPedido((long)pedidoId);
+                        Pedido pedido = await pedidoServices.GetPedidoPorIdAsync((long)pedidoId);
                         if (pedido != null)
                         {
-                            await orquestacionServices.UpdatePedidoAsync(pedido, true);
+                            PedidoServices.ActualizarEtiquetasDePedido(pedido, true);
+                            pedidoServices.EditPedido(pedido);
+                            RepartoServices.ActualizarEtiquetasDeReparto(pedido.Reparto);
+                            repartoServices.EditReparto(pedido.Reparto);
                         }
                     }
                     //notaDeEnvio = await getNotaDeEnvio(...);
-                    await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                        return null;
+                    }
                     return notaDeEnvio;
                 },
                 "No se pudo realizar",
@@ -344,7 +374,11 @@ namespace linway_app.Forms
             _lstProdVendidos = notaDeEnvio.ProdVendidos.ToList();
             ActualizarGrid2(_lstProdVendidos);
             label20.Text = notaDeEnvio.ImporteTotal.ToString();
+            //
+            textBox8.TextChanged -= TextBox8_TextChanged;  // evita error de concurrencia de DbContext
             textBox8.Text = "";
+            textBox8.TextChanged += TextBox8_TextChanged;
+            //
             label22.Text = "";
             button8.Enabled = false;
         }

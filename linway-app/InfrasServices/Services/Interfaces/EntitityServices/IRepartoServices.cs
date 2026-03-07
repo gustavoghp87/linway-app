@@ -11,6 +11,5 @@ namespace linway_app.Services.Interfaces
         void EditRepartos(ICollection<Reparto> repartos);
         Task<Reparto> GetRepartoPorIdAsync(long repartoId);
         Task<List<Reparto>> GetRepartosAsync();
-        void UpdateReparto(Reparto reparto);
     }
 }
