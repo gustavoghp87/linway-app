@@ -9,7 +9,6 @@ namespace linway_app.Services.Interfaces
         void AddNotaDeEnvio(NotaDeEnvio notaDeEnvio);
         void DeleteNotas(ICollection<NotaDeEnvio> notas);
         void EditNotaDeEnvio(NotaDeEnvio notaDeEnvio);
-        void EditValores(NotaDeEnvio nota);
         Task<NotaDeEnvio> GetNotaDeEnvioPorIdAsync(long id);
         Task<List<NotaDeEnvio>> GetNotaDeEnviosAsync();
     }

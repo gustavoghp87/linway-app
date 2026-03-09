@@ -47,15 +47,15 @@ namespace linway_app.Forms
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
+            this.button5CancelarEliminarPorRangos = new System.Windows.Forms.Button();
+            this.button3EliminarPrimero = new System.Windows.Forms.Button();
+            this.button4EliminarConfirmacion = new System.Windows.Forms.Button();
+            this.textBox4EliminarDesde = new System.Windows.Forms.TextBox();
+            this.textBox5EliminarHasta = new System.Windows.Forms.TextBox();
+            this.label11SerguroDeseaBorrar = new System.Windows.Forms.Label();
+            this.label12EliminarDesde = new System.Windows.Forms.Label();
+            this.label10CantidadABorrar = new System.Windows.Forms.Label();
+            this.label13EliminarHasta = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -316,103 +316,103 @@ namespace linway_app.Forms
             // 
             // button5
             // 
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.Location = new System.Drawing.Point(130, 235);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 17;
-            this.button5.Text = "Cancelar";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Visible = false;
-            this.button5.Click += new System.EventHandler(this.Button5_Click);
+            this.button5CancelarEliminarPorRangos.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5CancelarEliminarPorRangos.Location = new System.Drawing.Point(130, 235);
+            this.button5CancelarEliminarPorRangos.Name = "button5";
+            this.button5CancelarEliminarPorRangos.Size = new System.Drawing.Size(75, 23);
+            this.button5CancelarEliminarPorRangos.TabIndex = 17;
+            this.button5CancelarEliminarPorRangos.Text = "Cancelar";
+            this.button5CancelarEliminarPorRangos.UseVisualStyleBackColor = true;
+            this.button5CancelarEliminarPorRangos.Visible = false;
+            this.button5CancelarEliminarPorRangos.Click += new System.EventHandler(this.Button5_Click);
             // 
             // button3
             // 
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(74, 235);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 7;
-            this.button3.Text = "Borrar";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.Button3_Click);
+            this.button3EliminarPrimero.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3EliminarPrimero.Location = new System.Drawing.Point(74, 235);
+            this.button3EliminarPrimero.Name = "button3";
+            this.button3EliminarPrimero.Size = new System.Drawing.Size(75, 23);
+            this.button3EliminarPrimero.TabIndex = 7;
+            this.button3EliminarPrimero.Text = "Borrar";
+            this.button3EliminarPrimero.UseVisualStyleBackColor = true;
+            this.button3EliminarPrimero.Click += new System.EventHandler(this.Button3_Click);
             // 
             // button4
             // 
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(18, 235);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 8;
-            this.button4.Text = "Confirmar";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Visible = false;
-            this.button4.Click += new System.EventHandler(this.Button4_Click);
+            this.button4EliminarConfirmacion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4EliminarConfirmacion.Location = new System.Drawing.Point(18, 235);
+            this.button4EliminarConfirmacion.Name = "button4";
+            this.button4EliminarConfirmacion.Size = new System.Drawing.Size(75, 23);
+            this.button4EliminarConfirmacion.TabIndex = 8;
+            this.button4EliminarConfirmacion.Text = "Confirmar";
+            this.button4EliminarConfirmacion.UseVisualStyleBackColor = true;
+            this.button4EliminarConfirmacion.Visible = false;
+            this.button4EliminarConfirmacion.Click += new System.EventHandler(this.Button4_Click);
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(63, 151);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(65, 20);
-            this.textBox4.TabIndex = 16;
-            this.textBox4.Visible = false;
-            this.textBox4.TextChanged += new System.EventHandler(this.TextBox4_TextChanged);
+            this.textBox4EliminarDesde.Location = new System.Drawing.Point(63, 151);
+            this.textBox4EliminarDesde.Name = "textBox4";
+            this.textBox4EliminarDesde.Size = new System.Drawing.Size(65, 20);
+            this.textBox4EliminarDesde.TabIndex = 16;
+            this.textBox4EliminarDesde.Visible = false;
+            this.textBox4EliminarDesde.TextChanged += new System.EventHandler(this.TextBox4_TextChanged);
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(63, 113);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(65, 20);
-            this.textBox5.TabIndex = 15;
-            this.textBox5.Visible = false;
-            this.textBox5.TextChanged += new System.EventHandler(this.TextBox5_TextChanged);
+            this.textBox5EliminarHasta.Location = new System.Drawing.Point(63, 113);
+            this.textBox5EliminarHasta.Name = "textBox5";
+            this.textBox5EliminarHasta.Size = new System.Drawing.Size(65, 20);
+            this.textBox5EliminarHasta.TabIndex = 15;
+            this.textBox5EliminarHasta.Visible = false;
+            this.textBox5EliminarHasta.TextChanged += new System.EventHandler(this.TextBox5_TextChanged);
             // 
             // label11
             // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.Maroon;
-            this.label11.Location = new System.Drawing.Point(6, 219);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(208, 13);
-            this.label11.TabIndex = 14;
-            this.label11.Text = "¿Seguro desea borrar la selección?";
-            this.label11.Visible = false;
+            this.label11SerguroDeseaBorrar.AutoSize = true;
+            this.label11SerguroDeseaBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11SerguroDeseaBorrar.ForeColor = System.Drawing.Color.Maroon;
+            this.label11SerguroDeseaBorrar.Location = new System.Drawing.Point(6, 219);
+            this.label11SerguroDeseaBorrar.Name = "label11";
+            this.label11SerguroDeseaBorrar.Size = new System.Drawing.Size(208, 13);
+            this.label11SerguroDeseaBorrar.TabIndex = 14;
+            this.label11SerguroDeseaBorrar.Text = "¿Seguro desea borrar la selección?";
+            this.label11SerguroDeseaBorrar.Visible = false;
             // 
             // label12
             // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(6, 154);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(44, 13);
-            this.label12.TabIndex = 14;
-            this.label12.Text = "Hasta:";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label12.Visible = false;
+            this.label12EliminarDesde.AutoSize = true;
+            this.label12EliminarDesde.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12EliminarDesde.Location = new System.Drawing.Point(6, 154);
+            this.label12EliminarDesde.Name = "label12";
+            this.label12EliminarDesde.Size = new System.Drawing.Size(44, 13);
+            this.label12EliminarDesde.TabIndex = 14;
+            this.label12EliminarDesde.Text = "Hasta:";
+            this.label12EliminarDesde.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label12EliminarDesde.Visible = false;
             // 
             // label10
             // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.ForeColor = System.Drawing.Color.Red;
-            this.label10.Location = new System.Drawing.Point(89, 75);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(19, 20);
-            this.label10.TabIndex = 13;
-            this.label10.Text = "0";
+            this.label10CantidadABorrar.AutoSize = true;
+            this.label10CantidadABorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10CantidadABorrar.ForeColor = System.Drawing.Color.Red;
+            this.label10CantidadABorrar.Location = new System.Drawing.Point(89, 75);
+            this.label10CantidadABorrar.Name = "label10";
+            this.label10CantidadABorrar.Size = new System.Drawing.Size(19, 20);
+            this.label10CantidadABorrar.TabIndex = 13;
+            this.label10CantidadABorrar.Text = "0";
             // 
             // label13
             // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(6, 116);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(51, 13);
-            this.label13.TabIndex = 13;
-            this.label13.Text = "Desde: ";
-            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label13.Visible = false;
+            this.label13EliminarHasta.AutoSize = true;
+            this.label13EliminarHasta.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13EliminarHasta.Location = new System.Drawing.Point(6, 116);
+            this.label13EliminarHasta.Name = "label13";
+            this.label13EliminarHasta.Size = new System.Drawing.Size(51, 13);
+            this.label13EliminarHasta.TabIndex = 13;
+            this.label13EliminarHasta.Text = "Desde: ";
+            this.label13EliminarHasta.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label13EliminarHasta.Visible = false;
             // 
             // label9
             // 
@@ -884,18 +884,18 @@ namespace linway_app.Forms
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage2.Controls.Add(this.button5);
+            this.tabPage2.Controls.Add(this.button5CancelarEliminarPorRangos);
             this.tabPage2.Controls.Add(this.label8);
-            this.tabPage2.Controls.Add(this.button3);
+            this.tabPage2.Controls.Add(this.button3EliminarPrimero);
             this.tabPage2.Controls.Add(this.comboBox3);
-            this.tabPage2.Controls.Add(this.button4);
+            this.tabPage2.Controls.Add(this.button4EliminarConfirmacion);
             this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Controls.Add(this.textBox4);
-            this.tabPage2.Controls.Add(this.label13);
-            this.tabPage2.Controls.Add(this.textBox5);
-            this.tabPage2.Controls.Add(this.label10);
-            this.tabPage2.Controls.Add(this.label11);
-            this.tabPage2.Controls.Add(this.label12);
+            this.tabPage2.Controls.Add(this.textBox4EliminarDesde);
+            this.tabPage2.Controls.Add(this.label13EliminarHasta);
+            this.tabPage2.Controls.Add(this.textBox5EliminarHasta);
+            this.tabPage2.Controls.Add(this.label10CantidadABorrar);
+            this.tabPage2.Controls.Add(this.label11SerguroDeseaBorrar);
+            this.tabPage2.Controls.Add(this.label12EliminarDesde);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -987,18 +987,18 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button button3EliminarPrimero;
+        private System.Windows.Forms.Label label11SerguroDeseaBorrar;
+        private System.Windows.Forms.Label label10CantidadABorrar;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TextBox textBox4EliminarDesde;
+        private System.Windows.Forms.TextBox textBox5EliminarHasta;
+        private System.Windows.Forms.Label label12EliminarDesde;
+        private System.Windows.Forms.Label label13EliminarHasta;
+        private System.Windows.Forms.Button button5CancelarEliminarPorRangos;
+        private System.Windows.Forms.Button button4EliminarConfirmacion;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button button7;

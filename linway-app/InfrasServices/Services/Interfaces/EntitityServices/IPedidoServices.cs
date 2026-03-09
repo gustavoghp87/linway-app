@@ -11,7 +11,7 @@ namespace linway_app.Services.Interfaces
         void EditPedido(Pedido pedido);
         void EditPedidos(ICollection<Pedido> pedidos);
         Task<Pedido> GetPedidoPorIdAsync(long pedidoId);
-        Task<ICollection<Pedido>> GetPedidosAsync();
-        Task<ICollection<Pedido>> GetPedidosPorRepartoIdAsync(long repartoId);
+        Task<List<Pedido>> GetPedidosAsync();
+        Task<List<Pedido>> GetPedidosPorRepartoIdAsync(long repartoId);
     }
 }

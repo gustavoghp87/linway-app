@@ -37,22 +37,17 @@ namespace linway_app.Services.FormServices
             List<Venta> lstVentas = await GetVentasAsync();
             foreach (ProdVendido prodVendido in prodVendidos.Where(x => ProductoServices.IsProducto(x.Producto)))
             {
-                bool exists = false;
-                foreach (var venta in lstVentas)
+                var venta = lstVentas.FirstOrDefault(x => x.ProductoId == prodVendido.ProductoId);
+                if (venta != null)  // existe, se suma o resta
                 {
-                    if (venta.ProductoId == prodVendido.ProductoId)
-                    {
-                        exists = true;
-                        venta.Cantidad = addingUp
-                            ? venta.Cantidad + prodVendido.Cantidad
-                            : venta.Cantidad - prodVendido.Cantidad;
-                        ventasAEditar.Add(venta);
-                        break;
-                    }
+                    venta.Cantidad = addingUp
+                        ? venta.Cantidad + prodVendido.Cantidad
+                        : venta.Cantidad - prodVendido.Cantidad;
+                    ventasAEditar.Add(venta);
                 }
-                if (!exists && addingUp)
+                else if (addingUp)  // no existe, se agrega solo si se está sumando (si es resta hay un error)
                 {
-                    Venta nuevaVenta = new Venta
+                    var nuevaVenta = new Venta
                     {
                         ProductoId = prodVendido.ProductoId,
                         Cantidad = prodVendido.Cantidad

@@ -1,6 +1,7 @@
 ﻿using linway_app.Services.Interfaces;
 using Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace linway_app.Services.FormServices
@@ -26,12 +27,6 @@ namespace linway_app.Services.FormServices
         {
             _services.Edit(notaDeEnvio);
         }
-        public void EditValores(NotaDeEnvio nota)
-        {
-            nota.ImporteTotal = ExtraerImporteDeNotaDeEnvio(nota.ProdVendidos);
-            nota.Detalle = ExtraerDetalleDeNotaDeEnvio(nota.ProdVendidos);
-            EditNotaDeEnvio(nota);
-        }
         public async Task<NotaDeEnvio> GetNotaDeEnvioPorIdAsync(long id)
         {
             NotaDeEnvio nota = await _services.GetAsync(id);
@@ -46,28 +41,15 @@ namespace linway_app.Services.FormServices
         public static string ExtraerDetalleDeNotaDeEnvio(ICollection<ProdVendido> lstProdVendidos)
         {
             string detalle = "";
-            if (lstProdVendidos == null || lstProdVendidos.Count == 0)
-            {
-                return "";
-            }
             foreach (ProdVendido prodVendido in lstProdVendidos)
             {
-                string description = ProdVendidoServices.GetEditedDescripcion(prodVendido.Descripcion);
-                detalle += prodVendido.Cantidad.ToString() + "x " + description + ". ";
+                detalle += prodVendido.Cantidad.ToString() + "x " + ProdVendidoServices.GetEditedDescripcion(prodVendido.Descripcion) + ". ";
             }
             return detalle;
         }
         public static decimal ExtraerImporteDeNotaDeEnvio(ICollection<ProdVendido> lstProdVendidos)
         {
-            decimal importeTotal = 0;
-            if (lstProdVendidos == null || lstProdVendidos.Count == 0)
-            {
-                return 0;
-            }
-            foreach (ProdVendido prodVendido in lstProdVendidos)
-            {
-                importeTotal += prodVendido.Cantidad * prodVendido.Precio;
-            }
+            decimal importeTotal = lstProdVendidos.ToList().Sum(prodVendido => prodVendido.Cantidad * prodVendido.Precio);
             return importeTotal;
         }
         #endregion

@@ -99,12 +99,21 @@ namespace linway_app.Forms
                     Reparto reparto = lstDiasRep
                         .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
                         .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
-                    Pedido pedido;
+                    List<Pedido> pedidos = await pedidoServices.GetPedidosAsync();  // evita error de concurrencia de DbContext
+                    List<ProdVendido> prodVendidos = await prodVendidoServices.GetProdVendidosAsync();
+
+                    // si ya está en un reparto
+                    Pedido pedidoEnElQueEsta = pedidos.ToList().FirstOrDefault(x => x.ProdVendidos.ToList().Exists(pv => pv.NotaDeEnvioId == notaDeEnvioId && x.Estado != "Eliminado"));
+                    //prodVendidos.FirstOrDefault
+                    Pedido pedidoAlQueQuiereIr = pedidos.ToList().FirstOrDefault(x => x.ClienteId == notaDeEnvio.ClienteId && x.Estado != "Eliminado");
+                    if (pedidos.Exists(x => x.Id == notaDeEnvioId))
                     {
-                        var pedidos = await pedidoServices.GetPedidosAsync();  // evita error de concurrencia de DbContext
-                        pedido = pedidos.ToList().Find(x => x.ClienteId == notaDeEnvio.ClienteId && x.Estado != "Eliminado");
+                        MessageBox.Show("Esta Nota de Envío ya está en este Reparto");
+                        return false;
                     }
+                    
                     Cliente cliente = await clienteServices.GetClientePorIdAsync(notaDeEnvio.ClienteId);
+                    Pedido pedido = pedidoAlQueQuiereIr;
                     bool existiaPedido = pedido != null;
                     if (!existiaPedido)
                     {
@@ -124,7 +133,7 @@ namespace linway_app.Forms
                             T = 0
                         };
                     }
-                    var prodVendidos = await prodVendidoServices.GetProdVendidosAsync();  // evita error de concurrencia de DbContext
+                    
                     var prodVendidosAActualizar = new List<ProdVendido>();
                     foreach (ProdVendido prodVendido in prodVendidos.Where(x => x.NotaDeEnvioId == notaDeEnvio.Id))
                     {

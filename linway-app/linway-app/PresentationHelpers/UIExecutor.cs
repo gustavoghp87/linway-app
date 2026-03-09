@@ -23,7 +23,7 @@ namespace linway_app.PresentationHelpers
             {
                 Logger.LogException(ex);
                 scope.ServiceProvider.GetRequiredService<ISavingServices>().DiscardChanges();
-                MessageBox.Show($"{errorMessage}: {ex.Message}");
+                MessageBox.Show($"{errorMessage}: {ex}");
                 return default;
             }
             finally

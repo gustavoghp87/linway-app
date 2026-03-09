@@ -3,6 +3,7 @@ using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -133,12 +134,12 @@ namespace linway_app.Forms
         }
         private async void TextBox10_TextChanged(object sender, EventArgs ev)     // cantidad a agregar
         {
-            if (label25.Text == "No encontrado" || textBox10.Text == "")
+            string nombreDeProducto = label25.Text;
+            string cantidadTexto = textBox10.Text;
+            if (nombreDeProducto == "No encontrado" || cantidadTexto == "")
             {
                 return;
             }
-            string nombreDeProducto = label25.Text;
-            string cantidadTexto = textBox10.Text;
             if (!int.TryParse(textBox10.Text, out int cantidad))
             {
                 return;
@@ -165,11 +166,15 @@ namespace linway_app.Forms
             string nombreDeProducto = label25.Text;
             string cantidadTexto = textBox10.Text;
             string numeroDeNota = textBox7.Text;
-            if (!int.TryParse(textBox10.Text, out int cantidad) || !long.TryParse(textBox7.Text, out long notaDeEnvioId))
+            if (nombreDeProducto == "No encontrado")
             {
                 return;
             }
-            NotaDeEnvio updatedNote = await UIExecutor.ExecuteAsync(
+            if (!int.TryParse(textBox10.Text, out int cantidad) || !long.TryParse(numeroDeNota, out long notaDeEnvioId))
+            {
+                return;
+            }
+            NotaDeEnvio notaDeEnvio = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
@@ -180,57 +185,57 @@ namespace linway_app.Forms
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
                     //
-                    Producto productoNuevo = await productoServices.GetProductoPorNombreExactoAsync(nombreDeProducto);
+                    Producto producto = await productoServices.GetProductoPorNombreExactoAsync(nombreDeProducto);
                     NotaDeEnvio notaDeEnvio = await notaDeEnvioServices.GetNotaDeEnvioPorIdAsync(notaDeEnvioId);
-                    ProdVendido nuevoProdVendido = new ProdVendido()
+                    var nuevoProdVendido = new ProdVendido()
                     {
-                        Cantidad = int.Parse(textBox10.Text),
-                        Descripcion = productoNuevo.Nombre,
-                        NotaDeEnvioId = notaDeEnvio.Id,
-                        Precio = ProductoServices.IsNegativePrice(productoNuevo) ? (-1) * productoNuevo.Precio : productoNuevo.Precio,
-                        ProductoId = productoNuevo.Id,
-                        RegistroVentaId = notaDeEnvio.ProdVendidos.First().RegistroVentaId
+                        Cantidad = cantidad,
+                        Descripcion = producto.Nombre,
+                        NotaDeEnvio = notaDeEnvio,
+                        NotaDeEnvioId = notaDeEnvioId,
+                        Precio = ProductoServices.IsNegativePrice(producto)
+                            ? (-1) * producto.Precio
+                            : producto.Precio,
+                        Producto = producto,
+                        ProductoId = producto.Id,
+                        RegistroVentaId = notaDeEnvio.ProdVendidos.FirstOrDefault().RegistroVentaId  // nullable
                     };
                     Pedido pedido = null;
-                    if (notaDeEnvio.ProdVendidos != null)
+                    // si la nota de envío estaba en algún reparto (mediante sus prod. vendidos) se agregar el prod. vendido nuevo al reparto
+                    var prodVendidoEnPedido = notaDeEnvio.ProdVendidos.ToList().Find(x => x.PedidoId != null);
+                    if (prodVendidoEnPedido != null)
                     {
-                        var prodVendidoEnPedido = notaDeEnvio.ProdVendidos.ToList().Find(x => x.PedidoId != null);  // se puede tomar directamente el pedido...
-                        if (prodVendidoEnPedido != null)
-                        {
-                            pedido = await pedidoServices.GetPedidoPorIdAsync((long)prodVendidoEnPedido.PedidoId);
-                            if (pedido != null)
-                            {
-                                nuevoProdVendido.Pedido = pedido;
-                            }
-                        }
+                        pedido = await pedidoServices.GetPedidoPorIdAsync((long)prodVendidoEnPedido.PedidoId);
+                        nuevoProdVendido.Pedido = pedido;
                     }
-                    var existingProdVendido = notaDeEnvio.ProdVendidos.ToList().Find(x => x.Producto.Nombre == productoNuevo.Nombre);
+                    // si el prod. vendido ya estaba en esta nota de envío, se suma la cantidad y se actualizan las etiquetas
+                    var prodVendidos = await prodVendidoServices.GetProdVendidosAsync();
+                    var existingProdVendido = prodVendidos.ToList().Find(x => x.NotaDeEnvioId == notaDeEnvioId && x.Producto.Id == producto.Id);
                     if (existingProdVendido == null || ProductoServices.IsSaldo(existingProdVendido.Producto))
                     {
-                        prodVendidoServices.AddProdVendidos(new List<ProdVendido>() { nuevoProdVendido });
+                        prodVendidoServices.AddProdVendido(nuevoProdVendido);
                     }
                     else
                     {
                         existingProdVendido.Cantidad += nuevoProdVendido.Cantidad;
                         prodVendidoServices.EditProdVendido(existingProdVendido);
                     }
-                    _lstProdVendidos.Add(nuevoProdVendido);
-                    notaDeEnvioServices.EditValores(notaDeEnvio);
+                    // se actualiza la nota de envío
+                    notaDeEnvio.ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(notaDeEnvio.ProdVendidos);
+                    notaDeEnvio.Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(notaDeEnvio.ProdVendidos);
+                    notaDeEnvioServices.EditNotaDeEnvio(notaDeEnvio);
+                    // se actualizan las ventas
                     await ventaServices.UpdateVentasDesdeProdVendidosAsync(new List<ProdVendido>() { nuevoProdVendido }, true);
-                    if (nuevoProdVendido.Pedido != null)
+                    // se actualiza el reparto si está la nota en el reparto (mediante sus prod. vendidos)
+                    if (pedido != null)
                     {
-                        //pedido = await getPedido((long)nuevoProdVendido.PedidoId);
-                        PedidoServices.ActualizarEtiquetasDePedido(pedido, true);
-                        await pedidoServices.AddPedidoAsync(pedido);  // no hay pedido para agregar
-                        RepartoServices.ActualizarEtiquetasDeReparto(pedido.Reparto);
-                        repartoServices.EditReparto(pedido.Reparto);
+                        var reparto = await repartoServices.GetRepartoPorIdAsync(pedido.RepartoId);
+                        RepartoServices.ActualizarEtiquetasDeReparto(reparto);
+                        repartoServices.EditReparto(reparto);
+                        PedidoServices.ActualizarEtiquetasDePedido(pedido, pedido.Entregar == 1);
+                        pedidoServices.EditPedido(pedido);
                     }
-                    else
-                    {
-                        MessageBox.Show("Esta Nota no estaba en ningún Reparto");
-                        savingServices.DiscardChanges();
-                        return null;
-                    }
+                    //
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {
@@ -238,20 +243,20 @@ namespace linway_app.Forms
                         MessageBox.Show("No se hicieron cambios");
                         return null;
                     }
-                    //NotaDeEnvio updatedNote = await notaDeEnvioServices.GetNotaDeEnvio(notaDeEnvioId);
                     return notaDeEnvio;
                 },
                 "No se pudo realizar",
                 this
             );
-            if (updatedNote == null)
+            if (notaDeEnvio == null)
             {
                 return;
             }
             await ActualizarNotas();
             ActualizarGrid1(_lstNotaDeEnvios);
-            ActualizarGrid2(updatedNote.ProdVendidos.ToList());
+            ActualizarGrid2(notaDeEnvio.ProdVendidos.ToList());
             decimal impTotal = 0;
+            _lstProdVendidos = notaDeEnvio.ProdVendidos.ToList();
             foreach (ProdVendido prodVend in _lstProdVendidos)
             {
                 impTotal += prodVend.Cantidad * prodVend.Precio;

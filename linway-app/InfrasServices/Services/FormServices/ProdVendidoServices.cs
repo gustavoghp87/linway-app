@@ -12,6 +12,10 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
+        public void AddProdVendido(ProdVendido prodVendido)
+        {
+            _services.Add(prodVendido);
+        }
         public void AddProdVendidos(ICollection<ProdVendido> prodVendidos)
         {
             _services.AddMany(prodVendidos);

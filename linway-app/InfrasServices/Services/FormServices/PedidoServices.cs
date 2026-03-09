@@ -52,9 +52,9 @@ namespace linway_app.Services.FormServices
             //};
             return pedidos;
         }
-        public async Task<ICollection<Pedido>> GetPedidosAsync()
+        public async Task<List<Pedido>> GetPedidosAsync()
         {
-            ICollection<Pedido> pedidos = await _services.GetAllAsync();
+            List<Pedido> pedidos = await _services.GetAllAsync();
             return pedidos;
         }
         #region private methods
