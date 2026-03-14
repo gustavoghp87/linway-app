@@ -57,7 +57,7 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.textBox9PrecioProdNuevo = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
@@ -298,7 +298,7 @@
             this.gbModificar.Controls.Add(this.label14);
             this.gbModificar.Controls.Add(this.label18);
             this.gbModificar.Controls.Add(this.label13);
-            this.gbModificar.Controls.Add(this.textBox9);
+            this.gbModificar.Controls.Add(this.textBox9PrecioProdNuevo);
             this.gbModificar.Controls.Add(this.label16);
             this.gbModificar.Controls.Add(this.textBox8);
             this.gbModificar.Controls.Add(this.button6);
@@ -388,11 +388,11 @@
             // 
             // textBox9
             // 
-            this.textBox9.Location = new System.Drawing.Point(138, 137);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(100, 21);
-            this.textBox9.TabIndex = 4;
-            this.textBox9.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloImporte_KeyPress);
+            this.textBox9PrecioProdNuevo.Location = new System.Drawing.Point(138, 137);
+            this.textBox9PrecioProdNuevo.Name = "textBox9";
+            this.textBox9PrecioProdNuevo.Size = new System.Drawing.Size(100, 21);
+            this.textBox9PrecioProdNuevo.TabIndex = 4;
+            this.textBox9PrecioProdNuevo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloImporte_KeyPress);
             // 
             // label16
             // 
@@ -479,7 +479,7 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.TextBox textBox9PrecioProdNuevo;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.Button button6;

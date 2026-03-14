@@ -49,7 +49,6 @@ namespace linway_app.Forms
             );
             if (!success)
             {
-                MessageBox.Show("No se pudo agregar Reparto");
                 return;
             }
             await Actualizar();

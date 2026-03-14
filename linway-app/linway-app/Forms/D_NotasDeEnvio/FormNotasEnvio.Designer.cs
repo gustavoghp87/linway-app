@@ -29,8 +29,8 @@ namespace linway_app.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -60,6 +60,7 @@ namespace linway_app.Forms
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label100Reparto = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
@@ -120,27 +121,27 @@ namespace linway_app.Forms
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 199);
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dataGridView1.Location = new System.Drawing.Point(12, 243);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 10;
-            this.dataGridView1.Size = new System.Drawing.Size(729, 319);
+            this.dataGridView1.Size = new System.Drawing.Size(827, 357);
             this.dataGridView1.TabIndex = 0;
             // 
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(275, 78);
+            this.button1.Location = new System.Drawing.Point(295, 71);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(113, 23);
+            this.button1.Size = new System.Drawing.Size(175, 31);
             this.button1.TabIndex = 1;
             this.button1.Text = "Ver/imprimir";
             this.button1.UseVisualStyleBackColor = true;
@@ -163,18 +164,18 @@ namespace linway_app.Forms
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 132);
+            this.groupBox1.Location = new System.Drawing.Point(12, 170);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(462, 61);
+            this.groupBox1.Size = new System.Drawing.Size(502, 64);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtrar datos";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(254, 21);
+            this.textBox1.Location = new System.Drawing.Point(262, 21);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(166, 21);
+            this.textBox1.Size = new System.Drawing.Size(224, 21);
             this.textBox1.TabIndex = 6;
             this.textBox1.Visible = false;
             this.textBox1.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
@@ -183,7 +184,7 @@ namespace linway_app.Forms
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(183, 26);
+            this.label2.Location = new System.Drawing.Point(194, 25);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 13);
             this.label2.TabIndex = 5;
@@ -218,9 +219,9 @@ namespace linway_app.Forms
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.comboBox2);
             this.groupBox2.Controls.Add(this.button1);
-            this.groupBox2.Location = new System.Drawing.Point(12, 12);
+            this.groupBox2.Location = new System.Drawing.Point(12, 21);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(462, 114);
+            this.groupBox2.Size = new System.Drawing.Size(502, 127);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Imprimir";
@@ -230,7 +231,7 @@ namespace linway_app.Forms
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.label7.Location = new System.Drawing.Point(384, 32);
+            this.label7.Location = new System.Drawing.Point(423, 32);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(19, 20);
             this.label7.TabIndex = 12;
@@ -240,7 +241,7 @@ namespace linway_app.Forms
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(296, 28);
+            this.label6.Location = new System.Drawing.Point(304, 27);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(68, 26);
             this.label6.TabIndex = 11;
@@ -251,7 +252,7 @@ namespace linway_app.Forms
             // 
             this.textBox3.Location = new System.Drawing.Point(177, 81);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(58, 20);
+            this.textBox3.Size = new System.Drawing.Size(62, 20);
             this.textBox3.TabIndex = 10;
             this.textBox3.Visible = false;
             this.textBox3.TextChanged += new System.EventHandler(this.TextBox3_TextChanged);
@@ -314,11 +315,11 @@ namespace linway_app.Forms
             this.comboBox2.TabIndex = 2;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox2_SelectedIndexChanged);
             // 
-            // button5
+            // button5CancelarEliminarPorRangos
             // 
             this.button5CancelarEliminarPorRangos.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button5CancelarEliminarPorRangos.Location = new System.Drawing.Point(130, 235);
-            this.button5CancelarEliminarPorRangos.Name = "button5";
+            this.button5CancelarEliminarPorRangos.Name = "button5CancelarEliminarPorRangos";
             this.button5CancelarEliminarPorRangos.Size = new System.Drawing.Size(75, 23);
             this.button5CancelarEliminarPorRangos.TabIndex = 17;
             this.button5CancelarEliminarPorRangos.Text = "Cancelar";
@@ -326,22 +327,22 @@ namespace linway_app.Forms
             this.button5CancelarEliminarPorRangos.Visible = false;
             this.button5CancelarEliminarPorRangos.Click += new System.EventHandler(this.Button5_Click);
             // 
-            // button3
+            // button3EliminarPrimero
             // 
             this.button3EliminarPrimero.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3EliminarPrimero.Location = new System.Drawing.Point(74, 235);
-            this.button3EliminarPrimero.Name = "button3";
+            this.button3EliminarPrimero.Name = "button3EliminarPrimero";
             this.button3EliminarPrimero.Size = new System.Drawing.Size(75, 23);
             this.button3EliminarPrimero.TabIndex = 7;
             this.button3EliminarPrimero.Text = "Borrar";
             this.button3EliminarPrimero.UseVisualStyleBackColor = true;
             this.button3EliminarPrimero.Click += new System.EventHandler(this.Button3_Click);
             // 
-            // button4
+            // button4EliminarConfirmacion
             // 
             this.button4EliminarConfirmacion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button4EliminarConfirmacion.Location = new System.Drawing.Point(18, 235);
-            this.button4EliminarConfirmacion.Name = "button4";
+            this.button4EliminarConfirmacion.Name = "button4EliminarConfirmacion";
             this.button4EliminarConfirmacion.Size = new System.Drawing.Size(75, 23);
             this.button4EliminarConfirmacion.TabIndex = 8;
             this.button4EliminarConfirmacion.Text = "Confirmar";
@@ -349,65 +350,65 @@ namespace linway_app.Forms
             this.button4EliminarConfirmacion.Visible = false;
             this.button4EliminarConfirmacion.Click += new System.EventHandler(this.Button4_Click);
             // 
-            // textBox4
+            // textBox4EliminarDesde
             // 
             this.textBox4EliminarDesde.Location = new System.Drawing.Point(63, 151);
-            this.textBox4EliminarDesde.Name = "textBox4";
+            this.textBox4EliminarDesde.Name = "textBox4EliminarDesde";
             this.textBox4EliminarDesde.Size = new System.Drawing.Size(65, 20);
             this.textBox4EliminarDesde.TabIndex = 16;
             this.textBox4EliminarDesde.Visible = false;
             this.textBox4EliminarDesde.TextChanged += new System.EventHandler(this.TextBox4_TextChanged);
             // 
-            // textBox5
+            // textBox5EliminarHasta
             // 
             this.textBox5EliminarHasta.Location = new System.Drawing.Point(63, 113);
-            this.textBox5EliminarHasta.Name = "textBox5";
+            this.textBox5EliminarHasta.Name = "textBox5EliminarHasta";
             this.textBox5EliminarHasta.Size = new System.Drawing.Size(65, 20);
             this.textBox5EliminarHasta.TabIndex = 15;
             this.textBox5EliminarHasta.Visible = false;
             this.textBox5EliminarHasta.TextChanged += new System.EventHandler(this.TextBox5_TextChanged);
             // 
-            // label11
+            // label11SerguroDeseaBorrar
             // 
             this.label11SerguroDeseaBorrar.AutoSize = true;
             this.label11SerguroDeseaBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11SerguroDeseaBorrar.ForeColor = System.Drawing.Color.Maroon;
             this.label11SerguroDeseaBorrar.Location = new System.Drawing.Point(6, 219);
-            this.label11SerguroDeseaBorrar.Name = "label11";
+            this.label11SerguroDeseaBorrar.Name = "label11SerguroDeseaBorrar";
             this.label11SerguroDeseaBorrar.Size = new System.Drawing.Size(208, 13);
             this.label11SerguroDeseaBorrar.TabIndex = 14;
             this.label11SerguroDeseaBorrar.Text = "¿Seguro desea borrar la selección?";
             this.label11SerguroDeseaBorrar.Visible = false;
             // 
-            // label12
+            // label12EliminarDesde
             // 
             this.label12EliminarDesde.AutoSize = true;
             this.label12EliminarDesde.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12EliminarDesde.Location = new System.Drawing.Point(6, 154);
-            this.label12EliminarDesde.Name = "label12";
+            this.label12EliminarDesde.Name = "label12EliminarDesde";
             this.label12EliminarDesde.Size = new System.Drawing.Size(44, 13);
             this.label12EliminarDesde.TabIndex = 14;
             this.label12EliminarDesde.Text = "Hasta:";
             this.label12EliminarDesde.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.label12EliminarDesde.Visible = false;
             // 
-            // label10
+            // label10CantidadABorrar
             // 
             this.label10CantidadABorrar.AutoSize = true;
             this.label10CantidadABorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10CantidadABorrar.ForeColor = System.Drawing.Color.Red;
             this.label10CantidadABorrar.Location = new System.Drawing.Point(89, 75);
-            this.label10CantidadABorrar.Name = "label10";
+            this.label10CantidadABorrar.Name = "label10CantidadABorrar";
             this.label10CantidadABorrar.Size = new System.Drawing.Size(19, 20);
             this.label10CantidadABorrar.TabIndex = 13;
             this.label10CantidadABorrar.Text = "0";
             // 
-            // label13
+            // label13EliminarHasta
             // 
             this.label13EliminarHasta.AutoSize = true;
             this.label13EliminarHasta.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13EliminarHasta.Location = new System.Drawing.Point(6, 116);
-            this.label13EliminarHasta.Name = "label13";
+            this.label13EliminarHasta.Name = "label13EliminarHasta";
             this.label13EliminarHasta.Size = new System.Drawing.Size(51, 13);
             this.label13EliminarHasta.TabIndex = 13;
             this.label13EliminarHasta.Text = "Desde: ";
@@ -451,6 +452,7 @@ namespace linway_app.Forms
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label100Reparto);
             this.groupBox4.Controls.Add(this.label16);
             this.groupBox4.Controls.Add(this.button7);
             this.groupBox4.Controls.Add(this.button6);
@@ -459,12 +461,20 @@ namespace linway_app.Forms
             this.groupBox4.Controls.Add(this.label14);
             this.groupBox4.Controls.Add(this.comboBox5);
             this.groupBox4.Controls.Add(this.comboBox4);
-            this.groupBox4.Location = new System.Drawing.Point(480, 12);
+            this.groupBox4.Location = new System.Drawing.Point(520, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(261, 181);
+            this.groupBox4.Size = new System.Drawing.Size(319, 222);
             this.groupBox4.TabIndex = 7;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Enviar a hoja de reparto";
+            // 
+            // label10
+            // 
+            this.label100Reparto.AutoSize = true;
+            this.label100Reparto.Location = new System.Drawing.Point(14, 144);
+            this.label100Reparto.Name = "label10";
+            this.label100Reparto.Size = new System.Drawing.Size(0, 13);
+            this.label100Reparto.TabIndex = 18;
             // 
             // label16
             // 
@@ -479,7 +489,7 @@ namespace linway_app.Forms
             // button7
             // 
             this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button7.Location = new System.Drawing.Point(155, 142);
+            this.button7.Location = new System.Drawing.Point(205, 183);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(75, 23);
             this.button7.TabIndex = 16;
@@ -491,9 +501,9 @@ namespace linway_app.Forms
             // 
             this.button6.Enabled = false;
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(29, 142);
+            this.button6.Location = new System.Drawing.Point(29, 170);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.Size = new System.Drawing.Size(130, 39);
             this.button6.TabIndex = 15;
             this.button6.Text = "Enviar";
             this.button6.UseVisualStyleBackColor = true;
@@ -537,6 +547,7 @@ namespace linway_app.Forms
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(85, 21);
             this.comboBox5.TabIndex = 1;
+            this.comboBox5.SelectedIndexChanged += new System.EventHandler(this.ComboBox5_SelectedIndexChanged);
             // 
             // comboBox4
             // 
@@ -558,10 +569,10 @@ namespace linway_app.Forms
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(747, 12);
+            this.tabControl1.Location = new System.Drawing.Point(845, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(468, 506);
+            this.tabControl1.Size = new System.Drawing.Size(468, 588);
             this.tabControl1.TabIndex = 8;
             // 
             // tabPage1
@@ -577,7 +588,7 @@ namespace linway_app.Forms
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(460, 480);
+            this.tabPage1.Size = new System.Drawing.Size(460, 562);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Modificar";
             // 
@@ -586,7 +597,7 @@ namespace linway_app.Forms
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.ForeColor = System.Drawing.Color.Red;
-            this.label20.Location = new System.Drawing.Point(63, 446);
+            this.label20.Location = new System.Drawing.Point(64, 535);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(0, 18);
             this.label20.TabIndex = 25;
@@ -595,9 +606,9 @@ namespace linway_app.Forms
             // 
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(9, 448);
+            this.label19.Location = new System.Drawing.Point(9, 535);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(48, 16);
+            this.label19.Size = new System.Drawing.Size(47, 16);
             this.label19.TabIndex = 24;
             this.label19.Text = "Total:";
             // 
@@ -605,7 +616,7 @@ namespace linway_app.Forms
             // 
             this.tabControl2.Controls.Add(this.tabPage3);
             this.tabControl2.Controls.Add(this.tabPage4);
-            this.tabControl2.Location = new System.Drawing.Point(0, 49);
+            this.tabControl2.Location = new System.Drawing.Point(0, 77);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(457, 120);
@@ -752,7 +763,7 @@ namespace linway_app.Forms
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(449, 94);
+            this.tabPage4.Size = new System.Drawing.Size(449, 100);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Quitar producto";
             // 
@@ -832,7 +843,7 @@ namespace linway_app.Forms
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(109, 15);
+            this.textBox7.Location = new System.Drawing.Point(109, 26);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(58, 20);
             this.textBox7.TabIndex = 13;
@@ -853,7 +864,7 @@ namespace linway_app.Forms
             // 
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(6, 18);
+            this.label17.Location = new System.Drawing.Point(6, 29);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(97, 13);
             this.label17.TabIndex = 18;
@@ -866,19 +877,19 @@ namespace linway_app.Forms
             this.dataGridView2.AllowUserToDeleteRows = false;
             this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 164);
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle4;
+            this.dataGridView2.Location = new System.Drawing.Point(3, 209);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowHeadersWidth = 10;
-            this.dataGridView2.Size = new System.Drawing.Size(454, 265);
+            this.dataGridView2.Size = new System.Drawing.Size(454, 315);
             this.dataGridView2.TabIndex = 9;
             // 
             // tabPage2
@@ -899,17 +910,17 @@ namespace linway_app.Forms
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(460, 480);
+            this.tabPage2.Size = new System.Drawing.Size(460, 562);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Borrar";
             // 
-            // lCantNotas
+            // labelCantidadDeNotas
             // 
             this.labelCantidadDeNotas.AutoSize = true;
             this.labelCantidadDeNotas.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelCantidadDeNotas.ForeColor = System.Drawing.Color.Red;
-            this.labelCantidadDeNotas.Location = new System.Drawing.Point(592, 525);
-            this.labelCantidadDeNotas.Name = "lCantNotas";
+            this.labelCantidadDeNotas.Location = new System.Drawing.Point(592, 614);
+            this.labelCantidadDeNotas.Name = "labelCantidadDeNotas";
             this.labelCantidadDeNotas.Size = new System.Drawing.Size(118, 18);
             this.labelCantidadDeNotas.TabIndex = 11;
             this.labelCantidadDeNotas.Text = "notas de envio";
@@ -917,7 +928,7 @@ namespace linway_app.Forms
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(884, 526);
+            this.button2.Location = new System.Drawing.Point(884, 606);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(187, 28);
             this.button2.TabIndex = 18;
@@ -929,7 +940,7 @@ namespace linway_app.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1218, 561);
+            this.ClientSize = new System.Drawing.Size(1316, 644);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.labelCantidadDeNotas);
             this.Controls.Add(this.tabControl1);
@@ -1041,5 +1052,6 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label100Reparto;
     }
 }

@@ -10,10 +10,6 @@ namespace linway_app.Forms
     {
         private void ActualizarGrid2ProdVendidos (ICollection<ProdVendido> lstProdVendidos)
         {
-            if (lstProdVendidos == null)
-            {
-                return;
-            }
             var grid = new List<EProdVendido>();
             foreach (ProdVendido prodVendido in lstProdVendidos)
             {
@@ -32,10 +28,6 @@ namespace linway_app.Forms
         }
         private void ActualizarGrid3Ventas()
         {
-            if (_lstVentas == null)
-            {
-                return;
-            }
             var grid = new List<EVenta>();
             foreach (Venta venta in _lstVentas)
             {
@@ -49,10 +41,6 @@ namespace linway_app.Forms
 
         private void ActualizarGrid5(ICollection<Venta> lstVentas)
         {
-            if (lstVentas == null)
-            {
-                return;
-            }
             var grid = new List<EVenta>();
             foreach (Venta venta in lstVentas)
             {

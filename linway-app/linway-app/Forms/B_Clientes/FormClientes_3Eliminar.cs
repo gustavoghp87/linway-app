@@ -9,8 +9,10 @@ namespace linway_app.Forms
 {
     public partial class FormClientes : Form
     {
+        private Cliente _clienteAEliminar;
         private async void BorrarPorId_textBox_TextChanged(object sender, EventArgs ev)
         {
+            _clienteAEliminar = null;
             string numeroDeCliente = textBox22.Text;
             if (numeroDeCliente == "" || !long.TryParse(textBox22.Text, out long clienteId))
             {
@@ -35,11 +37,13 @@ namespace linway_app.Forms
                 button23.Enabled = false;
                 return;
             }
+            _clienteAEliminar = cliente;
             label47.Text = cliente.Direccion;
             button23.Enabled = true;
         }
         private async void BorrarPorDire_textBox_TextChanged(object sender, EventArgs ev)
         {
+            _clienteAEliminar = null;
             string direccion = textBoxDireEnBorrar.Text;
             if (direccion == "")
             {
@@ -64,6 +68,7 @@ namespace linway_app.Forms
                 button23.Enabled = false;
                 return;
             }
+            _clienteAEliminar = cliente;
             label47.Text = cliente.Direccion;
             button23.Enabled = true;
         }
@@ -73,14 +78,12 @@ namespace linway_app.Forms
             {
                 return;
             }
-            string direccion = label47.Text;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    Cliente cliente = await clienteServices.GetClientePorDireccionExactaAsync(direccion);
-                    clienteServices.DeleteCliente(cliente);
+                    clienteServices.DeleteCliente(_clienteAEliminar);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {
@@ -96,6 +99,7 @@ namespace linway_app.Forms
             {
                 return;
             }
+            _clienteAEliminar = null;
             textBox22.Text = "";
             textBoxDireEnBorrar.Text = "";
             label47.Text = "";

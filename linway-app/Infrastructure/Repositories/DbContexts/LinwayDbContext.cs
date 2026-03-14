@@ -16,6 +16,9 @@ namespace Infrastructure.Repositories.DbContexts
         public virtual DbSet<RegistroVenta> RegistroVenta { get; set; }
         public virtual DbSet<Reparto> Reparto { get; set; }
         public virtual DbSet<Venta> Venta { get; set; }
+        public LinwayDbContext(DbContextOptions<LinwayDbContext> options) : base(options)
+        {
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -47,6 +50,7 @@ namespace Infrastructure.Repositories.DbContexts
             modelBuilder.Entity<DiaReparto>(entity =>
             {
                 entity.HasIndex(e => e.Id);
+                entity.HasIndex(e => e.Dia).IsUnique();
                 entity.Property(e => e.Dia).IsRequired();
                 entity.Property(e => e.Estado).IsRequired();
             });
@@ -127,7 +131,7 @@ namespace Infrastructure.Repositories.DbContexts
             modelBuilder.Entity<Reparto>(entity =>
             {
                 entity.HasIndex(e => e.Id);
-                entity.Property(e => e.Nombre).IsRequired();
+                entity.Property(e => e.Nombre).IsRequired().HasMaxLength(40);
                 entity.Property(e => e.Ta).HasColumnName("TA");
                 entity.Property(e => e.Tae).HasColumnName("TAE");
                 entity.Property(e => e.Td).HasColumnName("TD");
@@ -139,6 +143,7 @@ namespace Infrastructure.Repositories.DbContexts
                     .HasForeignKey(d => d.DiaRepartoId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
                 entity.Property(e => e.Estado).IsRequired();
+                entity.HasIndex(e => new { e.DiaRepartoId, e.Nombre }).IsUnique();
             });
             modelBuilder.Entity<Venta>(entity =>
             {

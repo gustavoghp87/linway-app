@@ -1,5 +1,4 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Excel;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
@@ -12,9 +11,8 @@ namespace linway_app.Forms
 {
     public partial class FormVentas : Form
     {
-        private List<Venta> _lstVentas;
-        private List<RegistroVenta> _lstRegistros;
-        private readonly List<Venta> _lstAgregarVentas;
+        private List<Venta> _lstVentas = new List<Venta>();
+        private List<RegistroVenta> _lstRegistros = new List<RegistroVenta>();
         private string showing = "agregarReg";
         private readonly IServiceScope _scope;
         public FormVentas()
@@ -22,10 +20,6 @@ namespace linway_app.Forms
             InitializeComponent();
             _scope = Program.LinwayServiceProvider.CreateScope();
             FormClosed += (s, e) => _scope.Dispose();
-            //
-            _lstVentas = new List<Venta>();
-            _lstRegistros = new List<RegistroVenta>();
-            _lstAgregarVentas = new List<Venta>();
         }
         private async void FormVentas_Load(object sender, EventArgs ev)
         {
@@ -33,18 +27,24 @@ namespace linway_app.Forms
         }
         private async Task Actualizar()
         {
-            await UIExecutor.ExecuteAsync(
+            var response = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
                     var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
-                    _lstVentas = await ventaServices.GetVentasAsync();
-                    _lstRegistros = await registroVentaServices.GetRegistroVentasAsync();
-                    return true;
+                    List<Venta> ventas = await ventaServices.GetVentasAsync();
+                    List<RegistroVenta> registros = await registroVentaServices.GetRegistroVentasAsync();
+                    return (ventas, registros);
                 },
                 "No se pudieron buscar las Ventas y los Registros de Ventas",
                 null
             );
+            if (response.ventas == null || response.registros == null)
+            {
+                return;
+            }
+            _lstVentas = response.ventas;
+            _lstRegistros = response.registros;
             ActualizarGrid1Registros(_lstRegistros);
             ActualizarGrid3Ventas();
         }

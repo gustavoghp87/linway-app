@@ -36,7 +36,7 @@ namespace linway_app.Services.FormServices
             return repartos;
         }
         #region static methods
-        public static void ActualizarEtiquetasDeReparto(Reparto reparto)
+        public static void ActualizarCantidadesDeReparto(Reparto reparto)  // primero pedido, luego reparto
         {
             reparto.Ta = 0;
             reparto.Te = 0;

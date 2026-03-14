@@ -11,6 +11,7 @@ namespace linway_app.Forms
 {
     public partial class FormVentas : Form
     {
+        private RegistroVenta _registroVerEliminar;
         private void VerRegistro_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
@@ -21,6 +22,7 @@ namespace linway_app.Forms
         // Ver y deshacer una venta
         private async void TextBox1_TextChanged(object sender, EventArgs ev)
         {
+            _registroVerEliminar = null;
             string numeroDeRegistroVenta = textBox1.Text;
             if (numeroDeRegistroVenta == "")
             {
@@ -53,6 +55,7 @@ namespace linway_app.Forms
                 bDeshacerVenta.Enabled = false;
                 return;
             }
+            _registroVerEliminar = registroVenta;
             labelFecha.Text = registroVenta.Fecha;
             labelProductoN.Text = registroVenta.NombreCliente;
             ActualizarGrid2ProdVendidos(registroVenta.ProdVendido.ToList());
@@ -72,18 +75,13 @@ namespace linway_app.Forms
                 return;
             }
             ;
-            if (!long.TryParse(textBox1.Text, out long registroVentaId))
-            {
-                return;
-            }
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
-                    RegistroVenta registro = await registroVentaServices.GetRegistroVentaPorIdAsync(registroVentaId);
-                    await ventaServices.UpdateVentasDesdeProdVendidosAsync(registro.ProdVendido, false);
+                    await ventaServices.UpdateVentasDesdeProdVendidosAsync(_registroVerEliminar.ProdVendido, false);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

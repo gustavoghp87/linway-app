@@ -14,6 +14,10 @@ namespace linway_app.Forms
     {
         private readonly List<ProdVendido> _lstProdVendidosAAgregar = new List<ProdVendido>();
         private readonly List<Producto> _lstProductosAAgregar = new List<Producto>();
+        private Cliente _cliente;
+        private Producto _producto;
+        private Reparto _reparto;
+        private Pedido _pedido;
         private readonly IServiceScope _scope;
         public FormCrearNota()
         {
@@ -34,16 +38,13 @@ namespace linway_app.Forms
         }
         private async void ConfirmarCrearNota_Click(object sender, EventArgs ev)
         {
-            if (labelClienteId.Text == "" || labelClienteId.Text == "No encontrado" || _lstProdVendidosAAgregar == null || _lstProdVendidosAAgregar.Count == 0)
+            if (_cliente == null || _lstProdVendidosAAgregar == null || _lstProdVendidosAAgregar.Count == 0)
             {
                 MessageBox.Show("Verifique los campos");
                 return;
             }
-            string direccion = label36.Text;
             bool agregarProdVendidosARegistrosYVentas = checkBox4.Checked;
             bool enviarAHojaDeReparto = checkBox3.Checked;
-            string diaReparto = comboBox4.Text;
-            string nombreReparto = comboBox3.Text;
             NotaDeEnvio nuevaNota = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
@@ -56,10 +57,9 @@ namespace linway_app.Forms
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
-                    Cliente cliente = await clienteServices.GetClientePorDireccionExactaAsync(direccion);
                     NotaDeEnvio nuevaNota = new NotaDeEnvio
                     {
-                        ClienteId = cliente.Id,
+                        ClienteId = _cliente.Id,
                         Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
                         Impresa = 0,
                         Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(_lstProdVendidosAAgregar),
@@ -74,9 +74,9 @@ namespace linway_app.Forms
                     {
                         RegistroVenta nuevoRegistro = new RegistroVenta
                         {
-                            ClienteId = cliente.Id,
+                            ClienteId = _cliente.Id,
                             Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
-                            NombreCliente = cliente.Direccion
+                            NombreCliente = _cliente.Direccion
                         };
                         registroVentaServices.AddRegistroVenta(nuevoRegistro);
                         foreach (var prodVendido in _lstProdVendidosAAgregar)
@@ -88,51 +88,36 @@ namespace linway_app.Forms
                     }
                     if (enviarAHojaDeReparto)
                     {
-                        List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                        Reparto reparto = lstDiasRep
-                            .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
-                            .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
-
-                        //Pedido pedido = await orquestacionServices.GetPedidoPorRepartoYClienteGenerarSiNoExisteAsync(reparto.Id, cliente.Id);
-                        Pedido pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == cliente.Id && x.Estado != "Eliminado");
-                        bool existiaPedido = pedido != null;
+                        bool existiaPedido = _pedido != null;
                         if (!existiaPedido)
                         {
-                            pedido = new Pedido()
+                            if (_reparto == null)
                             {
-                                Cliente = cliente,
-                                Direccion = cliente.Direccion,
-                                Reparto = reparto,
-                                Entregar = 1,
-                                Estado = "Activo",
-                                ProductosText = "",
-                                L = 0,
-                                A = 0,
-                                Ae = 0,
-                                D = 0,
-                                E = 0,
-                                T = 0
-                            };
+                                savingServices.DiscardChanges();
+                                MessageBox.Show("Falta el Reparto");
+                                return null;
+                            }
+                            _pedido = PedidoServices.CrearPedido(_cliente, _reparto);
                         }
                         foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
                         {
-                            prodVendido.Pedido = pedido;
+                            prodVendido.Pedido = _pedido;
                         }
                         // pedido.Entregar = 1;
-                        PedidoServices.ActualizarEtiquetasDePedido(pedido, true);
-                        RepartoServices.ActualizarEtiquetasDeReparto(pedido.Reparto);
+                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(_pedido, true);
+                        RepartoServices.ActualizarCantidadesDeReparto(_pedido.Reparto);
                         if (existiaPedido)
                         {
-                            pedidoServices.EditPedido(pedido);
+                            pedidoServices.EditPedido(_pedido);
                         }
                         else
                         {
-                            await pedidoServices.AddPedidoAsync(pedido);
+                            await pedidoServices.AddPedidoAsync(_pedido);
                         }
-                        repartoServices.EditReparto(pedido.Reparto);
+                        repartoServices.EditReparto(_pedido.Reparto);
                     }
                     prodVendidoServices.AddProdVendidos(_lstProdVendidosAAgregar);
-                    nuevaNota.Cliente = cliente;  // para que no falle la dirección al imprimir
+                    nuevaNota.Cliente = _cliente;  // para que no falle la dirección al imprimir
                     foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
                     {
                         prodVendido.Producto = _lstProductosAAgregar.Find(p => p.Id == prodVendido.ProductoId);  // para que no falten los productos al imprimir

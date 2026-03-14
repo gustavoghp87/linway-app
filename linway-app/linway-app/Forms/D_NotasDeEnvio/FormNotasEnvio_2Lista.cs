@@ -24,10 +24,10 @@ namespace linway_app.Forms
             //{
             //    ((DataGridViewRow)item).Height = 35;
             //}
-            dataGridView1.Columns[0].Width = 40;
+            dataGridView1.Columns[0].Width = 50;
             dataGridView1.Columns[1].Width = 70;
-            dataGridView1.Columns[2].Width = 170;
-            dataGridView1.Columns[3].Width = 320;
+            dataGridView1.Columns[2].Width = 210;
+            dataGridView1.Columns[3].Width = 380;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;        // lento
             //
             comboBox1.SelectedIndexChanged -= ComboBox1_SelectedIndexChanged;  // evita error de concurrencia de DbContext

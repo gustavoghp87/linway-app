@@ -44,7 +44,7 @@ namespace linway_app.Forms
                 Cuit = textBox3.Text,
                 Tipo = tipo.ToString()
             };
-            var success = await UIExecutor.ExecuteAsync(
+            var logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
@@ -61,7 +61,7 @@ namespace linway_app.Forms
                 "No se pudo agregar el Cliente",
                 this
             );
-            if (!success)
+            if (!logrado)
             {
                 return;
             }

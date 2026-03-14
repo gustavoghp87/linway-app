@@ -26,7 +26,7 @@ public class EfCommandInterceptor : DbCommandInterceptor
         if (_queries?.Value != null && _queries.Value.TryGetValue(eventData.CommandId, out var info))
         {
             Debug.WriteLine("EF FAILED QUERY:");
-            Debug.WriteLine(info);  // imprime información de errores de concurrencia de DB Context
+            Debug.WriteLine(info);  // imprime en consola información de errores de concurrencia de DB Context
         }
     }
 }

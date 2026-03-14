@@ -10,12 +10,18 @@ namespace linway_app.Forms
 {
     public partial class FormProductos : Form
     {
+        private bool _liberado = false;
+        private bool _liberado2 = false;
+        private string _tipoMod = "";
+        private string _subTipoMod = "";
+        private Producto _productoAEditar;
         private void LimpiarEditar_Click(object sender, EventArgs ev)
         {
+            _productoAEditar = null;
             label19.Text = "";
             textBox2.Text = "";
             textBox8.Text = "";
-            textBox9.Text = "";
+            textBox9PrecioProdNuevo.Text = "";
             textBox21.Text = "";
             //
             comboBox2.Visible = false;
@@ -26,7 +32,7 @@ namespace linway_app.Forms
             if (producto == null)
             {
                 label19.Text = "No encontrado";
-                textBox9.Text = "";
+                textBox9PrecioProdNuevo.Text = "";
                 _subTipoMod = "";
                 comboBox3.Visible = false;
                 comboBox2.Visible = false;
@@ -35,7 +41,7 @@ namespace linway_app.Forms
             _liberado = false;
             _liberado2 = false;
             label19.Text = producto.Nombre;
-            textBox9.Text = producto.Precio.ToString();
+            textBox9PrecioProdNuevo.Text = producto.Precio.ToString();
             _tipoMod = producto.Tipo;
             if (producto.SubTipo != null)
             {
@@ -102,11 +108,12 @@ namespace linway_app.Forms
         }
         private async void TextBox8_TextChanged(object sender, EventArgs ev)   // buscar por id
         {
+            _productoAEditar = null;
             string numeroDeProducto = textBox8.Text;
             if (numeroDeProducto == "")
             {
                 label19.Text = "";
-                textBox9.Text = "";
+                textBox9PrecioProdNuevo.Text = "";
                 _tipoMod = "";
                 _subTipoMod = "";
                 comboBox3.Visible = false;
@@ -127,15 +134,20 @@ namespace linway_app.Forms
                 "No se pudo buscar el Producto",
                 null
             );
+            if (producto != null)
+            {
+                _productoAEditar = producto;
+            }
             CargarDatosAModificar(producto);
         }
         private async void TextBox2_TextChanged(object sender, EventArgs ev)  // buscar por nombre
         {
+            _productoAEditar = null;
             string nombreDeProducto = textBox2.Text;
             if (nombreDeProducto == "")
             {
                 label19.Text = "";
-                textBox9.Text = "";
+                textBox9PrecioProdNuevo.Text = "";
                 _tipoMod = "";
                 _subTipoMod = "";
                 comboBox3.Visible = false;
@@ -152,12 +164,16 @@ namespace linway_app.Forms
                 "No se pudo buscar el Producto",
                 null
             );
+            if (producto != null)
+            {
+                _productoAEditar = producto;
+            }
             CargarDatosAModificar(producto);
         }
         bool TodoOKmodificarP()
         {
             bool subtipoVisibleButEmpty = comboBox2.Visible && comboBox2.Text == "";
-            return label19.Text != "No encontrado" && label19.Text != "" && textBox9.Text != "" && !subtipoVisibleButEmpty;
+            return _productoAEditar != null && textBox9PrecioProdNuevo.Text != "" && !subtipoVisibleButEmpty;
         }
         private async void EditarProducto_Click(object sender, EventArgs ev)
         {
@@ -166,29 +182,22 @@ namespace linway_app.Forms
                 MessageBox.Show("Verifique que se hayan llenado los campos correctamente");
                 return;
             }
-            if (!decimal.TryParse(textBox9.Text, out decimal precio))
+            if (!decimal.TryParse(textBox9PrecioProdNuevo.Text, out decimal precio))
             {
                 return;
             }
             string tipo = comboBox3.Text;
             string subtipo = comboBox2.Visible && comboBox2.Text != "" ? comboBox2.Text : "";
-            string nombreDeProducto = label19.Text;
+            _productoAEditar.Precio = precio;
+            _productoAEditar.Tipo = tipo;
+            _productoAEditar.SubTipo = subtipo;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var productoServices = sp.GetRequiredService<IProductoServices>();
-                    Producto producto = await productoServices.GetProductoPorNombreExactoAsync(nombreDeProducto);
-                    if (producto == null)
-                    {
-                        return false;  // nunca debería pasar
-                    }
-                    
-                    producto.Precio = precio;
-                    producto.Tipo = tipo;
-                    producto.SubTipo = subtipo;
-                    productoServices.EditProducto(producto);
+                    productoServices.EditProducto(_productoAEditar);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {
@@ -204,6 +213,7 @@ namespace linway_app.Forms
             {
                 return;
             }
+            _productoAEditar = null;
             button6.PerformClick();
         }
     }

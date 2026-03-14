@@ -9,8 +9,10 @@ namespace linway_app.Forms
 {
     public partial class FormRecibos : Form
     {
+        private Cliente _clienteAgregarRecibo;
         private async void ClienteId_TextChanged(object sender, EventArgs ev)
         {
+            _clienteAgregarRecibo = null;
             string numeroDeCliente = textBox6.Text;
             if (numeroDeCliente == "")
             {
@@ -37,6 +39,7 @@ namespace linway_app.Forms
                 button6.Enabled = false;
                 return;
             }
+            _clienteAgregarRecibo = cliente;
             label15.Text = cliente.Direccion;
             if (_lstDetallesAAgregar.Count != 0)
             {
@@ -45,6 +48,7 @@ namespace linway_app.Forms
         }
         private async void TextBox9_TextChanged(object sender, EventArgs ev)
         {
+            _clienteAgregarRecibo = null;
             string direccion = textBox9.Text;
             if (direccion == "")
             {
@@ -67,6 +71,7 @@ namespace linway_app.Forms
                 button6.Enabled = false;
                 return;
             }
+            _clienteAgregarRecibo = cliente;
             label15.Text = cliente.Direccion;
             if (_lstDetallesAAgregar.Count != 0)
             {
@@ -138,24 +143,22 @@ namespace linway_app.Forms
         private async void CrearRecibo_Click(object sender, EventArgs ev)
         {
             await CargarRecibos();
-            string direccion = label15.Text;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var clienteService = sp.GetRequiredService<IClienteServices>();
-                    Cliente cliente = await clienteService.GetClientePorDireccionExactaAsync(direccion);
                     var reciboService = sp.GetRequiredService<IReciboServices>();
                     var detalleReciboService = sp.GetRequiredService<IDetalleReciboServices>();
-                    if (cliente == null)
+                    if (_clienteAgregarRecibo == null)
                     {
                         return false;
                     }
                     var nuevoRecibo = new Recibo
                     {
-                        ClienteId = cliente.Id,
-                        DireccionCliente = cliente.Direccion,
+                        ClienteId = _clienteAgregarRecibo.Id,
+                        DireccionCliente = _clienteAgregarRecibo.Direccion,
                         ImporteTotal = _subTo,
                         Impreso = 0,
                         Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
@@ -189,6 +192,7 @@ namespace linway_app.Forms
             label18.Text = "0";
             _lstDetallesAAgregar.Clear();
             await Actualizar();
+            _clienteAgregarRecibo = null;
         }
     }
 }

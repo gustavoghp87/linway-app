@@ -120,6 +120,7 @@ namespace linway_app.Forms
             this.comboBox3.Size = new System.Drawing.Size(99, 21);
             this.comboBox3.TabIndex = 43;
             this.comboBox3.Visible = false;
+            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.ComboBox3_SelectorDeReparto_SelectedIndexChanged);
             // 
             // comboBox4
             // 

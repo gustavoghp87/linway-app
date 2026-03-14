@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Models.Enums;
 using System;
 using System.Windows.Forms;
 
@@ -7,12 +6,6 @@ namespace linway_app.Forms
 {
     public partial class FormProductos : Form
     {
-        private string _tipo = TipoProducto.Líquido.ToString();
-        private string _subTipo = "";
-        private string _tipoMod = "";
-        private string _subTipoMod = "";
-        private bool _liberado = false;
-        private bool _liberado2 = false;
         private readonly IServiceScope _scope;
         public FormProductos()
         {

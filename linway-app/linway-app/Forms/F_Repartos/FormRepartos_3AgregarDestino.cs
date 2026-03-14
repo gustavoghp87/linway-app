@@ -1,4 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
+using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
@@ -11,6 +12,7 @@ namespace linway_app.Forms
 {
     public partial class FormRepartos : Form
     {
+        private Cliente _clienteAReparto;
         private async void ComboBox4_SelectedIndexChanged(object sender, EventArgs ev)
         {
             string diaReparto = comboBox4.SelectedItem.ToString();
@@ -46,6 +48,7 @@ namespace linway_app.Forms
         }
         private async void TextBox2_TextChanged(object sender, EventArgs ev)  // Agregar destino a recorrido
         {
+            _clienteAReparto = null;
             string numeroDeCliente = textBox2.Text;
             if (numeroDeCliente == "")
             {
@@ -66,9 +69,15 @@ namespace linway_app.Forms
                 null
             );
             label8.Text = cliente != null ? cliente.Direccion : "No encontrado";
+            if (cliente == null)
+            {
+                return;
+            }
+            _clienteAReparto = cliente;
         }
         private async void TextBox6_TextChanged(object sender, EventArgs ev)
         {
+            _clienteAReparto = null;
             string direccion = textBox6.Text;
             if (direccion == "")
             {
@@ -85,12 +94,17 @@ namespace linway_app.Forms
                 null
             );
             label8.Text = cliente != null ? cliente.Direccion : "No encontrado";
+            if (cliente == null)
+            {
+                return;
+            }
+            _clienteAReparto = cliente;
         }
         private async void AgregarDestinoAReparto_btn1_Click(object sender, EventArgs ev)
         {
             string diaReparto = comboBox4.Text;
             string direccion = label8.Text;
-            if (direccion == "" || direccion == "No encontrado" || diaReparto == "")
+            if (_clienteAReparto == null || diaReparto == "")
             {
                 MessageBox.Show("Error, verificar los campos");
                 return;
@@ -103,35 +117,19 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    Cliente cliente = await clienteServices.GetClientePorDireccionExactaAsync(direccion) ?? throw new Exception("No se pudo encontrar el Cliente");
                     List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
                     Reparto reparto = lstDiasRep
                         .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
                         .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado") ?? throw new Exception("No se pudo encontrar el Reparto");
-                    if (_lstPedidos.Exists(x => x.ClienteId == cliente.Id && x.RepartoId == reparto.Id))
+                    if (_lstPedidos.Exists(x => x.ClienteId == _clienteAReparto.Id && x.RepartoId == reparto.Id))
                     {
                         savingServices.DiscardChanges();
                         MessageBox.Show("Ese cliente ya estaba en el Reparto");
                         return false;
                     }
-                    var pedido = new Pedido()
-                    {
-                        Cliente = cliente,
-                        Direccion = cliente.Direccion,
-                        Reparto = reparto,
-                        Entregar = 1,
-                        Estado = "Activo",
-                        ProductosText = "",
-                        L = 0,
-                        A = 0,
-                        Ae = 0,
-                        D = 0,
-                        E = 0,
-                        T = 0
-                    };
+                    var pedido = PedidoServices.CrearPedido(_clienteAReparto, reparto);
                     await pedidoServices.AddPedidoAsync(pedido);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
@@ -152,6 +150,7 @@ namespace linway_app.Forms
             await Actualizar();
             await ActualizarCombobox1();
             await UpdateGrid();
+            _clienteAReparto = null;
         }
     }
 }

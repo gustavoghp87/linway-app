@@ -11,6 +11,7 @@ namespace linway_app.Forms
 {
     public partial class FormCrearNota : Form
     {
+        private List<Reparto> _repartos;
         private void CheckedChanged(object sender, EventArgs ev)
         {
             if (checkBox3.Checked)       // enviar a hoja de reparto
@@ -30,6 +31,7 @@ namespace linway_app.Forms
         }
         private async void EnviarA_HDR_SelectedIndexChanged(object sender, EventArgs ev)
         {
+            _repartos = null;
             string diaReparto = comboBox4.Text;
             List<Reparto> repartos = await UIExecutor.ExecuteAsync(
                 _scope,
@@ -46,9 +48,27 @@ namespace linway_app.Forms
             {
                 return;
             }
-            comboBox3.DataSource = repartos;
+            _repartos = repartos;
+            comboBox3.DataSource = _repartos;
             comboBox3.DisplayMember = "Nombre";
             comboBox3.ValueMember = "Nombre";
+        }
+        private async void ComboBox3_SelectorDeReparto_SelectedIndexChanged(object sender, EventArgs ev)
+        {
+            string nombreReparto = comboBox3.Text;
+            Pedido pedido = await UIExecutor.ExecuteAsync(
+                _scope,
+                async sp =>
+                {
+                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
+                    Reparto reparto = _repartos.Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
+                    Pedido pedido = reparto.Pedidos.ToList().FirstOrDefault(x => x.ClienteId == _cliente.Id && x.Estado != "Eliminado");
+                    return pedido;
+                },
+                "No se pudo buscar el Reparto por nombre",
+                null
+            );
+            _pedido = pedido;  // puede ser null
         }
     }
 }

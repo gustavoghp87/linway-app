@@ -10,6 +10,8 @@ namespace linway_app.Forms
 {
     public partial class FormProductos : Form
     {
+        private string _tipoAgregar = TipoProducto.Líquido.ToString();
+        private string _subTipoAgregar = "";
         private void LimpiarAgregar_Click(object sender, EventArgs ev)
         {
             radioButton1.Checked = false;
@@ -28,21 +30,21 @@ namespace linway_app.Forms
             switch (elegido.Text)
             {
                 case "Líquido":
-                    _tipo = TipoProducto.Líquido.ToString();
+                    _tipoAgregar = TipoProducto.Líquido.ToString();
                     comboBox1.DataSource = Enum.GetValues(typeof(TipoLiquido));
                     break;
                 case "Polvo":
-                    _tipo = TipoProducto.Polvo.ToString();
+                    _tipoAgregar = TipoProducto.Polvo.ToString();
                     comboBox1.Visible = true;
                     comboBox1.DataSource = Enum.GetValues(typeof(TipoPolvo));
                     break;
                 case "Unidad":
-                    _tipo = TipoProducto.Unidad.ToString();
+                    _tipoAgregar = TipoProducto.Unidad.ToString();
                     comboBox1.Visible = false;
                     comboBox1.DataSource = null;
                     break;
                 case "Saldo":
-                    _tipo = TipoProducto.Saldo.ToString();
+                    _tipoAgregar = TipoProducto.Saldo.ToString();
                     comboBox1.Visible = true;
                     comboBox1.DataSource = Enum.GetValues(typeof(TipoSaldo));
                     break;
@@ -50,7 +52,7 @@ namespace linway_app.Forms
         }
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            _subTipo = comboBox1.SelectedItem?.ToString() ?? "";
+            _subTipoAgregar = comboBox1.SelectedItem?.ToString() ?? "";
         }
         private bool TodoOKagregarP()
         {
@@ -72,10 +74,11 @@ namespace linway_app.Forms
             {
                 Nombre = textBox6.Text,
                 Precio = precio,
-                Tipo = _tipo.ToString()
+                Tipo = _tipoAgregar.ToString()
             };
-            if (_subTipo != "") {
-                nuevoProducto.SubTipo = _subTipo;
+            if (_subTipoAgregar != "")
+            {
+                nuevoProducto.SubTipo = _subTipoAgregar;
             }
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,

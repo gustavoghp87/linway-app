@@ -12,6 +12,9 @@ namespace linway_app.Forms
 {
     public partial class FormVentas : Form
     {
+        private Producto _productoAAgregar;
+        private Cliente _clienteAAgregar;
+        private readonly List<Venta> _lstAgregarVentas = new List<Venta>();
         private void NuevaVenta_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
@@ -22,6 +25,7 @@ namespace linway_app.Forms
         }
         private async void InputProductoId_TextChanged(object sender, EventArgs ev)
         {
+            _productoAAgregar = null;
             string numeroDeProducto = textBox12.Text;
             if (numeroDeProducto == "")
             {
@@ -49,11 +53,13 @@ namespace linway_app.Forms
                 labelPrecio.Text = "";
                 return;
             }
+            _productoAAgregar = producto;
             label28.Text = producto.Nombre;
             labelPrecio.Text = producto.Precio.ToString();
         }
         private async void TextBox4_TextChanged(object sender, EventArgs ev)
         {
+            _productoAAgregar = null;
             string nombreDeProducto = textBox4.Text;
             if (textBox4.Text != "")
             {
@@ -77,12 +83,15 @@ namespace linway_app.Forms
                 labelPrecio.Text = "";
                 return;
             }
+            _productoAAgregar = producto;
             label28.Text = producto.Nombre;
             labelPrecio.Text = producto.Precio.ToString();
         }
         private void Limpiar_Click(object sender, EventArgs ev)
         {
             _lstAgregarVentas.Clear();
+            _clienteAAgregar = null;
+            _productoAAgregar = null;
             ActualizarGrid5(_lstAgregarVentas);
             label28.Text = "";
             textBox13.Text = "";
@@ -90,27 +99,19 @@ namespace linway_app.Forms
         }
         private async void Anyadir_Click(object sender, EventArgs ev)
         {
-            if(!int.TryParse(textBox13.Text, out int cantidad))
+            if (!int.TryParse(textBox13.Text, out int cantidad))
             {
                 return;
             }
-            string nombreDeProducto = label28.Text;
-            Producto producto = await UIExecutor.ExecuteAsync(
-                _scope,
-                async sp =>
-                {
-                    var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetProductoPorNombreAsync(nombreDeProducto);
-                },
-                "No se pudo buscar el Producto",
-                null
-            );
-            if (producto == null) return;
+            if (_productoAAgregar == null || cantidad == 0)
+            {
+                return;
+            }
             var nuevaVenta = new Venta
             {
-                ProductoId = producto.Id,
+                ProductoId = _productoAAgregar.Id,
                 Cantidad = cantidad,
-                Producto = producto      // dejar para que cargue el nombre en el grid
+                Producto = _productoAAgregar      // dejar para que cargue el nombre en el grid
             };
             _lstAgregarVentas.Add(nuevaVenta);
             ActualizarGrid5(_lstAgregarVentas);
@@ -171,6 +172,7 @@ namespace linway_app.Forms
         }
         private async void TextBox19_TextChanged(object sender, EventArgs ev)
         {
+            _clienteAAgregar = null;
             string numeroDeCliente = textBox19.Text;
             if (numeroDeCliente == "")
             {
@@ -195,10 +197,12 @@ namespace linway_app.Forms
                 label20.Text = "No encontrado";
                 return;
             }
+            _clienteAAgregar = cliente;
             label20.Text = cliente.Direccion;
         }
         private async void TextBox3_TextChanged(object sender, EventArgs ev)
         {
+            _clienteAAgregar = null;
             string direccion = textBox3.Text;
             if (direccion == "")
             {
@@ -219,11 +223,11 @@ namespace linway_app.Forms
                 label20.Text = "No encontrado";
                 return;
             }
+            _clienteAAgregar = cliente;
             label20.Text = cliente.Direccion;
         }
         private async void AgregarVenta_Click(object sender, EventArgs ev)
         {
-            //var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             if (_lstAgregarVentas == null || _lstAgregarVentas.Count == 0)
             {
                 MessageBox.Show("No se han ingresado productos");
@@ -231,9 +235,12 @@ namespace linway_app.Forms
             }
             string diaReparto = comboBox1.Text;
             string nombreReparto = comboBox2.Text;
-            string direccionCliente = label20.Text;
+            if (_clienteAAgregar == null || diaReparto == "" || nombreReparto == "")
+            {
+                MessageBox.Show("Faltan el Cliente o el Reparto");
+                return;
+            }
             bool enviarAReparto = checkBox2.Checked;
-            //Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms] Punto 1");
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
@@ -247,156 +254,102 @@ namespace linway_app.Forms
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
                     //
-                    Cliente cliente = null;
                     Reparto reparto = null;
                     Pedido pedido = null;
                     if (enviarAReparto)   // enviar a reparto
                     {
-                        if (direccionCliente == "" || diaReparto == "" || nombreReparto == "")
-                        {
-                            savingServices.DiscardChanges();
-                            MessageBox.Show("Faltan el cliente o el reparto");
-                            return false;
-                        }
-                        cliente = await clienteServices.GetClientePorDireccionExactaAsync(direccionCliente);
                         List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
                         reparto = lstDiasRep
                             .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
                             .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
-                        if (cliente == null || reparto == null)
+                        if (reparto == null)
                         {
-                            savingServices.DiscardChanges();
-                            MessageBox.Show("Falló cliente o reparto");
+                            MessageBox.Show("Falló Reparto");
                             return false;
                         }
-                        //pedido = await orquestacionServices.GetPedidoPorRepartoYClienteGenerarSiNoExisteAsync(reparto.Id, cliente.Id);
-                        pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == cliente.Id && x.Estado != "Eliminado");
+                        pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == _clienteAAgregar.Id && x.Estado != "Eliminado");
                         if (pedido == null)
                         {
-                            pedido = new Pedido()
-                            {
-                                Cliente = cliente,
-                                Direccion = cliente.Direccion,
-                                Reparto = reparto,
-                                Entregar = 1,
-                                Estado = "Activo",
-                                ProductosText = "",
-                                L = 0,
-                                A = 0,
-                                Ae = 0,
-                                D = 0,
-                                E = 0,
-                                T = 0
-                            };
-                            //await _pedidoServices.AddPedido(pedido);
-                        }
-                        if (pedido == null)
-                        {
-                            savingServices.DiscardChanges();
-                            MessageBox.Show("Falló pedido");
-                            return false;
+                            pedido = PedidoServices.CrearPedido(_clienteAAgregar, reparto);
                         }
                     }
-                    // generar un RegistroVenta con "Venta particular"y devuelve un id para usar en los ProdVendido
-                    // generar un Venta por cada ítem en _lstAgregarVentas, no necesita precios
-                    // generar un ProdVendido por cada ítem en _lstAgregarVentas con el id de (1)
-                    ActualizarGrid3Ventas();
+                    // se crea un Registro de Venta (para "Venta particular" o Cliente en Reparto si hay)
+                    // se recorren sus Ventas en bruto creando Ventas cuando no tienen y sumando cuando sí tienen
+                    // se recorren sus Ventas en bruto creando ProdVendidos (asociados al Pedido si hay) (nunca se editan ProdVendidos preexistentes porque podrían pertenecer a otras NotaDeEnvio preexistentes)
+                    // opcionalmente se envía a Reparto, actualizando las etiquetas del Reparto y del Pedido
+                    //   caso 1: el Reparto no existe, se crea uno
+                    //   caso 2: el Reparto existe, se agregan ProdVendidos
                     var nuevoRegistroVenta = new RegistroVenta
-                    {   // hacer o editar registros (no puedo editar porque no tengo cliente, se modifica si hay "enviar a hdr")
-                        ClienteId = 634,
-                        NombreCliente = "Venta particular",
+                    {   // si se envía a Reparto hay cliente
+                        ClienteId = _clienteAAgregar != null ? _clienteAAgregar.Id : 634,
+                        NombreCliente = _clienteAAgregar != null ? _clienteAAgregar.Direccion : "Venta particular",
                         Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
                     };
+                    registroVentaServices.AddRegistroVenta(nuevoRegistroVenta);
+                    //
                     var ventasAAgregar = new List<Venta>();
                     var ventasAEditar = new List<Venta>();
                     var prodVendidosAAgregar = new List<ProdVendido>();
-                    var prodVendidosAEditar = new List<ProdVendido>();
-                    int counter = 0;
                     List<Venta> lstVentas = await ventaServices.GetVentasAsync();
                     List<Producto> productos = await productoServices.GetProductosAsync();
                     List<ProdVendido> prodVendidos = enviarAReparto ? await prodVendidoServices.GetProdVendidosAsync() : null;
                     foreach (Venta ventaParaAgregar in _lstAgregarVentas)
                     {
-                        counter++;
-                        bool exists = false;
-                        foreach (Venta venta in lstVentas)
+                        Venta venta = lstVentas.FirstOrDefault(v => v.ProductoId == ventaParaAgregar.ProductoId);
+                        if (venta != null)
                         {
-                            if (venta.ProductoId != ventaParaAgregar.ProductoId)
-                            {
-                                continue;
-                            }
-                            exists = true;
                             venta.Cantidad += ventaParaAgregar.Cantidad;
                             ventasAEditar.Add(venta);
                         }
-                        if (!exists)
+                        else
                         {
                             ventasAAgregar.Add(ventaParaAgregar);
                         }
                         Producto producto = productos.Find(x => x.Id == ventaParaAgregar.ProductoId);
-                        if (producto == null)
+                        var nuevoProdVendido = new ProdVendido
                         {
-                            savingServices.DiscardChanges();
-                            MessageBox.Show("Falló Producto");
-                            return false;
-                        }
-                        exists = false;
-                        if (enviarAReparto && pedido.Id != 0)  // pedido.Id 0 implica que se acaba de crear
-                        {
-                            foreach (ProdVendido prodVendido in prodVendidos)
-                            {
-                                if (prodVendido.ProductoId == producto.Id && prodVendido.PedidoId == pedido.Id)
-                                {
-                                    exists = true;
-                                    prodVendido.Cantidad += ventaParaAgregar.Cantidad;
-                                    prodVendidosAEditar.Add(prodVendido);
-                                    break;
-                                }
-                            }
-                        }
-                        if (!exists)
-                        {
-                            var nuevoProdVendido = new ProdVendido
-                            {
-                                Cantidad = ventaParaAgregar.Cantidad,
-                                Descripcion = producto.Nombre,
-                                Precio = producto.Precio,
-                                ProductoId = producto.Id,
-                                RegistroVenta = nuevoRegistroVenta
-                            };
-                            prodVendidosAAgregar.Add(nuevoProdVendido);
-                        }
-                        //Actualizar();  comentado
+                            Cantidad = ventaParaAgregar.Cantidad,
+                            Descripcion = producto.Nombre,
+                            Precio = producto.Precio,
+                            ProductoId = producto.Id,
+                            RegistroVenta = nuevoRegistroVenta
+                        };
+                        prodVendidosAAgregar.Add(nuevoProdVendido);
                     }
                     ventaServices.AddVentas(ventasAAgregar);
                     ventaServices.EditVentas(ventasAEditar);
+                    prodVendidoServices.AddProdVendidos(prodVendidosAAgregar);
+                    //
                     if (enviarAReparto)
                     {
-                        foreach (ProdVendido pv in prodVendidosAAgregar)
-                        {
-                            pv.Pedido = pedido;
-                        }
-                        prodVendidoServices.AddProdVendidos(prodVendidosAAgregar);
                         if (pedido.Id == 0)
                         {
+                            // Pedido
+                            pedido.ProdVendidos = prodVendidosAAgregar;
+                            PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, true);
                             await pedidoServices.AddPedidoAsync(pedido);
+                            // Reparto
+                            reparto.Pedidos.Add(pedido);
+                            RepartoServices.ActualizarCantidadesDeReparto(pedido.Reparto);
+                            repartoServices.EditReparto(pedido.Reparto);
                         }
                         else
                         {
-                            PedidoServices.ActualizarEtiquetasDePedido(pedido, true);
+                            // Pedido
+                            foreach (var pv in prodVendidosAAgregar)
+                            {
+                                pedido.ProdVendidos.Add(pv);
+                            }
+                            PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, true);
                             pedidoServices.EditPedido(pedido);
-                            RepartoServices.ActualizarEtiquetasDeReparto(pedido.Reparto);
-                            repartoServices.EditReparto(pedido.Reparto);
+                            // Reparto
+                            var existente = reparto.Pedidos.FirstOrDefault(p => p.Id == pedido.Id);
+                            existente.ProdVendidos = pedido.ProdVendidos;
+                            RepartoServices.ActualizarCantidadesDeReparto(reparto);
+                            repartoServices.EditReparto(reparto);
                         }
-                        nuevoRegistroVenta.ClienteId = cliente.Id;
-                        nuevoRegistroVenta.NombreCliente = cliente.Direccion;
                     }
-                    else
-                    {
-                        prodVendidoServices.AddProdVendidos(prodVendidosAAgregar);
-                        prodVendidoServices.EditProdVendidos(prodVendidosAEditar);
-                    }
-                    registroVentaServices.AddRegistroVenta(nuevoRegistroVenta);
+                    //
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

@@ -1,28 +1,62 @@
-﻿
-Eliminar realmente Detalles de Recibos y Recibos; ProdVendido, RegistroVenta, NotaDeEnvio, Venta... o sea dejar solamente cliente y producto
+﻿-- Actualizar direcciones en Pedidos
+UPDATE Pedido p
+JOIN Cliente c ON c.Id = p.ClienteId
+SET p.Direccion = c.Direccion
+WHERE p.Estado = 'Activo'
+  AND c.Estado = 'Activo';
+
+-- Hay Días reparidos?
+SELECT `Dia`, COUNT(*) AS `Cantidad`
+FROM `DiaReparto`
+GROUP BY `Dia`
+HAVING COUNT(*) > 1;
+
+-- Días unique:
+SELECT `Dia`, COUNT(*) AS `Cantidad`
+FROM `DiaReparto`
+GROUP BY `Dia`
+HAVING COUNT(*) > 1;
+
+-- Cambiar Nombre de Reparto a VARCHAR (está como TEXT):
+ALTER TABLE `Reparto` MODIFY COLUMN `Nombre` VARCHAR(40) NOT NULL;
+
+-- Hay Repartos con Día-Nombre repetidos?
+SELECT `DiaRepartoId`, `Nombre`, COUNT(*) AS `Cantidad`
+FROM `Reparto`
+GROUP BY `DiaRepartoId`, `Nombre`
+HAVING COUNT(*) > 1;
+
+-- Combinación Día-Nombre única:
+ALTER TABLE `Reparto`
+ADD CONSTRAINT `UQ_Reparto_DiaRepartoId_Nombre`
+UNIQUE (`DiaRepartoId`, `Nombre`);
+
 
 Metas para versiones posteriores:
+-Eliminar realmente Detalles de Recibos y Recibos; ProdVendido, RegistroVenta, NotaDeEnvio, Venta... o sea dejar solamente cliente y producto (ver las clásulas On Delete en LinwayDbContext)
+-Crear atributos de la clase y dejar de usar labels para capturar repartos y pedidos
 -Cambiar sistema de cantidades de líquidos y polvos (2x5, etcétera)
 -Separar dirección de localidad
 -Eliminar dobles espaciados
 -Segundo campo para teléfono
 -En los campos de búsqueda por dirección hacer indistinto usar las tildes en las vocales
 -Migrar de Windows Forms a WPS u otro más moderno
--Lograr que se pueda usar la app sin tener encendida la pc host (base de datos independiente)
+-Lograr que se pueda usar la app sin tener encendida la pc host (base de datos en la nube)
 -Lograr que la app sea reactiva a cambios en la base de datos
--Hacer un logger
 -ClienteId no debería ser obligatorio en Registro de Venta (por venta particular cargada desde Ventas)
--Que limpiar pedido/reparto cree pedidos nuevos en 0 en vez de vaciar los que están
-
--Dividir los Forms en clases parciales por bloque
 -Ver la diferencia entre Pedido y Destino
 
 
 
-
-___________________________________Sistema Linway 15__________________________________    junio 2023
--Cambio de diseño de servicios: scopes por ciclo de vida de formulario.
-
+___________________________________Sistema Linway 15__________________________________    marzo 2026
+-Cambio de diseño de servicios: scopes por ciclo de vida de formulario, operaciones como bulks
+-Panel de carga para operaciones complejas ("Cargando...")
+-Corregido comportamiento de asociar Productos Vendidos anteriores a una Nota de Envío nueva
+ al usar "Enviar a Reparto" del Formulario de Ventas
+-En Formulario de Nota de Envío, en "Agregar a reparto", ahora avisa si la Nota de Envío ya
+ estaba en el reparto destino y cancela
+-Divididos los Forms en clases parciales por bloque de diseño
+-Nuevos índices de unicidad en la base de datos: Dia y combinación Día-Nombre
 
 
 ___________________________________Sistema Linway 14__________________________________    junio 2023

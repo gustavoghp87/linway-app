@@ -40,9 +40,9 @@ namespace linway_app.Forms
                     {
                         foreach (Pedido pedido in reparto.Pedidos)
                         {
-                            PedidoServices.ActualizarEtiquetasDePedido(pedido, false);
+                            PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, false);
                         }
-                        RepartoServices.ActualizarEtiquetasDeReparto(reparto);
+                        RepartoServices.ActualizarCantidadesDeReparto(reparto);
                     }
                     repartoServices.EditRepartos(repartosALimpiar);
                     pedidoServices.EditPedidos(pedidosALimpiar);
@@ -106,12 +106,12 @@ namespace linway_app.Forms
                     prodVendidoServices.EditProdVendidos(prodVendidosALimpiar);
                     foreach (var reparto in repartosALimpiar)
                     {
-                        RepartoServices.ActualizarEtiquetasDeReparto(reparto);
+                        RepartoServices.ActualizarCantidadesDeReparto(reparto);
                     }
                     repartoServices.EditRepartos(repartosALimpiar);
                     foreach (Pedido pedido in pedidosALimpiar)
                     {
-                        PedidoServices.ActualizarEtiquetasDePedido(pedido, false);
+                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, false);
                     }
                     pedidoServices.EditPedidos(pedidosALimpiar);
                     bool guardado = await savingServices.SaveAsync();
@@ -190,11 +190,11 @@ namespace linway_app.Forms
                         prodVendido.PedidoId = null;
                     }
                     prodVendidoServices.EditProdVendidos(prodVendidosALimpiar);
-                    RepartoServices.ActualizarEtiquetasDeReparto(repartoALimpiar);
+                    RepartoServices.ActualizarCantidadesDeReparto(repartoALimpiar);
                     repartoServices.EditReparto(repartoALimpiar);
                     foreach (Pedido pedido in pedidosALimpiar)
                     {
-                        PedidoServices.ActualizarEtiquetasDePedido(pedido, false);
+                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, false);
                     }
                     pedidoServices.EditPedidos(pedidosALimpiar);
                     bool guardado = await savingServices.SaveAsync();
@@ -257,7 +257,7 @@ namespace linway_app.Forms
                         prodVendido.PedidoId = null;
                     }
                     prodVendidoServices.EditProdVendidos(prodVendidosAEditar);
-                    PedidoServices.ActualizarEtiquetasDePedido(pedidoAEditar, false);
+                    PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedidoAEditar, false);
                     pedidoServices.EditPedido(pedidoAEditar);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)

@@ -36,7 +36,7 @@ namespace linway_app.Services.FormServices
             Pedido pedido = await _services.GetAsync(pedidoId);
             return pedido;
         }
-        public async Task<ICollection<Pedido>> GetPedidosPorRepartoIdAsync(long repartoId)
+        public async Task<List<Pedido>> GetPedidosPorRepartoIdAsync(long repartoId)
         {
             var pedidos = await GetPedidosAsync();
             if (pedidos == null)
@@ -70,7 +70,7 @@ namespace linway_app.Services.FormServices
         }
         #endregion
         #region static methods
-        public static void ActualizarEtiquetasDePedido(Pedido pedido, bool entregar)
+        public static void ActualizarCantidadesYDescripcionDePedido(Pedido pedido, bool entregar)  // primero pedido, luego reparto
         {
             if (pedido == null)
             {
@@ -83,16 +83,20 @@ namespace linway_app.Services.FormServices
             pedido.E = 0;
             pedido.L = 0;
             pedido.T = 0;
-            pedido.ProdVendidos.ToList().ForEach(prodVendido =>
+            var gruposPorProducto = pedido.ProdVendidos.GroupBy(pv => pv.Producto.Id);  // se agrupa para que Productos repetidos no tengan Descripción repetida
+            foreach (var grupo in gruposPorProducto)
             {
-                string description = ProductoServices.IsProducto(prodVendido.Producto)
-                    ? ProdVendidoServices.GetEditedDescripcion(prodVendido.Descripcion)
-                    : prodVendido.Descripcion;
-                if (ProductoServices.IsPolvo(prodVendido.Producto) && !ProductoServices.IsBlanqueador(prodVendido.Producto))
+                ProdVendido referencia = grupo.First();
+                Producto producto = referencia.Producto;
+                long cantidadTotal = grupo.Sum(x => x.Cantidad);
+                string description = ProductoServices.IsProducto(producto)
+                    ? ProdVendidoServices.GetEditedDescripcion(referencia.Descripcion)
+                    : referencia.Descripcion;
+                if (ProductoServices.IsPolvo(producto) && !ProductoServices.IsBlanqueador(producto))
                 {
                     int kilos = 20;
-                    long cantidadDeBolsas = prodVendido.Cantidad / kilos;
-                    switch (prodVendido.Producto.SubTipo)
+                    long cantidadDeBolsas = cantidadTotal / kilos;
+                    switch (producto.SubTipo)
                     {
                         case string a when a == TipoPolvo.AlisonEspecial.ToString():
                             pedido.Ae += cantidadDeBolsas;
@@ -109,41 +113,57 @@ namespace linway_app.Services.FormServices
                         case string a when a == TipoPolvo.Eslabón.ToString():
                             pedido.E += cantidadDeBolsas;
                             break;
-                        default:
-                            break;
                     }
                     pedido.ProductosText += cantidadDeBolsas + "x20 " + description + " | ";
                 }
-                else if (!ProductoServices.IsSaldo(prodVendido.Producto))
+                else if (!ProductoServices.IsSaldo(producto))
                 {
-                    if (ProductoServices.IsLiquido(prodVendido.Producto))
+                    if (ProductoServices.IsLiquido(producto))
                     {
-                        pedido.L += prodVendido.Cantidad;
+                        pedido.L += cantidadTotal;
                     }
-                    if (ProductoServices.IsBlanqueador(prodVendido.Producto))
+
+                    if (ProductoServices.IsBlanqueador(producto))
                     {
-                        pedido.ProductosText += prodVendido.Cantidad.ToString() + " kg " + description + " | ";
+                        pedido.ProductosText += cantidadTotal.ToString() + " kg " + description + " | ";
                     }
                     else
                     {
-                        pedido.ProductosText += prodVendido.Cantidad.ToString() + "x " + description + " | ";
+                        pedido.ProductosText += cantidadTotal.ToString() + "x " + description + " | ";
                     }
                 }
-                else if (ProductoServices.IsACobrar(prodVendido.Producto))
+                else if (ProductoServices.IsACobrar(producto))
                 {
                     pedido.ProductosText += "A cobrar | ";
                 }
-            });
+            }
             if (pedido.ProductosText.Length > 3)
             {
-                var lastThree = pedido.ProductosText.Substring(pedido.ProductosText.Length - 3, 3);
-                var cleansed = pedido.ProductosText.Substring(0, pedido.ProductosText.Length - 3);
-                if (lastThree == " | ")
+                var ultimosTres = pedido.ProductosText.Substring(pedido.ProductosText.Length - 3, 3);
+                if (ultimosTres == " | ")
                 {
-                    pedido.ProductosText = cleansed;
+                    pedido.ProductosText = pedido.ProductosText.Substring(0, pedido.ProductosText.Length - 3);
                 }
             }
             pedido.Entregar = entregar ? 1 : 0;
+        }
+        public static Pedido CrearPedido(Cliente cliente, Reparto reparto)
+        {
+            return new Pedido()
+            {
+                Cliente = cliente,
+                Direccion = cliente.Direccion,
+                Reparto = reparto,
+                Entregar = 1,
+                Estado = "Activo",
+                ProductosText = "",
+                L = 0,
+                A = 0,
+                Ae = 0,
+                D = 0,
+                E = 0,
+                T = 0
+            };
         }
         #endregion
     }

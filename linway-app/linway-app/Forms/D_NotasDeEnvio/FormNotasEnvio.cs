@@ -67,16 +67,21 @@ namespace linway_app.Forms
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var exportarServices = sp.GetRequiredService<IExportarServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    ICollection<NotaDeEnvio> notas = await notaDeEnvioServices.GetNotaDeEnviosAsync();
+                    List<NotaDeEnvio> notas = await notaDeEnvioServices.GetNotaDeEnviosAsync();
                     exportarServices.ExportarNotas(notas);
-                    return await savingServices.SaveAsync();
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "Algo falló",
                 this
             );
             if (!logrado)
             {
-                MessageBox.Show("No se pudieron exportar Notas");
                 return;
             }
             button2.Text = "TERMINADO";
