@@ -12,36 +12,37 @@ namespace linway_app.Forms
     {
         private void LimpiarAgregar_Click(object sender, EventArgs ev)
         {
-            textBox1.Text = "";
+            textBox1AgregarNombre.Text = "";
             textBox2.Text = "";
-            textBox3.Text = "";
-            textBox4.Text = "";
-            textBox5.Text = "";
-            textBox18.Text = "";
-            radioButton1.Checked = false;
-            radioButton2.Checked = false;
+            textBox3AgregarCuit.Text = "";
+            textBox4AgregarCP.Text = "";
+            textBox5AgregarTelefono.Text = "";
+            textBox18AgregarLocalidad.Text = "";
+            radioButton1AgregarRInscripto.Checked = false;
+            radioButton2AgregarRMonotributo.Checked = false;
         }
         private async void AgregarCliente_Click(object sender, EventArgs ev)
         {
-            if (textBox2.Text == "" || (!radioButton1.Checked && !radioButton2.Checked))
+            string direccion = textBox2.Text;
+            if (direccion == "" || (!radioButton1AgregarRInscripto.Checked && !radioButton2AgregarRMonotributo.Checked))
             {
                 MessageBox.Show("Los campos Dirección y Responsable Inscr/Monotributo son obligatorios");
                 return;
             }
             TipoR tipo = TipoR.Monotributo;
-            if (radioButton2.Checked)
+            if (radioButton2AgregarRMonotributo.Checked)
             {
                 tipo = TipoR.Inscripto;
             }
             var nuevoCliente = new Cliente
             {
-                Direccion = textBox18.Text != ""
-                    ? textBox2.Text + " - " + textBox18.Text
-                    : textBox2.Text,
-                CodigoPostal = textBox4.Text,
-                Telefono = textBox5.Text,
-                Nombre = textBox1.Text,
-                Cuit = textBox3.Text,
+                Direccion = textBox18AgregarLocalidad.Text != ""
+                    ? direccion + " - " + textBox18AgregarLocalidad.Text
+                    : direccion,
+                CodigoPostal = textBox4AgregarCP.Text,
+                Telefono = textBox5AgregarTelefono.Text,
+                Nombre = textBox1AgregarNombre.Text,
+                Cuit = textBox3AgregarCuit.Text,
                 Tipo = tipo.ToString()
             };
             var logrado = await UIExecutor.ExecuteAsync(
@@ -65,7 +66,7 @@ namespace linway_app.Forms
             {
                 return;
             }
-            button2.PerformClick();
+            button2AgregarLimpiar.PerformClick();
         }
     }
 }

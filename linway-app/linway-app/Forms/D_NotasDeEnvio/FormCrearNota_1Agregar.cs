@@ -3,6 +3,7 @@ using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
+using Models.Entities;
 using Models.Enums;
 using System;
 using System.Windows.Forms;
@@ -216,6 +217,9 @@ namespace linway_app.Forms
             label38.Text = "";
             label40.Text = "";
             labelProductoId.Text = "";
+            label36.Text = "";
+            textBox15.Text = "";
+            labelClienteId.Text = "";
             ActualizarGrid();
         }
     }

@@ -588,6 +588,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Testing.md" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>

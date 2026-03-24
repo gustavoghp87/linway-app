@@ -10,7 +10,8 @@ namespace linway_app.Forms
     {
         private void CargarGridProductos(ICollection<Producto> lstProductos)
         {
-            if (lstProductos == null) {
+            if (lstProductos == null)
+            {
                 return;
             }
             var grid = new List<EProducto>();

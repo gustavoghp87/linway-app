@@ -2,7 +2,9 @@
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace linway_app.Forms
 {
@@ -12,30 +14,6 @@ namespace linway_app.Forms
         //{
         //    textBox7.Enabled = radioButton4.Checked;
         //}
-        //_____________grupo imprimir_______________
-        private void Button1_Click(object sender, EventArgs ev)
-        {
-            if (comboBox2.Text == "")
-            {
-                return;
-            }
-            int i = 0;
-            foreach (Recibo recibo in ObtenerListaAImprimir())
-            {
-                if (recibo == null)
-                {
-                    continue;
-                }
-                i++;
-                if (i < 21)
-                {
-                    var form = Program.LinwayServiceProvider.GetRequiredService<FormImprimirRecibo>();
-                    form.Rellenar_Datos(recibo);
-                    form.Show(this);
-                }
-            }
-            Close();
-        }
         private void TextBox2_KeyPress(object sender, KeyPressEventArgs ev)
         {
             if (!char.IsNumber(ev.KeyChar) && ev.KeyChar != (char)Keys.Back)
@@ -53,11 +31,12 @@ namespace linway_app.Forms
         private List<Recibo> ObtenerListaAImprimir()
         {
             var listaAImprimir = new List<Recibo>();
-            if (_lstRecibos == null)
+            string opcion = comboBox2ImprimirTipo.SelectedItem.ToString();
+            if (opcion == null)
             {
                 return listaAImprimir;
             }
-            if (comboBox2.SelectedItem.ToString() == "No impresas")
+            if (opcion == "No impresas")
             {
                 foreach (Recibo recibo in _lstRecibos)
                 {
@@ -67,7 +46,7 @@ namespace linway_app.Forms
                     }
                 }
             }
-            else if (comboBox2.SelectedItem.ToString() == "Hoy")
+            else if (opcion == "Hoy")
             {
                 foreach (Recibo recibo in _lstRecibos)
                 {
@@ -77,15 +56,15 @@ namespace linway_app.Forms
                     }
                 }
             }
-            else if (textBox2.Text != "" && textBox3.Text != "" && comboBox2.SelectedItem.ToString() == "Establecer rango")
+            else if (opcion == "Establecer rango" && textBox2ImprimirRangoDesde.Text != "")
             {
                 try
                 {
-                    long menor = long.Parse(textBox2.Text);
-                    long mayor = long.Parse(textBox3.Text);
-                    if (menor <= mayor)
+                    int rangoDesde = int.Parse(textBox2ImprimirRangoDesde.Text);
+                    int rangoHasta = textBox3ImprimirRangoHasta.Text != "" ? int.Parse(textBox3ImprimirRangoHasta.Text) : rangoDesde;
+                    if (rangoDesde <= rangoHasta)
                     {
-                        for (long i = menor; i <= mayor; i++)
+                        for (int i = rangoDesde; i <= rangoHasta; i++)
                         {
                             Recibo recibo = _lstRecibos.Find(x => x.Id == i);
                             if (recibo == null)
@@ -96,7 +75,8 @@ namespace linway_app.Forms
                         }
                     }
                 }
-                catch {
+                catch
+                {
                     MessageBox.Show("Rango establecido incorrecto");
                 }
             }
@@ -104,19 +84,19 @@ namespace linway_app.Forms
         }
         private void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            if (comboBox2.SelectedItem.ToString() == "No impresas" || comboBox2.SelectedItem.ToString() == "Hoy")
+            if (comboBox2ImprimirTipo.SelectedItem.ToString() == "No impresas" || comboBox2ImprimirTipo.SelectedItem.ToString() == "Hoy")
             {
-                textBox2.Visible = false;
-                textBox3.Visible = false;
+                textBox2ImprimirRangoDesde.Visible = false;
+                textBox3ImprimirRangoHasta.Visible = false;
                 label4.Visible = false;
                 label5.Visible = false;
-                textBox3.Text = "";
-                textBox2.Text = "";
+                textBox3ImprimirRangoHasta.Text = "";
+                textBox2ImprimirRangoDesde.Text = "";
             }
-            else if (comboBox2.SelectedItem.ToString() == "Establecer rango")
+            else if (comboBox2ImprimirTipo.SelectedItem.ToString() == "Establecer rango")
             {
-                textBox2.Visible = true;
-                textBox3.Visible = true;
+                textBox2ImprimirRangoDesde.Visible = true;
+                textBox3ImprimirRangoHasta.Visible = true;
                 label4.Visible = true;
                 label5.Visible = true;
             }
@@ -129,6 +109,52 @@ namespace linway_app.Forms
         private void TextBox2_TextChanged(object sender, EventArgs ev)
         {
             label7.Text = ObtenerListaAImprimir().Count.ToString();
+        }
+        private void Button1_Click(object sender, EventArgs ev)
+        {
+            List<Recibo> listaAImprimir = ObtenerListaAImprimir();
+            if (listaAImprimir.Count > 20)
+            {
+                MessageBox.Show("Se imprimen hasta 20 por vez");
+            }
+            int i = 0;
+            int abiertos = 0;
+            foreach (Recibo recibo in listaAImprimir)
+            {
+                i++;
+                if (i > 20)
+                {
+                    continue;
+                }
+                //var form = Program.LinwayServiceProvider.GetRequiredService<FormImprimirRecibo>();
+                //form.Rellenar_Datos(recibo);
+                //form.Show(this);
+                abiertos++;
+                var scope = Program.LinwayServiceProvider.CreateScope();
+                var form = scope.ServiceProvider.GetRequiredService<FormImprimirRecibo>();
+                form.Rellenar_Datos(recibo);
+                form.FormClosing += async (s, e) =>
+                {
+                    scope.Dispose();
+                    if (Interlocked.Decrement(ref abiertos) == 0)
+                    {
+                        _scope.Dispose();
+                        _scope = Program.LinwayServiceProvider.CreateScope();  // renueva scope para que tome los cambios hechos en otros scopes
+                        await Actualizar();
+                        textBox2ImprimirRangoDesde.Visible = false;
+                        textBox3ImprimirRangoHasta.Visible = false;
+                        label4.Visible = false;
+                        label5.Visible = false;
+                        textBox3ImprimirRangoHasta.Text = "";
+                        textBox2ImprimirRangoDesde.Text = "";
+                        // con eventos asociados:
+                        comboBox1FiltrarLista.SelectedItem = "Todas";
+                        comboBox2ImprimirTipo.Text = "";
+                    }
+                };
+                form.Show(this);
+            }
+            //Close();
         }
     }
 }

@@ -18,11 +18,18 @@ namespace linway_app.Services.FormServices
         }
         public void DeleteRegistroVenta(RegistroVenta registroVenta)
         {
-            _services.Delete(registroVenta);
+            registroVenta.Estado = "Eliminado";
+            _services.Edit(registroVenta);
+            //_services.Delete(registroVenta);
         }
         public void DeleteRegistros(ICollection<RegistroVenta> registros)
         {
-            _services.DeleteMany(registros);
+            foreach (var entity in registros)
+            {
+                entity.Estado = "Eliminado";
+            }
+            _services.EditMany(registros);
+            //_services.DeleteMany(registros);
         }
         public void EditRegistroVenta(RegistroVenta registroVenta)
         {

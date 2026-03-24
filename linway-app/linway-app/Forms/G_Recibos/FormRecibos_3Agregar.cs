@@ -2,7 +2,9 @@
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
+using Models.Entities;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -10,6 +12,22 @@ namespace linway_app.Forms
     public partial class FormRecibos : Form
     {
         private Cliente _clienteAgregarRecibo;
+        private readonly List<DetalleRecibo> _lstDetallesAAgregar = new List<DetalleRecibo>();
+        private decimal _subTo = 0;
+        private void ActualizarGridDetalles()
+        {
+            if (_lstDetallesAAgregar == null)
+            {
+                return;
+            }
+            var grid2 = new List<EDetalleRecibo>();
+            foreach (DetalleRecibo detalleRecibo in _lstDetallesAAgregar)
+            {
+                grid2.Add(Form1.Mapper.Map<EDetalleRecibo>(detalleRecibo));
+            }
+            dataGridView2.DataSource = grid2;
+            dataGridView2.Columns[0].Width = 140;
+        }
         private async void ClienteId_TextChanged(object sender, EventArgs ev)
         {
             _clienteAgregarRecibo = null;

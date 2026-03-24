@@ -12,10 +12,8 @@ namespace linway_app.Forms
 {
     public partial class FormRecibos : Form
     {
-        private decimal _subTo = 0;
         private List<Recibo> _lstRecibos = new List<Recibo>();
-        private readonly List<DetalleRecibo> _lstDetallesAAgregar = new List<DetalleRecibo>();
-        private readonly IServiceScope _scope;
+        private IServiceScope _scope;
         public FormRecibos()
         {
             InitializeComponent();
@@ -49,38 +47,6 @@ namespace linway_app.Forms
                 return;
             }
             _lstRecibos = recibos;
-        }
-        private void ActualizarGridRecibos(ICollection<Recibo> lstRecibos)
-        {
-            if (lstRecibos == null)
-            {
-                return;
-            }
-            var grid1 = new List<ERecibo>();
-            foreach (Recibo recibo in lstRecibos)
-            {
-                grid1.Add(Form1.Mapper.Map<ERecibo>(recibo));
-            }
-            dataGridView1.DataSource = grid1;
-            dataGridView1.Columns[0].Width = 50;
-            dataGridView1.Columns[1].Width = 50;
-            dataGridView1.Columns[2].Width = 350;
-            dataGridView1.Columns[3].Width = 80;
-            lCantRecibos.Text = lstRecibos.Count.ToString() + " recibos.";
-        }
-        private void ActualizarGridDetalles()
-        {
-            if (_lstDetallesAAgregar == null)
-            {
-                return;
-            }
-            var grid2 = new List<EDetalleRecibo>();
-            foreach (DetalleRecibo detalleRecibo in _lstDetallesAAgregar)
-            {
-                grid2.Add(Form1.Mapper.Map<EDetalleRecibo>(detalleRecibo));
-            }
-            dataGridView2.DataSource = grid2;
-            dataGridView2.Columns[0].Width = 140;
         }
         private void RadioButton1_CheckedChanged(object sender, EventArgs ev)
         {

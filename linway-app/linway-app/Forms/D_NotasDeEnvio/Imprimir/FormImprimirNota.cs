@@ -7,6 +7,7 @@ using Models.Enums;
 using System;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -63,7 +64,7 @@ namespace linway_app.Forms
                 MessageBox.Show("Error rellenando los datos: " + e.Message);
             }
         }
-        private async void MarcarImpresa()
+        private async Task MarcarImpresa()
         {
             if (_notaDeEnvio.Impresa == 1)
             {
@@ -82,11 +83,14 @@ namespace linway_app.Forms
                 null
             );
         }
-
-        /// IMPRIMIR
-        private void CaptureScreen()
+        private void PrintDocument1_PrintPage(object sender, PrintPageEventArgs ev)
         {
-            try
+            ev.Graphics.DrawImage(memoryImage, 0, 0);
+        }
+        private async void Imprimir_Click(object sender, EventArgs ev)
+        {
+            button1.Visible = false;
+            try  // Capture Screen
             {
                 Graphics mygraphics = CreateGraphics();
                 Size s = Size;
@@ -100,35 +104,21 @@ namespace linway_app.Forms
             }
             catch (Exception e)
             {
-                Logger.LogException(e);
-                MessageBox.Show("Error al capturar pantalla para imprimir: " + e.Message);
-            }
-        }
-        private void PrintDocument1_PrintPage(object sender, PrintPageEventArgs ev)
-        {
-            ev.Graphics.DrawImage(memoryImage, 0, 0);
-        }
-        private void Imprimir_Click(object sender, EventArgs ev)
-        {
-            button1.Visible = false;
-            try
-            {
-                CaptureScreen();
-            }
-            catch (Exception e)
-            {
+                button1.Visible = true;
                 Logger.LogException(e);
                 MessageBox.Show("Error al imprimir screen: " + e.Message);
+                return;
             }
             PrintDialog printDialog1 = new PrintDialog { Document = printDocument1 };
             DialogResult result = printDialog1.ShowDialog();
             if (result != DialogResult.OK)
             {
+                button1.Visible = true;
                 MessageBox.Show("Algo falló al generar Diálogo");
                 return;
             }
             printDocument1.Print();
-            MarcarImpresa();
+            await MarcarImpresa();
             Close();
         }
     }

@@ -341,7 +341,7 @@ namespace linway_app.Services.Excel
             using var fs = new FileStream(path + _extension, FileMode.Create, FileAccess.Write);
             IWorkbook workbook = new XSSFWorkbook();
             ISheet sheet1 = workbook.CreateSheet("Hoja1");
-            sheet1.AddMergedRegion(new CellRangeAddress(0, 0, 0, notas.Count + 2));
+            sheet1.AddMergedRegion(new CellRangeAddress(0, 0, 0, 7));
 
             var style1 = workbook.CreateCellStyle();
             style1.FillForegroundColor = HSSFColor.Blue.Index2;

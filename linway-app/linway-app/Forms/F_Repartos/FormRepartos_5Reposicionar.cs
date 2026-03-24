@@ -11,12 +11,6 @@ namespace linway_app.Forms
 {
     public partial class FormRepartos : Form
     {
-        private void PosicionarDestino_ToolStripMenuItem_Click(object sender, EventArgs ev)
-        {
-            LimpiarPantalla();
-            groupBox7.Visible = true;
-            label27.Text = "Día " + comboBox1.Text + " -> Reparto: " + comboBox2.Text;
-        }
         private void TextBox3_TextChanged(object sender, EventArgs ev)
         {
             try
@@ -46,7 +40,7 @@ namespace linway_app.Forms
             }
             string pedidoAMover = label30.Text;
             string pedidoReferencia = label31.Text;
-            string diaReparto = comboBox1.Text;
+            string diaReparto = comboBox1ListaDia.Text;
             string nombreReparto = comboBox2.Text;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
@@ -57,8 +51,8 @@ namespace linway_app.Forms
                     //
                     List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
                     Reparto reparto = lstDiasRep
-                        .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
-                        .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
+                        .Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList()
+                        .Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
                     Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoAMover && x.Estado != "Eliminado");
                     Pedido pedido2 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoReferencia && x.Estado != "Eliminado");
                     long order1 = pedido1.Orden;

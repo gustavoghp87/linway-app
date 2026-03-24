@@ -23,7 +23,9 @@ namespace linway_app.Services.FormServices
         }
         public void DeleteProducto(Producto producto)
         {
-            _services.Delete(producto);
+            producto.Estado = "Eliminado";
+            _services.Edit(producto);
+            //_services.Delete(producto);
         }
         public void EditProducto(Producto producto)
         {
@@ -37,13 +39,13 @@ namespace linway_app.Services.FormServices
         public async Task<Producto> GetProductoPorNombreAsync(string nombre)
         {
             List<Producto> productos = await GetProductosAsync();
-            Producto producto = productos.Find(x => x.Nombre.ToLower().Contains(nombre.ToLower()) && x.Estado != null && x.Estado != "Eliminado");
+            Producto producto = productos.Find(x => x.Nombre.ToLower().Contains(nombre.ToLower()) && x.Estado != "Eliminado");
             return producto;
         }
         public async Task<Producto> GetProductoPorNombreExactoAsync(string nombre)
         {
             List<Producto> productos = await GetProductosAsync();
-            Producto producto = productos.Find(x => x.Nombre.Equals(nombre) && x.Estado != null && x.Estado != "Eliminado");
+            Producto producto = productos.Find(x => x.Nombre.Equals(nombre) && x.Estado != "Eliminado");
             return producto;
         }
         public async Task<List<Producto>> GetProductosAsync()

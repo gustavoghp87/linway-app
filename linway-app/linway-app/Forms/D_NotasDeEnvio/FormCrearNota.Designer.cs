@@ -36,7 +36,7 @@ namespace linway_app.Forms
             this.label34 = new System.Windows.Forms.Label();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox1Imprimir = new System.Windows.Forms.CheckBox();
             this.label35 = new System.Windows.Forms.Label();
             this.label43 = new System.Windows.Forms.Label();
             this.button16 = new System.Windows.Forms.Button();
@@ -141,14 +141,14 @@ namespace linway_app.Forms
             // 
             // checkBox1
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(630, 216);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(61, 17);
-            this.checkBox1.TabIndex = 18;
-            this.checkBox1.Text = "Imprimir";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1Imprimir.AutoSize = true;
+            this.checkBox1Imprimir.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox1Imprimir.Location = new System.Drawing.Point(630, 216);
+            this.checkBox1Imprimir.Name = "checkBox1";
+            this.checkBox1Imprimir.Size = new System.Drawing.Size(61, 17);
+            this.checkBox1Imprimir.TabIndex = 18;
+            this.checkBox1Imprimir.Text = "Imprimir";
+            this.checkBox1Imprimir.UseVisualStyleBackColor = true;
             // 
             // label35
             // 
@@ -391,7 +391,7 @@ namespace linway_app.Forms
             this.Controls.Add(this.label39);
             this.Controls.Add(this.comboBox4);
             this.Controls.Add(this.dataGridView4);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.checkBox1Imprimir);
             this.Controls.Add(this.label38);
             this.Controls.Add(this.button14);
             this.Controls.Add(this.label43);
@@ -428,7 +428,7 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.ComboBox comboBox4;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBox1Imprimir;
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Label label43;
         private System.Windows.Forms.Button button16;

@@ -14,7 +14,7 @@ namespace linway_app.Forms
     {
         private List<NotaDeEnvio> _lstNotaDeEnvios = new List<NotaDeEnvio>();
         private List<ProdVendido> _lstProdVendidos = new List<ProdVendido>();
-        private readonly IServiceScope _scope;
+        private IServiceScope _scope;
         public FormNotasEnvio()
         {
             InitializeComponent();
@@ -43,6 +43,11 @@ namespace linway_app.Forms
             }
             _lstNotaDeEnvios = notas;
             labelCantidadDeNotas.Text = _lstNotaDeEnvios.Count.ToString() + " notas de envio.";
+            //
+            textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
+            comboBox1.SelectedItem = "";
+            textBox1.TextChanged += TextBox1_TextChanged;
+
         }
         private void ActualizarGrid2(ICollection<ProdVendido> lstProdVendidos)
         {
@@ -64,18 +69,11 @@ namespace linway_app.Forms
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
                     var exportarServices = sp.GetRequiredService<IExportarServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
                     List<NotaDeEnvio> notas = await notaDeEnvioServices.GetNotaDeEnviosAsync();
                     exportarServices.ExportarNotas(notas);
-                    bool guardado = await savingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        savingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    return true;
                 },
                 "Algo falló",
                 this

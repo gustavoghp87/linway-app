@@ -24,9 +24,9 @@ namespace linway_app.Forms
             }
             bool IsDec = false;
             int nroDec = 0;
-            for (int i = 0; i < textBox7.Text.Length; i++)
+            for (int i = 0; i < textBox7AgregarPrecio.Text.Length; i++)
             {
-                if (textBox7.Text[i] == ',')
+                if (textBox7AgregarPrecio.Text[i] == ',')
                 {
                     IsDec = true;
                 }

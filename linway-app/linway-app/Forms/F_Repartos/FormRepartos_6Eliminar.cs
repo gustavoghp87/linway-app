@@ -20,7 +20,7 @@ namespace linway_app.Forms
                 async sp => {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList();
                 },
                 "No se pudieron buscar los Repartos",
                 null
@@ -82,6 +82,10 @@ namespace linway_app.Forms
             label32.Text = pedido.Direccion;
             _pedidoAEliminar = pedido;
         }
+        private void Button15_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+        }
         private async void Button16_Click(object sender, EventArgs ev)
         {
             await ReCargarHDR(comboBox10.Text, comboBox9.Text);
@@ -125,15 +129,6 @@ namespace linway_app.Forms
             LimpiarPantalla();
             await ActualizarCombobox1();
             await UpdateGrid();
-        }
-        private void Button15_Click(object sender, EventArgs ev)
-        {
-            LimpiarPantalla();
-        }
-        private void BorrarUnDestino_ToolStripMenuItem_Click(object sender, EventArgs ev)
-        {
-            LimpiarPantalla();
-            groupBox8.Visible = true;
         }
     }
 }

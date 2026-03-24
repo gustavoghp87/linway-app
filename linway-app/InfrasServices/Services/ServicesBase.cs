@@ -39,16 +39,11 @@ namespace linway_app.Services
         }
         public void Delete(T entity, CancellationToken ct = default)
         {
-            entity.Estado = "Eliminado";
-            _repository.Edit(entity);
+            _repository.Delete(entity);
         }
         public void DeleteMany(IEnumerable<T> entities, CancellationToken ct = default)
         {
-            foreach (var entity in entities)
-            {
-                entity.Estado = "Eliminado";
-            }
-            _repository.EditMany(entities);
+            _repository.DeleteMany(entities);
         }
         public async Task<T> GetAsync(long id, CancellationToken ct = default)
         {

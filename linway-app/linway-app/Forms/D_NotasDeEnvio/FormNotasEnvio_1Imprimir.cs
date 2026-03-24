@@ -2,26 +2,14 @@
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
 {
     public partial class FormNotasEnvio : Form
     {
-        private void Button1_Click(object sender, EventArgs ev)
-        {
-            if (comboBox2.Text == "")
-            {
-                return;
-            }
-            var lstAImprimir = ObtenerListaAImprimir();
-            foreach (NotaDeEnvio nota in lstAImprimir)
-            {
-                var form = Program.LinwayServiceProvider.GetRequiredService<FormImprimirNota>();
-                form.Rellenar_Datos(nota);
-                form.Show(this);
-            }
-        }
         private void TextBox2_KeyPress(object sender, KeyPressEventArgs ev)
         {
             if (!char.IsNumber(ev.KeyChar) && ev.KeyChar != (char)Keys.Back)
@@ -38,8 +26,8 @@ namespace linway_app.Forms
         }
         private List<NotaDeEnvio> ObtenerListaAImprimir()
         {
-            string opcion = comboBox2.SelectedItem.ToString();
             var listaAImprimir = new List<NotaDeEnvio>();
+            string opcion = comboBox2TipoImprimir.SelectedItem.ToString();
             if (opcion == "No impresas")
             {
                 foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
@@ -60,12 +48,13 @@ namespace linway_app.Forms
                     }
                 }
             }
-            else if (opcion == "Establecer rango" && textBox2.Text != "" && textBox3.Text != "")
+            else if (opcion == "Establecer rango" && textBox2ImprimirRangoDesde.Text != "")
             {
                 try
                 {
-                    int j = int.Parse(textBox3.Text);
-                    for (int i = int.Parse(textBox2.Text); i <= j; i++)
+                    int rangoDesde = int.Parse(textBox2ImprimirRangoDesde.Text);
+                    int rangoHasta = textBox3ImprimirRangoHasta.Text != "" ? int.Parse(textBox3ImprimirRangoHasta.Text) : rangoDesde;
+                    for (int i = rangoDesde; i <= rangoHasta; i++)
                     {
                         NotaDeEnvio nota = _lstNotaDeEnvios.Find(x => x.Id == i);
                         if (nota != null)
@@ -83,31 +72,31 @@ namespace linway_app.Forms
         }
         private void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            string opcion = comboBox2.SelectedItem.ToString();
+            string opcion = comboBox2TipoImprimir.SelectedItem.ToString();
             if (opcion == "No impresas" || opcion == "Hoy")
             {
-                textBox2.TextChanged -= TextBox2_TextChanged;  // evita error de concurrencia de DbContext
-                textBox2.Visible = false;
-                textBox2.Text = "";
-                textBox2.TextChanged += TextBox2_TextChanged;
+                textBox2ImprimirRangoDesde.TextChanged -= TextBox2_TextChanged;  // evita error de concurrencia de DbContext
+                textBox2ImprimirRangoDesde.Visible = false;
+                textBox2ImprimirRangoDesde.Text = "";
+                textBox2ImprimirRangoDesde.TextChanged += TextBox2_TextChanged;
                 //
-                textBox3.TextChanged -= TextBox3_TextChanged;  // evita error de concurrencia de DbContext
-                textBox3.Visible = false;
-                textBox3.Text = "";
-                textBox3.TextChanged += TextBox3_TextChanged;
+                textBox3ImprimirRangoHasta.TextChanged -= TextBox3_TextChanged;  // evita error de concurrencia de DbContext
+                textBox3ImprimirRangoHasta.Visible = false;
+                textBox3ImprimirRangoHasta.Text = "";
+                textBox3ImprimirRangoHasta.TextChanged += TextBox3_TextChanged;
                 //
                 label4.Visible = false;
                 label5.Visible = false;
             }
             else if (opcion == "Establecer rango")
             {
-                textBox2.TextChanged -= TextBox2_TextChanged;  // evita error de concurrencia de DbContext
-                textBox2.Visible = true;
-                textBox2.TextChanged += TextBox2_TextChanged;
+                textBox2ImprimirRangoDesde.TextChanged -= TextBox2_TextChanged;  // evita error de concurrencia de DbContext
+                textBox2ImprimirRangoDesde.Visible = true;
+                textBox2ImprimirRangoDesde.TextChanged += TextBox2_TextChanged;
                 //
-                textBox3.TextChanged -= TextBox3_TextChanged;  // evita error de concurrencia de DbContext
-                textBox3.Visible = true;
-                textBox3.TextChanged += TextBox3_TextChanged;
+                textBox3ImprimirRangoHasta.TextChanged -= TextBox3_TextChanged;  // evita error de concurrencia de DbContext
+                textBox3ImprimirRangoHasta.Visible = true;
+                textBox3ImprimirRangoHasta.TextChanged += TextBox3_TextChanged;
                 //
                 label4.Visible = true;
                 label5.Visible = true;
@@ -121,6 +110,34 @@ namespace linway_app.Forms
         private void TextBox2_TextChanged(object sender, EventArgs ev)
         {
             label7.Text = ObtenerListaAImprimir().Count.ToString();
+        }
+        private void Button1Imprimir_Click(object sender, EventArgs ev)
+        {
+            if (comboBox2TipoImprimir.Text == "")
+            {
+                return;
+            }
+            var lstAImprimir = ObtenerListaAImprimir();
+            int abiertos = 0;
+            foreach (NotaDeEnvio nota in lstAImprimir)
+            {
+                abiertos++;
+                var scope = Program.LinwayServiceProvider.CreateScope();
+                var form = scope.ServiceProvider.GetRequiredService<FormImprimirNota>();
+                form.Rellenar_Datos(nota);
+                form.FormClosing += async (s, e) =>
+                {
+                    scope.Dispose();
+                    if (Interlocked.Decrement(ref abiertos) == 0)
+                    {
+                        _scope.Dispose();
+                        _scope = Program.LinwayServiceProvider.CreateScope();  // renueva scope para que tome los cambios hechos en otros scopes
+                        await ActualizarNotas();
+                        ActualizarGrid1(_lstNotaDeEnvios);
+                    }
+                };
+                form.Show(this);
+            }
         }
     }
 }

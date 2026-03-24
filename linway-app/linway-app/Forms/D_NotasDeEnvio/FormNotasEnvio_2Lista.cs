@@ -44,7 +44,7 @@ namespace linway_app.Forms
             var lFiltrada = new List<NotaDeEnvio>();
             if (opcion == "Hoy")
             {
-                label2.Text = "";
+                label2FiltrarPorDireccionOFecha.Text = "";
                 //
                 textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";
@@ -62,7 +62,7 @@ namespace linway_app.Forms
             }
             else if (opcion == "Todas")
             {
-                label2.Text = "";
+                label2FiltrarPorDireccionOFecha.Text = "";
                 //
                 textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";
@@ -74,7 +74,7 @@ namespace linway_app.Forms
             }
             else if (opcion == "Impresas")
             {
-                label2.Text = "";
+                label2FiltrarPorDireccionOFecha.Text = "";
                 //
                 textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";
@@ -92,7 +92,7 @@ namespace linway_app.Forms
             }
             else if (opcion == "No impresas")
             {
-                label2.Text = "";
+                label2FiltrarPorDireccionOFecha.Text = "";
                 //
                 textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";
@@ -110,7 +110,7 @@ namespace linway_app.Forms
             }
             else if (opcion == "Cliente")
             {
-                label2.Text = "Dirección:";
+                label2FiltrarPorDireccionOFecha.Text = "Dirección:";
                 //
                 textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";
@@ -120,7 +120,7 @@ namespace linway_app.Forms
             }
             else if (opcion== "Fecha")
             {
-                label2.Text = "Fecha:";
+                label2FiltrarPorDireccionOFecha.Text = "Fecha:";
                 //
                 textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
                 textBox1.Text = "";

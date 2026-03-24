@@ -182,7 +182,7 @@ namespace linway_app.Forms
                 MessageBox.Show("Verifique que se hayan llenado los campos correctamente");
                 return;
             }
-            if (!decimal.TryParse(textBox9PrecioProdNuevo.Text, out decimal precio))
+            if (!decimal.TryParse(textBox9PrecioProdNuevo.Text, out decimal precio) || precio <= 0)
             {
                 return;
             }

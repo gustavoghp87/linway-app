@@ -30,14 +30,25 @@ namespace linway_app.Forms
             dataGridView1.DataSource = grid1;
             dataGridView1.Columns[0].Visible = false;
             dataGridView1.Columns[1].Width = 37;
-            dataGridView1.Columns[2].Width = 230;
-            dataGridView1.Columns[3].Width = 320;
-            dataGridView1.Columns[4].Width = 53;
-            dataGridView1.Columns[5].Width = 30;
-            dataGridView1.Columns[6].Width = 30;
-            dataGridView1.Columns[7].Width = 30;
-            dataGridView1.Columns[8].Width = 30;
-            dataGridView1.Columns[9].Width = 30;
+            dataGridView1.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView1.Columns[2].Width = 260;  // dirección
+            dataGridView1.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridView1.Columns[3].Width = 420;  // productos
+            dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridView1.Columns[4].Width = 53;   // entregar
+            dataGridView1.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridView1.Columns[5].Width = 40;   // litros
+            dataGridView1.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView1.Columns[6].Width = 30;   // A
+            dataGridView1.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView1.Columns[7].Width = 30;   // E
+            dataGridView1.Columns[7].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView1.Columns[8].Width = 30;   // D
+            dataGridView1.Columns[8].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView1.Columns[9].Width = 30;   // T
+            dataGridView1.Columns[9].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView1.Columns[10].Width = 30;   // Ae
+            dataGridView1.Columns[10].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridView1.Columns[11].Visible = false;      // orden
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
             var eliminarColumna = new DataGridViewButtonColumn
@@ -54,7 +65,7 @@ namespace linway_app.Forms
         }
         private async void Exportar_Click(object sender, EventArgs ev)
         {
-            string diaReparto = comboBox1.Text;
+            string diaReparto = comboBox1ListaDia.Text;
             string nombreReparto = comboBox2.Text;
             if (diaReparto == "" || nombreReparto == "")
             {
@@ -71,8 +82,8 @@ namespace linway_app.Forms
                         var exportarServices = sp.GetRequiredService<IExportarServices>();
                         List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
                         Reparto reparto = lstDiasRep
-                            .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
-                            .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
+                            .Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList()
+                            .Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
                         exportarServices.ExportarReparto(reparto);
                         return true;
                     },
@@ -102,21 +113,21 @@ namespace linway_app.Forms
         }
         private async Task ActualizarCombobox1()
         {
-            comboBox2.Visible = true;
-            label2.Visible = true;
-            ActualizarGrid(new List<Pedido>());
-            if (_lstDiaRepartos.Count == 0)
+            if (comboBox1ListaDia.SelectedItem == null)
             {
                 return;
             }
-            string diaReparto = comboBox1.SelectedItem.ToString();
+            comboBox2.Visible = true;
+            label2.Visible = true;
+            ActualizarGrid(new List<Pedido>());
+            string diaReparto = comboBox1ListaDia.SelectedItem.ToString();
             List<Reparto> repartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.OrderBy(x => x.Id).ToList();
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -137,7 +148,7 @@ namespace linway_app.Forms
         }
         private async Task UpdateGrid()
         {
-            string diaReparto = comboBox1.Text;  // .SelectedItem.ToString();
+            string diaReparto = comboBox1ListaDia.Text;  // .SelectedItem.ToString();
             if (diaReparto == "")
             {
                 return;
@@ -152,8 +163,8 @@ namespace linway_app.Forms
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
                     Reparto reparto = lstDiasRep
-                        .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
-                        .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado") ?? throw new Exception("No se encontró Reparto");
+                        .Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList()
+                        .Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado") ?? throw new Exception("No se encontró Reparto");
                     List<Pedido> pedidos;
                     var pedidos1 = await pedidoServices.GetPedidosPorRepartoIdAsync(reparto.Id);
                     if (soloAEntregar)

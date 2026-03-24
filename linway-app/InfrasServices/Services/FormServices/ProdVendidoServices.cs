@@ -22,7 +22,9 @@ namespace linway_app.Services.FormServices
         }
         public void DeleteProdVendido(ProdVendido prodVendido)
         {
-            _services.Delete(prodVendido);
+            prodVendido.Estado = "Eliminado";
+            _services.Edit(prodVendido);
+            //_services.Delete(prodVendido);
         }
         public void EditProdVendido(ProdVendido prodVendido)
         {

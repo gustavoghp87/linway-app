@@ -1,5 +1,6 @@
 ﻿using linway_app.Services.Interfaces;
 using Models;
+using NPOI.POIFS.FileSystem;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -46,7 +47,9 @@ namespace linway_app.Services.FormServices
         //}
         public void DeleteCliente(Cliente cliente)
         {
-            _services.Delete(cliente);
+            cliente.Estado = "Eliminado";
+            _services.Edit(cliente);
+            //_services.Delete(cliente);
         }
         public void EditCliente(Cliente cliente)
         {

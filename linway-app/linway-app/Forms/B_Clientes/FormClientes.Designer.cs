@@ -40,16 +40,16 @@ namespace linway_app.Forms
             this.gbAgregar = new System.Windows.Forms.GroupBox();
             this.label44 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox18 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.textBox18AgregarLocalidad = new System.Windows.Forms.TextBox();
+            this.textBox1AgregarNombre = new System.Windows.Forms.TextBox();
+            this.button2AgregarLimpiar = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.radioButton2AgregarRMonotributo = new System.Windows.Forms.RadioButton();
+            this.textBox3AgregarCuit = new System.Windows.Forms.TextBox();
+            this.radioButton1AgregarRInscripto = new System.Windows.Forms.RadioButton();
+            this.textBox4AgregarCP = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.textBox5AgregarTelefono = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
@@ -62,7 +62,7 @@ namespace linway_app.Forms
             this.textBox24 = new System.Windows.Forms.TextBox();
             this.label49 = new System.Windows.Forms.Label();
             this.textBox23 = new System.Windows.Forms.TextBox();
-            this.button8 = new System.Windows.Forms.Button();
+            this.button8EditarLimpiar = new System.Windows.Forms.Button();
             this.label25 = new System.Windows.Forms.Label();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.textBox14 = new System.Windows.Forms.TextBox();
@@ -167,16 +167,16 @@ namespace linway_app.Forms
             // 
             this.gbAgregar.Controls.Add(this.label44);
             this.gbAgregar.Controls.Add(this.label1);
-            this.gbAgregar.Controls.Add(this.textBox18);
-            this.gbAgregar.Controls.Add(this.textBox1);
-            this.gbAgregar.Controls.Add(this.button2);
+            this.gbAgregar.Controls.Add(this.textBox18AgregarLocalidad);
+            this.gbAgregar.Controls.Add(this.textBox1AgregarNombre);
+            this.gbAgregar.Controls.Add(this.button2AgregarLimpiar);
             this.gbAgregar.Controls.Add(this.textBox2);
-            this.gbAgregar.Controls.Add(this.radioButton2);
-            this.gbAgregar.Controls.Add(this.textBox3);
-            this.gbAgregar.Controls.Add(this.radioButton1);
-            this.gbAgregar.Controls.Add(this.textBox4);
+            this.gbAgregar.Controls.Add(this.radioButton2AgregarRMonotributo);
+            this.gbAgregar.Controls.Add(this.textBox3AgregarCuit);
+            this.gbAgregar.Controls.Add(this.radioButton1AgregarRInscripto);
+            this.gbAgregar.Controls.Add(this.textBox4AgregarCP);
             this.gbAgregar.Controls.Add(this.label2);
-            this.gbAgregar.Controls.Add(this.textBox5);
+            this.gbAgregar.Controls.Add(this.textBox5AgregarTelefono);
             this.gbAgregar.Controls.Add(this.label3);
             this.gbAgregar.Controls.Add(this.button1);
             this.gbAgregar.Controls.Add(this.label4);
@@ -209,27 +209,27 @@ namespace linway_app.Forms
             // 
             // textBox18
             // 
-            this.textBox18.Location = new System.Drawing.Point(102, 76);
-            this.textBox18.Name = "textBox18";
-            this.textBox18.Size = new System.Drawing.Size(131, 21);
-            this.textBox18.TabIndex = 4;
+            this.textBox18AgregarLocalidad.Location = new System.Drawing.Point(102, 76);
+            this.textBox18AgregarLocalidad.Name = "textBox18";
+            this.textBox18AgregarLocalidad.Size = new System.Drawing.Size(131, 21);
+            this.textBox18AgregarLocalidad.TabIndex = 4;
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(102, 24);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(131, 21);
-            this.textBox1.TabIndex = 2;
+            this.textBox1AgregarNombre.Location = new System.Drawing.Point(102, 24);
+            this.textBox1AgregarNombre.Name = "textBox1";
+            this.textBox1AgregarNombre.Size = new System.Drawing.Size(131, 21);
+            this.textBox1AgregarNombre.TabIndex = 2;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(158, 247);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 20;
-            this.button2.Text = "Limpiar";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.LimpiarAgregar_Click);
+            this.button2AgregarLimpiar.Location = new System.Drawing.Point(158, 247);
+            this.button2AgregarLimpiar.Name = "button2";
+            this.button2AgregarLimpiar.Size = new System.Drawing.Size(75, 23);
+            this.button2AgregarLimpiar.TabIndex = 20;
+            this.button2AgregarLimpiar.Text = "Limpiar";
+            this.button2AgregarLimpiar.UseVisualStyleBackColor = true;
+            this.button2AgregarLimpiar.Click += new System.EventHandler(this.LimpiarAgregar_Click);
             // 
             // textBox2
             // 
@@ -240,39 +240,39 @@ namespace linway_app.Forms
             // 
             // radioButton2
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(59, 199);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(83, 19);
-            this.radioButton2.TabIndex = 19;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "R.Inscripto";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2AgregarRMonotributo.AutoSize = true;
+            this.radioButton2AgregarRMonotributo.Location = new System.Drawing.Point(59, 199);
+            this.radioButton2AgregarRMonotributo.Name = "radioButton2";
+            this.radioButton2AgregarRMonotributo.Size = new System.Drawing.Size(83, 19);
+            this.radioButton2AgregarRMonotributo.TabIndex = 19;
+            this.radioButton2AgregarRMonotributo.TabStop = true;
+            this.radioButton2AgregarRMonotributo.Text = "R.Inscripto";
+            this.radioButton2AgregarRMonotributo.UseVisualStyleBackColor = true;
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(102, 102);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(131, 21);
-            this.textBox3.TabIndex = 5;
+            this.textBox3AgregarCuit.Location = new System.Drawing.Point(102, 102);
+            this.textBox3AgregarCuit.Name = "textBox3";
+            this.textBox3AgregarCuit.Size = new System.Drawing.Size(131, 21);
+            this.textBox3AgregarCuit.TabIndex = 5;
             // 
             // radioButton1
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(148, 199);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(103, 19);
-            this.radioButton1.TabIndex = 18;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "R.Monotributo";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1AgregarRInscripto.AutoSize = true;
+            this.radioButton1AgregarRInscripto.Location = new System.Drawing.Point(148, 199);
+            this.radioButton1AgregarRInscripto.Name = "radioButton1";
+            this.radioButton1AgregarRInscripto.Size = new System.Drawing.Size(103, 19);
+            this.radioButton1AgregarRInscripto.TabIndex = 18;
+            this.radioButton1AgregarRInscripto.TabStop = true;
+            this.radioButton1AgregarRInscripto.Text = "R.Monotributo";
+            this.radioButton1AgregarRInscripto.UseVisualStyleBackColor = true;
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(102, 128);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(131, 21);
-            this.textBox4.TabIndex = 6;
+            this.textBox4AgregarCP.Location = new System.Drawing.Point(102, 128);
+            this.textBox4AgregarCP.Name = "textBox4";
+            this.textBox4AgregarCP.Size = new System.Drawing.Size(131, 21);
+            this.textBox4AgregarCP.TabIndex = 6;
             // 
             // label2
             // 
@@ -285,10 +285,10 @@ namespace linway_app.Forms
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(102, 154);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(131, 21);
-            this.textBox5.TabIndex = 7;
+            this.textBox5AgregarTelefono.Location = new System.Drawing.Point(102, 154);
+            this.textBox5AgregarTelefono.Name = "textBox5";
+            this.textBox5AgregarTelefono.Size = new System.Drawing.Size(131, 21);
+            this.textBox5AgregarTelefono.TabIndex = 7;
             // 
             // label3
             // 
@@ -337,7 +337,7 @@ namespace linway_app.Forms
             this.gbModificar.Controls.Add(this.textBox24);
             this.gbModificar.Controls.Add(this.label49);
             this.gbModificar.Controls.Add(this.textBox23);
-            this.gbModificar.Controls.Add(this.button8);
+            this.gbModificar.Controls.Add(this.button8EditarLimpiar);
             this.gbModificar.Controls.Add(this.label25);
             this.gbModificar.Controls.Add(this.radioButton3);
             this.gbModificar.Controls.Add(this.textBox14);
@@ -415,13 +415,13 @@ namespace linway_app.Forms
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(176, 262);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(75, 23);
-            this.button8.TabIndex = 20;
-            this.button8.Text = "Cancelar";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.LimpiarEditar_Click);
+            this.button8EditarLimpiar.Location = new System.Drawing.Point(176, 262);
+            this.button8EditarLimpiar.Name = "button8";
+            this.button8EditarLimpiar.Size = new System.Drawing.Size(75, 23);
+            this.button8EditarLimpiar.TabIndex = 20;
+            this.button8EditarLimpiar.Text = "Cancelar";
+            this.button8EditarLimpiar.UseVisualStyleBackColor = true;
+            this.button8EditarLimpiar.Click += new System.EventHandler(this.LimpiarEditar_Click);
             // 
             // label25
             // 
@@ -561,16 +561,16 @@ namespace linway_app.Forms
         private System.Windows.Forms.GroupBox gbAgregar;
         private System.Windows.Forms.Label label44;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox18;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox textBox18AgregarLocalidad;
+        private System.Windows.Forms.TextBox textBox1AgregarNombre;
+        private System.Windows.Forms.Button button2AgregarLimpiar;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.RadioButton radioButton2AgregarRMonotributo;
+        private System.Windows.Forms.TextBox textBox3AgregarCuit;
+        private System.Windows.Forms.RadioButton radioButton1AgregarRInscripto;
+        private System.Windows.Forms.TextBox textBox4AgregarCP;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox textBox5AgregarTelefono;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label4;
@@ -581,7 +581,7 @@ namespace linway_app.Forms
         private System.Windows.Forms.TextBox textBox24;
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.TextBox textBox23;
-        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button8EditarLimpiar;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.TextBox textBox14;

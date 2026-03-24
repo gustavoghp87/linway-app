@@ -21,7 +21,14 @@ namespace linway_app.PresentationHelpers
             }
             catch (Exception ex)
             {
-                scope.ServiceProvider.GetRequiredService<ISavingServices>().DiscardChanges();
+                try
+                {
+                    scope.ServiceProvider.GetRequiredService<ISavingServices>().DiscardChanges();
+                }
+                catch (Exception ex1)
+                {
+                    //
+                }
                 Logger.LogException(ex);
                 string reason = Logger.GetReason(ex);
                 MessageBox.Show($"{errorMessage}: {reason}");

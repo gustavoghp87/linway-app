@@ -24,7 +24,7 @@ namespace linway_app.Forms
                 {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList();
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -135,7 +135,7 @@ namespace linway_app.Forms
                     if (pedidoAlQueQuiereIr == null)
                     {
                         Cliente cliente = await clienteServices.GetClientePorIdAsync(_notaDeEnvioAReparto.ClienteId);
-                        pedidoAlQueQuiereIr = PedidoServices.CrearPedido(cliente, _reparto);
+                        pedidoAlQueQuiereIr = PedidoServices.GetNuevoPedido(cliente, _reparto);
                     }
                     // prodVendidos
                     List<ProdVendido> prodVendidosDeLaNota = prodVendidos.Where(x => x.NotaDeEnvioId == _notaDeEnvioAReparto.Id).ToList();

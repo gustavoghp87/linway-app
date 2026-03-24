@@ -1,5 +1,6 @@
 ﻿using linway_app.Services.Interfaces;
 using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,8 +14,13 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
-        public void AddReparto(Reparto reparto)
+        public void AddReparto(Reparto reparto, List<DiaReparto> diaRepartos)
         {
+            Reparto repartoMismoDiaNombre = diaRepartos.Find(d => d.Id == reparto.DiaRepartoId).Reparto.FirstOrDefault(r => r.Nombre == reparto.Nombre);
+            if (repartoMismoDiaNombre != null)
+            {
+                throw new Exception($"Ya existe un reparto '{reparto.Nombre}' los {reparto.DiaReparto.Dia}");
+            }
             _services.Add(reparto);
         }
         public void EditReparto(Reparto reparto)

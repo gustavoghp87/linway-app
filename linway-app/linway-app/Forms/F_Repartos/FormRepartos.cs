@@ -29,7 +29,7 @@ namespace linway_app.Forms
         }
         private async Task Actualizar()
         {
-            _lstDiaRepartos = await UIExecutor.ExecuteAsync(
+            List<DiaReparto> diaRepartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
@@ -38,14 +38,12 @@ namespace linway_app.Forms
                 "No se pudieron buscar los Días de Reparto",
                 null
             );
-            if (_lstDiaRepartos == null)
-            {
-                return;
-            }
-            if (_lstDiaRepartos == null || _lstDiaRepartos.Count == 0)
+            if (diaRepartos == null || diaRepartos.Count == 0)
             {
                 await CrearDias();
+                return;
             }
+            _lstDiaRepartos = diaRepartos;
             await UpdateGrid();
         }
         private async Task CrearDias()
@@ -77,7 +75,6 @@ namespace linway_app.Forms
             if (diaDeRepartos == null || diaDeRepartos.Count == 0)
             {
                 MessageBox.Show("Algo falla con la base de datos");
-                Close();
                 return;
             }
             _lstDiaRepartos = diaDeRepartos;
@@ -93,8 +90,8 @@ namespace linway_app.Forms
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
                     Reparto reparto = lstDiasRep
-                        .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
-                        .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
+                        .Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList()
+                        .Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
                     var pedidos = await pedidoServices.GetPedidosPorRepartoIdAsync(reparto.Id);
                     return pedidos.OrderBy(x => x.Orden).ToList();
                 },
@@ -123,10 +120,10 @@ namespace linway_app.Forms
             textBox4.Text = "";
             textBox2.Text = "";
             textBox6.Text = "";
-            textBox1.Text = "";
+            textBox1AgregarRepartoNombre.Text = "";
             textBox5.Text = "";
             textBox7.Text = "";
-            label8.Text = "";
+            label8AgregarPedidoDireccion.Text = "";
             comboBox6.Text = "";
             comboBox7.Text = "";
             comboBox8.Text = "";
@@ -149,6 +146,38 @@ namespace linway_app.Forms
         {
             LimpiarPantalla();
             groupBox2.Visible = true;
+        }
+        private void TodasLuAVi_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+            groupBox4.Visible = true;
+        }
+        private void DiaEspecífico_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+            groupBox5.Visible = true;
+        }
+        private void RepartoSeleccionado_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+            groupBox6.Visible = true;
+        }
+        private void Destino_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+            groupBox9.Visible = true;
+            label39.Text = "Día " + comboBox1ListaDia.Text + " -> Reparto: " + comboBox2.Text;
+        }
+        private void PosicionarDestino_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+            groupBox7.Visible = true;
+            label27.Text = "Día " + comboBox1ListaDia.Text + " -> Reparto: " + comboBox2.Text;
+        }
+        private void BorrarUnDestino_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+            groupBox8.Visible = true;
         }
     }
 }

@@ -12,15 +12,16 @@ namespace linway_app.Forms
         private async void AgregarRepartoADIA_btn2_Click(object sender, EventArgs ev)
         {
             await Actualizar();
-            if (textBox1.Text == "")
+            if (textBox1AgregarRepartoNombre.Text == "")
             {
                 return;
             }
             string diaReparto = comboBox3.Text;
             DiaReparto diaRep = _lstDiaRepartos.Find(x => x.Dia.Contains(diaReparto));
-            Reparto nuevoReparto = new Reparto
+            var nuevoReparto = new Reparto
             {
-                Nombre = textBox1.Text,
+                Nombre = textBox1AgregarRepartoNombre.Text,
+                DiaReparto = diaRep,
                 DiaRepartoId = diaRep.Id,
                 Ta = 0,
                 Tae = 0,
@@ -35,7 +36,7 @@ namespace linway_app.Forms
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    repartoServices.AddReparto(nuevoReparto);
+                    repartoServices.AddReparto(nuevoReparto, _lstDiaRepartos);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

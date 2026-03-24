@@ -34,7 +34,7 @@ namespace Infrastructure.Repositories.DbContexts
             {
                 entity.HasIndex(e => e.Id);
                 entity.Property(e => e.Cuit).HasColumnName("CUIT");
-                entity.Property(e => e.Direccion).IsRequired();
+                entity.Property(e => e.Direccion).IsRequired().HasMaxLength(80);
                 entity.Property(e => e.Estado).IsRequired();
             });
             modelBuilder.Entity<DetalleRecibo>(entity =>
@@ -109,7 +109,7 @@ namespace Infrastructure.Repositories.DbContexts
             modelBuilder.Entity<Recibo>(entity =>
             {
                 entity.HasIndex(e => e.Id);
-                entity.Property(e => e.DireccionCliente).IsRequired();
+                entity.Property(e => e.DireccionCliente).IsRequired().HasMaxLength(80);
                 entity.Property(e => e.Fecha).IsRequired();
                 entity.HasOne(d => d.Cliente)
                     .WithMany(p => p.Recibo)
@@ -121,7 +121,7 @@ namespace Infrastructure.Repositories.DbContexts
             {
                 entity.HasIndex(e => e.Id);
                 entity.Property(e => e.Fecha).IsRequired();
-                entity.Property(e => e.NombreCliente).IsRequired();
+                entity.Property(e => e.NombreCliente).IsRequired().HasMaxLength(80);  // en realidad es dirección
                 entity.HasOne(d => d.Cliente)
                     .WithMany(p => p.RegistroVenta)
                     .HasForeignKey(d => d.ClienteId)
@@ -131,7 +131,7 @@ namespace Infrastructure.Repositories.DbContexts
             modelBuilder.Entity<Reparto>(entity =>
             {
                 entity.HasIndex(e => e.Id);
-                entity.Property(e => e.Nombre).IsRequired().HasMaxLength(40);
+                entity.Property(e => e.Nombre).IsRequired().HasMaxLength(80);  // en realidad es dirección
                 entity.Property(e => e.Ta).HasColumnName("TA");
                 entity.Property(e => e.Tae).HasColumnName("TAE");
                 entity.Property(e => e.Td).HasColumnName("TD");
@@ -143,7 +143,7 @@ namespace Infrastructure.Repositories.DbContexts
                     .HasForeignKey(d => d.DiaRepartoId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
                 entity.Property(e => e.Estado).IsRequired();
-                entity.HasIndex(e => new { e.DiaRepartoId, e.Nombre }).IsUnique();
+                //entity.HasIndex(e => new { e.DiaRepartoId, e.Nombre }).IsUnique();
             });
             modelBuilder.Entity<Venta>(entity =>
             {

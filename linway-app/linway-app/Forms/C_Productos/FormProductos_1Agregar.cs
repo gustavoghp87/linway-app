@@ -14,38 +14,38 @@ namespace linway_app.Forms
         private string _subTipoAgregar = "";
         private void LimpiarAgregar_Click(object sender, EventArgs ev)
         {
-            radioButton1.Checked = false;
-            radioButton2.Checked = false;
+            radioButton1AgregarLiquido.Checked = false;
+            radioButton2Agregar.Checked = false;
             radioButton3.Checked = false;
-            radioButton4.Checked = false;
-            textBox6.Text = "";
-            textBox7.Text = "";
+            radioButton4AgregarSaldo.Checked = false;
+            textBox6AgregarNombre.Text = "";
+            textBox7AgregarPrecio.Text = "";
             //
             comboBox1.Visible = false;
         }
         private void SeleccionarTipo_CheckedChanged(object sender, EventArgs ev)
         {
-            comboBox1.Visible = true;
             var elegido = (RadioButton)sender;
             switch (elegido.Text)
             {
                 case "Líquido":
+                    comboBox1.Visible = true;
                     _tipoAgregar = TipoProducto.Líquido.ToString();
                     comboBox1.DataSource = Enum.GetValues(typeof(TipoLiquido));
                     break;
                 case "Polvo":
-                    _tipoAgregar = TipoProducto.Polvo.ToString();
                     comboBox1.Visible = true;
+                    _tipoAgregar = TipoProducto.Polvo.ToString();
                     comboBox1.DataSource = Enum.GetValues(typeof(TipoPolvo));
                     break;
                 case "Unidad":
-                    _tipoAgregar = TipoProducto.Unidad.ToString();
                     comboBox1.Visible = false;
+                    _tipoAgregar = TipoProducto.Unidad.ToString();
                     comboBox1.DataSource = null;
                     break;
                 case "Saldo":
-                    _tipoAgregar = TipoProducto.Saldo.ToString();
                     comboBox1.Visible = true;
+                    _tipoAgregar = TipoProducto.Saldo.ToString();
                     comboBox1.DataSource = Enum.GetValues(typeof(TipoSaldo));
                     break;
             }
@@ -56,8 +56,8 @@ namespace linway_app.Forms
         }
         private bool TodoOKagregarP()
         {
-            return textBox6.Text != "" && textBox7.Text != ""
-                && (radioButton1.Checked || radioButton2.Checked || radioButton3.Checked || radioButton4.Checked);
+            return textBox6AgregarNombre.Text != "" && textBox7AgregarPrecio.Text != ""
+                && (radioButton1AgregarLiquido.Checked || radioButton2Agregar.Checked || radioButton3.Checked || radioButton4AgregarSaldo.Checked);
         }
         private async void AgregarProducto_Click(object sender, EventArgs ev)
         {
@@ -66,13 +66,13 @@ namespace linway_app.Forms
                 MessageBox.Show("Verifique los campos.");
                 return;
             }
-            if (!decimal.TryParse(textBox7.Text, out decimal precio))
+            if (!decimal.TryParse(textBox7AgregarPrecio.Text, out decimal precio) || precio <= 0)
             {
                 return;
             }
             var nuevoProducto = new Producto
             {
-                Nombre = textBox6.Text,
+                Nombre = textBox6AgregarNombre.Text,
                 Precio = precio,
                 Tipo = _tipoAgregar.ToString()
             };

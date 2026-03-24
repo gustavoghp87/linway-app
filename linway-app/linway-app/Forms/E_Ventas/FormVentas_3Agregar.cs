@@ -13,7 +13,10 @@ namespace linway_app.Forms
     public partial class FormVentas : Form
     {
         private Producto _productoAAgregar;
-        private Cliente _clienteAAgregar;
+        private Cliente _clienteAgregar;
+        private DiaReparto _diaRepartoAgregar;
+        private Reparto _repartoAgregar;
+        private List<Reparto> _repartosAgregar;
         private readonly List<Venta> _lstAgregarVentas = new List<Venta>();
         private void NuevaVenta_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
@@ -90,7 +93,7 @@ namespace linway_app.Forms
         private void Limpiar_Click(object sender, EventArgs ev)
         {
             _lstAgregarVentas.Clear();
-            _clienteAAgregar = null;
+            _clienteAgregar = null;
             _productoAAgregar = null;
             ActualizarGrid5(_lstAgregarVentas);
             label28.Text = "";
@@ -148,31 +151,34 @@ namespace linway_app.Forms
                 textBox3.Text = "";
             }
         }
-        private async void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)  // agregar a reparto
+        private async void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)  // selecciona día de reparto
         {
-            string diaReparto = comboBox1.Text;
-            List<Reparto> repartos = await UIExecutor.ExecuteAsync(
+            string dia = comboBox1.Text;
+            DiaReparto diaReparto = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
+                    return lstDiasRep.Find(x => x.Dia == dia && x.Estado != "Eliminado");
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
             );
-            if (repartos == null)
-            {
-                return;
-            }
-            comboBox2.DataSource = repartos;
+            _diaRepartoAgregar = diaReparto;
+            comboBox2.DataSource = diaReparto.Reparto;  // plural
             comboBox2.DisplayMember = "Nombre";
             comboBox2.ValueMember = "Nombre";
         }
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)  // selecciona reparto
+        {
+            string nombreReparto = comboBox2.Text;
+            List<Reparto> repartos = _diaRepartoAgregar.Reparto.ToList().Where(x => x.Nombre == nombreReparto && x.Estado != "Eliminado").ToList();
+            _repartoAgregar = repartos.Find(x => x.Nombre == nombreReparto);
+        }
         private async void TextBox19_TextChanged(object sender, EventArgs ev)
         {
-            _clienteAAgregar = null;
+            _clienteAgregar = null;
             string numeroDeCliente = textBox19.Text;
             if (numeroDeCliente == "")
             {
@@ -197,12 +203,12 @@ namespace linway_app.Forms
                 label20.Text = "No encontrado";
                 return;
             }
-            _clienteAAgregar = cliente;
+            _clienteAgregar = cliente;
             label20.Text = cliente.Direccion;
         }
         private async void TextBox3_TextChanged(object sender, EventArgs ev)
         {
-            _clienteAAgregar = null;
+            _clienteAgregar = null;
             string direccion = textBox3.Text;
             if (direccion == "")
             {
@@ -223,7 +229,7 @@ namespace linway_app.Forms
                 label20.Text = "No encontrado";
                 return;
             }
-            _clienteAAgregar = cliente;
+            _clienteAgregar = cliente;
             label20.Text = cliente.Direccion;
         }
         private async void AgregarVenta_Click(object sender, EventArgs ev)
@@ -233,14 +239,12 @@ namespace linway_app.Forms
                 MessageBox.Show("No se han ingresado productos");
                 return;
             }
-            string diaReparto = comboBox1.Text;
-            string nombreReparto = comboBox2.Text;
-            if (_clienteAAgregar == null || diaReparto == "" || nombreReparto == "")
+            bool enviarAReparto = checkBox2.Checked;
+            if (_clienteAgregar == null || (enviarAReparto && _repartoAgregar == null))
             {
                 MessageBox.Show("Faltan el Cliente o el Reparto");
                 return;
             }
-            bool enviarAReparto = checkBox2.Checked;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
@@ -254,23 +258,13 @@ namespace linway_app.Forms
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
                     //
-                    Reparto reparto = null;
                     Pedido pedido = null;
                     if (enviarAReparto)   // enviar a reparto
                     {
-                        List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                        reparto = lstDiasRep
-                            .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
-                            .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado");
-                        if (reparto == null)
-                        {
-                            MessageBox.Show("Falló Reparto");
-                            return false;
-                        }
-                        pedido = reparto.Pedidos.ToList().Find(x => x.ClienteId == _clienteAAgregar.Id && x.Estado != "Eliminado");
+                        pedido = _repartoAgregar.Pedidos.ToList().Find(x => x.ClienteId == _clienteAgregar.Id && x.Estado != "Eliminado");
                         if (pedido == null)
                         {
-                            pedido = PedidoServices.CrearPedido(_clienteAAgregar, reparto);
+                            pedido = PedidoServices.GetNuevoPedido(_clienteAgregar, _repartoAgregar);
                         }
                     }
                     // se crea un Registro de Venta (para "Venta particular" o Cliente en Reparto si hay)
@@ -281,8 +275,8 @@ namespace linway_app.Forms
                     //   caso 2: el Reparto existe, se agregan ProdVendidos
                     var nuevoRegistroVenta = new RegistroVenta
                     {   // si se envía a Reparto hay cliente
-                        ClienteId = _clienteAAgregar != null ? _clienteAAgregar.Id : 634,
-                        NombreCliente = _clienteAAgregar != null ? _clienteAAgregar.Direccion : "Venta particular",
+                        ClienteId = _clienteAgregar != null ? _clienteAgregar.Id : 634,
+                        NombreCliente = _clienteAgregar != null ? _clienteAgregar.Direccion : "Venta particular",
                         Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
                     };
                     registroVentaServices.AddRegistroVenta(nuevoRegistroVenta);
@@ -329,7 +323,7 @@ namespace linway_app.Forms
                             PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, true);
                             await pedidoServices.AddPedidoAsync(pedido);
                             // Reparto
-                            reparto.Pedidos.Add(pedido);
+                            _repartoAgregar.Pedidos.Add(pedido);
                             RepartoServices.ActualizarCantidadesDeReparto(pedido.Reparto);
                             repartoServices.EditReparto(pedido.Reparto);
                         }
@@ -343,10 +337,10 @@ namespace linway_app.Forms
                             PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, true);
                             pedidoServices.EditPedido(pedido);
                             // Reparto
-                            var existente = reparto.Pedidos.FirstOrDefault(p => p.Id == pedido.Id);
+                            var existente = _repartoAgregar.Pedidos.FirstOrDefault(p => p.Id == pedido.Id);
                             existente.ProdVendidos = pedido.ProdVendidos;
-                            RepartoServices.ActualizarCantidadesDeReparto(reparto);
-                            repartoServices.EditReparto(reparto);
+                            RepartoServices.ActualizarCantidadesDeReparto(_repartoAgregar);
+                            repartoServices.EditReparto(_repartoAgregar);
                         }
                     }
                     //
@@ -365,6 +359,8 @@ namespace linway_app.Forms
             {
                 return;
             }
+            _repartoAgregar = null;
+            _clienteAgregar = null;
             _lstAgregarVentas.Clear();
             LimpiarPantalla();
             await Actualizar();

@@ -3,9 +3,9 @@ using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -45,6 +45,12 @@ namespace linway_app.Forms
             }
             bool agregarProdVendidosARegistrosYVentas = checkBox4.Checked;
             bool enviarAHojaDeReparto = checkBox3.Checked;
+            bool imprimir = checkBox1Imprimir.Checked;
+            if (enviarAHojaDeReparto && _reparto == null)
+            {
+                MessageBox.Show("Falta el Reparto");
+                return;
+            }
             NotaDeEnvio nuevaNota = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
@@ -72,7 +78,7 @@ namespace linway_app.Forms
                     }
                     if (agregarProdVendidosARegistrosYVentas)
                     {
-                        RegistroVenta nuevoRegistro = new RegistroVenta
+                        var nuevoRegistro = new RegistroVenta
                         {
                             ClienteId = _cliente.Id,
                             Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
@@ -91,21 +97,14 @@ namespace linway_app.Forms
                         bool existiaPedido = _pedido != null;
                         if (!existiaPedido)
                         {
-                            if (_reparto == null)
-                            {
-                                savingServices.DiscardChanges();
-                                MessageBox.Show("Falta el Reparto");
-                                return null;
-                            }
-                            _pedido = PedidoServices.CrearPedido(_cliente, _reparto);
+                            _pedido = PedidoServices.GetNuevoPedido(_cliente, _reparto);
                         }
                         foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
                         {
                             prodVendido.Pedido = _pedido;
+                            _pedido.ProdVendidos.Add(prodVendido);
                         }
-                        // pedido.Entregar = 1;
-                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(_pedido, true);
-                        RepartoServices.ActualizarCantidadesDeReparto(_pedido.Reparto);
+                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(_pedido, true);  // pedido.Entregar = 1;
                         if (existiaPedido)
                         {
                             pedidoServices.EditPedido(_pedido);
@@ -114,15 +113,27 @@ namespace linway_app.Forms
                         {
                             await pedidoServices.AddPedidoAsync(_pedido);
                         }
+                        // reparto
+                        foreach (var p in _reparto.Pedidos)
+                        {
+                            if (p.Id == _pedido.Id)
+                            {
+                                p.ProdVendidos = _pedido.ProdVendidos;
+                            }
+                        }
+                        RepartoServices.ActualizarCantidadesDeReparto(_pedido.Reparto);
                         repartoServices.EditReparto(_pedido.Reparto);
                     }
                     prodVendidoServices.AddProdVendidos(_lstProdVendidosAAgregar);
-                    nuevaNota.Cliente = _cliente;  // para que no falle la dirección al imprimir
-                    foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
+                    if (imprimir)  // imprimir
                     {
-                        prodVendido.Producto = _lstProductosAAgregar.Find(p => p.Id == prodVendido.ProductoId);  // para que no falten los productos al imprimir
+                        nuevaNota.Cliente = _cliente;
+                        foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
+                        {
+                            prodVendido.Producto = _lstProductosAAgregar.Find(p => p.Id == prodVendido.ProductoId);
+                        }
+                        nuevaNota.ProdVendidos = _lstProdVendidosAAgregar;
                     }
-                    nuevaNota.ProdVendidos = _lstProdVendidosAAgregar;
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {
@@ -139,11 +150,13 @@ namespace linway_app.Forms
             {
                 return;
             }
-            if (checkBox1.Checked)  // imprimir
+            _pedido = null;
+            _reparto = null;
+            if (imprimir)  // imprimir
             {
                 var form = Program.LinwayServiceProvider.GetRequiredService<FormImprimirNota>();
                 form.Rellenar_Datos(nuevaNota);
-                form.Show(this);
+                form.Show(this);  // no necesita renovar scope porque el cambio a imprimido no se muestra en este form
             }
             Close();
         }

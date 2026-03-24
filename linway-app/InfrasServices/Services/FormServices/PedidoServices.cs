@@ -21,7 +21,9 @@ namespace linway_app.Services.FormServices
         }
         public void DeletePedido(Pedido pedido)
         {
-            _services.Delete(pedido);
+            pedido.Estado = "Eliminado";
+            _services.Edit(pedido);
+            //_services.Delete(pedido);
         }
         public void EditPedido(Pedido pedido)
         {
@@ -147,7 +149,7 @@ namespace linway_app.Services.FormServices
             }
             pedido.Entregar = entregar ? 1 : 0;
         }
-        public static Pedido CrearPedido(Cliente cliente, Reparto reparto)
+        public static Pedido GetNuevoPedido(Cliente cliente, Reparto reparto)
         {
             return new Pedido()
             {

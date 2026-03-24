@@ -1,11 +1,8 @@
 ﻿using Infrastructure.Repositories.DbContexts;
 using Infrastructure.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using Models.OModel;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -24,10 +21,14 @@ namespace Infrastructure.Repositories
         {
             _context.Set<T>().AddRangeAsync(t);
         }
-        //public bool Delete(T t)
-        //{
-        //    return Edit(t);   // doing nothing
-        //}
+        public void Delete(T t)
+        {
+            _context.Set<T>().Remove(t);
+        }
+        public void DeleteMany(IEnumerable<T> t)
+        {
+            _context.Set<T>().RemoveRange(t);
+        }
         public void Edit(T t)
         {
             _context.Set<T>().Update(t);
@@ -36,25 +37,25 @@ namespace Infrastructure.Repositories
         {
             _context.Set<T>().UpdateRange(t);
         }
-        public T Get(long id)
-        {
-            return _context.Set<T>().Find(id);
-        }
-        public IQueryable<T> GetAll()  // no se usa, se usa Query
-        {
-            return _context.Set<T>();
-        }
+        //public T Get(long id)
+        //{
+        //    return _context.Set<T>().Find(id);
+        //}
+        //public IQueryable<T> GetAll()  // no se usa, se usa Query
+        //{
+        //    return _context.Set<T>();
+        //}
         public IQueryable<T> Query()
         {
             return _context.Set<T>();
         }
-        public Task<T> FirstOrDefaultAsync(IQueryable<T> query, CancellationToken cancellationToken = default)
-        {
-            return query.FirstOrDefaultAsync(cancellationToken);
-        }
-        public Task<List<T>> ToListAsync(IQueryable<T> query, CancellationToken cancellationToken = default)
-        {
-            return query.ToListAsync(cancellationToken);
-        }
+        //public Task<T> FirstOrDefaultAsync(IQueryable<T> query, CancellationToken cancellationToken = default)
+        //{
+        //    return query.FirstOrDefaultAsync(cancellationToken);
+        //}
+        //public Task<List<T>> ToListAsync(IQueryable<T> query, CancellationToken cancellationToken = default)
+        //{
+        //    return query.ToListAsync(cancellationToken);
+        //}
     }
 }

@@ -38,16 +38,16 @@
             this.label45 = new System.Windows.Forms.Label();
             this.gbAgregar = new System.Windows.Forms.GroupBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButton4AgregarSaldo = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2Agregar = new System.Windows.Forms.RadioButton();
+            this.radioButton1AgregarLiquido = new System.Windows.Forms.RadioButton();
             this.limpiarBtn = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.textBox7AgregarPrecio = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.textBox6AgregarNombre = new System.Windows.Forms.TextBox();
             this.gbModificar = new System.Windows.Forms.GroupBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
@@ -158,16 +158,16 @@
             // gbAgregar
             // 
             this.gbAgregar.Controls.Add(this.comboBox1);
-            this.gbAgregar.Controls.Add(this.radioButton4);
+            this.gbAgregar.Controls.Add(this.radioButton4AgregarSaldo);
             this.gbAgregar.Controls.Add(this.radioButton3);
-            this.gbAgregar.Controls.Add(this.radioButton2);
-            this.gbAgregar.Controls.Add(this.radioButton1);
+            this.gbAgregar.Controls.Add(this.radioButton2Agregar);
+            this.gbAgregar.Controls.Add(this.radioButton1AgregarLiquido);
             this.gbAgregar.Controls.Add(this.limpiarBtn);
             this.gbAgregar.Controls.Add(this.button3);
             this.gbAgregar.Controls.Add(this.label8);
-            this.gbAgregar.Controls.Add(this.textBox7);
+            this.gbAgregar.Controls.Add(this.textBox7AgregarPrecio);
             this.gbAgregar.Controls.Add(this.label9);
-            this.gbAgregar.Controls.Add(this.textBox6);
+            this.gbAgregar.Controls.Add(this.textBox6AgregarNombre);
             this.gbAgregar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbAgregar.Location = new System.Drawing.Point(12, 12);
             this.gbAgregar.Name = "gbAgregar";
@@ -188,15 +188,15 @@
             // 
             // radioButton4
             // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(93, 139);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(57, 19);
-            this.radioButton4.TabIndex = 10;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "Saldo";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            this.radioButton4.CheckedChanged += new System.EventHandler(this.SeleccionarTipo_CheckedChanged);
+            this.radioButton4AgregarSaldo.AutoSize = true;
+            this.radioButton4AgregarSaldo.Location = new System.Drawing.Point(93, 139);
+            this.radioButton4AgregarSaldo.Name = "radioButton4";
+            this.radioButton4AgregarSaldo.Size = new System.Drawing.Size(57, 19);
+            this.radioButton4AgregarSaldo.TabIndex = 10;
+            this.radioButton4AgregarSaldo.TabStop = true;
+            this.radioButton4AgregarSaldo.Text = "Saldo";
+            this.radioButton4AgregarSaldo.UseVisualStyleBackColor = true;
+            this.radioButton4AgregarSaldo.CheckedChanged += new System.EventHandler(this.SeleccionarTipo_CheckedChanged);
             // 
             // radioButton3
             // 
@@ -212,27 +212,27 @@
             // 
             // radioButton2
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(93, 114);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(55, 19);
-            this.radioButton2.TabIndex = 8;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Polvo";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.SeleccionarTipo_CheckedChanged);
+            this.radioButton2Agregar.AutoSize = true;
+            this.radioButton2Agregar.Location = new System.Drawing.Point(93, 114);
+            this.radioButton2Agregar.Name = "radioButton2";
+            this.radioButton2Agregar.Size = new System.Drawing.Size(55, 19);
+            this.radioButton2Agregar.TabIndex = 8;
+            this.radioButton2Agregar.TabStop = true;
+            this.radioButton2Agregar.Text = "Polvo";
+            this.radioButton2Agregar.UseVisualStyleBackColor = true;
+            this.radioButton2Agregar.CheckedChanged += new System.EventHandler(this.SeleccionarTipo_CheckedChanged);
             // 
             // radioButton1
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(13, 113);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(66, 19);
-            this.radioButton1.TabIndex = 7;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Líquido";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.SeleccionarTipo_CheckedChanged);
+            this.radioButton1AgregarLiquido.AutoSize = true;
+            this.radioButton1AgregarLiquido.Location = new System.Drawing.Point(13, 113);
+            this.radioButton1AgregarLiquido.Name = "radioButton1";
+            this.radioButton1AgregarLiquido.Size = new System.Drawing.Size(66, 19);
+            this.radioButton1AgregarLiquido.TabIndex = 7;
+            this.radioButton1AgregarLiquido.TabStop = true;
+            this.radioButton1AgregarLiquido.Text = "Líquido";
+            this.radioButton1AgregarLiquido.UseVisualStyleBackColor = true;
+            this.radioButton1AgregarLiquido.CheckedChanged += new System.EventHandler(this.SeleccionarTipo_CheckedChanged);
             // 
             // limpiarBtn
             // 
@@ -266,11 +266,11 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(87, 61);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(94, 21);
-            this.textBox7.TabIndex = 4;
-            this.textBox7.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloImporte_KeyPress);
+            this.textBox7AgregarPrecio.Location = new System.Drawing.Point(87, 61);
+            this.textBox7AgregarPrecio.Name = "textBox7";
+            this.textBox7AgregarPrecio.Size = new System.Drawing.Size(94, 21);
+            this.textBox7AgregarPrecio.TabIndex = 4;
+            this.textBox7AgregarPrecio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloImporte_KeyPress);
             // 
             // label9
             // 
@@ -283,10 +283,10 @@
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(87, 28);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(125, 21);
-            this.textBox6.TabIndex = 3;
+            this.textBox6AgregarNombre.Location = new System.Drawing.Point(87, 28);
+            this.textBox6AgregarNombre.Name = "textBox6";
+            this.textBox6AgregarNombre.Size = new System.Drawing.Size(125, 21);
+            this.textBox6AgregarNombre.TabIndex = 3;
             // 
             // gbModificar
             // 
@@ -471,9 +471,9 @@
         private System.Windows.Forms.Button limpiarBtn;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox textBox7AgregarPrecio;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox textBox6AgregarNombre;
         private System.Windows.Forms.GroupBox gbModificar;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label14;
@@ -485,10 +485,10 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.CheckBox cbSeguroBorrar;
-        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.RadioButton radioButton4AgregarSaldo;
         private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButton2Agregar;
+        private System.Windows.Forms.RadioButton radioButton1AgregarLiquido;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label BusqNombreLabel;

@@ -19,7 +19,12 @@ namespace linway_app.Services.FormServices
         }
         public void DeleteVentas(ICollection<Venta> ventas)
         {
-            _services.DeleteMany(ventas);
+            foreach (var entity in ventas)
+            {
+                entity.Estado = "Eliminado";
+            }
+            _services.EditMany(ventas);
+            //_services.DeleteMany(ventas);
         }
         public void EditVentas(ICollection<Venta> ventas)
         {

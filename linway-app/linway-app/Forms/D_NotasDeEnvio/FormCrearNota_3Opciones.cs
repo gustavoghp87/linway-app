@@ -39,7 +39,7 @@ namespace linway_app.Forms
                 {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList();
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -55,20 +55,28 @@ namespace linway_app.Forms
         }
         private async void ComboBox3_SelectorDeReparto_SelectedIndexChanged(object sender, EventArgs ev)
         {
+            _pedido = null;
+            _reparto = null;
             string nombreReparto = comboBox3.Text;
-            Pedido pedido = await UIExecutor.ExecuteAsync(
+            var respuesta = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     Reparto reparto = _repartos.Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
+                    _reparto = reparto;
                     Pedido pedido = reparto.Pedidos.ToList().FirstOrDefault(x => x.ClienteId == _cliente.Id && x.Estado != "Eliminado");
-                    return pedido;
+                    return (pedido, reparto);
                 },
                 "No se pudo buscar el Reparto por nombre",
                 null
             );
-            _pedido = pedido;  // puede ser null
+            if (respuesta.pedido == null || respuesta.reparto == null)
+            {
+                return;
+            }
+            _pedido = respuesta.pedido;
+            _reparto = respuesta.reparto;
         }
     }
 }

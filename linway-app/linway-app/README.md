@@ -1,4 +1,30 @@
-﻿-- Actualizar direcciones en Pedidos
+﻿
+
+-- correr query de eliminación de detalles de recibo eliminados falsos
+
+DELETE FROM detallerecibo WHERE Estado = "Eliminado";
+
+
+-- correr query de eliminación de recibos eliminados falsos
+
+DELETE FROM recibo WHERE Estado = "Eliminado";
+
+--
+
+
+Eliminar PV que ya no tienen Nota de Envío, Registro de Venta ni Pedido
+
+
+Poner largo máximo 40 en dirección (cliente, registro de venta y pedido)
+
+ALTER TABLE `Cliente` MODIFY COLUMN `Nombre` VARCHAR(99) NOT NULL;
+ALTER TABLE `RegistroVenta` MODIFY COLUMN `NombreCliente` VARCHAR(99) NOT NULL;
+ALTER TABLE `Reparto` MODIFY COLUMN `Nombre` VARCHAR(99) NOT NULL;
+ALTER TABLE `Recibo` MODIFY COLUMN `DireccionCliente` VARCHAR(99) NOT NULL;
+
+
+
+-- Actualizar direcciones en Pedidos
 UPDATE Pedido p
 JOIN Cliente c ON c.Id = p.ClienteId
 SET p.Direccion = c.Direccion
@@ -10,26 +36,6 @@ SELECT `Dia`, COUNT(*) AS `Cantidad`
 FROM `DiaReparto`
 GROUP BY `Dia`
 HAVING COUNT(*) > 1;
-
--- Días unique:
-SELECT `Dia`, COUNT(*) AS `Cantidad`
-FROM `DiaReparto`
-GROUP BY `Dia`
-HAVING COUNT(*) > 1;
-
--- Cambiar Nombre de Reparto a VARCHAR (está como TEXT):
-ALTER TABLE `Reparto` MODIFY COLUMN `Nombre` VARCHAR(40) NOT NULL;
-
--- Hay Repartos con Día-Nombre repetidos?
-SELECT `DiaRepartoId`, `Nombre`, COUNT(*) AS `Cantidad`
-FROM `Reparto`
-GROUP BY `DiaRepartoId`, `Nombre`
-HAVING COUNT(*) > 1;
-
--- Combinación Día-Nombre única:
-ALTER TABLE `Reparto`
-ADD CONSTRAINT `UQ_Reparto_DiaRepartoId_Nombre`
-UNIQUE (`DiaRepartoId`, `Nombre`);
 
 
 Metas para versiones posteriores:
@@ -57,6 +63,9 @@ ___________________________________Sistema Linway 15____________________________
  estaba en el reparto destino y cancela
 -Divididos los Forms en clases parciales por bloque de diseño
 -Nuevos índices de unicidad en la base de datos: Dia y combinación Día-Nombre
+
+-Detalles de Recibo y Recibos ahora se eliminan realmente
+
 
 
 ___________________________________Sistema Linway 14__________________________________    junio 2023

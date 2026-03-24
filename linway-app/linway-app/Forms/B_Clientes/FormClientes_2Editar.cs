@@ -29,13 +29,12 @@ namespace linway_app.Forms
         }
         bool TodoOkModificarC()
         {
-            //var direccionLabel = label23.Text;
             //var cuit = textBox10.Text;
             //var nombre = textBox11.Text;
             //var telefono = textBox24.Text;
             //var cp = textBox25.Text;
-            //var direccion = textBox23.Text;
-            return _clienteAEditar != null;
+            var direccion = textBox23.Text;
+            return _clienteAEditar != null && direccion != "";
         }
         private void ActualizarEtiquetasDeClienteAEDitar(Cliente cliente)
         {
@@ -139,6 +138,12 @@ namespace linway_app.Forms
                 MessageBox.Show("Verifique que los campos sean correctos");
                 return;
             }
+            _clienteAEditar.Direccion = textBox23.Text;
+            _clienteAEditar.Telefono = textBox24.Text;
+            _clienteAEditar.CodigoPostal = textBox25.Text;
+            _clienteAEditar.Nombre = textBox11.Text;
+            _clienteAEditar.Cuit = textBox10.Text;
+            _clienteAEditar.Tipo = radioButton3.Checked ? TipoR.Inscripto.ToString() : TipoR.Monotributo.ToString();
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
@@ -147,12 +152,6 @@ namespace linway_app.Forms
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    _clienteAEditar.Direccion = textBox23.Text;
-                    _clienteAEditar.Telefono = textBox24.Text;
-                    _clienteAEditar.CodigoPostal = textBox25.Text;
-                    _clienteAEditar.Nombre = textBox11.Text;
-                    _clienteAEditar.Cuit = textBox10.Text;
-                    _clienteAEditar.Tipo = radioButton3.Checked ? TipoR.Inscripto.ToString() : TipoR.Monotributo.ToString();
                     clienteServices.EditCliente(_clienteAEditar);
                     List<DiaReparto> dias = await diaRepartoServices.GetDiaRepartosAsync();
                     List<Pedido> pedidosAEditar = dias
@@ -181,7 +180,7 @@ namespace linway_app.Forms
                 return;
             }
             _clienteAEditar = null;
-            button8.PerformClick();
+            button8EditarLimpiar.PerformClick();
         }
     }
 }

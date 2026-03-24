@@ -15,14 +15,14 @@ namespace linway_app.Forms
         private Cliente _clienteAReparto;
         private async void ComboBox4_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            string diaReparto = comboBox4.SelectedItem.ToString();
+            string diaReparto = comboBox4AgregarPedidido_Dia.SelectedItem.ToString();
             List<Reparto> repartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList();
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -31,9 +31,9 @@ namespace linway_app.Forms
             {
                 return;
             }
-            comboBox5.DataSource = repartos;
-            comboBox5.DisplayMember = "Nombre";
-            comboBox5.ValueMember = "Nombre";
+            comboBox5AgregarPedido_Nombre.DataSource = repartos;
+            comboBox5AgregarPedido_Nombre.DisplayMember = "Nombre";
+            comboBox5AgregarPedido_Nombre.ValueMember = "Nombre";
         }
         private void Button4_Click(object sender, EventArgs ev)
         {
@@ -46,13 +46,13 @@ namespace linway_app.Forms
                 ev.Handled = true;
             }
         }
-        private async void TextBox2_TextChanged(object sender, EventArgs ev)  // Agregar destino a recorrido
+        private async void TextBox2_TextChanged(object sender, EventArgs ev)
         {
             _clienteAReparto = null;
             string numeroDeCliente = textBox2.Text;
             if (numeroDeCliente == "")
             {
-                label8.Text = "No encontrado";
+                label8AgregarPedidoDireccion.Text = "No encontrado";
                 return;
             }
             if (!long.TryParse(numeroDeCliente, out long clienteId))
@@ -68,7 +68,7 @@ namespace linway_app.Forms
                 "No se pudo buscar el Cliente",
                 null
             );
-            label8.Text = cliente != null ? cliente.Direccion : "No encontrado";
+            label8AgregarPedidoDireccion.Text = cliente != null ? cliente.Direccion : "No encontrado";
             if (cliente == null)
             {
                 return;
@@ -81,7 +81,7 @@ namespace linway_app.Forms
             string direccion = textBox6.Text;
             if (direccion == "")
             {
-                label8.Text = "No encontrado";
+                label8AgregarPedidoDireccion.Text = "No encontrado";
                 return;
             }
             Cliente cliente = await UIExecutor.ExecuteAsync(
@@ -93,7 +93,7 @@ namespace linway_app.Forms
                 "No se pudo buscar el Cliente",
                 null
             );
-            label8.Text = cliente != null ? cliente.Direccion : "No encontrado";
+            label8AgregarPedidoDireccion.Text = cliente != null ? cliente.Direccion : "No encontrado";
             if (cliente == null)
             {
                 return;
@@ -102,34 +102,32 @@ namespace linway_app.Forms
         }
         private async void AgregarDestinoAReparto_btn1_Click(object sender, EventArgs ev)
         {
-            string diaReparto = comboBox4.Text;
-            string direccion = label8.Text;
+            string diaReparto = comboBox4AgregarPedidido_Dia.Text;
+            string direccion = label8AgregarPedidoDireccion.Text;
             if (_clienteAReparto == null || diaReparto == "")
             {
                 MessageBox.Show("Error, verificar los campos");
                 return;
             }
-            string nombreReparto = comboBox5.Text;
-            await ReCargarHDR(diaReparto, nombreReparto);
+            string nombreReparto = comboBox5AgregarPedido_Nombre.Text;
+            //await ReCargarHDR(diaReparto, nombreReparto);
             //comboBox1.SelectedIndex = comboBox4.SelectedIndex;
             //comboBox2.SelectedIndex = comboBox5.SelectedIndex;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    Reparto reparto = lstDiasRep
-                        .Find(x => x.Dia == diaReparto && x.Estado != null && x.Estado != "Eliminado").Reparto.ToList()
-                        .Find(x => x.Nombre == nombreReparto && x.Estado != null && x.Estado != "Eliminado") ?? throw new Exception("No se pudo encontrar el Reparto");
+                    Reparto reparto = _lstDiaRepartos
+                        .Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList()
+                        .Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
                     if (_lstPedidos.Exists(x => x.ClienteId == _clienteAReparto.Id && x.RepartoId == reparto.Id))
                     {
                         savingServices.DiscardChanges();
                         MessageBox.Show("Ese cliente ya estaba en el Reparto");
                         return false;
                     }
-                    var pedido = PedidoServices.CrearPedido(_clienteAReparto, reparto);
+                    var pedido = PedidoServices.GetNuevoPedido(_clienteAReparto, reparto);
                     await pedidoServices.AddPedidoAsync(pedido);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)

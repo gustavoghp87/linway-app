@@ -20,7 +20,12 @@ namespace linway_app.Services.FormServices
         }
         public void DeleteNotas(ICollection<NotaDeEnvio> notas)
         {
-            _services.DeleteMany(notas);
+            foreach (var entity in notas)
+            {
+                entity.Estado = "Eliminado";
+            }
+            _services.EditMany(notas);
+            //_services.DeleteMany(notas);
         }
 
         public void EditNotaDeEnvio(NotaDeEnvio notaDeEnvio)

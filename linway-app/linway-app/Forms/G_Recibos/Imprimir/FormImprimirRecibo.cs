@@ -6,6 +6,7 @@ using Models;
 using System;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -47,14 +48,15 @@ namespace linway_app.Forms
             lTotal.Text = "$ " + _recibo.ImporteTotal.ToString(".00");
             foreach (DetalleRecibo detalle in _recibo.DetalleRecibos)
             {
-                if (detalle.Detalle.Contains("Factura")) {
+                if (detalle.Detalle.Contains("Factura"))
+                {
                     detalle.Detalle = detalle.Detalle.Replace("Factura", "Fc.");
                 }
                 label1.Text = label1.Text + detalle.Detalle + Environment.NewLine;
                 label2.Text = label2.Text + detalle.Importe.ToString(".00") + Environment.NewLine;
             }
         }
-        private async void MarcarImpresa()
+        private async Task MarcarImpresa()
         {
             if (_recibo.Impreso == 1)
             {
@@ -74,9 +76,14 @@ namespace linway_app.Forms
                 null
             );
         }
-        private void CaptureScreen()
+        private void PrintDocument1_PrintPage(object sender, PrintPageEventArgs ev)
         {
-            try
+            ev.Graphics.DrawImage(memoryImage, 0, 0);
+        }
+        private async void Button1_Click(object sender, EventArgs ev)
+        {
+            button1.Visible = false;
+            try  // Capture Screen
             {
                 Graphics mygraphics = CreateGraphics();
                 Size s = Size;
@@ -92,16 +99,8 @@ namespace linway_app.Forms
             {
                 Logger.LogException(e);
                 MessageBox.Show("Falló captura de pantalla:", e.Message);
+                return;
             }
-        }
-        private void PrintDocument1_PrintPage(object sender, PrintPageEventArgs ev)
-        {
-            ev.Graphics.DrawImage(memoryImage, 0, 0);
-        }
-        private void Button1_Click(object sender, EventArgs ev)
-        {
-            button1.Visible = false;
-            CaptureScreen();
             try
             {
                 PrintDialog printDialog1 = new PrintDialog { Document = printDocument1 };
@@ -112,14 +111,15 @@ namespace linway_app.Forms
                     return;
                 }
                 printDocument1.Print();
-                MarcarImpresa();
-                Close();
             }
             catch (Exception e)
             {
                 Logger.LogException(e);
                 MessageBox.Show("Falló impresión: " + e.Message);
+                return;
             }
+            await MarcarImpresa();
+            Close();
         }
     }
 }
