@@ -2,6 +2,7 @@
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,23 @@ namespace linway_app.Forms
     public partial class FormVentas : Form
     {
         private RegistroVenta _registroVerEliminar;
-        private void VerRegistro_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        private void ActualizarGrid2ProdVendidos(ICollection<ProdVendido> lstProdVendidos)
         {
-            LimpiarPantalla();
-            showing = "verReg";
-            gbVerRegistro.Visible = true;
-            ActualizarGrid2ProdVendidos(new List<ProdVendido>());
+            var grid = new List<EProdVendido>();
+            foreach (ProdVendido prodVendido in lstProdVendidos)
+            {
+                grid.Add(Form1.Mapper.Map<EProdVendido>(prodVendido));
+            }
+            dataGridView2.DataSource = grid;
+            if (showing == "agregarReg")
+            {
+                dataGridView2.Columns[0].Width = 150;
+            }
+            if (showing == "verReg")
+            {
+                dataGridView2.Columns[0].Width = 28;
+                dataGridView2.Columns[1].Width = 150;
+            }
         }
         // Ver y deshacer una venta
         private async void TextBox1_TextChanged(object sender, EventArgs ev)
@@ -41,7 +53,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
-                    return await registroVentaServices.GetRegistroVentaPorIdAsync(registroVentaId);
+                    return await registroVentaServices.GetPorIdAsync(registroVentaId);
                 },
                 "No se pudo buscar el Registro de Venta",
                 null
@@ -58,20 +70,20 @@ namespace linway_app.Forms
             _registroVerEliminar = registroVenta;
             labelFecha.Text = registroVenta.Fecha;
             labelProductoN.Text = registroVenta.NombreCliente;
-            ActualizarGrid2ProdVendidos(registroVenta.ProdVendido.ToList());
+            ActualizarGrid2ProdVendidos(registroVenta.ProdVendidos.ToList());
             decimal importeTotal = 0;
-            foreach (ProdVendido prodVendido in registroVenta.ProdVendido)
+            foreach (ProdVendido prodVendido in registroVenta.ProdVendidos)
             {
                 importeTotal += prodVendido.Precio;
             }
             labelTotal.Text = "Total: $" + importeTotal.ToString();
             bDeshacerVenta.Enabled = true;
         }
-        private async void DeshacerVenta_Click(object sender, EventArgs ev)
+        private async void DeshacerVenta_Click(object sender, EventArgs ev)  // resetea contador de ventas (lista de la derecha)
         {
             if (!cbSeguro.Checked)
             {
-                MessageBox.Show("Debe confirmar que está seguro de deshacer este registro.");
+                MessageBox.Show("Debe confirmar que está seguro de reiniciar el contador de Ventas.");
                 return;
             }
             ;
@@ -81,7 +93,7 @@ namespace linway_app.Forms
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
-                    await ventaServices.UpdateVentasDesdeProdVendidosAsync(_registroVerEliminar.ProdVendido, false);
+                    await ventaServices.UpdateDesdeProdVendidosAsync(_registroVerEliminar.ProdVendidos, false);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

@@ -8,11 +8,6 @@ namespace linway_app.Forms
 {
     public partial class FormVentas : Form
     {
-        private void ReiniciarVentas_ToolStripMenuItem_Click(object sender, EventArgs ev)
-        {
-            LimpiarPantalla();
-            groupBox7.Visible = true;
-        }
         private async void ReiniciarVentas_Click(object sender, EventArgs ev)
         {
             if (!cbSeguroBorrar.Checked)
@@ -25,7 +20,7 @@ namespace linway_app.Forms
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
-                    ventaServices.DeleteVentas(_lstVentas);
+                    ventaServices.DeleteMany(_lstVentas);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

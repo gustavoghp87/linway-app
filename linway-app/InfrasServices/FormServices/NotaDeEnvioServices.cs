@@ -14,30 +14,25 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
-        public void AddNotaDeEnvio(NotaDeEnvio notaDeEnvio)
+        public void Add(NotaDeEnvio notaDeEnvio)
         {
             _services.Add(notaDeEnvio);
         }
-        public void DeleteNotas(ICollection<NotaDeEnvio> notas)
+        public void DeleteMany(ICollection<NotaDeEnvio> notas)
         {
-            foreach (var entity in notas)
-            {
-                entity.Estado = "Eliminado";
-            }
-            _services.EditMany(notas);
-            //_services.DeleteMany(notas);
+            _services.DeleteMany(notas);
         }
 
-        public void EditNotaDeEnvio(NotaDeEnvio notaDeEnvio)
+        public void Edit(NotaDeEnvio notaDeEnvio)
         {
             _services.Edit(notaDeEnvio);
         }
-        public async Task<NotaDeEnvio> GetNotaDeEnvioPorIdAsync(long id)
+        public async Task<NotaDeEnvio> GetPorIdAsync(long id)
         {
             NotaDeEnvio nota = await _services.GetAsync(id);
             return nota;
         }
-        public async Task<List<NotaDeEnvio>> GetNotaDeEnviosAsync()
+        public async Task<List<NotaDeEnvio>> GetAllAsync()
         {
             List<NotaDeEnvio> notas = await _services.GetAllAsync();
             return notas;

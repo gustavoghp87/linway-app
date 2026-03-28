@@ -1,6 +1,5 @@
 ﻿using linway_app.Services.Interfaces;
 using Models;
-using NPOI.POIFS.FileSystem;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
-        public async Task AddClienteAsync(Cliente cliente)
+        public async Task AddAsync(Cliente cliente)
         {
             cliente.Direccion = cliente.Direccion.Trim();
             {   // no permitir comillas simples
@@ -28,7 +27,7 @@ namespace linway_app.Services.FormServices
                 }
             }
             {   // no permitir direcciones repetidas (no se hace por DB porque se permiten repetidos entre clientes eliminados)
-                var clientes = await GetClientesAsync();
+                var clientes = await GetAllAsync();  // ya filtró los falsos eliminados
                 if (clientes.Exists(x => x.Direccion == cliente.Direccion))
                 {
                     throw new Exception($"Ya existe un cliente con esta dirección: {cliente.Direccion}");
@@ -45,24 +44,22 @@ namespace linway_app.Services.FormServices
         //    };
         //    await AddClienteAsync(cliente);
         //}
-        public void DeleteCliente(Cliente cliente)
+        public void Delete(Cliente cliente)
         {
-            cliente.Estado = "Eliminado";
-            _services.Edit(cliente);
-            //_services.Delete(cliente);
+            _services.Delete(cliente);
         }
-        public void EditCliente(Cliente cliente)
+        public void Edit(Cliente cliente)
         {
             _services.Edit(cliente);
         }
-        public async Task<Cliente> GetClientePorIdAsync(long clientId)
+        public async Task<Cliente> GetPorIdAsync(long clientId)
         {
             Cliente cliente = await _services.GetAsync(clientId);
             return cliente;
         }
-        public async Task<Cliente> GetClientePorDireccionAsync(string direccion)
+        public async Task<Cliente> GetPorDireccionAsync(string direccion)
         {
-            List<Cliente> clientes = await GetClientesAsync();
+            List<Cliente> clientes = await GetAllAsync();
             Cliente cliente = clientes.Find(x => x.Direccion.ToLower().Contains(direccion.ToLower()));
             if (cliente == null)
             {
@@ -82,13 +79,13 @@ namespace linway_app.Services.FormServices
             }
             return cliente;
         }
-        public async Task<Cliente> GetClientePorDireccionExactaAsync(string direccion)
+        public async Task<Cliente> GetPorDireccionExactaAsync(string direccion)
         {
-            List<Cliente> clientes = await GetClientesAsync();
+            List<Cliente> clientes = await GetAllAsync();
             Cliente cliente = clientes.Find(x => x.Direccion.Contains(direccion));
             return cliente;
         }
-        public async Task<List<Cliente>> GetClientesAsync()
+        public async Task<List<Cliente>> GetAllAsync()
         {
             List<Cliente> clientes = await _services.GetAllAsync();
             return clientes;

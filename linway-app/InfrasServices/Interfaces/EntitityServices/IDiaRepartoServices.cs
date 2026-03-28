@@ -6,7 +6,7 @@ namespace linway_app.Services.Interfaces
 {
     public interface IDiaRepartoServices
     {
-        void AddDiaReparto(DiaReparto diaReparto);
-        Task<List<DiaReparto>> GetDiaRepartosAsync();
+        void Add(DiaReparto diaReparto);
+        Task<List<DiaReparto>> GetAllAsync();
     }
 }

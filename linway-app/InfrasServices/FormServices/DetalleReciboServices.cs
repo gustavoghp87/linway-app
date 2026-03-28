@@ -11,11 +11,11 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
-        public void AddDetalles(ICollection<DetalleRecibo> detalles)
+        public void AddMany(ICollection<DetalleRecibo> detalles)
         {
             _services.AddMany(detalles);
         }
-        public void DeleteDetalles(ICollection<DetalleRecibo> detalles)
+        public void DeleteMany(ICollection<DetalleRecibo> detalles)
         {
             _services.DeleteMany(detalles);
         }

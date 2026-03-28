@@ -12,7 +12,7 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
-        public void AddRecibo(Recibo recibo)
+        public void Add(Recibo recibo)
         {
             _services.Add(recibo);
         }
@@ -26,15 +26,15 @@ namespace linway_app.Services.FormServices
         //    }
         //    return total;
         //}
-        public void DeleteRecibos(ICollection<Recibo> recibos)
+        public void DeleteMany(ICollection<Recibo> recibos)
         {
             _services.DeleteMany(recibos);
         }
-        public void EditRecibo(Recibo recibo)
+        public void Edit(Recibo recibo)
         {
             _services.Edit(recibo);
         }
-        public async Task<List<Recibo>> GetRecibosAsync()
+        public async Task<List<Recibo>> GetAllAsync()
         {
             List<Recibo> recibos = await _services.GetAllAsync();
             return recibos;

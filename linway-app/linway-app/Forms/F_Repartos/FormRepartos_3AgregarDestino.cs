@@ -21,8 +21,8 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto).Repartos.ToList();
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -63,7 +63,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetClientePorIdAsync(clienteId);
+                    return await clienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -88,7 +88,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetClientePorDireccionAsync(direccion);
+                    return await clienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -119,8 +119,8 @@ namespace linway_app.Forms
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     Reparto reparto = _lstDiaRepartos
-                        .Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList()
-                        .Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
+                        .Find(x => x.Dia == diaReparto).Repartos.ToList()
+                        .Find(x => x.Nombre == nombreReparto);
                     if (_lstPedidos.Exists(x => x.ClienteId == _clienteAReparto.Id && x.RepartoId == reparto.Id))
                     {
                         savingServices.DiscardChanges();
@@ -128,7 +128,7 @@ namespace linway_app.Forms
                         return false;
                     }
                     var pedido = PedidoServices.GetNuevoPedido(_clienteAReparto, reparto);
-                    await pedidoServices.AddPedidoAsync(pedido);
+                    await pedidoServices.AddAsync(pedido);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {
@@ -146,8 +146,6 @@ namespace linway_app.Forms
             }
             LimpiarPantalla();
             await Actualizar();
-            await ActualizarCombobox1();
-            await UpdateGrid();
             _clienteAReparto = null;
         }
     }

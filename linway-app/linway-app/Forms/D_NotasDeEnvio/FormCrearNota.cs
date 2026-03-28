@@ -3,7 +3,6 @@ using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
-using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -38,7 +37,7 @@ namespace linway_app.Forms
         }
         private async void ConfirmarCrearNota_Click(object sender, EventArgs ev)
         {
-            if (_cliente == null || _lstProdVendidosAAgregar == null || _lstProdVendidosAAgregar.Count == 0)
+            if (_cliente == null || _lstProdVendidosAAgregar.Count == 0)
             {
                 MessageBox.Show("Verifique los campos");
                 return;
@@ -55,8 +54,6 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
@@ -71,7 +68,7 @@ namespace linway_app.Forms
                         Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(_lstProdVendidosAAgregar),
                         ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(_lstProdVendidosAAgregar)
                     };
-                    notaDeEnvioServices.AddNotaDeEnvio(nuevaNota);
+                    notaDeEnvioServices.Add(nuevaNota);
                     foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
                     {
                         prodVendido.NotaDeEnvio = nuevaNota;
@@ -84,13 +81,13 @@ namespace linway_app.Forms
                             Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
                             NombreCliente = _cliente.Direccion
                         };
-                        registroVentaServices.AddRegistroVenta(nuevoRegistro);
+                        registroVentaServices.Add(nuevoRegistro);
                         foreach (var prodVendido in _lstProdVendidosAAgregar)
                         {
                             prodVendido.RegistroVenta = nuevoRegistro;
                             _lstProdVendidosAAgregar.Find(x => x.Id == prodVendido.Id).RegistroVenta = nuevoRegistro;  // para que el siguiente checkbox no pise los cambios
                         }
-                        await ventaServices.UpdateVentasDesdeProdVendidosAsync(_lstProdVendidosAAgregar, true);
+                        await ventaServices.UpdateDesdeProdVendidosAsync(_lstProdVendidosAAgregar, true);
                     }
                     if (enviarAHojaDeReparto)
                     {
@@ -107,11 +104,11 @@ namespace linway_app.Forms
                         PedidoServices.ActualizarCantidadesYDescripcionDePedido(_pedido, true);  // pedido.Entregar = 1;
                         if (existiaPedido)
                         {
-                            pedidoServices.EditPedido(_pedido);
+                            pedidoServices.Edit(_pedido);
                         }
                         else
                         {
-                            await pedidoServices.AddPedidoAsync(_pedido);
+                            await pedidoServices.AddAsync(_pedido);
                         }
                         // reparto
                         foreach (var p in _reparto.Pedidos)
@@ -122,9 +119,9 @@ namespace linway_app.Forms
                             }
                         }
                         RepartoServices.ActualizarCantidadesDeReparto(_pedido.Reparto);
-                        repartoServices.EditReparto(_pedido.Reparto);
+                        repartoServices.Edit(_pedido.Reparto);
                     }
-                    prodVendidoServices.AddProdVendidos(_lstProdVendidosAAgregar);
+                    prodVendidoServices.AddMany(_lstProdVendidosAAgregar);
                     if (imprimir)  // imprimir
                     {
                         nuevaNota.Cliente = _cliente;

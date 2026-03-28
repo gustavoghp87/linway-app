@@ -45,8 +45,8 @@ namespace linway_app.Forms
                 {
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
                     var productoServices = sp.GetRequiredService<IProductoServices>();
-                    List<Producto> productos = await productoServices.GetProductosAsync();
-                    List<Cliente> clientes = await clienteServices.GetClientesAsync();
+                    List<Producto> productos = await productoServices.GetAllAsync();
+                    List<Cliente> clientes = await clienteServices.GetAllAsync();
                     return (clientes, productos);
                 },
                 "No se pudieron buscar los Clientes y los Productos",

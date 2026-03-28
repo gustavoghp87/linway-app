@@ -14,29 +14,29 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
-        public void AddReparto(Reparto reparto, List<DiaReparto> diaRepartos)
+        public void Add(Reparto reparto, List<DiaReparto> diaRepartos)
         {
-            Reparto repartoMismoDiaNombre = diaRepartos.Find(d => d.Id == reparto.DiaRepartoId).Reparto.FirstOrDefault(r => r.Nombre == reparto.Nombre);
+            Reparto repartoMismoDiaNombre = diaRepartos.Find(d => d.Id == reparto.DiaRepartoId).Repartos.FirstOrDefault(r => r.Nombre == reparto.Nombre);
             if (repartoMismoDiaNombre != null)
             {
                 throw new Exception($"Ya existe un reparto '{reparto.Nombre}' los {reparto.DiaReparto.Dia}");
             }
             _services.Add(reparto);
         }
-        public void EditReparto(Reparto reparto)
+        public void Edit(Reparto reparto)
         {
             _services.Edit(reparto);
         }
-        public void EditRepartos(ICollection<Reparto> repartos)
+        public void EditMany(ICollection<Reparto> repartos)
         {
             _services.EditMany(repartos);
         }
-        public async Task<Reparto> GetRepartoPorIdAsync(long repartoId)
+        public async Task<Reparto> GetPorIdAsync(long repartoId)
         {
             Reparto reparto = await _services.GetAsync(repartoId);
             return reparto;
         }
-        public async Task<List<Reparto>> GetRepartosAsync()
+        public async Task<List<Reparto>> GetAllAsync()
         {
             List<Reparto> repartos = await _services.GetAllAsync();
             return repartos;

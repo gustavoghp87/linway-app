@@ -86,7 +86,7 @@ namespace linway_app.Forms
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var productoServices = sp.GetRequiredService<IProductoServices>();
-                    productoServices.AddProducto(nuevoProducto);
+                    productoServices.Add(nuevoProducto);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

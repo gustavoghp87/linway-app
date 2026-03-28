@@ -9,7 +9,7 @@ namespace Models
         {
             ProdVendidos = new HashSet<ProdVendido>();
         }
-        public string Direccion { get; set; }  // se mantiene como campo distinto a Cliente.Direccion como referencia para Repartos eliminados
+        public string Direccion { get; set; }  // se mantiene como campo distinto a Cliente.Direccion para que no tarde tanto en cargar
         public long ClienteId { get; set; }
         public long RepartoId { get; set; }
         public long Entregar { get; set; }

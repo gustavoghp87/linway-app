@@ -46,7 +46,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetClientePorIdAsync(clienteId);
+                    return await clienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -78,7 +78,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetClientePorDireccionAsync(direccion);
+                    return await clienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -160,19 +160,25 @@ namespace linway_app.Forms
         }
         private async void CrearRecibo_Click(object sender, EventArgs ev)
         {
+            if (_clienteAgregarRecibo == null)
+            {
+                MessageBox.Show("Seleccionar un Cliente primero");
+                return;
+            }
+            if (_lstDetallesAAgregar.Count == 0)
+            {
+                MessageBox.Show("Agregar al menos un Detalle");
+                return;
+            }
             await CargarRecibos();
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var clienteService = sp.GetRequiredService<IClienteServices>();
                     var reciboService = sp.GetRequiredService<IReciboServices>();
                     var detalleReciboService = sp.GetRequiredService<IDetalleReciboServices>();
-                    if (_clienteAgregarRecibo == null)
-                    {
-                        return false;
-                    }
+                    //
                     var nuevoRecibo = new Recibo
                     {
                         ClienteId = _clienteAgregarRecibo.Id,
@@ -181,12 +187,14 @@ namespace linway_app.Forms
                         Impreso = 0,
                         Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
                     };
-                    reciboService.AddRecibo(nuevoRecibo);
+                    reciboService.Add(nuevoRecibo);
+                    //
                     foreach (DetalleRecibo detalle in _lstDetallesAAgregar)
                     {
                         detalle.Recibo = nuevoRecibo;
                     }
-                    detalleReciboService.AddDetalles(_lstDetallesAAgregar);
+                    detalleReciboService.AddMany(_lstDetallesAAgregar);
+                    //
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

@@ -32,8 +32,8 @@ namespace linway_app.Forms
                 async sp => {
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
                     var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
-                    List<Venta> ventas = await ventaServices.GetVentasAsync();
-                    List<RegistroVenta> registros = await registroVentaServices.GetRegistroVentasAsync();
+                    List<Venta> ventas = await ventaServices.GetAllAsync();
+                    List<RegistroVenta> registros = await registroVentaServices.GetAllAsync();
                     return (ventas, registros);
                 },
                 "No se pudieron buscar las Ventas y los Registros de Ventas",
@@ -47,6 +47,28 @@ namespace linway_app.Forms
             _lstRegistros = response.registros;
             ActualizarGrid1Registros(_lstRegistros);
             ActualizarGrid3Ventas();
+        }
+        private void LimpiarPantalla()
+        {
+            gbNuevaVenta.Visible = false;
+            gbVerRegistro.Visible = false;
+            groupBox7.Visible = false;
+            label28.Text = "";
+            label20.Text = "";
+            textBox19.Text = "";
+            textBox3.Text = "";
+            checkBox2.Checked = false;
+            cbSeguro.Checked = false;
+            textBox12.Text = "";
+            textBox13.Text = "";
+            textBox1.Text = "";
+            labelFecha.Text = "";
+            labelTotal.Text = "";
+            cbSeguroBorrar.Checked = false;
+            gbBorrarReg.Visible = false;
+            tbDesde.Text = "";
+            tbHasta.Text = "";
+            checkBox1.Checked = false;
         }
         private void CancelarClick_Click(object sender, EventArgs ev)
         {
@@ -69,6 +91,31 @@ namespace linway_app.Forms
             {
                 ev.Handled = true;
             }
+        }
+        private void VerRegistro_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+            showing = "verReg";
+            gbVerRegistro.Visible = true;
+            ActualizarGrid2ProdVendidos(new List<ProdVendido>());
+        }
+        private void NuevaVenta_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+            showing = "agregarReg";
+            gbNuevaVenta.Visible = true;
+            _lstAgregarVentas.Clear();
+            ActualizarGrid5(_lstAgregarVentas);
+        }
+        private void ReiniciarVentas_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+            groupBox7.Visible = true;
+        }
+        private void BorrarRegistros_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+            gbBorrarReg.Visible = true;
         }
         private async void ExportBtn_Click_1(object sender, EventArgs ev)
         {

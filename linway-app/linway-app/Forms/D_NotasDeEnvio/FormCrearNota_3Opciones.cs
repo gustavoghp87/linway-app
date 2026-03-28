@@ -16,30 +16,31 @@ namespace linway_app.Forms
         {
             if (checkBox3.Checked)       // enviar a hoja de reparto
             {
-                label33.Visible = true;
-                label34.Visible = true;
-                comboBox3.Visible = true;
-                comboBox4.Visible = true;
+                label33Dia.Visible = true;
+                label34Nombre.Visible = true;
+                comboBox3NombreDeReparto.Visible = true;
+                comboBox4DiaDeReparto.Visible = true;
             }
             else
             {
-                label33.Visible = false;
-                label34.Visible = false;
-                comboBox3.Visible = false;
-                comboBox4.Visible = false;
+                label33Dia.Visible = false;
+                label34Nombre.Visible = false;
+                comboBox3NombreDeReparto.Visible = false;
+                comboBox4DiaDeReparto.Visible = false;
             }
         }
         private async void EnviarA_HDR_SelectedIndexChanged(object sender, EventArgs ev)
         {
             _repartos = null;
-            string diaReparto = comboBox4.Text;
+            string diaReparto = comboBox4DiaDeReparto.Text;
             List<Reparto> repartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
+                    List<Reparto> repartos = lstDiasRep.Find(x => x.Dia == diaReparto).Repartos.ToList();
+                    return repartos;
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -49,34 +50,16 @@ namespace linway_app.Forms
                 return;
             }
             _repartos = repartos;
-            comboBox3.DataSource = _repartos;
-            comboBox3.DisplayMember = "Nombre";
-            comboBox3.ValueMember = "Nombre";
+            comboBox3NombreDeReparto.DataSource = _repartos;
+            comboBox3NombreDeReparto.SelectedIndex = 0;
+            comboBox3NombreDeReparto.DisplayMember = "Nombre";
+            comboBox3NombreDeReparto.ValueMember = "Nombre";
         }
-        private async void ComboBox3_SelectorDeReparto_SelectedIndexChanged(object sender, EventArgs ev)
+        private void ComboBox3_SelectorDeReparto_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            _pedido = null;
-            _reparto = null;
-            string nombreReparto = comboBox3.Text;
-            var respuesta = await UIExecutor.ExecuteAsync(
-                _scope,
-                async sp =>
-                {
-                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    Reparto reparto = _repartos.Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
-                    _reparto = reparto;
-                    Pedido pedido = reparto.Pedidos.ToList().FirstOrDefault(x => x.ClienteId == _cliente.Id && x.Estado != "Eliminado");
-                    return (pedido, reparto);
-                },
-                "No se pudo buscar el Reparto por nombre",
-                null
-            );
-            if (respuesta.pedido == null || respuesta.reparto == null)
-            {
-                return;
-            }
-            _pedido = respuesta.pedido;
-            _reparto = respuesta.reparto;
+            Reparto reparto = (Reparto)comboBox3NombreDeReparto.SelectedItem;
+            _pedido = reparto.Pedidos.ToList().FirstOrDefault(x => x.ClienteId == _cliente.Id);
+            _reparto = reparto;
         }
     }
 }

@@ -1,46 +1,6 @@
 ﻿
-
--- correr query de eliminación de detalles de recibo eliminados falsos
-
-DELETE FROM detallerecibo WHERE Estado = "Eliminado";
-
-
--- correr query de eliminación de recibos eliminados falsos
-
-DELETE FROM recibo WHERE Estado = "Eliminado";
-
---
-
-
-Eliminar PV que ya no tienen Nota de Envío, Registro de Venta ni Pedido
-
-
-Poner largo máximo 40 en dirección (cliente, registro de venta y pedido)
-
-ALTER TABLE `Cliente` MODIFY COLUMN `Nombre` VARCHAR(99) NOT NULL;
-ALTER TABLE `RegistroVenta` MODIFY COLUMN `NombreCliente` VARCHAR(99) NOT NULL;
-ALTER TABLE `Reparto` MODIFY COLUMN `Nombre` VARCHAR(99) NOT NULL;
-ALTER TABLE `Recibo` MODIFY COLUMN `DireccionCliente` VARCHAR(99) NOT NULL;
-
-
-
--- Actualizar direcciones en Pedidos
-UPDATE Pedido p
-JOIN Cliente c ON c.Id = p.ClienteId
-SET p.Direccion = c.Direccion
-WHERE p.Estado = 'Activo'
-  AND c.Estado = 'Activo';
-
--- Hay Días reparidos?
-SELECT `Dia`, COUNT(*) AS `Cantidad`
-FROM `DiaReparto`
-GROUP BY `Dia`
-HAVING COUNT(*) > 1;
-
-
 Metas para versiones posteriores:
--Eliminar realmente Detalles de Recibos y Recibos; ProdVendido, RegistroVenta, NotaDeEnvio, Venta... o sea dejar solamente cliente y producto (ver las clásulas On Delete en LinwayDbContext)
--Crear atributos de la clase y dejar de usar labels para capturar repartos y pedidos
+--------------------------------
 -Cambiar sistema de cantidades de líquidos y polvos (2x5, etcétera)
 -Separar dirección de localidad
 -Eliminar dobles espaciados
@@ -51,7 +11,11 @@ Metas para versiones posteriores:
 -Lograr que la app sea reactiva a cambios en la base de datos
 -ClienteId no debería ser obligatorio en Registro de Venta (por venta particular cargada desde Ventas)
 -Ver la diferencia entre Pedido y Destino
+-Agregar opción de eliminar reparto
+-Ver si eliminar el atributo Pedido.Direccion
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 ___________________________________Sistema Linway 15__________________________________    marzo 2026
@@ -61,11 +25,132 @@ ___________________________________Sistema Linway 15____________________________
  al usar "Enviar a Reparto" del Formulario de Ventas
 -En Formulario de Nota de Envío, en "Agregar a reparto", ahora avisa si la Nota de Envío ya
  estaba en el reparto destino y cancela
+-Datos ahora se eliminan realmente
+-Eliminar un cliente elimina sus Recibos y sus Detalles, sus Notas, sus Registros de Venta, y los
+ Productos Vendidos asociados a estos últimos tres
+-Eliminar un producto elimina también sus Ventas, pero no se puede eliminar si tiene Productos Vendidos
+ asociados a Registros de Venta, Pedidos o Notas de Envío
 -Divididos los Forms en clases parciales por bloque de diseño
--Nuevos índices de unicidad en la base de datos: Dia y combinación Día-Nombre
+-Índices de unicidad en la base de datos
+-Se corrieron los siguientes queries:
 
--Detalles de Recibo y Recibos ahora se eliminan realmente
+DROP DATABASE linway1;
+CREATE DATABASE linway1;
+USE linway1;
+SOURCE "C:\Users\g\Desktop\linway_completo.sql";
 
+--
+RENAME TABLE Cliente TO Clientes;
+RENAME TABLE DetalleRecibo TO DetalleRecibos;
+RENAME TABLE DiaReparto TO DiaRepartos;
+RENAME TABLE NotaDeEnvio TO NotaDeEnvios;
+RENAME TABLE Pedido TO Pedidos;
+RENAME TABLE Producto TO Productos;
+RENAME TABLE ProdVendido TO ProdVendidos;
+RENAME TABLE Recibo TO Recibos;
+RENAME TABLE RegistroVenta TO RegistroVentas;
+RENAME TABLE Reparto TO Repartos;
+RENAME TABLE Venta TO Ventas;
+--
+DELETE FROM DiaRepartos WHERE Id = 7;
+ALTER TABLE Repartos MODIFY COLUMN Nombre VARCHAR(40) NOT NULL;
+ALTER TABLE Repartos ADD CONSTRAINT UC_DiaReparto_Nombre UNIQUE (DiaRepartoId, Nombre);
+--
+UPDATE ProdVendidos AS pv JOIN NotaDeEnvios AS n ON n.Id = pv.NotaDeEnvioId SET pv.NotaDeEnvioId = NULL WHERE n.Estado = 'Eliminado';
+UPDATE ProdVendidos AS pv JOIN Pedidos AS p ON p.Id = pv.PedidoId SET pv.PedidoId = NULL WHERE p.Estado = 'Eliminado';
+UPDATE ProdVendidos AS pv JOIN RegistroVentas AS r ON r.Id = pv.RegistroVentaId SET pv.RegistroVentaId = NULL WHERE r.Estado = 'Eliminado';
+DELETE FROM ProdVendidos WHERE NotaDeEnvioId IS NULL AND PedidoId IS NULL AND RegistroVentaId IS NULL;
+DELETE FROM ProdVendidos WHERE Estado = "Eliminado";
+ALTER TABLE ProdVendidos DROP COLUMN Estado;
+--
+DELETE FROM DetalleRecibos WHERE Estado = "Eliminado";
+ALTER TABLE DetalleRecibos DROP COLUMN Estado;
+--
+DELETE FROM Recibos WHERE Estado = "Eliminado";
+ALTER TABLE Recibos DROP COLUMN Estado;
+--
+DELETE FROM Ventas WHERE Estado = "Eliminado";
+ALTER TABLE Ventas DROP COLUMN Estado;
+DELETE v FROM Ventas v INNER JOIN Productos p ON v.ProductoId = p.Id WHERE p.Estado = 'Eliminado';
+--
+DELETE FROM Pedidos WHERE Estado = "Eliminado";
+ALTER TABLE Pedidos DROP COLUMN Estado;
+--
+DELETE FROM RegistroVentas WHERE Estado = "Eliminado";
+ALTER TABLE RegistroVentas DROP COLUMN Estado;
+--
+DELETE FROM NotaDeEnvios WHERE Estado = "Eliminado";
+ALTER TABLE NotaDeEnvios DROP COLUMN Estado;
+--
+ALTER TABLE Repartos DROP COLUMN Estado;
+--
+ALTER TABLE DiaRepartos DROP COLUMN Estado;
+--
+DELETE FROM Clientes WHERE Id = 435;
+UPDATE Clientes SET Direccion = CONCAT(Direccion, " ELIMINADO ", Id) WHERE Estado = "Eliminado";
+UPDATE Pedidos p JOIN Clientes c ON c.Id = p.ClienteId SET p.Direccion = c.Direccion;
+ALTER TABLE Clientes MODIFY COLUMN Direccion VARCHAR(80) NOT NULL;
+ALTER TABLE Pedidos MODIFY COLUMN Direccion VARCHAR(80) NOT NULL;
+ALTER TABLE RegistroVentas MODIFY COLUMN NombreCliente VARCHAR(80) NOT NULL;
+ALTER TABLE Recibos MODIFY COLUMN DireccionCliente VARCHAR(80) NOT NULL;
+ALTER TABLE Clientes ADD UNIQUE INDEX idx_direccion (Direccion);
+--
+UPDATE Productos SET Nombre = CONCAT("ELIMINADO ", Id, " - ", Nombre) WHERE Estado = "Eliminado";
+ALTER TABLE Productos MODIFY COLUMN Nombre VARCHAR(60) NOT NULL;
+ALTER TABLE Productos ADD UNIQUE INDEX idx_nombre (Nombre);
+--
+DELETE dr FROM DetalleRecibos dr INNER JOIN Recibos r ON r.Id = dr.ReciboId INNER JOIN Clientes c ON c.Id = r.ClienteId WHERE c.Estado = 'Eliminado';
+DELETE r FROM Recibos r INNER JOIN Clientes c ON c.Id = r.ClienteId WHERE c.Estado = 'Eliminado';
+DELETE pv FROM ProdVendidos pv INNER JOIN NotaDeEnvios ne ON ne.Id = pv.NotaDeEnvioId INNER JOIN Clientes c ON c.Id = ne.ClienteId WHERE c.Estado = 'Eliminado';
+DELETE pv FROM ProdVendidos pv INNER JOIN RegistroVentas rv ON rv.Id = pv.RegistroVentaId INNER JOIN Clientes c ON c.Id = rv.ClienteId WHERE c.Estado = 'Eliminado';
+DELETE pv FROM ProdVendidos pv INNER JOIN Pedidos pe ON pe.Id = pv.PedidoId INNER JOIN Clientes c ON c.Id = pe.ClienteId WHERE c.Estado = 'Eliminado';
+DELETE rv FROM RegistroVentas rv INNER JOIN Clientes c ON c.Id = rv.ClienteId WHERE c.Estado = 'Eliminado';
+DELETE ne FROM NotaDeEnvios ne INNER JOIN Clientes c ON c.Id = ne.ClienteId WHERE c.Estado = 'Eliminado';
+DELETE p FROM Pedidos p INNER JOIN Clientes c ON c.Id = p.ClienteId WHERE c.Estado = 'Eliminado';
+UPDATE Repartos r
+    JOIN (
+        SELECT 
+            RepartoId,
+            SUM(A)  AS Ta,
+            SUM(E)  AS Te,
+            SUM(D)  AS Td,
+            SUM(T)  AS Tt,
+            SUM(Ae) AS Tae,
+            SUM(L)  AS Tl,
+            SUM(A + E + T + Ae + D) AS TotalB
+        FROM Pedidos
+        GROUP BY RepartoId
+    ) p ON p.RepartoId = r.Id
+    SET 
+        r.Ta      = p.Ta,
+        r.Te      = p.Te,
+        r.Td      = p.Td,
+        r.Tt      = p.Tt,
+        r.Tae     = p.Tae,
+        r.Tl      = p.Tl,
+        r.TotalB  = p.TotalB
+;
+DELETE FROM Clientes WHERE Estado = "Eliminado";
+ALTER TABLE Clientes DROP COLUMN Estado;
+--
+DELETE pr FROM Productos pr LEFT JOIN ProdVendidos pv ON pv.ProductoId = pr.Id WHERE pv.ProductoId = NULL AND pr.Estado = 'Eliminado';
+DELETE FROM Productos
+    WHERE Estado = 'Eliminado'
+        AND Id IN (
+            SELECT Id FROM (
+                SELECT pr.Id
+                FROM Productos pr
+                LEFT JOIN ProdVendidos pv ON pv.ProductoId = pr.Id
+                LEFT JOIN NotaDeEnvios ne ON ne.Id = pv.NotaDeEnvioId
+                LEFT JOIN RegistroVentas rv ON rv.Id = pv.RegistroVentaId
+                WHERE pr.Estado = 'Eliminado'
+                GROUP BY pr.Id
+                HAVING COUNT(ne.Id) = 0 AND COUNT(rv.Id) = 0
+            ) AS sub
+        )
+;
+ALTER TABLE Productos DROP COLUMN Estado;
+--
 
 
 ___________________________________Sistema Linway 14__________________________________    junio 2023

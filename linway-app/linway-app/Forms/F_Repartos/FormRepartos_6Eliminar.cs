@@ -1,7 +1,9 @@
 ﻿using linway_app.PresentationHelpers;
+using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +21,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto).Repartos.ToList();
                 },
                 "No se pudieron buscar los Repartos",
                 null
@@ -44,7 +46,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    return await repartoServices.GetRepartoPorIdAsync(reparto.Id);
+                    return await repartoServices.GetPorIdAsync(reparto.Id);
                 },
                 "No se pudo buscar Reparto",
                 null
@@ -93,42 +95,13 @@ namespace linway_app.Forms
             {
                 return;
             }
-            bool logrado = await UIExecutor.ExecuteAsync(
-                _scope,
-                async sp => {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    //var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();  comentado
-                    //List<ProdVendido> prodVendidos = await prodVendidoServices.GetProdVendidos();
-                    //_pedidoAEliminar.ProdVendidos = prodVendidos.Where(x => x.PedidoId == _pedidoAEliminar.Id).ToList();
-                    //if (_pedidoAEliminar.ProdVendidos != null && _pedidoAEliminar.ProdVendidos.Count > 0)
-                    //{
-                    //    foreach (ProdVendido prodVendido in _pedidoAEliminar.ProdVendidos)
-                    //    {
-                    //        prodVendido.PedidoId = null;  innecesario, Entity Framework ya lo hace
-                    //    }
-                    //    prodVendidoServices.EditProdVendidos(_pedidoAEliminar.ProdVendidos);
-                    //}
-                    pedidoServices.DeletePedido(_pedidoAEliminar);
-                    bool guardado = await savingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        savingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
-                },
-                "No se pudo realizar",
-                this
-            );
+            bool logrado = await EliminarPedidoAsync(_pedidoAEliminar);
             if (!logrado)
             {
                 return;
             }
-            await Actualizar();
             LimpiarPantalla();
-            await ActualizarCombobox1();
-            await UpdateGrid();
+            await Actualizar();
         }
     }
 }

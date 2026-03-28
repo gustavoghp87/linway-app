@@ -36,7 +36,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    NotaDeEnvio notaDeEnvio = await notaDeEnvioServices.GetNotaDeEnvioPorIdAsync(notaDeEnvioId);
+                    NotaDeEnvio notaDeEnvio = await notaDeEnvioServices.GetPorIdAsync(notaDeEnvioId);
                     return notaDeEnvio;
                 },
                 "No se pudo buscar Nota de Envío",
@@ -82,7 +82,7 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetProductoPorIdAsync(productoId);
+                    return await productoServices.GetPorIdAsync(productoId);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -117,7 +117,7 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetProductoPorNombreAsync(nombreDeProducto);
+                    return await productoServices.GetPorNombreAsync(nombreDeProducto);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -193,35 +193,35 @@ namespace linway_app.Forms
                     var prodVendidoEnPedido = _notaDeEnvioAModificar.ProdVendidos.ToList().Find(x => x.PedidoId != null);
                     if (prodVendidoEnPedido != null)
                     {
-                        pedido = await pedidoServices.GetPedidoPorIdAsync((long)prodVendidoEnPedido.PedidoId);
+                        pedido = await pedidoServices.GetPorIdAsync((long)prodVendidoEnPedido.PedidoId);
                         nuevoProdVendido.Pedido = pedido;
                     }
                     // si el prod. vendido ya estaba en esta nota de envío, se suma la cantidad y se actualizan las etiquetas
-                    var prodVendidos = await prodVendidoServices.GetProdVendidosAsync();
+                    var prodVendidos = await prodVendidoServices.GetAllAsync();
                     var existingProdVendido = prodVendidos.ToList().Find(x => x.NotaDeEnvioId == _notaDeEnvioAModificar.Id && x.Producto.Id == _productoAAgregar.Id);
                     if (existingProdVendido == null || ProductoServices.IsSaldo(existingProdVendido.Producto))
                     {
-                        prodVendidoServices.AddProdVendido(nuevoProdVendido);
+                        prodVendidoServices.Add(nuevoProdVendido);
                     }
                     else
                     {
                         existingProdVendido.Cantidad += nuevoProdVendido.Cantidad;
-                        prodVendidoServices.EditProdVendido(existingProdVendido);
+                        prodVendidoServices.Edit(existingProdVendido);
                     }
                     // se actualiza la nota de envío
                     _notaDeEnvioAModificar.ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(_notaDeEnvioAModificar.ProdVendidos);
                     _notaDeEnvioAModificar.Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(_notaDeEnvioAModificar.ProdVendidos);
-                    notaDeEnvioServices.EditNotaDeEnvio(_notaDeEnvioAModificar);
+                    notaDeEnvioServices.Edit(_notaDeEnvioAModificar);
                     // se actualizan las ventas
-                    await ventaServices.UpdateVentasDesdeProdVendidosAsync(new List<ProdVendido>() { nuevoProdVendido }, true);
+                    await ventaServices.UpdateDesdeProdVendidosAsync(new List<ProdVendido>() { nuevoProdVendido }, true);
                     // se actualiza el reparto si está la nota en el reparto (mediante sus prod. vendidos)
                     if (pedido != null)
                     {
-                        var reparto = await repartoServices.GetRepartoPorIdAsync(pedido.RepartoId);
+                        var reparto = await repartoServices.GetPorIdAsync(pedido.RepartoId);
                         RepartoServices.ActualizarCantidadesDeReparto(reparto);
-                        repartoServices.EditReparto(reparto);
+                        repartoServices.Edit(reparto);
                         PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, pedido.Entregar == 1);
-                        pedidoServices.EditPedido(pedido);
+                        pedidoServices.Edit(pedido);
                     }
                     //
                     bool guardado = await savingServices.SaveAsync();
@@ -290,6 +290,11 @@ namespace linway_app.Forms
             {
                 return;
             }
+            if (_lstProdVendidos.Count < 2)
+            {
+                MessageBox.Show("No se puede quitar el único producto que tiene una nota, hay que eliminarla");
+                return;
+            }
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
@@ -300,15 +305,11 @@ namespace linway_app.Forms
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
                     //
-                    if (_lstProdVendidos.Count < 2)
-                    {
-                        savingServices.DiscardChanges();
-                        MessageBox.Show("No se puede quitar el único producto que tiene una nota, hay que eliminarla");
-                        return false;
-                    }
-                    prodVendidoServices.DeleteProdVendido(_prodVendidoAQuitar);
+                    _prodVendidoAQuitar.NotaDeEnvioId = null;
+                    prodVendidoServices.EditOrDelete(new List<ProdVendido>() { _prodVendidoAQuitar });
+                    //
                     var lstAuxiliar = new List<ProdVendido>();
-                    foreach (ProdVendido pv in _notaDeEnvioAModificar.ProdVendidos)
+                    foreach (ProdVendido pv in _notaDeEnvioAModificar.ProdVendidos)  // o hacer Remove
                     {
                         if (pv.ProductoId != _prodVendidoAQuitar.ProductoId)
                         {
@@ -318,24 +319,26 @@ namespace linway_app.Forms
                     _notaDeEnvioAModificar.ProdVendidos = lstAuxiliar;
                     _notaDeEnvioAModificar.ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(lstAuxiliar);
                     _notaDeEnvioAModificar.Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(lstAuxiliar);
-                    notaDeEnvioServices.EditNotaDeEnvio(_notaDeEnvioAModificar);
-                    _prodVendidoAQuitar.NotaDeEnvioId = null;
-                    _prodVendidoAQuitar.RegistroVentaId = null;
-                    _prodVendidoAQuitar.PedidoId = null;
-                    var pedidoId = _prodVendidoAQuitar.PedidoId;
-                    _prodVendidoAQuitar.PedidoId = null;
-                    prodVendidoServices.EditProdVendido(_prodVendidoAQuitar);
-                    await ventaServices.UpdateVentasDesdeProdVendidosAsync(new List<ProdVendido>() { _prodVendidoAQuitar }, false);
-                    if (pedidoId != null)
+                    notaDeEnvioServices.Edit(_notaDeEnvioAModificar);
+
+
+                    // revisar esto
+                    long? pedidoId = _prodVendidoAQuitar.PedidoId;
+                    //_prodVendidoAQuitar.NotaDeEnvioId = null;
+                    //_prodVendidoAQuitar.RegistroVentaId = null;  nadie pidió esto...
+                    //_prodVendidoAQuitar.PedidoId = null;  nadie pidió esto...
+                    //prodVendidoServices.EditOrDeleteProdVendidos(new List<ProdVendido>() { _prodVendidoAQuitar });
+
+
+
+                    await ventaServices.UpdateDesdeProdVendidosAsync(new List<ProdVendido>() { _prodVendidoAQuitar }, false);
+                    Pedido pedido = pedidoId != null ? await pedidoServices.GetPorIdAsync((long)pedidoId) : null;
+                    if (pedido != null)
                     {
-                        Pedido pedido = await pedidoServices.GetPedidoPorIdAsync((long)pedidoId);
-                        if (pedido != null)
-                        {
-                            PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, true);
-                            pedidoServices.EditPedido(pedido);
-                            RepartoServices.ActualizarCantidadesDeReparto(pedido.Reparto);
-                            repartoServices.EditReparto(pedido.Reparto);
-                        }
+                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, true);
+                        pedidoServices.Edit(pedido);
+                        RepartoServices.ActualizarCantidadesDeReparto(pedido.Reparto);
+                        repartoServices.Edit(pedido.Reparto);
                     }
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)

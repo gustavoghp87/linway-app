@@ -13,42 +13,41 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
-        public void AddProducto(Producto producto)
+        public void Add(Producto producto)
         {
             while (producto.Nombre.Contains("'"))
             {
                 producto.Nombre = producto.Nombre.Replace(char.Parse("'"), '"');
             }
+            // TODO: no permitir nombres repetidos
             _services.Add(producto);
         }
-        public void DeleteProducto(Producto producto)
+        public void Delete(Producto producto)
         {
-            producto.Estado = "Eliminado";
-            _services.Edit(producto);
-            //_services.Delete(producto);
+            _services.Delete(producto);
         }
-        public void EditProducto(Producto producto)
+        public void Edit(Producto producto)
         {
             _services.Edit(producto);
         }
-        public async Task<Producto> GetProductoPorIdAsync(long productId)
+        public async Task<Producto> GetPorIdAsync(long productId)
         {
             Producto producto = await _services.GetAsync(productId);
             return producto;
         }
-        public async Task<Producto> GetProductoPorNombreAsync(string nombre)
+        public async Task<Producto> GetPorNombreAsync(string nombre)
         {
-            List<Producto> productos = await GetProductosAsync();
-            Producto producto = productos.Find(x => x.Nombre.ToLower().Contains(nombre.ToLower()) && x.Estado != "Eliminado");
+            List<Producto> productos = await GetAllAsync();
+            Producto producto = productos.Find(x => x.Nombre.ToLower().Contains(nombre.ToLower()));
             return producto;
         }
-        public async Task<Producto> GetProductoPorNombreExactoAsync(string nombre)
+        public async Task<Producto> GetPorNombreExactoAsync(string nombre)
         {
-            List<Producto> productos = await GetProductosAsync();
-            Producto producto = productos.Find(x => x.Nombre.Equals(nombre) && x.Estado != "Eliminado");
+            List<Producto> productos = await GetAllAsync();
+            Producto producto = productos.Find(x => x.Nombre.Equals(nombre));
             return producto;
         }
-        public async Task<List<Producto>> GetProductosAsync()
+        public async Task<List<Producto>> GetAllAsync()
         {
             List<Producto> producto = await _services.GetAllAsync();
             return producto;

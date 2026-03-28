@@ -65,7 +65,7 @@ E_Ventas
 
 F_Reparto
 ---------
--Lista por reparto (día + nombre): muestra cantidades de reparto, filtro Entregar/Todos, atajo Eliminar Pedido
+-Lista por reparto (día + nombre): muestra cantidades de reparto, filtro Entregar/Todos, atajo Eliminar Pedido (refresca cantidades)
 -Agregar reparto a día (los días son 6 y están fijados), no admite combinación repetida Día-Nombre
 -Agregar cliente en reparto o sea crea un pedido vacío, no admite combinación repetida
 -Limpiar: (1) todos, (2) repartos de un día, (3) pedidos de un reparto, (4) pedido... r
@@ -73,7 +73,7 @@ F_Reparto
 -Todos los cancelar borran sección
 
 
-No existe un eliminar Reparto de Día
+No existe aun eliminar Reparto
 
 G_Recibos
 ---------

@@ -22,7 +22,7 @@ namespace linway_app.Forms
             textBox2.Text = "";
             textBox8.Text = "";
             textBox9PrecioProdNuevo.Text = "";
-            textBox21.Text = "";
+            textBox21EliminarProductoNumero.Text = "";
             //
             comboBox2.Visible = false;
             comboBox3.Visible = false;
@@ -129,7 +129,7 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetProductoPorIdAsync(productoId);
+                    return await productoServices.GetPorIdAsync(productoId);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -159,7 +159,7 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetProductoPorNombreAsync(nombreDeProducto);
+                    return await productoServices.GetPorNombreAsync(nombreDeProducto);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -197,7 +197,7 @@ namespace linway_app.Forms
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var productoServices = sp.GetRequiredService<IProductoServices>();
-                    productoServices.EditProducto(_productoAEditar);
+                    productoServices.Edit(_productoAEditar);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

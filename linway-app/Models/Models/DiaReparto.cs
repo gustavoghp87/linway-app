@@ -7,9 +7,9 @@ namespace Models
     {
         public DiaReparto()
         {
-            Reparto = new HashSet<Reparto>();
+            Repartos = new HashSet<Reparto>();
         }
         public string Dia { get; set; }
-        public virtual ICollection<Reparto> Reparto { get; set; }
+        public virtual ICollection<Reparto> Repartos { get; set; }
     }
 }

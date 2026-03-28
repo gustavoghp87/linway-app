@@ -1,9 +1,11 @@
 ﻿using linway_app.PresentationHelpers;
+using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -140,7 +142,7 @@ namespace linway_app.Forms
             textBox5EliminarDesde.Text = "";
             textBox5EliminarDesde.TextChanged += TextBox5_TextChanged;
         }
-        private async void Button4_Click(object sender, EventArgs ev)
+        private async void Button4_Click(object sender, EventArgs ev)  // eliminar nota de envío
         {
             List<NotaDeEnvio> notas = await ObtenerListaABorrar();
             bool logrado = await UIExecutor.ExecuteAsync(
@@ -148,8 +150,21 @@ namespace linway_app.Forms
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    notaDeEnvioServices.DeleteNotas(notas);
-                    return await savingServices.SaveAsync();
+                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
+                    List<ProdVendido> prodVendidos = notas.SelectMany(n => n.ProdVendidos).ToList();
+                    foreach (var prodVendido in prodVendidos)
+                    {
+                        prodVendido.NotaDeEnvioId = null;
+                    }
+                    prodVendidoServices.EditOrDelete(prodVendidos);
+                    notaDeEnvioServices.DeleteMany(notas);
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudieron eliminar las Notas de Envío",
                 this

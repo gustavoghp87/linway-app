@@ -32,8 +32,8 @@ namespace linway_app.Forms
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.comboBox1ListaDia = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.comboBox1ListaDias = new System.Windows.Forms.ComboBox();
+            this.comboBox2ListaRepartos = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.opcionesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -161,36 +161,36 @@ namespace linway_app.Forms
             // 
             // comboBox1
             // 
-            this.comboBox1ListaDia.FormattingEnabled = true;
-            this.comboBox1ListaDia.Items.AddRange(new object[] {
+            this.comboBox1ListaDias.FormattingEnabled = true;
+            this.comboBox1ListaDias.Items.AddRange(new object[] {
             "Lunes",
             "Martes",
             "Miércoles",
             "Jueves",
             "Viernes",
             "Sábado"});
-            this.comboBox1ListaDia.Location = new System.Drawing.Point(62, 34);
-            this.comboBox1ListaDia.Name = "comboBox1";
-            this.comboBox1ListaDia.Size = new System.Drawing.Size(121, 26);
-            this.comboBox1ListaDia.TabIndex = 2;
-            this.comboBox1ListaDia.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
+            this.comboBox1ListaDias.Location = new System.Drawing.Point(62, 34);
+            this.comboBox1ListaDias.Name = "comboBox1";
+            this.comboBox1ListaDias.Size = new System.Drawing.Size(121, 26);
+            this.comboBox1ListaDias.TabIndex = 2;
+            this.comboBox1ListaDias.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // comboBox2
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(296, 34);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(134, 26);
-            this.comboBox2.TabIndex = 3;
-            this.comboBox2.Visible = false;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox2_SelectedIndexChanged);
+            this.comboBox2ListaRepartos.FormattingEnabled = true;
+            this.comboBox2ListaRepartos.Location = new System.Drawing.Point(296, 34);
+            this.comboBox2ListaRepartos.Name = "comboBox2";
+            this.comboBox2ListaRepartos.Size = new System.Drawing.Size(134, 26);
+            this.comboBox2ListaRepartos.TabIndex = 3;
+            this.comboBox2ListaRepartos.Visible = false;
+            this.comboBox2ListaRepartos.SelectedIndexChanged += new System.EventHandler(this.ComboBox2_SelectedIndexChanged);
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.comboBox2);
+            this.groupBox1.Controls.Add(this.comboBox2ListaRepartos);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.comboBox1ListaDia);
+            this.groupBox1.Controls.Add(this.comboBox1ListaDias);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(12, 38);
             this.groupBox1.Name = "groupBox1";
@@ -1209,8 +1209,8 @@ namespace linway_app.Forms
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox comboBox1ListaDia;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox1ListaDias;
+        private System.Windows.Forms.ComboBox comboBox2ListaRepartos;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem opcionesToolStripMenuItem;

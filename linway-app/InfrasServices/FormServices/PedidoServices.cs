@@ -14,38 +14,40 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
-        public async Task AddPedidoAsync(Pedido pedido)
+        public async Task AddAsync(Pedido pedido)
         {
             pedido.Orden = await GetOrdenAsync(pedido.RepartoId);
             _services.Add(pedido);
         }
-        public void DeletePedido(Pedido pedido)
+        public void Delete(Pedido pedido)
         {
-            pedido.Estado = "Eliminado";
-            _services.Edit(pedido);
-            //_services.Delete(pedido);
+            _services.Delete(pedido);
         }
-        public void EditPedido(Pedido pedido)
+        public void DeleteMany(ICollection<Pedido> pedidos)
+        {
+            _services.DeleteMany(pedidos);
+        }
+        public void Edit(Pedido pedido)
         {
             _services.Edit(pedido);
         }
-        public void EditPedidos(ICollection<Pedido> pedidos)
+        public void EditMany(ICollection<Pedido> pedidos)
         {
             _services.EditMany(pedidos);
         }
-        public async Task<Pedido> GetPedidoPorIdAsync(long pedidoId)
+        public async Task<Pedido> GetPorIdAsync(long pedidoId)
         {
             Pedido pedido = await _services.GetAsync(pedidoId);
             return pedido;
         }
-        public async Task<List<Pedido>> GetPedidosPorRepartoIdAsync(long repartoId)
+        public async Task<List<Pedido>> GetPorRepartoIdAsync(long repartoId)
         {
-            var pedidos = await GetPedidosAsync();
+            var pedidos = await GetAllAsync();
             if (pedidos == null)
             {
                 return new List<Pedido>();
             }
-            pedidos = pedidos.Where(x => x.RepartoId == repartoId && x.Estado != "Eliminado").ToList();
+            pedidos = pedidos.Where(x => x.RepartoId == repartoId).ToList();
             // ver:
             //List<Cliente> clientes = getClientes();
             //foreach (Pedido pedido in pedidos)
@@ -54,7 +56,7 @@ namespace linway_app.Services.FormServices
             //};
             return pedidos;
         }
-        public async Task<List<Pedido>> GetPedidosAsync()
+        public async Task<List<Pedido>> GetAllAsync()
         {
             List<Pedido> pedidos = await _services.GetAllAsync();
             return pedidos;
@@ -62,7 +64,7 @@ namespace linway_app.Services.FormServices
         #region private methods
         private async Task<long> GetOrdenAsync(long repartoId)
         {
-            var lstPedidos = await GetPedidosPorRepartoIdAsync(repartoId);
+            var lstPedidos = await GetPorRepartoIdAsync(repartoId);
             if (lstPedidos == null || lstPedidos.Count == 0)
             {
                 return 1;
@@ -157,7 +159,6 @@ namespace linway_app.Services.FormServices
                 Direccion = cliente.Direccion,
                 Reparto = reparto,
                 Entregar = 1,
-                Estado = "Activo",
                 ProductosText = "",
                 L = 0,
                 A = 0,

@@ -32,7 +32,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    return await notaDeEnvioServices.GetNotaDeEnviosAsync();
+                    return await notaDeEnvioServices.GetAllAsync();
                 },
                 "No se pudieron buscar las Notas de Envío",
                 null
@@ -71,7 +71,7 @@ namespace linway_app.Forms
                 async sp => {
                     var exportarServices = sp.GetRequiredService<IExportarServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    List<NotaDeEnvio> notas = await notaDeEnvioServices.GetNotaDeEnviosAsync();
+                    List<NotaDeEnvio> notas = await notaDeEnvioServices.GetAllAsync();
                     exportarServices.ExportarNotas(notas);
                     return true;
                 },

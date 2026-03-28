@@ -3,7 +3,6 @@ using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
-using Models.Entities;
 using Models.Enums;
 using System;
 using System.Windows.Forms;
@@ -16,11 +15,11 @@ namespace linway_app.Forms
         private async void TextBox15_TextChanged(object sender, EventArgs ev)  // cliente por número
         {
             _cliente = null;
-            string numeroDeCliente = textBox15.Text;
-            textBox1.Text = "";
+            string numeroDeCliente = textBox15ClienteNumeroBusqueda.Text;
+            textBox1ClienteDireccionBusqueda.Text = "";
             if (numeroDeCliente == "")
             {
-                label36.Text = "";
+                label36ClienteDireccion.Text = "";
                 labelClienteId.Text = "";
                 return;
             }
@@ -32,28 +31,28 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetClientePorIdAsync(clienteId);
+                    return await clienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el cliente",
                 null
             );
             if (cliente == null)
             {
-                label36.Text = "No encontrado";
+                label36ClienteDireccion.Text = "No encontrado";
                 labelClienteId.Text = "";
                 return;
             }
             _cliente = cliente;
-            label36.Text = cliente.Direccion;
+            label36ClienteDireccion.Text = cliente.Direccion;
             labelClienteId.Text = cliente.Id.ToString();
         }
         private async void TextBox1_TextChanged(object sender, EventArgs ev)  // cliente por dirección
         {
             _cliente = null;
-            string direccion = textBox1.Text;
+            string direccion = textBox1ClienteDireccionBusqueda.Text;
             if (direccion == "")
             {
-                label36.Text = "";
+                label36ClienteDireccion.Text = "";
                 labelClienteId.Text = "";
                 return;
             }
@@ -61,29 +60,30 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetClientePorDireccionAsync(direccion);
+                    return await clienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el cliente",
                 null
             );
             if (cliente == null)
             {
-                label36.Text = "No encontrado";
+                label36ClienteDireccion.Text = "No encontrado";
                 labelClienteId.Text = "";
                 return;
             }
             _cliente = cliente;
-            label36.Text = cliente.Direccion;
+            label36ClienteDireccion.Text = cliente.Direccion;
             labelClienteId.Text = cliente.Id.ToString();
         }
         private async void TextBox16_TextChanged(object sender, EventArgs ev)  // producto por número
         {
             _producto = null;
-            string numeroDeProducto = textBox16.Text;
+            label40ProductoSubtotal.Text = "";
+            string numeroDeProducto = textBox16ProductoNombreBusqueda.Text;
             if (numeroDeProducto == "")
             {
-                label38.Text = "";
-                labelProductoId.Text = "";
+                label38ProductoNombre.Text = "";
+                labelProductoNumero.Text = "";
                 return;
             }
             if (!long.TryParse(numeroDeProducto, out long productoId))
@@ -95,30 +95,32 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetProductoPorIdAsync(productoId);
+                    return await productoServices.GetPorIdAsync(productoId);
                 },
                 "No se pudo buscar el Producto",
                 null
             );
             if (producto == null)
             {
-                label38.Text = "No encontrado";
-                labelProductoId.Text = "";
+                label38ProductoNombre.Text = "No encontrado";
+                labelProductoNumero.Text = "";
                 return;
             }
             _producto = producto;
-            label38.Text = _producto.Nombre;
-            labelProductoId.Text = _producto.Id.ToString();
-            textBox20.Visible = label38.Text.Contains("actura");
+            label38ProductoNombre.Text = _producto.Nombre;
+            labelProductoNumero.Text = _producto.Id.ToString();
+            textBox20Factura.Visible = label38ProductoNombre.Text.Contains("actura");
+            label40ProductoSubtotal.Text = _cantidad > 0 ? (_producto.Precio * _cantidad).ToString() : "";   // subtotal
         }
         private async void TextBox2_TextChanged(object sender, EventArgs ev)  // producto por nombre
         {
             _producto = null;
-            string nombreDeProducto = textBox2.Text;
+            label40ProductoSubtotal.Text = "";
+            string nombreDeProducto = textBox2ProductoNombreBusqueda.Text;
             if (nombreDeProducto == "")
             {
-                label38.Text = "";
-                labelProductoId.Text = "";
+                label38ProductoNombre.Text = "";
+                labelProductoNumero.Text = "";
                 return;
             }
             Producto producto = await UIExecutor.ExecuteAsync(
@@ -126,37 +128,33 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetProductoPorNombreAsync(nombreDeProducto);
+                    return await productoServices.GetPorNombreAsync(nombreDeProducto);
                 },
                 "No se pudo buscar el Producto",
                 null
             );
             if (producto == null)
             {
-                label38.Text = "No encontrado";
-                labelProductoId.Text = "";
+                label38ProductoNombre.Text = "No encontrado";
+                labelProductoNumero.Text = "";
                 return;
             }
             _producto = producto;
-            label38.Text = _producto.Nombre;
-            labelProductoId.Text = _producto.Id.ToString();
-            textBox20.Visible = label38.Text.Contains("actura");
+            label38ProductoNombre.Text = _producto.Nombre;
+            labelProductoNumero.Text = _producto.Id.ToString();
+            textBox20Factura.Visible = label38ProductoNombre.Text.Contains("actura");
+            label40ProductoSubtotal.Text = _cantidad > 0 ? (_producto.Precio * _cantidad).ToString() : "";   // subtotal
         }
         private async void TextBox17_TextChanged(object sender, EventArgs ev)  // cantidad
         {
-            string numeroDeProducto = labelProductoId.Text;
-            if (numeroDeProducto == "" || !int.TryParse(textBox17.Text, out int cantidad))
+            label40ProductoSubtotal.Text = "";
+            string numeroDeProducto = labelProductoNumero.Text;
+            if (numeroDeProducto == "" || !int.TryParse(textBox17ProductoCantidad.Text, out int cantidad))
             {
-                label40.Text = "";
                 return;
             }
             _cantidad = cantidad;
-            if (_producto == null)
-            {
-                label40.Text = "";
-                return;
-            }
-            label40.Text = (_producto.Precio * _cantidad).ToString();   // subtotal
+            label40ProductoSubtotal.Text = _producto != null ? (_producto.Precio * _cantidad).ToString() : "";   // subtotal
         }
         private async void AnyadirProdVendidos_Click(object sender, EventArgs ev)
         {
@@ -182,9 +180,10 @@ namespace linway_app.Forms
                 var nuevoPV = new ProdVendido
                 {
                     Cantidad = _cantidad,
-                    Descripcion = label38.Text,
+                    Descripcion = label38ProductoNombre.Text,
                     Precio = _producto.Precio,
-                    ProductoId = _producto.Id
+                    ProductoId = _producto.Id,
+                    Producto = _producto
                 };
                 if (_producto.Tipo == TipoProducto.Saldo.ToString() && _producto.SubTipo != TipoSaldo.SaldoPendiente.ToString())
                 {
@@ -194,7 +193,7 @@ namespace linway_app.Forms
                     }
                     else if (_producto.SubTipo == TipoSaldo.AFacturar.ToString())
                     {
-                        nuevoPV.Descripcion = label38.Text + textBox20.Text;
+                        nuevoPV.Descripcion = label38ProductoNombre.Text + textBox20Factura.Text;
                     }
                 }
                 _lstProdVendidosAAgregar.Add(nuevoPV);
@@ -205,21 +204,17 @@ namespace linway_app.Forms
             {
                 impTotal += prodVendido.Precio * prodVendido.Cantidad;
             }
-            _cliente = null;
             _producto = null;
             _cantidad = 0;
-            label42.Text = impTotal.ToString();
-            textBox20.Text = "";
-            textBox20.Visible = false;
-            textBox16.Text = "";
-            textBox17.Text = "";
-            textBox2.Text = "";
-            label38.Text = "";
-            label40.Text = "";
-            labelProductoId.Text = "";
-            label36.Text = "";
-            textBox15.Text = "";
-            labelClienteId.Text = "";
+            label42ImporteTotal.Text = impTotal.ToString();
+            textBox20Factura.Text = "";
+            textBox20Factura.Visible = false;
+            textBox16ProductoNombreBusqueda.Text = "";
+            textBox17ProductoCantidad.Text = "";
+            textBox2ProductoNombreBusqueda.Text = "";
+            label38ProductoNombre.Text = "";
+            label40ProductoSubtotal.Text = "";
+            labelProductoNumero.Text = "";
             ActualizarGrid();
         }
     }

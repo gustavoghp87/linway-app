@@ -5,7 +5,7 @@ namespace linway_app.Services.Interfaces
 {
     public interface IDetalleReciboServices
     {
-        void AddDetalles(ICollection<DetalleRecibo> detalles);
-        void DeleteDetalles(ICollection<DetalleRecibo> detalles);
+        void AddMany(ICollection<DetalleRecibo> detalles);
+        void DeleteMany(ICollection<DetalleRecibo> detalles);
     }
 }

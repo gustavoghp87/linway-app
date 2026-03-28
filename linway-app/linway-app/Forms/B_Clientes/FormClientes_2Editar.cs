@@ -89,7 +89,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetClientePorIdAsync(clienteId);
+                    return await clienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -120,7 +120,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetClientePorDireccionAsync(direccion);
+                    return await clienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -152,10 +152,10 @@ namespace linway_app.Forms
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    clienteServices.EditCliente(_clienteAEditar);
-                    List<DiaReparto> dias = await diaRepartoServices.GetDiaRepartosAsync();
+                    clienteServices.Edit(_clienteAEditar);
+                    List<DiaReparto> dias = await diaRepartoServices.GetAllAsync();
                     List<Pedido> pedidosAEditar = dias
-                        .SelectMany(dia => dia.Reparto)
+                        .SelectMany(dia => dia.Repartos)
                         .SelectMany(reparto => reparto.Pedidos)
                         .Where(pedido => pedido.ClienteId == _clienteAEditar.Id)
                         .ToList();
@@ -163,7 +163,7 @@ namespace linway_app.Forms
                     {
                         pedido.Direccion = _clienteAEditar.Direccion;
                     }
-                    pedidoServices.EditPedidos(pedidosAEditar);
+                    pedidoServices.EditMany(pedidosAEditar);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

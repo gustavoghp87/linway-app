@@ -1,4 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
+using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
@@ -33,52 +34,47 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    return await diaRepartoServices.GetDiaRepartosAsync();
+                    return await diaRepartoServices.GetAllAsync();
                 },
                 "No se pudieron buscar los Días de Reparto",
                 null
             );
-            if (diaRepartos == null || diaRepartos.Count == 0)
-            {
-                await CrearDias();
-                return;
-            }
             _lstDiaRepartos = diaRepartos;
-            await UpdateGrid();
+            ActualizarPedidosYGridDePedidos();
         }
-        private async Task CrearDias()
-        {
-            List<DiaReparto> diaDeRepartos = await UIExecutor.ExecuteAsync(
-                _scope,
-                async sp =>
-                {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var diaRepartoServicios = sp.GetRequiredService<IDiaRepartoServices>();
-                    var nuevoDia = new DiaReparto();
-                    string[] dias = new string[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" };
-                    foreach (string dia in dias)
-                    {
-                        nuevoDia.Dia = dia;
-                        diaRepartoServicios.AddDiaReparto(nuevoDia);
-                    }
-                    bool logradoFinal = await savingServices.SaveAsync();
-                    if (!logradoFinal)
-                    {
-                        MessageBox.Show("No se crearon los Días de Reparto");
-                        return null;
-                    }
-                    return await diaRepartoServicios.GetDiaRepartosAsync();
-                },
-                "Algo falló",
-                this
-            );
-            if (diaDeRepartos == null || diaDeRepartos.Count == 0)
-            {
-                MessageBox.Show("Algo falla con la base de datos");
-                return;
-            }
-            _lstDiaRepartos = diaDeRepartos;
-        }
+        //private async Task CrearDias()
+        //{
+        //    List<DiaReparto> diaDeRepartos = await UIExecutor.ExecuteAsync(
+        //        _scope,
+        //        async sp =>
+        //        {
+        //            var savingServices = sp.GetRequiredService<ISavingServices>();
+        //            var diaRepartoServicios = sp.GetRequiredService<IDiaRepartoServices>();
+        //            var nuevoDia = new DiaReparto();
+        //            string[] dias = new string[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" };
+        //            foreach (string dia in dias)
+        //            {
+        //                nuevoDia.Dia = dia;
+        //                diaRepartoServicios.Add(nuevoDia);
+        //            }
+        //            bool logradoFinal = await savingServices.SaveAsync();
+        //            if (!logradoFinal)
+        //            {
+        //                MessageBox.Show("No se crearon los Días de Reparto");
+        //                return null;
+        //            }
+        //            return await diaRepartoServicios.GetAllAsync();
+        //        },
+        //        "Algo falló",
+        //        this
+        //    );
+        //    if (diaDeRepartos == null || diaDeRepartos.Count == 0)
+        //    {
+        //        MessageBox.Show("Algo falla con la base de datos");
+        //        return;
+        //    }
+        //    _lstDiaRepartos = diaDeRepartos;
+        //}
         private async Task ReCargarHDR(string diaReparto, string nombreReparto)
         {
             await Actualizar();
@@ -88,11 +84,11 @@ namespace linway_app.Forms
                 {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
                     Reparto reparto = lstDiasRep
-                        .Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList()
-                        .Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
-                    var pedidos = await pedidoServices.GetPedidosPorRepartoIdAsync(reparto.Id);
+                        .Find(x => x.Dia == diaReparto).Repartos.ToList()
+                        .Find(x => x.Nombre == nombreReparto);
+                    var pedidos = await pedidoServices.GetPorRepartoIdAsync(reparto.Id);
                     return pedidos.OrderBy(x => x.Orden).ToList();
                 },
                 "No se pudieron buscar los Pedidos",
@@ -133,6 +129,47 @@ namespace linway_app.Forms
             label32.Text = "";
             label36.Text = "";
         }
+        private async Task<bool> EliminarPedidoAsync(Pedido pedidoAEliminar)  // handler
+        {
+            bool logrado = await UIExecutor.ExecuteAsync(
+                _scope,
+                async sp => {
+                    var savingServices = sp.GetRequiredService<ISavingServices>();
+                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
+                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
+                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
+                    Reparto reparto = await repartoServices.GetPorIdAsync(pedidoAEliminar.RepartoId);
+                    //
+                    List<ProdVendido> prodVendidosDelPedido;
+                    {
+                        List<ProdVendido> prodVendidos = await prodVendidoServices.GetAllAsync();
+                        prodVendidosDelPedido = prodVendidos.Where(x => x.PedidoId == pedidoAEliminar.Id).ToList();
+                    }
+                    foreach (ProdVendido prodVendido in prodVendidosDelPedido)
+                    {
+                        prodVendido.PedidoId = null;
+                    }
+                    prodVendidoServices.EditOrDelete(prodVendidosDelPedido);
+                    //
+                    reparto.Pedidos.Remove(pedidoAEliminar);
+                    RepartoServices.ActualizarCantidadesDeReparto(reparto);
+                    repartoServices.Edit(reparto);
+                    //
+                    pedidoServices.Delete(pedidoAEliminar);
+                    //
+                    bool guardado = await savingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        savingServices.DiscardChanges();
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
+                },
+                "No se pudo realizar",
+                this
+            );
+            return logrado;
+        }
         // MENUES
         private void AgregarReparto_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
@@ -166,13 +203,13 @@ namespace linway_app.Forms
         {
             LimpiarPantalla();
             groupBox9.Visible = true;
-            label39.Text = "Día " + comboBox1ListaDia.Text + " -> Reparto: " + comboBox2.Text;
+            label39.Text = "Día " + comboBox1ListaDias.Text + " -> Reparto: " + comboBox2ListaRepartos.Text;
         }
         private void PosicionarDestino_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
             groupBox7.Visible = true;
-            label27.Text = "Día " + comboBox1ListaDia.Text + " -> Reparto: " + comboBox2.Text;
+            label27.Text = "Día " + comboBox1ListaDias.Text + " -> Reparto: " + comboBox2ListaRepartos.Text;
         }
         private void BorrarUnDestino_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {

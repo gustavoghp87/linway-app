@@ -129,8 +129,8 @@ namespace linway_app.Forms
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var reciboService = sp.GetRequiredService<IReciboServices>();
                     var detalleReciboService = sp.GetRequiredService<IDetalleReciboServices>();
-                    detalleReciboService.DeleteDetalles(detallesAEliminar);  // primero
-                    reciboService.DeleteRecibos(recibosAEliminar);  // segundo
+                    detalleReciboService.DeleteMany(detallesAEliminar);  // primero
+                    reciboService.DeleteMany(recibosAEliminar);  // segundo
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

@@ -10,11 +10,6 @@ namespace linway_app.Forms
 {
     public partial class FormVentas : Form
     {
-        private void BorrarRegistros_ToolStripMenuItem_Click(object sender, EventArgs ev)
-        {
-            LimpiarPantalla();
-            gbBorrarReg.Visible = true;
-        }
         private void CheckBox1_CheckedChanged(object sender, EventArgs ev)
         {
             bBorrarRegVentas.Enabled = !bBorrarRegVentas.Enabled;
@@ -25,7 +20,7 @@ namespace linway_app.Forms
             {
                 bool todoOk = false;
                 long primero = long.Parse(tbDesde.Text);
-                long segundo = long.Parse(tbHasta.Text);
+                long segundo = tbHasta.Text != "" ? long.Parse(tbHasta.Text) : primero;
                 todoOk = (primero <= segundo);
                 if (!todoOk)
                 {
@@ -59,7 +54,7 @@ namespace linway_app.Forms
                 return;
             }
             var registrosABorrar = new List<RegistroVenta>();
-            var ventasABorrar = new List<ProdVendido>();
+            var prodVendidosAEditarOEliminar = new List<ProdVendido>();
             foreach (RegistroVenta registroVenta in _lstRegistros)
             {
                 if (!SeEncuentraEnIntervalo(registroVenta.Id))
@@ -67,16 +62,26 @@ namespace linway_app.Forms
                     continue;
                 }
                 registrosABorrar.Add(registroVenta);
-                ventasABorrar.AddRange(registroVenta.ProdVendido);
+                prodVendidosAEditarOEliminar.AddRange(registroVenta.ProdVendidos);
             }
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
+                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
                     var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
-                    registroVentaServices.DeleteRegistros(registrosABorrar);
-                    await ventaServices.UpdateVentasDesdeProdVendidosAsync(ventasABorrar, false);
+                    //
+                    foreach (ProdVendido pv in prodVendidosAEditarOEliminar)
+                    {
+                        pv.RegistroVentaId = null;
+                    }
+                    prodVendidoServices.EditOrDelete(prodVendidosAEditarOEliminar);
+                    //
+                    registroVentaServices.DeleteMany(registrosABorrar);
+                    //
+                    await ventaServices.UpdateDesdeProdVendidosAsync(prodVendidosAEditarOEliminar, false);  // resta de las ventas
+                    //
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

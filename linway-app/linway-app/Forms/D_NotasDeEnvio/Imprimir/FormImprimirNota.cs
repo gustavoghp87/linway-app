@@ -76,7 +76,7 @@ namespace linway_app.Forms
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    notaDeEnvioServices.EditNotaDeEnvio(_notaDeEnvio);
+                    notaDeEnvioServices.Edit(_notaDeEnvio);
                     return await savingServices.SaveAsync();
                 },
                 "No se pudo marcar la Nota de Envío como Imprimida",

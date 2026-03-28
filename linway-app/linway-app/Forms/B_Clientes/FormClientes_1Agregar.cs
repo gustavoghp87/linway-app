@@ -50,7 +50,7 @@ namespace linway_app.Forms
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    await clienteServices.AddClienteAsync(nuevoCliente);
+                    await clienteServices.AddAsync(nuevoCliente);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {

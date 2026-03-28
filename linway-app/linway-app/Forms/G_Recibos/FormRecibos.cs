@@ -37,7 +37,7 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var reciboServices = sp.GetRequiredService<IReciboServices>();
-                    return await reciboServices.GetRecibosAsync();
+                    return await reciboServices.GetAllAsync();
                 },
                 "No se pudieron buscar los Recibos",
                 null

@@ -6,20 +6,16 @@ using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
 {
     public partial class FormRepartos : Form
     {
+        private int _selectedIndex = -1;
         private bool _usandoDialogo = false;  // ver que aparecen los eliminados en eliminar cliente de recorrido (por lista)>
-        private void ActualizarGrid(ICollection<Pedido> lstPedidos)
+        private void ActualizarGridDePedidos(ICollection<Pedido> lstPedidos)
         {
-            if (lstPedidos == null)
-            {
-                return;
-            }
             var grid1 = new List<EPedido>();
             foreach (Pedido pedido in lstPedidos)
             {
@@ -65,8 +61,8 @@ namespace linway_app.Forms
         }
         private async void Exportar_Click(object sender, EventArgs ev)
         {
-            string diaReparto = comboBox1ListaDia.Text;
-            string nombreReparto = comboBox2.Text;
+            string diaReparto = comboBox1ListaDias.Text;
+            string nombreReparto = comboBox2ListaRepartos.Text;
             if (diaReparto == "" || nombreReparto == "")
             {
                 return;
@@ -78,12 +74,10 @@ namespace linway_app.Forms
                     _scope,
                     async sp =>
                     {
-                        var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                         var exportarServices = sp.GetRequiredService<IExportarServices>();
-                        List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                        Reparto reparto = lstDiasRep
-                            .Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList()
-                            .Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
+                        Reparto reparto = _lstDiaRepartos
+                            .Find(x => x.Dia == diaReparto).Repartos.ToList()
+                            .Find(x => x.Nombre == nombreReparto);
                         exportarServices.ExportarReparto(reparto);
                         return true;
                     },
@@ -97,12 +91,8 @@ namespace linway_app.Forms
                 exportarButton.Text = "Terminado";
             }
         }
-        private void VerDatos(Reparto reparto)
+        private void ActualizarCantidadesDeReparto(Reparto reparto)
         {
-            if (reparto == null)
-            {
-                return;
-            }
             label14.Text = reparto.Ta.ToString();
             label15.Text = reparto.Te.ToString();
             label16.Text = reparto.Td.ToString();
@@ -111,100 +101,68 @@ namespace linway_app.Forms
             label21.Text = reparto.TotalB.ToString();
             label22.Text = reparto.Tl.ToString() + " litros";
         }
-        private async Task ActualizarCombobox1()
+        private void ActualizarCombobox1()
         {
-            if (comboBox1ListaDia.SelectedItem == null)
+            var diaSeleccionado = comboBox1ListaDias.SelectedItem;
+            if (diaSeleccionado == null)
             {
                 return;
             }
-            comboBox2.Visible = true;
+            comboBox2ListaRepartos.Visible = true;
             label2.Visible = true;
-            ActualizarGrid(new List<Pedido>());
-            string diaReparto = comboBox1ListaDia.SelectedItem.ToString();
-            List<Reparto> repartos = await UIExecutor.ExecuteAsync(
-                _scope,
-                async sp =>
-                {
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.OrderBy(x => x.Id).ToList();
-                },
-                "No se pudieron buscar los Repartos por Día",
-                null
-            );
-            if (repartos == null)
+            string diaReparto = diaSeleccionado.ToString();
+            List<Reparto> repartos = _lstDiaRepartos.Find(x => x.Dia == diaReparto).Repartos.OrderBy(x => x.Id).ToList();
+            //
+            comboBox2ListaRepartos.DataSource = repartos.Count > 0 ? repartos : null;
+            comboBox2ListaRepartos.DisplayMember = "Nombre";
+            comboBox2ListaRepartos.ValueMember = "Nombre";
+            if (_selectedIndex == -1)
             {
-                return;
+                comboBox2ListaRepartos.SelectedIndex = repartos.Count > 0 ? 0 : -1;
             }
-            comboBox2.SelectedIndexChanged -= ComboBox2_SelectedIndexChanged;  // evita error de concurrencia de DbContext
-            comboBox2.DataSource = repartos.Count > 0 ? repartos : null;
-            comboBox2.SelectedIndexChanged += ComboBox2_SelectedIndexChanged;
-            comboBox2.DisplayMember = "Nombre";
-            comboBox2.ValueMember = "Nombre";
+            else
+            {
+                comboBox2ListaRepartos.SelectedIndex = _selectedIndex;
+            }
+            _selectedIndex = comboBox2ListaRepartos.SelectedIndex;
         }
-        private async void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            await ActualizarCombobox1();
-        }
-        private async Task UpdateGrid()
-        {
-            string diaReparto = comboBox1ListaDia.Text;  // .SelectedItem.ToString();
-            if (diaReparto == "")
-            {
-                return;
-            }
-            string nombreReparto = comboBox2.Text;
-            bool soloAEntregar = checkBox1.Checked;
-            var respuesta = await UIExecutor.ExecuteAsync(
-                _scope,
-                async sp =>
-                {
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    Reparto reparto = lstDiasRep
-                        .Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList()
-                        .Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado") ?? throw new Exception("No se encontró Reparto");
-                    List<Pedido> pedidos;
-                    var pedidos1 = await pedidoServices.GetPedidosPorRepartoIdAsync(reparto.Id);
-                    if (soloAEntregar)
-                    {
-                        pedidos = pedidos1.Where(x => x.Entregar == 1).ToList();
-                    }
-                    else
-                    {
-                        pedidos = pedidos1.ToList();
-                    }
-                    return (reparto, pedidos);
-                },
-                "No se pudieron buscar los Repartos por Día",
-                null
-            );
-            if (respuesta.reparto == null || respuesta.pedidos == null)
-            {
-                return;
-            }
-            _lstPedidos = respuesta.pedidos;
-            VerDatos(respuesta.reparto);
-            ActualizarGrid(_lstPedidos);
+            ActualizarCombobox1();
         }
         private async void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            await UpdateGrid();
+            _selectedIndex = -1;
+            ActualizarPedidosYGridDePedidos();
+        }
+        private void CambiarSoloAEntregar()
+        {
+            bool soloAEntregar = checkBox1.Checked;
+            if (soloAEntregar)
+            {
+                ActualizarGridDePedidos(_lstPedidos.FindAll(x => x.Entregar == 1));
+            }
+            else
+            {
+                ActualizarGridDePedidos(_lstPedidos);
+            }
+        }
+        private void ActualizarPedidosYGridDePedidos()
+        {
+            var repartoSeleccionado = comboBox2ListaRepartos.SelectedItem;
+            if (repartoSeleccionado == null)
+            {
+                return;
+            }
+            Reparto reparto = (Reparto)repartoSeleccionado;
+            List<Pedido> pedidos = reparto.Pedidos.ToList();
+            _lstPedidos = pedidos;
+            ActualizarCantidadesDeReparto(reparto);
+            CambiarSoloAEntregar();
         }
         private async void CheckBox1_CheckedChanged(object sender, EventArgs ev)
         {
-            if (!checkBox1.Checked)
-            {
-                await Actualizar();
-                return;
-            }
-            var ldFiltrada = new List<Pedido>();
-            foreach (Pedido pedido in _lstPedidos)
-            {
-                if (pedido.Entregar == 1) ldFiltrada.Add(pedido);
-            }
-            ActualizarGrid(ldFiltrada);
+            CambiarSoloAEntregar();
         }
         private async void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)  // eliminar destino desde la lista
         {
@@ -227,29 +185,14 @@ namespace linway_app.Forms
                 );
                 if (result == DialogResult.OK)
                 {
-                    bool logrado = await UIExecutor.ExecuteAsync(
-                        _scope,
-                        async sp => {
-                            var savingServices = sp.GetRequiredService<ISavingServices>();
-                            var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                            pedidoServices.DeletePedido(pedido);
-                            bool guardado = await savingServices.SaveAsync();
-                            if (!guardado)
-                            {
-                                savingServices.DiscardChanges();
-                                MessageBox.Show("No se hicieron cambios");
-                            }
-                            return guardado;
-                        },
-                        "No se pudo realizar",
-                        this
-                    );
+                    bool logrado = await EliminarPedidoAsync(pedido);
                     if (!logrado)
                     {
                         return;
                     }
                     MessageBox.Show($"Eliminado {direccion} ID: {pedido.Id}");
-                    await UpdateGrid();
+                    LimpiarPantalla();
+                    await Actualizar();
                 }
             }
             _usandoDialogo = false;

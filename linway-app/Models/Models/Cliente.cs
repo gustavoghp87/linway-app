@@ -7,10 +7,10 @@ namespace Models
     {
         public Cliente()
         {
-            NotaDeEnvio = new HashSet<NotaDeEnvio>();
-            Pedido = new HashSet<Pedido>();
-            Recibo = new HashSet<Recibo>();
-            RegistroVenta = new HashSet<RegistroVenta>();
+            NotaDeEnvios = new HashSet<NotaDeEnvio>();
+            Pedidos = new HashSet<Pedido>();
+            Recibos = new HashSet<Recibo>();
+            RegistroVentas = new HashSet<RegistroVenta>();
         }
         public string Direccion { get; set; }
         public string CodigoPostal { get; set; }
@@ -18,9 +18,9 @@ namespace Models
         public string Nombre { get; set; }
         public string Cuit { get; set; }
         public string Tipo { get; set; }
-        public virtual ICollection<NotaDeEnvio> NotaDeEnvio { get; set; }
-        public virtual ICollection<Pedido> Pedido { get; set; }
-        public virtual ICollection<Recibo> Recibo { get; set; }
-        public virtual ICollection<RegistroVenta> RegistroVenta { get; set; }
+        public virtual ICollection<NotaDeEnvio> NotaDeEnvios { get; set; }
+        public virtual ICollection<Pedido> Pedidos { get; set; }
+        public virtual ICollection<Recibo> Recibos { get; set; }
+        public virtual ICollection<RegistroVenta> RegistroVentas { get; set; }
     }
 }

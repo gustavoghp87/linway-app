@@ -23,8 +23,8 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
+                    return lstDiasRep.Find(x => x.Dia == diaReparto).Repartos.ToList();
                 },
                 "No se pudieron buscar los Repartos por Día",
                 null
@@ -51,8 +51,8 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    List<Reparto> lstRepartos = await repartoServices.GetRepartosAsync();
-                    return lstRepartos.Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
+                    List<Reparto> lstRepartos = await repartoServices.GetAllAsync();
+                    return lstRepartos.Find(x => x.Nombre == nombreReparto);
                 },
                 "No se pudieron buscar los Repartos por Nombre",
                 null
@@ -84,7 +84,7 @@ namespace linway_app.Forms
             _notaDeEnvioAReparto = nota;
             label16.Text = nota.Cliente.Direccion;
             button6.Enabled = comboBox5.Text != "";
-            Pedido pedido = nota.ProdVendidos.FirstOrDefault(pv => pv.PedidoId != null && pv.Pedido.Estado != "Eliminado")?.Pedido;
+            Pedido pedido = nota.ProdVendidos.FirstOrDefault(pv => pv.PedidoId != null)?.Pedido;
             label100Reparto.Text = pedido != null ? $"Reparto {pedido.Reparto.DiaReparto.Dia} {pedido.Reparto.Nombre}" : "En ningún Reparto";
         }
         private void Button7_Click(object sender, EventArgs ev)     // limpiar
@@ -123,10 +123,10 @@ namespace linway_app.Forms
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
-                    List<ProdVendido> prodVendidos = await prodVendidoServices.GetProdVendidosAsync();
-                    Pedido pedidoEnElQueEsta = prodVendidos.FirstOrDefault(pv => pv.NotaDeEnvioId == _notaDeEnvioAReparto.Id && pv.Estado != "Eliminado")?.Pedido;
-                    Pedido pedidoAlQueQuiereIr = _reparto.Pedidos.FirstOrDefault(x => x.ClienteId == _notaDeEnvioAReparto.ClienteId && x.Estado != "Eliminado");
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
+                    List<ProdVendido> prodVendidos = await prodVendidoServices.GetAllAsync();
+                    Pedido pedidoEnElQueEsta = prodVendidos.FirstOrDefault(pv => pv.NotaDeEnvioId == _notaDeEnvioAReparto.Id)?.Pedido;
+                    Pedido pedidoAlQueQuiereIr = _reparto.Pedidos.FirstOrDefault(x => x.ClienteId == _notaDeEnvioAReparto.ClienteId);
                     if (pedidoEnElQueEsta != null && pedidoAlQueQuiereIr != null && pedidoEnElQueEsta.Id == pedidoAlQueQuiereIr.Id)
                     {
                         MessageBox.Show("Esta Nota de Envío ya está en este Reparto");
@@ -134,7 +134,7 @@ namespace linway_app.Forms
                     }
                     if (pedidoAlQueQuiereIr == null)
                     {
-                        Cliente cliente = await clienteServices.GetClientePorIdAsync(_notaDeEnvioAReparto.ClienteId);
+                        Cliente cliente = await clienteServices.GetPorIdAsync(_notaDeEnvioAReparto.ClienteId);
                         pedidoAlQueQuiereIr = PedidoServices.GetNuevoPedido(cliente, _reparto);
                     }
                     // prodVendidos
@@ -143,13 +143,13 @@ namespace linway_app.Forms
                     {
                         prodVendido.Pedido = pedidoAlQueQuiereIr;
                     }
-                    prodVendidoServices.EditProdVendidos(prodVendidosDeLaNota);
+                    prodVendidoServices.EditMany(prodVendidosDeLaNota);
                     // pedido
                     if (pedidoAlQueQuiereIr.Id == 0)
                     {
                         pedidoAlQueQuiereIr.ProdVendidos = prodVendidosDeLaNota;
                         PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedidoAlQueQuiereIr, true);
-                        await pedidoServices.AddPedidoAsync(pedidoAlQueQuiereIr);
+                        await pedidoServices.AddAsync(pedidoAlQueQuiereIr);
                     }
                     else
                     {
@@ -158,22 +158,22 @@ namespace linway_app.Forms
                             pedidoAlQueQuiereIr.ProdVendidos.Add(pv);
                         }
                         PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedidoAlQueQuiereIr, true);
-                        pedidoServices.EditPedido(pedidoAlQueQuiereIr);
+                        pedidoServices.Edit(pedidoAlQueQuiereIr);
                     }
                     if (pedidoEnElQueEsta != null)
                     {
                         PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedidoEnElQueEsta, true);
-                        pedidoServices.EditPedido(pedidoEnElQueEsta);
+                        pedidoServices.Edit(pedidoEnElQueEsta);
                         Reparto repartoEnElQueEsta = pedidoEnElQueEsta.Reparto;
                         if (repartoEnElQueEsta.Id != _reparto.Id)
                         {
                             RepartoServices.ActualizarCantidadesDeReparto(repartoEnElQueEsta);
-                            repartoServices.EditReparto(repartoEnElQueEsta);
+                            repartoServices.Edit(repartoEnElQueEsta);
                         }
                     }
                     // reparto
                     RepartoServices.ActualizarCantidadesDeReparto(_reparto);
-                    repartoServices.EditReparto(_reparto);
+                    repartoServices.Edit(_reparto);
                     // guardado
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)

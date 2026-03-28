@@ -13,33 +13,20 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
-        public void AddVentas(ICollection<Venta> ventas)
+        public void DeleteMany(ICollection<Venta> ventas)
         {
-            _services.AddMany(ventas);
+            _services.DeleteMany(ventas);
         }
-        public void DeleteVentas(ICollection<Venta> ventas)
-        {
-            foreach (var entity in ventas)
-            {
-                entity.Estado = "Eliminado";
-            }
-            _services.EditMany(ventas);
-            //_services.DeleteMany(ventas);
-        }
-        public void EditVentas(ICollection<Venta> ventas)
-        {
-            _services.EditMany(ventas);
-        }
-        public async Task<List<Venta>> GetVentasAsync()
+        public async Task<List<Venta>> GetAllAsync()
         {
             List<Venta> ventas = await _services.GetAllAsync();
             return ventas;
         }
-        public async Task UpdateVentasDesdeProdVendidosAsync(ICollection<ProdVendido> prodVendidos, bool addingUp)
+        public async Task UpdateDesdeProdVendidosAsync(ICollection<ProdVendido> prodVendidos, bool addingUp)
         {
             var ventasAAgregar = new List<Venta>();
             var ventasAEditar = new List<Venta>();
-            List<Venta> lstVentas = await GetVentasAsync();
+            List<Venta> lstVentas = await GetAllAsync();
             foreach (ProdVendido prodVendido in prodVendidos.Where(x => ProductoServices.IsProducto(x.Producto)))
             {
                 var venta = lstVentas.FirstOrDefault(x => x.ProductoId == prodVendido.ProductoId);

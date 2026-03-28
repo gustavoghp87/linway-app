@@ -45,8 +45,8 @@ namespace linway_app.Forms
             this.label15 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBox2AgregarRegVentaRepartos = new System.Windows.Forms.ComboBox();
+            this.comboBox1AgregarRegVentaDias = new System.Windows.Forms.ComboBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.button18 = new System.Windows.Forms.Button();
             this.button17 = new System.Windows.Forms.Button();
@@ -82,7 +82,7 @@ namespace linway_app.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox2RegistrosFiltro = new System.Windows.Forms.TextBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.gbBorrarReg = new System.Windows.Forms.GroupBox();
@@ -143,8 +143,8 @@ namespace linway_app.Forms
             this.gbNuevaVenta.Controls.Add(this.label15);
             this.gbNuevaVenta.Controls.Add(this.label7);
             this.gbNuevaVenta.Controls.Add(this.label6);
-            this.gbNuevaVenta.Controls.Add(this.comboBox2);
-            this.gbNuevaVenta.Controls.Add(this.comboBox1);
+            this.gbNuevaVenta.Controls.Add(this.comboBox2AgregarRegVentaRepartos);
+            this.gbNuevaVenta.Controls.Add(this.comboBox1AgregarRegVentaDias);
             this.gbNuevaVenta.Controls.Add(this.checkBox2);
             this.gbNuevaVenta.Controls.Add(this.button18);
             this.gbNuevaVenta.Controls.Add(this.button17);
@@ -281,30 +281,30 @@ namespace linway_app.Forms
             // 
             // comboBox2
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(248, 340);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(99, 23);
-            this.comboBox2.TabIndex = 39;
-            this.comboBox2.Visible = false;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox2_SelectedIndexChanged);
+            this.comboBox2AgregarRegVentaRepartos.FormattingEnabled = true;
+            this.comboBox2AgregarRegVentaRepartos.Location = new System.Drawing.Point(248, 340);
+            this.comboBox2AgregarRegVentaRepartos.Name = "comboBox2";
+            this.comboBox2AgregarRegVentaRepartos.Size = new System.Drawing.Size(99, 23);
+            this.comboBox2AgregarRegVentaRepartos.TabIndex = 39;
+            this.comboBox2AgregarRegVentaRepartos.Visible = false;
+            this.comboBox2AgregarRegVentaRepartos.SelectedIndexChanged += new System.EventHandler(this.ComboBox2_SelectedIndexChanged);
             // 
             // comboBox1
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.comboBox1AgregarRegVentaDias.FormattingEnabled = true;
+            this.comboBox1AgregarRegVentaDias.Items.AddRange(new object[] {
             "Lunes",
             "Martes",
             "Miércoles",
             "Jueves",
             "Viernes",
             "Sábado"});
-            this.comboBox1.Location = new System.Drawing.Point(66, 340);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(99, 23);
-            this.comboBox1.TabIndex = 23;
-            this.comboBox1.Visible = false;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
+            this.comboBox1AgregarRegVentaDias.Location = new System.Drawing.Point(66, 340);
+            this.comboBox1AgregarRegVentaDias.Name = "comboBox1";
+            this.comboBox1AgregarRegVentaDias.Size = new System.Drawing.Size(99, 23);
+            this.comboBox1AgregarRegVentaDias.TabIndex = 23;
+            this.comboBox1AgregarRegVentaDias.Visible = false;
+            this.comboBox1AgregarRegVentaDias.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // checkBox2
             // 
@@ -667,7 +667,7 @@ namespace linway_app.Forms
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Controls.Add(this.textBox2RegistrosFiltro);
             this.groupBox1.Controls.Add(this.comboBox3);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -680,12 +680,12 @@ namespace linway_app.Forms
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(216, 20);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(158, 21);
-            this.textBox2.TabIndex = 6;
-            this.textBox2.Visible = false;
-            this.textBox2.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
+            this.textBox2RegistrosFiltro.Location = new System.Drawing.Point(216, 20);
+            this.textBox2RegistrosFiltro.Name = "textBox2";
+            this.textBox2RegistrosFiltro.Size = new System.Drawing.Size(158, 21);
+            this.textBox2RegistrosFiltro.TabIndex = 6;
+            this.textBox2RegistrosFiltro.Visible = false;
+            this.textBox2RegistrosFiltro.TextChanged += new System.EventHandler(this.TextBox2_TextChanged);
             // 
             // comboBox3
             // 
@@ -856,8 +856,8 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBox2AgregarRegVentaRepartos;
+        private System.Windows.Forms.ComboBox comboBox1AgregarRegVentaDias;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Button button18;
         private System.Windows.Forms.Button button17;
@@ -891,7 +891,7 @@ namespace linway_app.Forms
         private System.Windows.Forms.CheckBox cbSeguro;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox2RegistrosFiltro;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ToolStripMenuItem borrarRegistrosToolStripMenuItem;

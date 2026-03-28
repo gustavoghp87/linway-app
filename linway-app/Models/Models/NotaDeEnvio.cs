@@ -9,7 +9,7 @@ namespace Models
         {
             ProdVendidos = new HashSet<ProdVendido>();
         }
-        public long ClienteId { get; set; }
+        public long ClienteId { get; set; }  // no debería tener una columna DireccionCliente para guardar la dirección del momento de la creación de la nota?
         public string Fecha { get; set; }
         public long Impresa { get; set; }
         public string Detalle { get; set; }

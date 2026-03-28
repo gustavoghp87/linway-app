@@ -69,7 +69,7 @@ namespace linway_app.Forms
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var reciboServices = sp.GetRequiredService<IReciboServices>();
-                    reciboServices.EditRecibo(_recibo);
+                    reciboServices.Edit(_recibo);
                     return await savingServices.SaveAsync();
                 },
                 "No se pudo marcar Recibo como Imprimido",

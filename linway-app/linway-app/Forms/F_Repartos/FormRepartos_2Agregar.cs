@@ -31,12 +31,12 @@ namespace linway_app.Forms
                 TotalB = 0,
                 Tt = 0
             };
-            var success = await UIExecutor.ExecuteAsync(
+            var logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    repartoServices.AddReparto(nuevoReparto, _lstDiaRepartos);
+                    repartoServices.Add(nuevoReparto, _lstDiaRepartos);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {
@@ -48,14 +48,12 @@ namespace linway_app.Forms
                 "No se pudo agregar el Reparto",
                 this
             );
-            if (!success)
+            if (!logrado)
             {
                 return;
             }
-            await Actualizar();
             LimpiarPantalla();
-            await ActualizarCombobox1();
-            await UpdateGrid();
+            await Actualizar();
         }
         private void Button5_Click(object sender, EventArgs ev)
         {

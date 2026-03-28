@@ -40,8 +40,8 @@ namespace linway_app.Forms
             }
             string pedidoAMover = label30.Text;
             string pedidoReferencia = label31.Text;
-            string diaReparto = comboBox1ListaDia.Text;
-            string nombreReparto = comboBox2.Text;
+            string diaReparto = comboBox1ListaDias.Text;
+            string nombreReparto = comboBox2ListaRepartos.Text;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
@@ -49,12 +49,12 @@ namespace linway_app.Forms
                     var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     //
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetDiaRepartosAsync();
+                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
                     Reparto reparto = lstDiasRep
-                        .Find(x => x.Dia == diaReparto && x.Estado != "Eliminado").Reparto.ToList()
-                        .Find(x => x.Nombre == nombreReparto && x.Estado != "Eliminado");
-                    Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoAMover && x.Estado != "Eliminado");
-                    Pedido pedido2 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoReferencia && x.Estado != "Eliminado");
+                        .Find(x => x.Dia == diaReparto).Repartos.ToList()
+                        .Find(x => x.Nombre == nombreReparto);
+                    Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoAMover);
+                    Pedido pedido2 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoReferencia);
                     long order1 = pedido1.Orden;
                     long order2 = pedido2.Orden;
                     if (order2 == order1)
@@ -93,7 +93,7 @@ namespace linway_app.Forms
                         pedidosAEditar.Add(pedido1);
                         pedidosAEditar.Add(pedido2);
                     }
-                    pedidoServices.EditPedidos(pedidosAEditar);
+                    pedidoServices.EditMany(pedidosAEditar);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {
@@ -111,8 +111,6 @@ namespace linway_app.Forms
             }
             LimpiarPantalla();
             await Actualizar();
-            await ActualizarCombobox1();
-            await UpdateGrid();
         }
     }
 }

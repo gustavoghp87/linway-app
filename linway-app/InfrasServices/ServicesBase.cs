@@ -18,15 +18,10 @@ namespace linway_app.Services
         }
         public void Add(T entity, CancellationToken ct = default)
         {
-            entity.Estado = "Activo";
             _repository.Add(entity);
         }
         public void AddMany(IEnumerable<T> entities, CancellationToken ct = default)
         {
-            foreach (var entity in entities)
-            {
-                entity.Estado = "Activo";
-            }
             _repository.AddMany(entities);
         }
         public void Edit(T entity, CancellationToken ct = default)
@@ -49,14 +44,13 @@ namespace linway_app.Services
         {
             return await _repository
                .Query()
-               .Where(x => x.Id == id && x.Estado != "Eliminado")
+               .Where(x => x.Id == id)
                .FirstOrDefaultAsync(ct);
         }
         public async Task<List<T>> GetAllAsync(CancellationToken ct = default)
         {
             return await _repository
                 .Query()
-                .Where(x => x.Estado != "Eliminado")
                 .ToListAsync(ct);
         }
     }

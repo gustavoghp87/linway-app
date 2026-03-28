@@ -10,28 +10,6 @@ namespace linway_app.Forms
 {
     public partial class FormVentas : Form
     {
-        private void LimpiarPantalla()
-        {
-            gbNuevaVenta.Visible = false;
-            gbVerRegistro.Visible = false;
-            groupBox7.Visible = false;
-            label28.Text = "";
-            label20.Text = "";
-            textBox19.Text = "";
-            textBox3.Text = "";
-            checkBox2.Checked = false;
-            cbSeguro.Checked = false;
-            textBox12.Text = "";
-            textBox13.Text = "";
-            textBox1.Text = "";
-            labelFecha.Text = "";
-            labelTotal.Text = "";
-            cbSeguroBorrar.Checked = false;
-            gbBorrarReg.Visible = false;
-            tbDesde.Text = "";
-            tbHasta.Text = "";
-            checkBox1.Checked = false;
-        }
         private void ActualizarGrid1Registros(ICollection<RegistroVenta> lstRegistroVentas)
         {
             if (lstRegistroVentas == null)
@@ -49,11 +27,12 @@ namespace linway_app.Forms
         }
         private void ComboBox3_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            List<RegistroVenta> lFiltrada = new List<RegistroVenta>();
-            if (comboBox3.SelectedItem.ToString() == "Hoy")
+            var lFiltrada = new List<RegistroVenta>();
+            string opcion = comboBox3.SelectedItem.ToString();
+            if (opcion == "Hoy")
             {
-                textBox2.Text = "";
-                textBox2.Visible = false;
+                textBox2RegistrosFiltro.Text = "";
+                textBox2RegistrosFiltro.Visible = false;
                 foreach (RegistroVenta rActual in _lstRegistros)
                 {
                     if (rActual.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha))
@@ -63,27 +42,27 @@ namespace linway_app.Forms
                 }
                 ActualizarGrid1Registros(lFiltrada);
             }
-            else if (comboBox3.SelectedItem.ToString() == "Todas")
+            else if (opcion == "Todas")
             {
-                textBox2.Text = "";
-                textBox2.Visible = false;
+                textBox2RegistrosFiltro.Text = "";
+                textBox2RegistrosFiltro.Visible = false;
                 ActualizarGrid1Registros(_lstRegistros);
             }
             else
             {
-                textBox2.Text = "";
-                textBox2.Visible = true;
+                textBox2RegistrosFiltro.Text = "";
+                textBox2RegistrosFiltro.Visible = true;
             }
         }
         private void TextBox2_TextChanged(object sender, EventArgs ev)
         {
             if (comboBox3.SelectedItem.ToString() == "Cliente")
             {
-                FiltrarDatos(textBox2.Text, 'c');
+                FiltrarDatos(textBox2RegistrosFiltro.Text, 'c');
             }
             if (comboBox3.SelectedItem.ToString() == "Fecha")
             {
-                FiltrarDatos(textBox2.Text, 'f');
+                FiltrarDatos(textBox2RegistrosFiltro.Text, 'f');
             }
         }
         private void FiltrarDatos(string texto, char x)

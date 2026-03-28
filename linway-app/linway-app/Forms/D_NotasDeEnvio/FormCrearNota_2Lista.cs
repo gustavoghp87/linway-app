@@ -10,10 +10,6 @@ namespace linway_app.Forms
     {
         private void ActualizarGrid()
         {
-            if (_lstProdVendidosAAgregar == null)
-            {
-                return;
-            }
             var grid = new List<EProdVendido>();
             foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
             {
@@ -28,7 +24,7 @@ namespace linway_app.Forms
             _lstProdVendidosAAgregar.Clear();
             _lstProductosAAgregar.Clear();
             ActualizarGrid();
-            label42.Text = "";
+            label42ImporteTotal.Text = "";
         }
     }
 }

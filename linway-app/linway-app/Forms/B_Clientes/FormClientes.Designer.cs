@@ -33,8 +33,8 @@ namespace linway_app.Forms
             this.textBoxDireEnBorrar = new System.Windows.Forms.TextBox();
             this.BusqPorDireLabel = new System.Windows.Forms.Label();
             this.cbSeguroBorrar = new System.Windows.Forms.CheckBox();
-            this.button23 = new System.Windows.Forms.Button();
-            this.label47 = new System.Windows.Forms.Label();
+            this.button23EliminarCliente = new System.Windows.Forms.Button();
+            this.label47EliminarDireccion = new System.Windows.Forms.Label();
             this.textBox22 = new System.Windows.Forms.TextBox();
             this.label48 = new System.Windows.Forms.Label();
             this.gbAgregar = new System.Windows.Forms.GroupBox();
@@ -84,8 +84,8 @@ namespace linway_app.Forms
             this.gbBorrar.Controls.Add(this.textBoxDireEnBorrar);
             this.gbBorrar.Controls.Add(this.BusqPorDireLabel);
             this.gbBorrar.Controls.Add(this.cbSeguroBorrar);
-            this.gbBorrar.Controls.Add(this.button23);
-            this.gbBorrar.Controls.Add(this.label47);
+            this.gbBorrar.Controls.Add(this.button23EliminarCliente);
+            this.gbBorrar.Controls.Add(this.label47EliminarDireccion);
             this.gbBorrar.Controls.Add(this.textBox22);
             this.gbBorrar.Controls.Add(this.label48);
             this.gbBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -116,34 +116,34 @@ namespace linway_app.Forms
             // 
             // cbSeguroBorrar
             // 
-            this.cbSeguroBorrar.AutoSize = true;
-            this.cbSeguroBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbSeguroBorrar.Location = new System.Drawing.Point(12, 176);
+            this.cbSeguroBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbSeguroBorrar.Location = new System.Drawing.Point(11, 158);
             this.cbSeguroBorrar.Name = "cbSeguroBorrar";
-            this.cbSeguroBorrar.Size = new System.Drawing.Size(259, 19);
+            this.cbSeguroBorrar.Size = new System.Drawing.Size(266, 92);
             this.cbSeguroBorrar.TabIndex = 5;
-            this.cbSeguroBorrar.Text = "Estoy seguro que quiero borrar este cliente";
+            this.cbSeguroBorrar.Text = "En caso de tener Notas, Pedidos, Recibos y/o Registro de Venta, se van a eliminar" +
+    " también. Estoy seguro que quiero borrar este Cliente.";
             this.cbSeguroBorrar.UseVisualStyleBackColor = true;
             // 
             // button23
             // 
-            this.button23.Enabled = false;
-            this.button23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button23.Location = new System.Drawing.Point(96, 233);
-            this.button23.Name = "button23";
-            this.button23.Size = new System.Drawing.Size(89, 37);
-            this.button23.TabIndex = 4;
-            this.button23.Text = "Borrar";
-            this.button23.UseVisualStyleBackColor = true;
-            this.button23.Click += new System.EventHandler(this.EliminarCliente_Click);
+            this.button23EliminarCliente.Enabled = false;
+            this.button23EliminarCliente.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button23EliminarCliente.Location = new System.Drawing.Point(93, 255);
+            this.button23EliminarCliente.Name = "button23";
+            this.button23EliminarCliente.Size = new System.Drawing.Size(89, 37);
+            this.button23EliminarCliente.TabIndex = 4;
+            this.button23EliminarCliente.Text = "Borrar";
+            this.button23EliminarCliente.UseVisualStyleBackColor = true;
+            this.button23EliminarCliente.Click += new System.EventHandler(this.EliminarCliente_Click);
             // 
             // label47
             // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(8, 105);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(0, 16);
-            this.label47.TabIndex = 2;
+            this.label47EliminarDireccion.AutoSize = true;
+            this.label47EliminarDireccion.Location = new System.Drawing.Point(8, 105);
+            this.label47EliminarDireccion.Name = "label47";
+            this.label47EliminarDireccion.Size = new System.Drawing.Size(0, 16);
+            this.label47EliminarDireccion.TabIndex = 2;
             // 
             // textBox22
             // 
@@ -207,24 +207,24 @@ namespace linway_app.Forms
             this.label1.TabIndex = 7;
             this.label1.Text = "Nombre";
             // 
-            // textBox18
+            // textBox18AgregarLocalidad
             // 
             this.textBox18AgregarLocalidad.Location = new System.Drawing.Point(102, 76);
-            this.textBox18AgregarLocalidad.Name = "textBox18";
+            this.textBox18AgregarLocalidad.Name = "textBox18AgregarLocalidad";
             this.textBox18AgregarLocalidad.Size = new System.Drawing.Size(131, 21);
             this.textBox18AgregarLocalidad.TabIndex = 4;
             // 
-            // textBox1
+            // textBox1AgregarNombre
             // 
             this.textBox1AgregarNombre.Location = new System.Drawing.Point(102, 24);
-            this.textBox1AgregarNombre.Name = "textBox1";
+            this.textBox1AgregarNombre.Name = "textBox1AgregarNombre";
             this.textBox1AgregarNombre.Size = new System.Drawing.Size(131, 21);
             this.textBox1AgregarNombre.TabIndex = 2;
             // 
-            // button2
+            // button2AgregarLimpiar
             // 
             this.button2AgregarLimpiar.Location = new System.Drawing.Point(158, 247);
-            this.button2AgregarLimpiar.Name = "button2";
+            this.button2AgregarLimpiar.Name = "button2AgregarLimpiar";
             this.button2AgregarLimpiar.Size = new System.Drawing.Size(75, 23);
             this.button2AgregarLimpiar.TabIndex = 20;
             this.button2AgregarLimpiar.Text = "Limpiar";
@@ -238,39 +238,39 @@ namespace linway_app.Forms
             this.textBox2.Size = new System.Drawing.Size(131, 21);
             this.textBox2.TabIndex = 3;
             // 
-            // radioButton2
+            // radioButton2AgregarRMonotributo
             // 
             this.radioButton2AgregarRMonotributo.AutoSize = true;
             this.radioButton2AgregarRMonotributo.Location = new System.Drawing.Point(59, 199);
-            this.radioButton2AgregarRMonotributo.Name = "radioButton2";
+            this.radioButton2AgregarRMonotributo.Name = "radioButton2AgregarRMonotributo";
             this.radioButton2AgregarRMonotributo.Size = new System.Drawing.Size(83, 19);
             this.radioButton2AgregarRMonotributo.TabIndex = 19;
             this.radioButton2AgregarRMonotributo.TabStop = true;
             this.radioButton2AgregarRMonotributo.Text = "R.Inscripto";
             this.radioButton2AgregarRMonotributo.UseVisualStyleBackColor = true;
             // 
-            // textBox3
+            // textBox3AgregarCuit
             // 
             this.textBox3AgregarCuit.Location = new System.Drawing.Point(102, 102);
-            this.textBox3AgregarCuit.Name = "textBox3";
+            this.textBox3AgregarCuit.Name = "textBox3AgregarCuit";
             this.textBox3AgregarCuit.Size = new System.Drawing.Size(131, 21);
             this.textBox3AgregarCuit.TabIndex = 5;
             // 
-            // radioButton1
+            // radioButton1AgregarRInscripto
             // 
             this.radioButton1AgregarRInscripto.AutoSize = true;
             this.radioButton1AgregarRInscripto.Location = new System.Drawing.Point(148, 199);
-            this.radioButton1AgregarRInscripto.Name = "radioButton1";
+            this.radioButton1AgregarRInscripto.Name = "radioButton1AgregarRInscripto";
             this.radioButton1AgregarRInscripto.Size = new System.Drawing.Size(103, 19);
             this.radioButton1AgregarRInscripto.TabIndex = 18;
             this.radioButton1AgregarRInscripto.TabStop = true;
             this.radioButton1AgregarRInscripto.Text = "R.Monotributo";
             this.radioButton1AgregarRInscripto.UseVisualStyleBackColor = true;
             // 
-            // textBox4
+            // textBox4AgregarCP
             // 
             this.textBox4AgregarCP.Location = new System.Drawing.Point(102, 128);
-            this.textBox4AgregarCP.Name = "textBox4";
+            this.textBox4AgregarCP.Name = "textBox4AgregarCP";
             this.textBox4AgregarCP.Size = new System.Drawing.Size(131, 21);
             this.textBox4AgregarCP.TabIndex = 6;
             // 
@@ -283,10 +283,10 @@ namespace linway_app.Forms
             this.label2.TabIndex = 8;
             this.label2.Text = "Dirección";
             // 
-            // textBox5
+            // textBox5AgregarTelefono
             // 
             this.textBox5AgregarTelefono.Location = new System.Drawing.Point(102, 154);
-            this.textBox5AgregarTelefono.Name = "textBox5";
+            this.textBox5AgregarTelefono.Name = "textBox5AgregarTelefono";
             this.textBox5AgregarTelefono.Size = new System.Drawing.Size(131, 21);
             this.textBox5AgregarTelefono.TabIndex = 7;
             // 
@@ -413,10 +413,10 @@ namespace linway_app.Forms
             this.textBox23.Size = new System.Drawing.Size(198, 21);
             this.textBox23.TabIndex = 3;
             // 
-            // button8
+            // button8EditarLimpiar
             // 
             this.button8EditarLimpiar.Location = new System.Drawing.Point(176, 262);
-            this.button8EditarLimpiar.Name = "button8";
+            this.button8EditarLimpiar.Name = "button8EditarLimpiar";
             this.button8EditarLimpiar.Size = new System.Drawing.Size(75, 23);
             this.button8EditarLimpiar.TabIndex = 20;
             this.button8EditarLimpiar.Text = "Cancelar";
@@ -554,8 +554,8 @@ namespace linway_app.Forms
         #endregion
 
         private System.Windows.Forms.GroupBox gbBorrar;
-        private System.Windows.Forms.Button button23;
-        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Button button23EliminarCliente;
+        private System.Windows.Forms.Label label47EliminarDireccion;
         private System.Windows.Forms.TextBox textBox22;
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.GroupBox gbAgregar;

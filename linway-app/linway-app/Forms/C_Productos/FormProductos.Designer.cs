@@ -28,13 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormProductos));
             this.gbBorrar = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox1EliminarProductoNombre = new System.Windows.Forms.TextBox();
             this.BusqNombreLabel = new System.Windows.Forms.Label();
             this.cbSeguroBorrar = new System.Windows.Forms.CheckBox();
-            this.button22 = new System.Windows.Forms.Button();
-            this.label46 = new System.Windows.Forms.Label();
-            this.textBox21 = new System.Windows.Forms.TextBox();
+            this.button22Eliminar = new System.Windows.Forms.Button();
+            this.label46EliminarProductoNombre = new System.Windows.Forms.Label();
+            this.textBox21EliminarProductoNumero = new System.Windows.Forms.TextBox();
             this.label45 = new System.Windows.Forms.Label();
             this.gbAgregar = new System.Windows.Forms.GroupBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -69,29 +70,29 @@
             // 
             // gbBorrar
             // 
-            this.gbBorrar.Controls.Add(this.textBox1);
+            this.gbBorrar.Controls.Add(this.textBox1EliminarProductoNombre);
             this.gbBorrar.Controls.Add(this.BusqNombreLabel);
             this.gbBorrar.Controls.Add(this.cbSeguroBorrar);
-            this.gbBorrar.Controls.Add(this.button22);
-            this.gbBorrar.Controls.Add(this.label46);
-            this.gbBorrar.Controls.Add(this.textBox21);
+            this.gbBorrar.Controls.Add(this.button22Eliminar);
+            this.gbBorrar.Controls.Add(this.label46EliminarProductoNombre);
+            this.gbBorrar.Controls.Add(this.textBox21EliminarProductoNumero);
             this.gbBorrar.Controls.Add(this.label45);
             this.gbBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbBorrar.Location = new System.Drawing.Point(661, 12);
             this.gbBorrar.Name = "gbBorrar";
-            this.gbBorrar.Size = new System.Drawing.Size(272, 230);
+            this.gbBorrar.Size = new System.Drawing.Size(272, 240);
             this.gbBorrar.TabIndex = 41;
             this.gbBorrar.TabStop = false;
             this.gbBorrar.Text = "Borrar Producto";
             // 
-            // textBox1
+            // textBox1EliminarProductoNombre
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(165, 60);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(95, 21);
-            this.textBox1.TabIndex = 7;
-            this.textBox1.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
+            this.textBox1EliminarProductoNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1EliminarProductoNombre.Location = new System.Drawing.Point(165, 60);
+            this.textBox1EliminarProductoNombre.Name = "textBox1EliminarProductoNombre";
+            this.textBox1EliminarProductoNombre.Size = new System.Drawing.Size(95, 21);
+            this.textBox1EliminarProductoNombre.TabIndex = 7;
+            this.textBox1EliminarProductoNombre.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
             // 
             // BusqNombreLabel
             // 
@@ -105,45 +106,44 @@
             // 
             // cbSeguroBorrar
             // 
-            this.cbSeguroBorrar.AutoSize = true;
-            this.cbSeguroBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbSeguroBorrar.Location = new System.Drawing.Point(17, 160);
+            this.cbSeguroBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbSeguroBorrar.Location = new System.Drawing.Point(14, 120);
             this.cbSeguroBorrar.Name = "cbSeguroBorrar";
-            this.cbSeguroBorrar.Size = new System.Drawing.Size(238, 17);
+            this.cbSeguroBorrar.Size = new System.Drawing.Size(254, 83);
             this.cbSeguroBorrar.TabIndex = 5;
-            this.cbSeguroBorrar.Text = "Estoy seguro que quiero borrar este producto";
+            this.cbSeguroBorrar.Text = resources.GetString("cbSeguroBorrar.Text");
             this.cbSeguroBorrar.UseVisualStyleBackColor = true;
             // 
-            // button22
+            // button22Eliminar
             // 
-            this.button22.Enabled = false;
-            this.button22.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button22.Location = new System.Drawing.Point(161, 195);
-            this.button22.Name = "button22";
-            this.button22.Size = new System.Drawing.Size(86, 29);
-            this.button22.TabIndex = 4;
-            this.button22.Text = "Aceptar";
-            this.button22.UseVisualStyleBackColor = true;
-            this.button22.Click += new System.EventHandler(this.Eliminar_Click);
+            this.button22Eliminar.Enabled = false;
+            this.button22Eliminar.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button22Eliminar.Location = new System.Drawing.Point(161, 204);
+            this.button22Eliminar.Name = "button22Eliminar";
+            this.button22Eliminar.Size = new System.Drawing.Size(86, 29);
+            this.button22Eliminar.TabIndex = 4;
+            this.button22Eliminar.Text = "Aceptar";
+            this.button22Eliminar.UseVisualStyleBackColor = true;
+            this.button22Eliminar.Click += new System.EventHandler(this.Eliminar_Click);
             // 
-            // label46
+            // label46EliminarProductoNombre
             // 
-            this.label46.AutoSize = true;
-            this.label46.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label46.Location = new System.Drawing.Point(36, 113);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(0, 15);
-            this.label46.TabIndex = 2;
+            this.label46EliminarProductoNombre.AutoSize = true;
+            this.label46EliminarProductoNombre.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label46EliminarProductoNombre.Location = new System.Drawing.Point(21, 96);
+            this.label46EliminarProductoNombre.Name = "label46EliminarProductoNombre";
+            this.label46EliminarProductoNombre.Size = new System.Drawing.Size(0, 15);
+            this.label46EliminarProductoNombre.TabIndex = 2;
             // 
-            // textBox21
+            // textBox21EliminarProductoNumero
             // 
-            this.textBox21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox21.Location = new System.Drawing.Point(165, 31);
-            this.textBox21.Name = "textBox21";
-            this.textBox21.Size = new System.Drawing.Size(41, 21);
-            this.textBox21.TabIndex = 1;
-            this.textBox21.TextChanged += new System.EventHandler(this.TextBox21_TextChanged);
-            this.textBox21.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumeros_KeyPress);
+            this.textBox21EliminarProductoNumero.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox21EliminarProductoNumero.Location = new System.Drawing.Point(165, 31);
+            this.textBox21EliminarProductoNumero.Name = "textBox21EliminarProductoNumero";
+            this.textBox21EliminarProductoNumero.Size = new System.Drawing.Size(41, 21);
+            this.textBox21EliminarProductoNumero.TabIndex = 1;
+            this.textBox21EliminarProductoNumero.TextChanged += new System.EventHandler(this.TextBox21_TextChanged);
+            this.textBox21EliminarProductoNumero.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumeros_KeyPress);
             // 
             // label45
             // 
@@ -171,7 +171,7 @@
             this.gbAgregar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbAgregar.Location = new System.Drawing.Point(12, 12);
             this.gbAgregar.Name = "gbAgregar";
-            this.gbAgregar.Size = new System.Drawing.Size(268, 230);
+            this.gbAgregar.Size = new System.Drawing.Size(268, 240);
             this.gbAgregar.TabIndex = 42;
             this.gbAgregar.TabStop = false;
             this.gbAgregar.Text = "Agregar Producto";
@@ -186,11 +186,11 @@
             this.comboBox1.Visible = false;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
-            // radioButton4
+            // radioButton4AgregarSaldo
             // 
             this.radioButton4AgregarSaldo.AutoSize = true;
             this.radioButton4AgregarSaldo.Location = new System.Drawing.Point(93, 139);
-            this.radioButton4AgregarSaldo.Name = "radioButton4";
+            this.radioButton4AgregarSaldo.Name = "radioButton4AgregarSaldo";
             this.radioButton4AgregarSaldo.Size = new System.Drawing.Size(57, 19);
             this.radioButton4AgregarSaldo.TabIndex = 10;
             this.radioButton4AgregarSaldo.TabStop = true;
@@ -210,11 +210,11 @@
             this.radioButton3.UseVisualStyleBackColor = true;
             this.radioButton3.CheckedChanged += new System.EventHandler(this.SeleccionarTipo_CheckedChanged);
             // 
-            // radioButton2
+            // radioButton2Agregar
             // 
             this.radioButton2Agregar.AutoSize = true;
             this.radioButton2Agregar.Location = new System.Drawing.Point(93, 114);
-            this.radioButton2Agregar.Name = "radioButton2";
+            this.radioButton2Agregar.Name = "radioButton2Agregar";
             this.radioButton2Agregar.Size = new System.Drawing.Size(55, 19);
             this.radioButton2Agregar.TabIndex = 8;
             this.radioButton2Agregar.TabStop = true;
@@ -222,11 +222,11 @@
             this.radioButton2Agregar.UseVisualStyleBackColor = true;
             this.radioButton2Agregar.CheckedChanged += new System.EventHandler(this.SeleccionarTipo_CheckedChanged);
             // 
-            // radioButton1
+            // radioButton1AgregarLiquido
             // 
             this.radioButton1AgregarLiquido.AutoSize = true;
             this.radioButton1AgregarLiquido.Location = new System.Drawing.Point(13, 113);
-            this.radioButton1AgregarLiquido.Name = "radioButton1";
+            this.radioButton1AgregarLiquido.Name = "radioButton1AgregarLiquido";
             this.radioButton1AgregarLiquido.Size = new System.Drawing.Size(66, 19);
             this.radioButton1AgregarLiquido.TabIndex = 7;
             this.radioButton1AgregarLiquido.TabStop = true;
@@ -236,7 +236,7 @@
             // 
             // limpiarBtn
             // 
-            this.limpiarBtn.Location = new System.Drawing.Point(148, 180);
+            this.limpiarBtn.Location = new System.Drawing.Point(148, 184);
             this.limpiarBtn.Name = "limpiarBtn";
             this.limpiarBtn.Size = new System.Drawing.Size(89, 31);
             this.limpiarBtn.TabIndex = 6;
@@ -247,7 +247,7 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(27, 176);
+            this.button3.Location = new System.Drawing.Point(27, 180);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(91, 39);
             this.button3.TabIndex = 5;
@@ -264,10 +264,10 @@
             this.label8.TabIndex = 1;
             this.label8.Text = "Nombre:";
             // 
-            // textBox7
+            // textBox7AgregarPrecio
             // 
             this.textBox7AgregarPrecio.Location = new System.Drawing.Point(87, 61);
-            this.textBox7AgregarPrecio.Name = "textBox7";
+            this.textBox7AgregarPrecio.Name = "textBox7AgregarPrecio";
             this.textBox7AgregarPrecio.Size = new System.Drawing.Size(94, 21);
             this.textBox7AgregarPrecio.TabIndex = 4;
             this.textBox7AgregarPrecio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloImporte_KeyPress);
@@ -281,10 +281,10 @@
             this.label9.TabIndex = 2;
             this.label9.Text = "Precio:";
             // 
-            // textBox6
+            // textBox6AgregarNombre
             // 
             this.textBox6AgregarNombre.Location = new System.Drawing.Point(87, 28);
-            this.textBox6AgregarNombre.Name = "textBox6";
+            this.textBox6AgregarNombre.Name = "textBox6AgregarNombre";
             this.textBox6AgregarNombre.Size = new System.Drawing.Size(125, 21);
             this.textBox6AgregarNombre.TabIndex = 3;
             // 
@@ -306,7 +306,7 @@
             this.gbModificar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbModificar.Location = new System.Drawing.Point(286, 12);
             this.gbModificar.Name = "gbModificar";
-            this.gbModificar.Size = new System.Drawing.Size(369, 230);
+            this.gbModificar.Size = new System.Drawing.Size(369, 240);
             this.gbModificar.TabIndex = 43;
             this.gbModificar.TabStop = false;
             this.gbModificar.Text = "Modificar Producto";
@@ -386,10 +386,10 @@
             this.label13.TabIndex = 2;
             this.label13.Text = "Nuevo Precio:";
             // 
-            // textBox9
+            // textBox9PrecioProdNuevo
             // 
             this.textBox9PrecioProdNuevo.Location = new System.Drawing.Point(138, 137);
-            this.textBox9PrecioProdNuevo.Name = "textBox9";
+            this.textBox9PrecioProdNuevo.Name = "textBox9PrecioProdNuevo";
             this.textBox9PrecioProdNuevo.Size = new System.Drawing.Size(100, 21);
             this.textBox9PrecioProdNuevo.TabIndex = 4;
             this.textBox9PrecioProdNuevo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloImporte_KeyPress);
@@ -414,7 +414,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(264, 180);
+            this.button6.Location = new System.Drawing.Point(264, 188);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(92, 31);
             this.button6.TabIndex = 6;
@@ -427,7 +427,7 @@
             this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.Location = new System.Drawing.Point(264, 127);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(92, 39);
+            this.button7.Size = new System.Drawing.Size(92, 51);
             this.button7.TabIndex = 5;
             this.button7.Text = "Modificar";
             this.button7.UseVisualStyleBackColor = true;
@@ -437,7 +437,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(941, 254);
+            this.ClientSize = new System.Drawing.Size(941, 257);
             this.Controls.Add(this.gbModificar);
             this.Controls.Add(this.gbAgregar);
             this.Controls.Add(this.gbBorrar);
@@ -463,9 +463,9 @@
         #endregion
 
         private System.Windows.Forms.GroupBox gbBorrar;
-        private System.Windows.Forms.Button button22;
-        private System.Windows.Forms.Label label46;
-        private System.Windows.Forms.TextBox textBox21;
+        private System.Windows.Forms.Button button22Eliminar;
+        private System.Windows.Forms.Label label46EliminarProductoNombre;
+        private System.Windows.Forms.TextBox textBox21EliminarProductoNumero;
         private System.Windows.Forms.Label label45;
         private System.Windows.Forms.GroupBox gbAgregar;
         private System.Windows.Forms.Button limpiarBtn;
@@ -490,7 +490,7 @@
         private System.Windows.Forms.RadioButton radioButton2Agregar;
         private System.Windows.Forms.RadioButton radioButton1AgregarLiquido;
         private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox1EliminarProductoNombre;
         private System.Windows.Forms.Label BusqNombreLabel;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label1;
