@@ -10,10 +10,6 @@ namespace linway_app.Forms
     {
         private void CargarGridProductos(ICollection<Producto> lstProductos)
         {
-            if (lstProductos == null)
-            {
-                return;
-            }
             var grid = new List<EProducto>();
             foreach (Producto producto in lstProductos)
             {
@@ -26,14 +22,7 @@ namespace linway_app.Forms
         }
         private void FiltrarDatosP(string texto)
         {
-            var lstProductosFilstrados = new List<Producto>();
-            foreach (var producto in _lstProductos)
-            {
-                if (producto.Nombre.ToLower().Contains(texto.ToLower()))
-                {
-                    lstProductosFilstrados.Add(producto);
-                }
-            }
+            var lstProductosFilstrados = _lstProductos.FindAll(pr => pr.Nombre.ToLower().Contains(texto.ToLower()));
             CargarGridProductos(lstProductosFilstrados);
         }
         private void Button10_Click(object sender, EventArgs ev)

@@ -31,7 +31,7 @@ namespace linway_app.Forms
         {
             this.textBox20Factura = new System.Windows.Forms.TextBox();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox3EnviarA_HDR = new System.Windows.Forms.CheckBox();
             this.label33Dia = new System.Windows.Forms.Label();
             this.label34Nombre = new System.Windows.Forms.Label();
             this.comboBox3NombreDeReparto = new System.Windows.Forms.ComboBox();
@@ -83,14 +83,14 @@ namespace linway_app.Forms
             // 
             // checkBox3
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(436, 198);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(139, 17);
-            this.checkBox3.TabIndex = 45;
-            this.checkBox3.Text = "Enviar a hoja de reparto";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.CheckedChanged);
+            this.checkBox3EnviarA_HDR.AutoSize = true;
+            this.checkBox3EnviarA_HDR.Location = new System.Drawing.Point(436, 198);
+            this.checkBox3EnviarA_HDR.Name = "checkBox3";
+            this.checkBox3EnviarA_HDR.Size = new System.Drawing.Size(139, 17);
+            this.checkBox3EnviarA_HDR.TabIndex = 45;
+            this.checkBox3EnviarA_HDR.Text = "Enviar a hoja de reparto";
+            this.checkBox3EnviarA_HDR.UseVisualStyleBackColor = true;
+            this.checkBox3EnviarA_HDR.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // label33
             // 
@@ -381,7 +381,7 @@ namespace linway_app.Forms
             this.Controls.Add(this.textBox20Factura);
             this.Controls.Add(this.checkBox4);
             this.Controls.Add(this.label35);
-            this.Controls.Add(this.checkBox3);
+            this.Controls.Add(this.checkBox3EnviarA_HDR);
             this.Controls.Add(this.label40ProductoSubtotal);
             this.Controls.Add(this.label33Dia);
             this.Controls.Add(this.textBox17ProductoCantidad);
@@ -423,7 +423,7 @@ namespace linway_app.Forms
 
         private System.Windows.Forms.TextBox textBox20Factura;
         private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox3EnviarA_HDR;
         private System.Windows.Forms.Label label33Dia;
         private System.Windows.Forms.Label label34Nombre;
         private System.Windows.Forms.ComboBox comboBox3NombreDeReparto;

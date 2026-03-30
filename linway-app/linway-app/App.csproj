@@ -549,6 +549,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\E_Ventas\FormVentas.resx">
       <DependentUpon>FormVentas.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\G_Recibos\Imprimir\FormImprimirRecibo.resx">
       <DependentUpon>FormImprimirRecibo.cs</DependentUpon>

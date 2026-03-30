@@ -3,6 +3,7 @@ using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,18 @@ namespace linway_app.Forms
         private Producto _productoAAgregar;
         private ProdVendido _prodVendidoAQuitar;
         private int _cantidadAAgregar;
-        private async void TextBox7_TextChanged(object sender, EventArgs ev)
+        private void ActualizarGrid2AgregarProductoANota(ICollection<ProdVendido> lstProdVendidos)
+        {
+            var grid = new List<EProdVendido>();
+            foreach (ProdVendido prodVendido in lstProdVendidos)
+            {
+                grid.Add(Form1.Mapper.Map<EProdVendido>(prodVendido));
+            }
+            dataGridView2.DataSource = grid;
+            dataGridView2.Columns[0].Width = 25;
+            dataGridView2.Columns[1].Width = 200;
+        }
+        private async void TextBox7_TextChanged(object sender, EventArgs ev)  // nota de envío por Id
         {
             _notaDeEnvioAModificar = null;
             string numeroDeNota = textBox7.Text;
@@ -25,7 +37,7 @@ namespace linway_app.Forms
                 label18.Text = "";
                 label20.Text = "0";
                 _lstProdVendidos.Clear();
-                ActualizarGrid2(_lstProdVendidos);
+                ActualizarGrid2AgregarProductoANota(_lstProdVendidos);
                 return;
             }
             if (!long.TryParse(numeroDeNota, out long notaDeEnvioId))
@@ -47,12 +59,12 @@ namespace linway_app.Forms
                 label18.Text = "No encontrado";
                 label20.Text = "0";
                 _lstProdVendidos.Clear();
-                ActualizarGrid2(_lstProdVendidos);
+                ActualizarGrid2AgregarProductoANota(_lstProdVendidos);
                 return;
             }
             _notaDeEnvioAModificar = notaDeEnvio;
             _lstProdVendidos = notaDeEnvio.ProdVendidos.ToList();
-            ActualizarGrid2(_lstProdVendidos);
+            ActualizarGrid2AgregarProductoANota(_lstProdVendidos);
             decimal impTotal = 0;
             foreach (ProdVendido nota in _lstProdVendidos)
             {
@@ -62,7 +74,7 @@ namespace linway_app.Forms
             label18.Text = notaDeEnvio.Cliente.Direccion.ToString() + " - " + notaDeEnvio.ClienteId.ToString();
         }
         // Agregar
-        private async void TextBox9_TextChanged(object sender, EventArgs ev)     // id producto
+        private async void TextBox9_TextChanged(object sender, EventArgs ev)     // producto por Id
         {
             _productoAAgregar = null;
             label26.Text = "";
@@ -170,7 +182,6 @@ namespace linway_app.Forms
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    //var productoServices = sp.GetRequiredService<IProductoServices>();
                     var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
@@ -240,8 +251,8 @@ namespace linway_app.Forms
                 return;
             }
             await ActualizarNotas();
-            ActualizarGrid1(_lstNotaDeEnvios);
-            ActualizarGrid2(_notaDeEnvioAModificar.ProdVendidos.ToList());
+            EventoCombobox1ListaModalidad();
+            ActualizarGrid2AgregarProductoANota(_notaDeEnvioAModificar.ProdVendidos.ToList());
             decimal impTotal = 0;
             _lstProdVendidos = _notaDeEnvioAModificar.ProdVendidos.ToList();
             foreach (ProdVendido prodVend in _lstProdVendidos)
@@ -261,19 +272,18 @@ namespace linway_app.Forms
             _productoAAgregar = null;
             _cantidadAAgregar = 0;
         }
-
         //Quitar
-        private void TextBox8_TextChanged(object sender, EventArgs ev)
+        private void TextBox8_TextChanged(object sender, EventArgs ev)  // producto por nombre a quitar
         {
             _prodVendidoAQuitar = null;
-            string nombreDeProducto = textBox8.Text;
+            string nombreDeProducto = textBox8QuitarProducto_Nombre.Text;
             if (nombreDeProducto == "")
             {
                 label22.Text = "";
                 button8.Enabled = false;
                 return;
             }
-            ProdVendido prodVendido = _lstProdVendidos.Find(x => x.Producto.Nombre.ToLower().Contains(textBox8.Text.ToLower()));
+            ProdVendido prodVendido = _lstProdVendidos.Find(x => x.Producto.Nombre.ToLower().Contains(textBox8QuitarProducto_Nombre.Text.ToLower()));
             if (prodVendido == null)
             {
                 label22.Text = "No encontrado";
@@ -306,7 +316,7 @@ namespace linway_app.Forms
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
                     //
                     _prodVendidoAQuitar.NotaDeEnvioId = null;
-                    prodVendidoServices.EditOrDelete(new List<ProdVendido>() { _prodVendidoAQuitar });
+                    prodVendidoServices.EditOrDeleteMany(new List<ProdVendido>() { _prodVendidoAQuitar });
                     //
                     var lstAuxiliar = new List<ProdVendido>();
                     foreach (ProdVendido pv in _notaDeEnvioAModificar.ProdVendidos)  // o hacer Remove
@@ -320,26 +330,19 @@ namespace linway_app.Forms
                     _notaDeEnvioAModificar.ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(lstAuxiliar);
                     _notaDeEnvioAModificar.Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(lstAuxiliar);
                     notaDeEnvioServices.Edit(_notaDeEnvioAModificar);
-
-
-                    // revisar esto
-                    long? pedidoId = _prodVendidoAQuitar.PedidoId;
-                    //_prodVendidoAQuitar.NotaDeEnvioId = null;
-                    //_prodVendidoAQuitar.RegistroVentaId = null;  nadie pidió esto...
-                    //_prodVendidoAQuitar.PedidoId = null;  nadie pidió esto...
-                    //prodVendidoServices.EditOrDeleteProdVendidos(new List<ProdVendido>() { _prodVendidoAQuitar });
-
-
-
+                    //
                     await ventaServices.UpdateDesdeProdVendidosAsync(new List<ProdVendido>() { _prodVendidoAQuitar }, false);
-                    Pedido pedido = pedidoId != null ? await pedidoServices.GetPorIdAsync((long)pedidoId) : null;
-                    if (pedido != null)
+                    //
+                    if (_prodVendidoAQuitar.PedidoId != null)
                     {
-                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, true);
+                        Pedido pedido = await pedidoServices.GetPorIdAsync((long)_prodVendidoAQuitar.PedidoId);
+                        pedido.ProdVendidos.Remove(_prodVendidoAQuitar);
+                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, pedido.Entregar == 1);
                         pedidoServices.Edit(pedido);
                         RepartoServices.ActualizarCantidadesDeReparto(pedido.Reparto);
                         repartoServices.Edit(pedido.Reparto);
                     }
+                    //
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
                     {
@@ -356,15 +359,11 @@ namespace linway_app.Forms
                 return;
             }
             await ActualizarNotas();
-            ActualizarGrid1(_lstNotaDeEnvios);
+            EventoCombobox1ListaModalidad();
             _lstProdVendidos = _notaDeEnvioAModificar.ProdVendidos.ToList();
-            ActualizarGrid2(_lstProdVendidos);
+            ActualizarGrid2AgregarProductoANota(_lstProdVendidos);
             label20.Text = _notaDeEnvioAModificar.ImporteTotal.ToString();
-            //
-            textBox8.TextChanged -= TextBox8_TextChanged;  // evita error de concurrencia de DbContext
-            textBox8.Text = "";
-            textBox8.TextChanged += TextBox8_TextChanged;
-            //
+            textBox8QuitarProducto_Nombre.Text = "";
             label22.Text = "";
             button8.Enabled = false;
             _notaDeEnvioAModificar = null;

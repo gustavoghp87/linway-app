@@ -9,7 +9,7 @@ namespace linway_app.Services.Interfaces
         void Add(ProdVendido prodVendido);
         void AddMany(ICollection<ProdVendido> prodVendidos);
         void DeleteMany(ICollection<ProdVendido> prodVendidos);
-        void EditOrDelete(List<ProdVendido> prodVendidos);
+        void EditOrDeleteMany(List<ProdVendido> prodVendidos);
         void Edit(ProdVendido prodVendido);
         void EditMany(ICollection<ProdVendido> prodVendidos);
         Task<List<ProdVendido>> GetAllAsync();

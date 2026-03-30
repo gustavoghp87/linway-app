@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace linway_app.Forms
 {
-    public partial class FormRepartos : Form
+    public partial class FormRepartos : Form  // TODO: usar dos atributos Pedido
     {
         private void TextBox3_TextChanged(object sender, EventArgs ev)
         {
@@ -46,11 +46,9 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     //
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
-                    Reparto reparto = lstDiasRep
+                    Reparto reparto = _lstDiaRepartos
                         .Find(x => x.Dia == diaReparto).Repartos.ToList()
                         .Find(x => x.Nombre == nombreReparto);
                     Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoAMover);

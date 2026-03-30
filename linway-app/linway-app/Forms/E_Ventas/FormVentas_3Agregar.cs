@@ -106,7 +106,7 @@ namespace linway_app.Forms
             textBox13.Text = "";
             textBox12.Text = "";
         }
-        private async void Anyadir_Click(object sender, EventArgs ev)
+        private void Anyadir_Click(object sender, EventArgs ev)
         {
             if (_productoAAgregar == null || !int.TryParse(textBox13.Text, out int cantidad) || cantidad == 0)
             {
@@ -153,20 +153,10 @@ namespace linway_app.Forms
                 textBox3.Text = "";
             }
         }
-        private async void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)  // selecciona día de reparto
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)  // selecciona día de reparto
         {
             string dia = comboBox1AgregarRegVentaDias.Text;
-            DiaReparto diaReparto = await UIExecutor.ExecuteAsync(
-                _scope,
-                async sp =>
-                {
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
-                    return lstDiasRep.Find(x => x.Dia == dia);
-                },
-                "No se pudieron buscar los Repartos por Día",
-                null
-            );
+            DiaReparto diaReparto = _dias.Find(x => x.Dia == dia);
             _diaRepartoAgregar = diaReparto;
             comboBox2AgregarRegVentaRepartos.DataSource = diaReparto.Repartos.ToList();
             comboBox2AgregarRegVentaRepartos.DisplayMember = "Nombre";
@@ -178,7 +168,7 @@ namespace linway_app.Forms
             List<Reparto> repartos = _diaRepartoAgregar.Repartos.ToList().Where(x => x.Nombre == nombreReparto).ToList();
             _repartoAgregar = repartos.Find(x => x.Nombre == nombreReparto);
         }
-        private async void TextBox19_TextChanged(object sender, EventArgs ev)
+        private async void TextBox19_TextChanged(object sender, EventArgs ev)  // cliente por Id
         {
             _clienteAgregar = null;
             string numeroDeCliente = textBox19.Text;
@@ -208,7 +198,7 @@ namespace linway_app.Forms
             _clienteAgregar = cliente;
             label20.Text = cliente.Direccion;
         }
-        private async void TextBox3_TextChanged(object sender, EventArgs ev)
+        private async void TextBox3_TextChanged(object sender, EventArgs ev)  // cliente por dirección
         {
             _clienteAgregar = null;
             string direccion = textBox3.Text;

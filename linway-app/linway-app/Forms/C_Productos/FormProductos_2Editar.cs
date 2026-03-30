@@ -106,7 +106,7 @@ namespace linway_app.Forms
                 _liberado2 = true;
             }
         }
-        private async void TextBox8_TextChanged(object sender, EventArgs ev)   // buscar por id
+        private async void TextBox8_TextChanged(object sender, EventArgs ev)   // producto por Id
         {
             _productoAEditar = null;
             string numeroDeProducto = textBox8.Text;
@@ -140,7 +140,7 @@ namespace linway_app.Forms
             }
             CargarDatosAModificar(producto);
         }
-        private async void TextBox2_TextChanged(object sender, EventArgs ev)  // buscar por nombre
+        private async void TextBox2_TextChanged(object sender, EventArgs ev)  // producto por nombre
         {
             _productoAEditar = null;
             string nombreDeProducto = textBox2.Text;

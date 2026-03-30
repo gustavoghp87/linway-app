@@ -13,24 +13,10 @@ namespace linway_app.Forms
     public partial class FormRepartos : Form
     {
         private Cliente _clienteAReparto;
-        private async void ComboBox4_SelectedIndexChanged(object sender, EventArgs ev)
+        private void ComboBox4_SelectedIndexChanged(object sender, EventArgs ev)
         {
             string diaReparto = comboBox4AgregarPedidido_Dia.SelectedItem.ToString();
-            List<Reparto> repartos = await UIExecutor.ExecuteAsync(
-                _scope,
-                async sp =>
-                {
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto).Repartos.ToList();
-                },
-                "No se pudieron buscar los Repartos por Día",
-                null
-            );
-            if (repartos == null)
-            {
-                return;
-            }
+            List<Reparto> repartos = _lstDiaRepartos.Find(x => x.Dia == diaReparto).Repartos.ToList();
             comboBox5AgregarPedido_Nombre.DataSource = repartos;
             comboBox5AgregarPedido_Nombre.DisplayMember = "Nombre";
             comboBox5AgregarPedido_Nombre.ValueMember = "Nombre";
@@ -46,7 +32,7 @@ namespace linway_app.Forms
                 ev.Handled = true;
             }
         }
-        private async void TextBox2_TextChanged(object sender, EventArgs ev)
+        private async void TextBox2_TextChanged(object sender, EventArgs ev)  // cliente por Id
         {
             _clienteAReparto = null;
             string numeroDeCliente = textBox2.Text;
@@ -75,7 +61,7 @@ namespace linway_app.Forms
             }
             _clienteAReparto = cliente;
         }
-        private async void TextBox6_TextChanged(object sender, EventArgs ev)
+        private async void TextBox6_TextChanged(object sender, EventArgs ev)  // cliente por dirección
         {
             _clienteAReparto = null;
             string direccion = textBox6.Text;

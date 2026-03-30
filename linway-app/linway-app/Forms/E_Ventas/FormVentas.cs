@@ -11,8 +11,9 @@ namespace linway_app.Forms
 {
     public partial class FormVentas : Form
     {
-        private List<Venta> _lstVentas = new List<Venta>();
+        private List<DiaReparto> _dias = new List<DiaReparto>();
         private List<RegistroVenta> _lstRegistros = new List<RegistroVenta>();
+        private List<Venta> _lstVentas = new List<Venta>();
         private string showing = "agregarReg";
         private readonly IServiceScope _scope;
         public FormVentas()
@@ -27,24 +28,27 @@ namespace linway_app.Forms
         }
         private async Task Actualizar()
         {
-            var response = await UIExecutor.ExecuteAsync(
+            var respuesta = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var ventaServices = sp.GetRequiredService<IVentaServices>();
                     var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
+                    List<DiaReparto> dias = await diaRepartoServices.GetAllAsync();
                     List<Venta> ventas = await ventaServices.GetAllAsync();
                     List<RegistroVenta> registros = await registroVentaServices.GetAllAsync();
-                    return (ventas, registros);
+                    return (dias, ventas, registros);
                 },
                 "No se pudieron buscar las Ventas y los Registros de Ventas",
                 null
             );
-            if (response.ventas == null || response.registros == null)
+            if (respuesta.dias == null || respuesta.ventas == null || respuesta.registros == null)
             {
                 return;
             }
-            _lstVentas = response.ventas;
-            _lstRegistros = response.registros;
+            _dias = respuesta.dias;
+            _lstRegistros = respuesta.registros;
+            _lstVentas = respuesta.ventas;
             ActualizarGrid1Registros(_lstRegistros);
             ActualizarGrid3Ventas();
         }

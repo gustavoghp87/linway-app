@@ -2,7 +2,6 @@
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
-using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,6 +11,7 @@ namespace linway_app.Forms
 {
     public partial class FormNotasEnvio : Form
     {
+        private List<DiaReparto> _lstDiaRepartos = new List<DiaReparto>();
         private List<NotaDeEnvio> _lstNotaDeEnvios = new List<NotaDeEnvio>();
         private List<ProdVendido> _lstProdVendidos = new List<ProdVendido>();
         private IServiceScope _scope;
@@ -28,41 +28,26 @@ namespace linway_app.Forms
         }
         private async Task ActualizarNotas()
         {
-            var notas = await UIExecutor.ExecuteAsync(
+            var respuesta = await UIExecutor.ExecuteAsync(
                 _scope,
-                async sp => {
+                async sp =>
+                {
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    return await notaDeEnvioServices.GetAllAsync();
+                    List<NotaDeEnvio> notas = await notaDeEnvioServices.GetAllAsync();
+                    List<DiaReparto> dias = await diaRepartoServices.GetAllAsync();
+                    return (notas, dias);
                 },
-                "No se pudieron buscar las Notas de Envío",
+                "No se pudieron buscar las Notas de Envío o los Repartos por Día",
                 null
             );
-            if (notas == null)
+            if (respuesta.notas == null || respuesta.dias == null)
             {
                 return;
             }
-            _lstNotaDeEnvios = notas;
+            _lstNotaDeEnvios = respuesta.notas;
+            _lstDiaRepartos = respuesta.dias;
             labelCantidadDeNotas.Text = _lstNotaDeEnvios.Count.ToString() + " notas de envio.";
-            //
-            textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
-            comboBox1.SelectedItem = "";
-            textBox1.TextChanged += TextBox1_TextChanged;
-
-        }
-        private void ActualizarGrid2(ICollection<ProdVendido> lstProdVendidos)
-        {
-            if (lstProdVendidos == null)
-            {
-                return;
-            }
-            var grid = new List<EProdVendido>();
-            foreach (ProdVendido prodVendido in lstProdVendidos)
-            {
-                grid.Add(Form1.Mapper.Map<EProdVendido>(prodVendido));
-            }
-            dataGridView2.DataSource = grid;
-            dataGridView2.Columns[0].Width = 25;
-            dataGridView2.Columns[1].Width = 200;
         }
         private async void ExportarAExcel_Btn_Click(object sender, EventArgs ev)
         {

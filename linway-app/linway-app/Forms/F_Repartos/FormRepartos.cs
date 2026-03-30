@@ -78,26 +78,26 @@ namespace linway_app.Forms
         private async Task ReCargarHDR(string diaReparto, string nombreReparto)
         {
             await Actualizar();
-            List<Pedido> pedidos = await UIExecutor.ExecuteAsync(
-                _scope,
-                async sp =>
-                {
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
-                    Reparto reparto = lstDiasRep
-                        .Find(x => x.Dia == diaReparto).Repartos.ToList()
-                        .Find(x => x.Nombre == nombreReparto);
-                    var pedidos = await pedidoServices.GetPorRepartoIdAsync(reparto.Id);
-                    return pedidos.OrderBy(x => x.Orden).ToList();
-                },
-                "No se pudieron buscar los Pedidos",
-                null
-            );
-            if (pedidos == null)
-            {
-                return;
-            }
+            List<Pedido> pedidos = _lstDiaRepartos.Find(x => x.Dia == diaReparto)?.Repartos?.ToList().Find(x => x.Nombre == nombreReparto)?.Pedidos?.ToList().OrderBy(x => x.Orden).ToList() ?? new List<Pedido>();
+            //    _scope,
+            //    async sp =>
+            //    {
+            //        var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+            //        var pedidoServices = sp.GetRequiredService<IPedidoServices>();
+            //        List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
+            //        Reparto reparto = lstDiasRep
+            //            .Find(x => x.Dia == diaReparto).Repartos.ToList()
+            //            .Find(x => x.Nombre == nombreReparto);
+            //        var pedidos = await pedidoServices.GetPorRepartoIdAsync(reparto.Id);
+            //        return pedidos.OrderBy(x => x.Orden).ToList();
+            //    },
+            //    "No se pudieron buscar los Pedidos",
+            //    null
+            //);
+            //if (pedidos == null)
+            //{
+            //    return;
+            //}
             _lstPedidos = pedidos;
         }
         private void LimpiarPantalla()
@@ -117,16 +117,16 @@ namespace linway_app.Forms
             textBox2.Text = "";
             textBox6.Text = "";
             textBox1AgregarRepartoNombre.Text = "";
-            textBox5.Text = "";
+            textBox5EliminarPedido_Direccion.Text = "";
             textBox7.Text = "";
             label8AgregarPedidoDireccion.Text = "";
             comboBox6.Text = "";
             comboBox7.Text = "";
             comboBox8.Text = "";
-            comboBox9.Text = "";
-            comboBox10.Text = "";
+            comboBox9Repartos_Nombre.Text = "";
+            comboBox10Repartos_Dia.Text = "";
             //checkBox1.Checked = false;
-            label32.Text = "";
+            label32EliminarPedido_Direccion.Text = "";
             label36.Text = "";
         }
         private async Task<bool> EliminarPedidoAsync(Pedido pedidoAEliminar)  // handler
@@ -149,7 +149,7 @@ namespace linway_app.Forms
                     {
                         prodVendido.PedidoId = null;
                     }
-                    prodVendidoServices.EditOrDelete(prodVendidosDelPedido);
+                    prodVendidoServices.EditOrDeleteMany(prodVendidosDelPedido);
                     //
                     reparto.Pedidos.Remove(pedidoAEliminar);
                     RepartoServices.ActualizarCantidadesDeReparto(reparto);

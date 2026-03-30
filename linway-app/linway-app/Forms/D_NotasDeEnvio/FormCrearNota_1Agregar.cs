@@ -43,6 +43,7 @@ namespace linway_app.Forms
                 return;
             }
             _cliente = cliente;
+            EstablecerReparto();
             label36ClienteDireccion.Text = cliente.Direccion;
             labelClienteId.Text = cliente.Id.ToString();
         }
@@ -72,6 +73,7 @@ namespace linway_app.Forms
                 return;
             }
             _cliente = cliente;
+            EstablecerReparto();
             label36ClienteDireccion.Text = cliente.Direccion;
             labelClienteId.Text = cliente.Id.ToString();
         }

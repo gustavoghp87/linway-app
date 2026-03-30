@@ -39,7 +39,6 @@ namespace linway_app.Forms
         {
             label10EliminarCantidad.Text = ObtenerListaABorrar().Count.ToString();
         }
-
         private List<Recibo> ObtenerListaABorrar()
         {
             var listaABorrar = new List<Recibo>();

@@ -6,7 +6,7 @@ namespace Models
     {
         private static readonly string DbUser = "linway";
         private static readonly string DbPassword = "password";
-        private static readonly string DbName = "linway1";
+        private static readonly string DbName = "linway";
         private static readonly string DbPort = "3306";
         public static string GetDumpString()
         {

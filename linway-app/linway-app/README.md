@@ -1,18 +1,23 @@
 ﻿
-Metas para versiones posteriores:
---------------------------------
+Mejoras de características para próximas versiones:
+--------------------------------------------------
 -Cambiar sistema de cantidades de líquidos y polvos (2x5, etcétera)
--Separar dirección de localidad
 -Eliminar dobles espaciados
 -Segundo campo para teléfono
 -En los campos de búsqueda por dirección hacer indistinto usar las tildes en las vocales
--Migrar de Windows Forms a WPS u otro más moderno
--Lograr que se pueda usar la app sin tener encendida la pc host (base de datos en la nube)
 -Lograr que la app sea reactiva a cambios en la base de datos
--ClienteId no debería ser obligatorio en Registro de Venta (por venta particular cargada desde Ventas)
--Ver la diferencia entre Pedido y Destino
 -Agregar opción de eliminar reparto
+-Lograr que se pueda usar la app sin tener encendida la pc host (base de datos en la nube)
+-En repartos reutilizar los 2 combobox en todas las opciones
+
+Mejoras de sistema para próximas versiones:
+------------------------------------------
+-Separar dirección de localidad
+-Migrar de Windows Forms a WPS u otro más moderno
 -Ver si eliminar el atributo Pedido.Direccion
+-ClienteId no debería ser obligatorio en Registro de Venta (por venta particular cargada desde Ventas)
+-Hacer queries de búsqueda a DB en lugar de traer toda una colección y filtrar por Linq
+-Las etiquetas de los Repartos y las cantidades de los Pedidos y los Repartos deberían ser calculados dinámicamente ondemand o por procedimiento en la DB para simplificar todo
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,9 +39,9 @@ ___________________________________Sistema Linway 15____________________________
 -Índices de unicidad en la base de datos
 -Se corrieron los siguientes queries:
 
-DROP DATABASE linway1;
-CREATE DATABASE linway1;
-USE linway1;
+DROP DATABASE linway;
+CREATE DATABASE linway;
+USE linway;
 SOURCE "C:\Users\g\Desktop\linway_completo.sql";
 
 --
@@ -150,6 +155,14 @@ DELETE FROM Productos
         )
 ;
 ALTER TABLE Productos DROP COLUMN Estado;
+--
+UPDATE ProdVendidos SET NotaDeEnvioId = NULL WHERE NotaDeEnvioId = 26931;
+DELETE FROM NotaDeEnvios WHERE ID = 26931;
+UPDATE ProdVendidos SET RegistroVentaId = NULL WHERE RegistroVentaId IN (46436, 56618);
+DELETE FROM RegistroVentas WHERE Id IN (46436, 56618);
+DELETE FROM ProdVendidos WHERE NotaDeEnvioId IS NULL AND PedidoId IS NULL AND RegistroVentaId IS NULL;
+DELETE FROM Productos WHERE Id IN (52, 263, 264);
+SELECT pr.Id, pr.Nombre, COUNT(pv.Id) AS CantidadVendida, COUNT(ne.Id) AS CantidadNotas, COUNT(pe.Id) AS CantidadPedidos, COUNT(rv.Id) AS CantidadVentas FROM Productos pr LEFT JOIN ProdVendidos pv ON pv.ProductoId = pr.Id LEFT JOIN NotaDeEnvios ne ON ne.Id = pv.NotaDeEnvioId LEFT JOIN Pedidos pe ON pe.Id = pv.PedidoId LEFT JOIN RegistroVentas rv ON rv.Id = pv.RegistroVentaId WHERE pr.Nombre LIKE "ELIMINADO %" GROUP BY pr.Id ORDER BY pr.Id;
 --
 
 

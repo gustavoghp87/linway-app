@@ -120,4 +120,7 @@
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="label3.Text" xml:space="preserve">
+    <value>Al deshacer una Venta, se borrará el Registro y se descontarán los productos del listado de Ventas. También se sacarán estos productos del Reparto correspondiente si están en alguno. No se eliminará ninguna Nota de Envío aun si los productos tuvieran alguna asociada.</value>
+  </data>
 </root>

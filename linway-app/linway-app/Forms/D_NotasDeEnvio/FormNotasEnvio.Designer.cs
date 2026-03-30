@@ -35,9 +35,9 @@ namespace linway_app.Forms
             this.button1Imprimir = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox1ListaCampoClienteOFecha = new System.Windows.Forms.TextBox();
             this.label2FiltrarPorDireccionOFecha = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBox1ListaModalidad = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -57,7 +57,7 @@ namespace linway_app.Forms
             this.label10CantidadABorrar = new System.Windows.Forms.Label();
             this.label13EliminarHasta = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.comboBox3EliminarModalidad = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label100Reparto = new System.Windows.Forms.Label();
@@ -67,8 +67,8 @@ namespace linway_app.Forms
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.comboBox5EnviarAReparto_Reparto = new System.Windows.Forms.ComboBox();
+            this.comboBox4EnviarAReparto_Dia = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label20 = new System.Windows.Forms.Label();
@@ -93,7 +93,7 @@ namespace linway_app.Forms
             this.label29 = new System.Windows.Forms.Label();
             this.button8 = new System.Windows.Forms.Button();
             this.label22 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.textBox8QuitarProducto_Nombre = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
@@ -159,9 +159,9 @@ namespace linway_app.Forms
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.textBox1ListaCampoClienteOFecha);
             this.groupBox1.Controls.Add(this.label2FiltrarPorDireccionOFecha);
-            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Controls.Add(this.comboBox1ListaModalidad);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(12, 170);
@@ -173,12 +173,12 @@ namespace linway_app.Forms
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(262, 21);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(224, 21);
-            this.textBox1.TabIndex = 6;
-            this.textBox1.Visible = false;
-            this.textBox1.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
+            this.textBox1ListaCampoClienteOFecha.Location = new System.Drawing.Point(262, 21);
+            this.textBox1ListaCampoClienteOFecha.Name = "textBox1";
+            this.textBox1ListaCampoClienteOFecha.Size = new System.Drawing.Size(224, 21);
+            this.textBox1ListaCampoClienteOFecha.TabIndex = 6;
+            this.textBox1ListaCampoClienteOFecha.Visible = false;
+            this.textBox1ListaCampoClienteOFecha.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
             // 
             // label2
             // 
@@ -193,20 +193,20 @@ namespace linway_app.Forms
             // 
             // comboBox1
             // 
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.comboBox1ListaModalidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox1ListaModalidad.FormattingEnabled = true;
+            this.comboBox1ListaModalidad.Items.AddRange(new object[] {
             "Hoy",
             "Todas",
             "Impresas",
             "No impresas",
             "Cliente",
             "Fecha"});
-            this.comboBox1.Location = new System.Drawing.Point(50, 19);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 24);
-            this.comboBox1.TabIndex = 4;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
+            this.comboBox1ListaModalidad.Location = new System.Drawing.Point(50, 19);
+            this.comboBox1ListaModalidad.Name = "comboBox1";
+            this.comboBox1ListaModalidad.Size = new System.Drawing.Size(121, 24);
+            this.comboBox1ListaModalidad.TabIndex = 4;
+            this.comboBox1ListaModalidad.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // groupBox2
             // 
@@ -428,17 +428,17 @@ namespace linway_app.Forms
             // 
             // comboBox3
             // 
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Items.AddRange(new object[] {
+            this.comboBox3EliminarModalidad.FormattingEnabled = true;
+            this.comboBox3EliminarModalidad.Items.AddRange(new object[] {
             "(Seleccionar)",
             "Todas",
             "Impresas",
             "Establecer rango"});
-            this.comboBox3.Location = new System.Drawing.Point(114, 25);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(109, 21);
-            this.comboBox3.TabIndex = 13;
-            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.ComboBox3_SelectedIndexChanged);
+            this.comboBox3EliminarModalidad.Location = new System.Drawing.Point(114, 25);
+            this.comboBox3EliminarModalidad.Name = "comboBox3";
+            this.comboBox3EliminarModalidad.Size = new System.Drawing.Size(109, 21);
+            this.comboBox3EliminarModalidad.TabIndex = 13;
+            this.comboBox3EliminarModalidad.SelectedIndexChanged += new System.EventHandler(this.ComboBox3_SelectedIndexChanged);
             // 
             // label8
             // 
@@ -459,8 +459,8 @@ namespace linway_app.Forms
             this.groupBox4.Controls.Add(this.textBox6);
             this.groupBox4.Controls.Add(this.label15);
             this.groupBox4.Controls.Add(this.label14);
-            this.groupBox4.Controls.Add(this.comboBox5);
-            this.groupBox4.Controls.Add(this.comboBox4);
+            this.groupBox4.Controls.Add(this.comboBox5EnviarAReparto_Reparto);
+            this.groupBox4.Controls.Add(this.comboBox4EnviarAReparto_Dia);
             this.groupBox4.Location = new System.Drawing.Point(520, 12);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(319, 222);
@@ -542,28 +542,28 @@ namespace linway_app.Forms
             // 
             // comboBox5
             // 
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(155, 47);
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(85, 21);
-            this.comboBox5.TabIndex = 1;
-            this.comboBox5.SelectedIndexChanged += new System.EventHandler(this.ComboBox5_SelectedIndexChanged);
+            this.comboBox5EnviarAReparto_Reparto.FormattingEnabled = true;
+            this.comboBox5EnviarAReparto_Reparto.Location = new System.Drawing.Point(155, 47);
+            this.comboBox5EnviarAReparto_Reparto.Name = "comboBox5";
+            this.comboBox5EnviarAReparto_Reparto.Size = new System.Drawing.Size(85, 21);
+            this.comboBox5EnviarAReparto_Reparto.TabIndex = 1;
+            this.comboBox5EnviarAReparto_Reparto.SelectedIndexChanged += new System.EventHandler(this.ComboBox5_SelectedIndexChanged);
             // 
             // comboBox4
             // 
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Items.AddRange(new object[] {
+            this.comboBox4EnviarAReparto_Dia.FormattingEnabled = true;
+            this.comboBox4EnviarAReparto_Dia.Items.AddRange(new object[] {
             "Lunes",
             "Martes",
             "Miércoles",
             "Jueves",
             "Viernes",
             "Sábado"});
-            this.comboBox4.Location = new System.Drawing.Point(19, 47);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(85, 21);
-            this.comboBox4.TabIndex = 0;
-            this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.ComboBox4_SelectedIndexChanged);
+            this.comboBox4EnviarAReparto_Dia.Location = new System.Drawing.Point(19, 47);
+            this.comboBox4EnviarAReparto_Dia.Name = "comboBox4";
+            this.comboBox4EnviarAReparto_Dia.Size = new System.Drawing.Size(85, 21);
+            this.comboBox4EnviarAReparto_Dia.TabIndex = 0;
+            this.comboBox4EnviarAReparto_Dia.SelectedIndexChanged += new System.EventHandler(this.ComboBox4_SelectedIndexChanged);
             // 
             // tabControl1
             // 
@@ -758,7 +758,7 @@ namespace linway_app.Forms
             this.tabPage4.Controls.Add(this.label29);
             this.tabPage4.Controls.Add(this.button8);
             this.tabPage4.Controls.Add(this.label22);
-            this.tabPage4.Controls.Add(this.textBox8);
+            this.tabPage4.Controls.Add(this.textBox8QuitarProducto_Nombre);
             this.tabPage4.Controls.Add(this.label21);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
@@ -825,11 +825,11 @@ namespace linway_app.Forms
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(76, 6);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(100, 20);
-            this.textBox8.TabIndex = 1;
-            this.textBox8.TextChanged += new System.EventHandler(this.TextBox8_TextChanged);
+            this.textBox8QuitarProducto_Nombre.Location = new System.Drawing.Point(76, 6);
+            this.textBox8QuitarProducto_Nombre.Name = "textBox8";
+            this.textBox8QuitarProducto_Nombre.Size = new System.Drawing.Size(100, 20);
+            this.textBox8QuitarProducto_Nombre.TabIndex = 1;
+            this.textBox8QuitarProducto_Nombre.TextChanged += new System.EventHandler(this.TextBox8_TextChanged);
             // 
             // label21
             // 
@@ -898,7 +898,7 @@ namespace linway_app.Forms
             this.tabPage2.Controls.Add(this.button5CancelarEliminarPorRangos);
             this.tabPage2.Controls.Add(this.label8);
             this.tabPage2.Controls.Add(this.button3EliminarPrimero);
-            this.tabPage2.Controls.Add(this.comboBox3);
+            this.tabPage2.Controls.Add(this.comboBox3EliminarModalidad);
             this.tabPage2.Controls.Add(this.button4EliminarConfirmacion);
             this.tabPage2.Controls.Add(this.label9);
             this.tabPage2.Controls.Add(this.textBox4EliminarHasta);
@@ -986,9 +986,9 @@ namespace linway_app.Forms
         private System.Windows.Forms.Button button1Imprimir;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBox1ListaModalidad;
         private System.Windows.Forms.Label label2FiltrarPorDireccionOFecha;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox1ListaCampoClienteOFecha;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
@@ -1002,7 +1002,7 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label11SerguroDeseaBorrar;
         private System.Windows.Forms.Label label10CantidadABorrar;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.ComboBox comboBox3EliminarModalidad;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBox4EliminarHasta;
         private System.Windows.Forms.TextBox textBox5EliminarDesde;
@@ -1017,8 +1017,8 @@ namespace linway_app.Forms
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.ComboBox comboBox5;
-        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.ComboBox comboBox5EnviarAReparto_Reparto;
+        private System.Windows.Forms.ComboBox comboBox4EnviarAReparto_Dia;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
@@ -1033,7 +1033,7 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox textBox8QuitarProducto_Nombre;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox textBox11;
         private System.Windows.Forms.Label label25;

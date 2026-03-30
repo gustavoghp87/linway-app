@@ -19,12 +19,16 @@ namespace linway_app.Forms
             dataGridView4.Columns[0].Width = 28;
             dataGridView4.Columns[1].Width = 200;
         }
-        private void LimpiarLista_Click(object sender, EventArgs ev)
+        private void LimpiarLista()
         {
             _lstProdVendidosAAgregar.Clear();
             _lstProductosAAgregar.Clear();
             ActualizarGrid();
             label42ImporteTotal.Text = "";
+        }
+        private void LimpiarLista_Click(object sender, EventArgs ev)
+        {
+            LimpiarLista();
         }
     }
 }

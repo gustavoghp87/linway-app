@@ -130,7 +130,7 @@ namespace linway_app.Forms
         {
             ActualizarCombobox1();
         }
-        private async void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)
         {
             _selectedIndex = -1;
             ActualizarPedidosYGridDePedidos();
@@ -160,7 +160,7 @@ namespace linway_app.Forms
             ActualizarCantidadesDeReparto(reparto);
             CambiarSoloAEntregar();
         }
-        private async void CheckBox1_CheckedChanged(object sender, EventArgs ev)
+        private void CheckBox1_CheckedChanged(object sender, EventArgs ev)
         {
             CambiarSoloAEntregar();
         }

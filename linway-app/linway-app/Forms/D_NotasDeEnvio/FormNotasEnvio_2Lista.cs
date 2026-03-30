@@ -8,14 +8,10 @@ namespace linway_app.Forms
 {
     public partial class FormNotasEnvio : Form
     {
-        private void ActualizarGrid1(ICollection<NotaDeEnvio> lstNotadeEnvios)
+        private void ActualizarGrid1(ICollection<NotaDeEnvio> lstNotaDeEnvios)
         {
-            if (lstNotadeEnvios == null)
-            {
-                return;
-            }
             var grid = new List<ENotaDeEnvio>();
-            foreach (NotaDeEnvio nota in lstNotadeEnvios)
+            foreach (NotaDeEnvio nota in lstNotaDeEnvios)
             {
                 grid.Add(Form1.Mapper.Map<ENotaDeEnvio>(nota));
             }
@@ -29,111 +25,71 @@ namespace linway_app.Forms
             dataGridView1.Columns[2].Width = 210;
             dataGridView1.Columns[3].Width = 380;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;        // lento
-            //
-            comboBox1.SelectedIndexChanged -= ComboBox1_SelectedIndexChanged;  // evita error de concurrencia de DbContext
-            comboBox1.SelectedItem = "Todas ??";
-            comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
-            //
-            comboBox3.SelectedIndexChanged -= ComboBox3_SelectedIndexChanged;  // evita error de concurrencia de DbContext
-            comboBox3.SelectedItem = "(Seleccionar)";
-            comboBox3.SelectedIndexChanged += ComboBox3_SelectedIndexChanged;
+            labelCantidadDeNotas.Text = lstNotaDeEnvios.Count.ToString() + " notas de envio.";
         }
-        private async void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
+        private void EventoCombobox1ListaModalidad()
         {
-            string opcion = comboBox1.SelectedItem.ToString();  // todas - hoy - impresas- no impresas
-            var lFiltrada = new List<NotaDeEnvio>();
+            string opcion = comboBox1ListaModalidad.SelectedItem?.ToString();  // todas - hoy - impresas - no impresas - fecha - cliente
             if (opcion == "Hoy")
             {
                 label2FiltrarPorDireccionOFecha.Text = "";
                 //
-                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
-                textBox1.Text = "";
-                textBox1.Visible = false;
-                textBox1.TextChanged += TextBox1_TextChanged;
+                textBox1ListaCampoClienteOFecha.Text = "";
+                textBox1ListaCampoClienteOFecha.Visible = false;
                 //
-                foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
-                {
-                    if (nota.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha))
-                    {
-                        lFiltrada.Add(nota);
-                    }
-                }
-                ActualizarGrid1(lFiltrada);
+                ActualizarGrid1(_lstNotaDeEnvios.FindAll(n => n.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha)));
             }
             else if (opcion == "Todas")
             {
                 label2FiltrarPorDireccionOFecha.Text = "";
                 //
-                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
-                textBox1.Text = "";
-                textBox1.Visible = false;
-                textBox1.TextChanged += TextBox1_TextChanged;
+                textBox1ListaCampoClienteOFecha.Text = "";
+                textBox1ListaCampoClienteOFecha.Visible = false;
                 //
-                await ActualizarNotas();
                 ActualizarGrid1(_lstNotaDeEnvios);
             }
             else if (opcion == "Impresas")
             {
                 label2FiltrarPorDireccionOFecha.Text = "";
                 //
-                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
-                textBox1.Text = "";
-                textBox1.Visible = false;
-                textBox1.TextChanged += TextBox1_TextChanged;
+                textBox1ListaCampoClienteOFecha.Text = "";
+                textBox1ListaCampoClienteOFecha.Visible = false;
                 //
-                foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
-                {
-                    if (nota.Impresa == 1)
-                    {
-                        lFiltrada.Add(nota);
-                    }
-                }
-                ActualizarGrid1(lFiltrada);
+                ActualizarGrid1(_lstNotaDeEnvios.FindAll(n => n.Impresa == 1));
             }
             else if (opcion == "No impresas")
             {
                 label2FiltrarPorDireccionOFecha.Text = "";
                 //
-                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
-                textBox1.Text = "";
-                textBox1.Visible = false;
-                textBox1.TextChanged += TextBox1_TextChanged;
+                textBox1ListaCampoClienteOFecha.Text = "";
+                textBox1ListaCampoClienteOFecha.Visible = false;
                 //
-                foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
-                {
-                    if (nota.Impresa == 0)
-                    {
-                        lFiltrada.Add(nota);
-                    }
-                }
-                ActualizarGrid1(lFiltrada);
+                ActualizarGrid1(_lstNotaDeEnvios.FindAll(n => n.Impresa == 0));
             }
             else if (opcion == "Cliente")
             {
                 label2FiltrarPorDireccionOFecha.Text = "Dirección:";
                 //
-                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
-                textBox1.Text = "";
-                textBox1.Visible = true;
-                textBox1.TextChanged += TextBox1_TextChanged;
-                //
+                //textBox1ListaCampoClienteOFecha.Text = "";
+                textBox1ListaCampoClienteOFecha.Visible = true;
             }
-            else if (opcion== "Fecha")
+            else if (opcion == "Fecha")
             {
                 label2FiltrarPorDireccionOFecha.Text = "Fecha:";
                 //
-                textBox1.TextChanged -= TextBox1_TextChanged;  // evita error de concurrencia de DbContext
-                textBox1.Text = "";
-                textBox1.Visible = true;
-                textBox1.TextChanged += TextBox1_TextChanged;
-                //
+                //textBox1ListaCampoClienteOFecha.Text = "";
+                textBox1ListaCampoClienteOFecha.Visible = true;
             }
         }
-        private async void TextBox1_TextChanged(object sender, EventArgs ev)
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
+        {
+            EventoCombobox1ListaModalidad();
+        }
+        private void TextBox1_TextChanged(object sender, EventArgs ev)
         {
             // filtrar datos
-            string opcion = comboBox1.SelectedItem.ToString();
-            string texto = textBox1.Text;
+            string opcion = comboBox1ListaModalidad.SelectedItem.ToString();
+            string texto = textBox1ListaCampoClienteOFecha.Text;
             char x;
             if (opcion == "Cliente")
             {
@@ -147,7 +103,6 @@ namespace linway_app.Forms
             {
                 return;
             }
-            await ActualizarNotas();
             var lstFiltrada = new List<NotaDeEnvio>();
             foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
             {

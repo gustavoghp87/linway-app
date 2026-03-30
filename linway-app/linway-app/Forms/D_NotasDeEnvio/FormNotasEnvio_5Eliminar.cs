@@ -1,12 +1,10 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.FormServices;
 using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace linway_app.Forms
@@ -15,47 +13,30 @@ namespace linway_app.Forms
     {
         private async void ComboBox3_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            if ((new List<string>() { "Impresas", "(Seleccionar)", "Todas" }).Contains(comboBox3.SelectedItem.ToString()))
+            if ((new List<string>() { "Impresas", "(Seleccionar)", "Todas" }).Contains(comboBox3EliminarModalidad.SelectedItem.ToString()))
             {
                 label13EliminarHasta.Visible = false;
                 label12EliminarDesde.Visible = false;
-                //
-                textBox5EliminarDesde.TextChanged -= TextBox5_TextChanged;  // evita error de concurrencia de DbContext
                 textBox5EliminarDesde.Visible = false;
                 textBox5EliminarDesde.Text = "";
-                textBox5EliminarDesde.TextChanged += TextBox5_TextChanged;
-                //
-                textBox4EliminarHasta.TextChanged -= TextBox4_TextChanged;  // evita error de concurrencia de DbContext
                 textBox4EliminarHasta.Visible = false;
                 textBox4EliminarHasta.Text = "";
-                textBox4EliminarHasta.TextChanged += TextBox4_TextChanged;
             }
-            else if (comboBox3.SelectedItem.ToString() == "Establecer rango")
+            else if (comboBox3EliminarModalidad.SelectedItem.ToString() == "Establecer rango")
             {
-                textBox4EliminarHasta.TextChanged -= TextBox4_TextChanged;  // evita error de concurrencia de DbContext
                 textBox4EliminarHasta.Visible = true;
                 textBox4EliminarHasta.Text = "";
-                textBox4EliminarHasta.TextChanged += TextBox4_TextChanged;
-                //
-                textBox5EliminarDesde.TextChanged -= TextBox5_TextChanged;  // evita error de concurrencia de DbContext
                 textBox5EliminarDesde.Visible = true;
-                textBox5EliminarDesde.TextChanged += TextBox5_TextChanged;
-                //
                 label12EliminarDesde.Visible = true;
                 label13EliminarHasta.Visible = true;
             }
-            var lista = await ObtenerListaABorrar();
+            var lista = ObtenerListaABorrar();
             label10CantidadABorrar.Text = lista.Count.ToString();
         }
-        private async Task<List<NotaDeEnvio>> ObtenerListaABorrar()
+        private List<NotaDeEnvio> ObtenerListaABorrar()
         {
-            await ActualizarNotas();
             var listaABorrar = new List<NotaDeEnvio>();
-            if (_lstNotaDeEnvios == null || _lstNotaDeEnvios.Count == 0)
-            {
-                return listaABorrar;
-            }
-            string opcion = comboBox3.SelectedItem.ToString();
+            string opcion = comboBox3EliminarModalidad.SelectedItem.ToString();
             if (opcion == "Establecer rango" && textBox5EliminarDesde.Text != "")
             {
                 try
@@ -78,39 +59,27 @@ namespace linway_app.Forms
             }
             else if (opcion == "Todas")
             {
-                foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
-                {
-                    if (nota != null)
-                    {
-                        listaABorrar.Add(nota);
-                    }
-                }
+                listaABorrar = _lstNotaDeEnvios.Where(ne => ne != null).ToList();
             }
             else if (opcion == "Impresas")
             {
-                foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
-                {
-                    if (nota != null && nota.Impresa == 1)
-                    {
-                        listaABorrar.Add(nota);
-                    }
-                }
+                listaABorrar.AddRange(_lstNotaDeEnvios.Where(ne => ne != null && ne.Impresa == 1).ToList());
             }
             return listaABorrar;
         }
-        private async void TextBox5_TextChanged(object sender, EventArgs ev)
+        private void TextBox5_TextChanged(object sender, EventArgs ev)
         {
-            var lista = await ObtenerListaABorrar();
+            var lista = ObtenerListaABorrar();
             label10CantidadABorrar.Text = lista.Count.ToString();
         }
-        private async void TextBox4_TextChanged(object sender, EventArgs ev)
+        private void TextBox4_TextChanged(object sender, EventArgs ev)
         {
-            var lista = await ObtenerListaABorrar();
+            var lista = ObtenerListaABorrar();
             label10CantidadABorrar.Text = lista.Count.ToString();
         }
         private void Button3_Click(object sender, EventArgs ev)
         {
-            if ((new List<string>() { "Establecer rango", "Impresas", "Todas" }).Contains(comboBox3.SelectedItem.ToString()))
+            if ((new List<string>() { "Establecer rango", "Impresas", "Todas" }).Contains(comboBox3EliminarModalidad.SelectedItem.ToString()))
             {
                 label11SerguroDeseaBorrar.Visible = true;
                 button4EliminarConfirmacion.Visible = true;
@@ -127,24 +96,15 @@ namespace linway_app.Forms
             button3EliminarPrimero.Visible = true;
             label12EliminarDesde.Visible = false;
             label13EliminarHasta.Visible = false;
-            //
-            comboBox3.SelectedIndexChanged -= ComboBox3_SelectedIndexChanged;  // evita error de concurrencia de DbContext
-            comboBox3.SelectedItem = "(Seleccionar)";
-            comboBox3.SelectedIndexChanged += ComboBox3_SelectedIndexChanged;
-            //
-            textBox4EliminarHasta.TextChanged -= TextBox4_TextChanged;  // evita error de concurrencia de DbContext
+            comboBox3EliminarModalidad.SelectedItem = "(Seleccionar)";
             textBox4EliminarHasta.Visible = false;
             textBox4EliminarHasta.Text = "";
-            textBox4EliminarHasta.TextChanged += TextBox4_TextChanged;
-            //
-            textBox5EliminarDesde.TextChanged -= TextBox5_TextChanged;  // evita error de concurrencia de DbContext
             textBox5EliminarDesde.Visible = false;
             textBox5EliminarDesde.Text = "";
-            textBox5EliminarDesde.TextChanged += TextBox5_TextChanged;
         }
         private async void Button4_Click(object sender, EventArgs ev)  // eliminar nota de envío
         {
-            List<NotaDeEnvio> notas = await ObtenerListaABorrar();
+            List<NotaDeEnvio> notas = ObtenerListaABorrar();
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
@@ -156,7 +116,7 @@ namespace linway_app.Forms
                     {
                         prodVendido.NotaDeEnvioId = null;
                     }
-                    prodVendidoServices.EditOrDelete(prodVendidos);
+                    prodVendidoServices.EditOrDeleteMany(prodVendidos);
                     notaDeEnvioServices.DeleteMany(notas);
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)
@@ -173,31 +133,21 @@ namespace linway_app.Forms
             {
                 return;
             }
-            //
-            comboBox3.SelectedIndexChanged -= ComboBox3_SelectedIndexChanged;  // evita error de concurrencia de DbContext
-            comboBox3.SelectedItem = "(Seleccionar)";
-            comboBox3.SelectedIndexChanged += ComboBox3_SelectedIndexChanged;
-            //
+            comboBox3EliminarModalidad.SelectedItem = "(Seleccionar)";
             label11SerguroDeseaBorrar.Visible = false;
             button4EliminarConfirmacion.Visible = false;
             button5CancelarEliminarPorRangos.Visible = false;
             label13EliminarHasta.Visible = false;
             label12EliminarDesde.Visible = false;
             label10CantidadABorrar.Text = "0";
-            button3EliminarPrimero.Visible = false;
-            //
-            textBox4EliminarHasta.TextChanged -= TextBox4_TextChanged;  // evita error de concurrencia de DbContext
+            button3EliminarPrimero.Visible = true;
             textBox4EliminarHasta.Visible = false;
             textBox4EliminarHasta.Text = "";
-            textBox4EliminarHasta.TextChanged += TextBox4_TextChanged;
-            //
-            textBox5EliminarDesde.TextChanged -= TextBox5_TextChanged;  // evita error de concurrencia de DbContext
             textBox5EliminarDesde.Visible = false;
             textBox5EliminarDesde.Text = "";
-            textBox5EliminarDesde.TextChanged += TextBox5_TextChanged;
             //
             await ActualizarNotas();
-            ActualizarGrid1(_lstNotaDeEnvios);
+            EventoCombobox1ListaModalidad();
         }
     }
 }

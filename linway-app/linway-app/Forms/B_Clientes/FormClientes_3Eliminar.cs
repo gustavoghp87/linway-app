@@ -15,7 +15,7 @@ namespace linway_app.Forms
     public partial class FormClientes : Form
     {
         private Cliente _clienteAEliminar;
-        private async void BorrarPorId_textBox_TextChanged(object sender, EventArgs ev)  // por id
+        private async void BorrarPorId_textBox_TextChanged(object sender, EventArgs ev)  // cliente por Id
         {
             _clienteAEliminar = null;
             string numeroDeCliente = textBox22.Text;
@@ -46,7 +46,7 @@ namespace linway_app.Forms
             label47EliminarDireccion.Text = cliente.Direccion;
             button23EliminarCliente.Enabled = true;
         }
-        private async void BorrarPorDire_textBox_TextChanged(object sender, EventArgs ev)  // por dirección
+        private async void BorrarPorDire_textBox_TextChanged(object sender, EventArgs ev)  // cliente por dirección
         {
             _clienteAEliminar = null;
             string direccion = textBoxDireEnBorrar.Text;

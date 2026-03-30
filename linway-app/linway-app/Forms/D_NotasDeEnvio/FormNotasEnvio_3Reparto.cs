@@ -14,50 +14,41 @@ namespace linway_app.Forms
     {
         private NotaDeEnvio _notaDeEnvioAReparto;
         private Reparto _reparto;
-        private async void ComboBox4_SelectedIndexChanged(object sender, EventArgs ev)
+        private void Button7_Click(object sender, EventArgs ev)     // limpiar
+        {
+            _notaDeEnvioAReparto = null;
+            _reparto = null;
+            comboBox5EnviarAReparto_Reparto.Text = "";
+            comboBox5EnviarAReparto_Reparto.DataSource = null;
+            comboBox4EnviarAReparto_Dia.Text = "";
+            textBox6.Text = "";
+            button6.Enabled = false;
+            label16.Text = "";
+        }
+        private void ComboBox4_SelectedIndexChanged(object sender, EventArgs ev)
         {
             button6.Enabled = label16.Text != "" && label16.Text != "No encontrado";
-            string diaReparto = comboBox4.Text;
-            List<Reparto> repartos = await UIExecutor.ExecuteAsync(
-                _scope,
-                async sp =>
-                {
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
-                    return lstDiasRep.Find(x => x.Dia == diaReparto).Repartos.ToList();
-                },
-                "No se pudieron buscar los Repartos por Día",
-                null
-            );
-            if (repartos == null || repartos.Count == 0)
+            string diaReparto = comboBox4EnviarAReparto_Dia.Text;
+            if (diaReparto == "")
             {
-                comboBox5.SelectedIndexChanged -= ComboBox5_SelectedIndexChanged;  // evita error de concurrencia de DbContext
-                comboBox5.DataSource = null;
-                comboBox5.Text = "";
-                comboBox5.SelectedIndexChanged += ComboBox5_SelectedIndexChanged;
                 return;
             }
-            comboBox5.SelectedIndexChanged -= ComboBox5_SelectedIndexChanged;  // evita error de concurrencia de DbContext
-            comboBox5.DataSource = repartos;
-            comboBox5.DisplayMember = "Nombre";
-            comboBox5.ValueMember = "Nombre";
-            comboBox5.SelectedIndexChanged += ComboBox5_SelectedIndexChanged;
+            List<Reparto> repartos = _lstDiaRepartos.Find(x => x.Dia == diaReparto).Repartos.ToList();
+            if (repartos == null || repartos.Count == 0)
+            {
+                comboBox5EnviarAReparto_Reparto.DataSource = null;
+                comboBox5EnviarAReparto_Reparto.Text = "";
+                return;
+            }
+            comboBox5EnviarAReparto_Reparto.DataSource = repartos;
+            comboBox5EnviarAReparto_Reparto.SelectedIndex = repartos.Count > 0 ? 0 : -1;
+            comboBox5EnviarAReparto_Reparto.DisplayMember = "Nombre";
+            comboBox5EnviarAReparto_Reparto.ValueMember = "Nombre";
         }
-        private async void ComboBox5_SelectedIndexChanged(object sender, EventArgs ev)
+        private void ComboBox5_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            string nombreReparto = comboBox5.Text;
-            Reparto reparto = await UIExecutor.ExecuteAsync(
-                _scope,
-                async sp =>
-                {
-                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    List<Reparto> lstRepartos = await repartoServices.GetAllAsync();
-                    return lstRepartos.Find(x => x.Nombre == nombreReparto);
-                },
-                "No se pudieron buscar los Repartos por Nombre",
-                null
-            );
-            _reparto = reparto;
+            var repartoSeleccionado = comboBox5EnviarAReparto_Reparto.SelectedItem;
+            _reparto = (Reparto)repartoSeleccionado;
         }
         private void TextBox6_TextChanged(object sender, EventArgs ev)    // búsqueda por id de la nota de envío para agregar a pedido
         {
@@ -83,29 +74,9 @@ namespace linway_app.Forms
             }
             _notaDeEnvioAReparto = nota;
             label16.Text = nota.Cliente.Direccion;
-            button6.Enabled = comboBox5.Text != "";
+            button6.Enabled = comboBox5EnviarAReparto_Reparto.Text != "";
             Pedido pedido = nota.ProdVendidos.FirstOrDefault(pv => pv.PedidoId != null)?.Pedido;
             label100Reparto.Text = pedido != null ? $"Reparto {pedido.Reparto.DiaReparto.Dia} {pedido.Reparto.Nombre}" : "En ningún Reparto";
-        }
-        private void Button7_Click(object sender, EventArgs ev)     // limpiar
-        {
-            _notaDeEnvioAReparto = null;
-            _reparto = null;
-            //
-            comboBox5.SelectedIndexChanged -= ComboBox5_SelectedIndexChanged;  // evita error de concurrencia de DbContext
-            comboBox5.Text = "";
-            comboBox5.SelectedIndexChanged += ComboBox5_SelectedIndexChanged;
-            //
-            comboBox4.SelectedIndexChanged -= ComboBox4_SelectedIndexChanged;  // evita error de concurrencia de DbContext
-            comboBox4.Text = "";
-            comboBox4.SelectedIndexChanged += ComboBox4_SelectedIndexChanged;
-            //
-            textBox6.TextChanged -= TextBox6_TextChanged;  // evita error de concurrencia de DbContext
-            textBox6.Text = "";
-            textBox6.TextChanged += TextBox6_TextChanged;
-            //
-            button6.Enabled = false;
-            label16.Text = "";
         }
         private async void AgregarPedidoDesdeNota_Click(object sender, EventArgs ev)
         {
@@ -119,11 +90,9 @@ namespace linway_app.Forms
                 {
                     var savingServices = sp.GetRequiredService<ISavingServices>();
                     var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
                     var pedidoServices = sp.GetRequiredService<IPedidoServices>();
                     var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
                     var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
                     List<ProdVendido> prodVendidos = await prodVendidoServices.GetAllAsync();
                     Pedido pedidoEnElQueEsta = prodVendidos.FirstOrDefault(pv => pv.NotaDeEnvioId == _notaDeEnvioAReparto.Id)?.Pedido;
                     Pedido pedidoAlQueQuiereIr = _reparto.Pedidos.FirstOrDefault(x => x.ClienteId == _notaDeEnvioAReparto.ClienteId);
@@ -195,18 +164,9 @@ namespace linway_app.Forms
             button6.Enabled = false;
             label16.Text = "";
             label100Reparto.Text = "";
-            //
-            comboBox5.SelectedIndexChanged -= ComboBox4_SelectedIndexChanged;  // evita error de concurrencia de DbContext
-            comboBox5.Text = "";
-            comboBox5.SelectedIndexChanged += ComboBox4_SelectedIndexChanged;
-            //
-            comboBox4.SelectedIndexChanged -= ComboBox4_SelectedIndexChanged;  // evita error de concurrencia de DbContext
-            comboBox4.Text = "";
-            comboBox4.SelectedIndexChanged += ComboBox4_SelectedIndexChanged;
-            //
-            textBox6.TextChanged -= TextBox6_TextChanged;  // evita error de concurrencia de DbContext
+            comboBox5EnviarAReparto_Reparto.Text = "";
+            comboBox4EnviarAReparto_Dia.Text = "";
             textBox6.Text = "";
-            textBox6.TextChanged += TextBox6_TextChanged;
         }
     }
 }

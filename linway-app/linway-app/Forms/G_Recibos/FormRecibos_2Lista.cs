@@ -10,10 +10,6 @@ namespace linway_app.Forms
     {
         private void ActualizarGridRecibos(ICollection<Recibo> lstRecibos)
         {
-            if (lstRecibos == null)
-            {
-                return;
-            }
             var grid1 = new List<ERecibo>();
             foreach (Recibo recibo in lstRecibos)
             {
@@ -29,7 +25,7 @@ namespace linway_app.Forms
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
         {
             var lstRecibosFiltrados = new List<Recibo>();
-            string opcion = comboBox1FiltrarLista.SelectedItem.ToString();
+            string opcion = comboBox1FiltrarLista.SelectedItem?.ToString();
             if (opcion == "Hoy")
             {
                 label2.Text = "";

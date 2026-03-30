@@ -76,7 +76,7 @@ namespace linway_app.Forms
                     {
                         pv.RegistroVentaId = null;
                     }
-                    prodVendidoServices.EditOrDelete(prodVendidosAEditarOEliminar);
+                    prodVendidoServices.EditOrDeleteMany(prodVendidosAEditarOEliminar);
                     //
                     registroVentaServices.DeleteMany(registrosABorrar);
                     //

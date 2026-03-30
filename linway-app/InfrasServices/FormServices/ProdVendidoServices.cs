@@ -24,7 +24,7 @@ namespace linway_app.Services.FormServices
         {
             _services.DeleteMany(prodVendidos);
         }
-        public void EditOrDelete(List<ProdVendido> prodVendidos)
+        public void EditOrDeleteMany(List<ProdVendido> prodVendidos)
         {
             var prodVendidosAEliminar = new List<ProdVendido>();
             var prodVendidosAEditar = new List<ProdVendido>();

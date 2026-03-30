@@ -12,10 +12,6 @@ namespace linway_app.Forms
     {
         private void ActualizarGrid1Registros(ICollection<RegistroVenta> lstRegistroVentas)
         {
-            if (lstRegistroVentas == null)
-            {
-                return;
-            }
             var grid = new List<ERegistroVenta>();
             lstRegistroVentas.ToList().ForEach(x =>
                 grid.Add(Form1.Mapper.Map<ERegistroVenta>(x))
@@ -68,7 +64,7 @@ namespace linway_app.Forms
         private void FiltrarDatos(string texto, char x)
         {
             texto = texto.Trim().ToLower();
-            List<RegistroVenta> ListaFiltrada = new List<RegistroVenta>();
+            var ListaFiltrada = new List<RegistroVenta>();
             foreach (RegistroVenta rActual in _lstRegistros)
             {
                 string nombreCliente = rActual.NombreCliente.Trim().ToLower();

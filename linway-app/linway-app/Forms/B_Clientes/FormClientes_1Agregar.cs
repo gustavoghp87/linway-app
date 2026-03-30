@@ -19,21 +19,17 @@ namespace linway_app.Forms
             textBox5AgregarTelefono.Text = "";
             textBox18AgregarLocalidad.Text = "";
             radioButton1AgregarRInscripto.Checked = false;
-            radioButton2AgregarRMonotributo.Checked = false;
+            radioButton2AgregarRInscripto.Checked = false;
         }
         private async void AgregarCliente_Click(object sender, EventArgs ev)
         {
             string direccion = textBox2.Text;
-            if (direccion == "" || (!radioButton1AgregarRInscripto.Checked && !radioButton2AgregarRMonotributo.Checked))
+            if (direccion == "" || (!radioButton1AgregarRInscripto.Checked && !radioButton2AgregarRInscripto.Checked))
             {
                 MessageBox.Show("Los campos Dirección y Responsable Inscr/Monotributo son obligatorios");
                 return;
             }
-            TipoR tipo = TipoR.Monotributo;
-            if (radioButton2AgregarRMonotributo.Checked)
-            {
-                tipo = TipoR.Inscripto;
-            }
+            TipoR tipo = radioButton2AgregarRInscripto.Checked ? TipoR.Inscripto : TipoR.Monotributo;
             var nuevoCliente = new Cliente
             {
                 Direccion = textBox18AgregarLocalidad.Text != ""

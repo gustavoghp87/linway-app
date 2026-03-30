@@ -16,10 +16,6 @@ namespace linway_app.Forms
         private decimal _subTo = 0;
         private void ActualizarGridDetalles()
         {
-            if (_lstDetallesAAgregar == null)
-            {
-                return;
-            }
             var grid2 = new List<EDetalleRecibo>();
             foreach (DetalleRecibo detalleRecibo in _lstDetallesAAgregar)
             {
@@ -28,7 +24,7 @@ namespace linway_app.Forms
             dataGridView2.DataSource = grid2;
             dataGridView2.Columns[0].Width = 140;
         }
-        private async void ClienteId_TextChanged(object sender, EventArgs ev)
+        private async void ClienteId_TextChanged(object sender, EventArgs ev)  // cliente por Id
         {
             _clienteAgregarRecibo = null;
             string numeroDeCliente = textBox6.Text;
@@ -64,7 +60,7 @@ namespace linway_app.Forms
                 button6.Enabled = true;
             }
         }
-        private async void TextBox9_TextChanged(object sender, EventArgs ev)
+        private async void TextBox9_TextChanged(object sender, EventArgs ev)  // cliente por direccion
         {
             _clienteAgregarRecibo = null;
             string direccion = textBox9.Text;

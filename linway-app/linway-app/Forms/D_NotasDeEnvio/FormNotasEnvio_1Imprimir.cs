@@ -75,29 +75,17 @@ namespace linway_app.Forms
             string opcion = comboBox2TipoImprimir.SelectedItem.ToString();
             if (opcion == "No impresas" || opcion == "Hoy")
             {
-                textBox2ImprimirRangoDesde.TextChanged -= TextBox2_TextChanged;  // evita error de concurrencia de DbContext
                 textBox2ImprimirRangoDesde.Visible = false;
                 textBox2ImprimirRangoDesde.Text = "";
-                textBox2ImprimirRangoDesde.TextChanged += TextBox2_TextChanged;
-                //
-                textBox3ImprimirRangoHasta.TextChanged -= TextBox3_TextChanged;  // evita error de concurrencia de DbContext
                 textBox3ImprimirRangoHasta.Visible = false;
                 textBox3ImprimirRangoHasta.Text = "";
-                textBox3ImprimirRangoHasta.TextChanged += TextBox3_TextChanged;
-                //
                 label4.Visible = false;
                 label5.Visible = false;
             }
             else if (opcion == "Establecer rango")
             {
-                textBox2ImprimirRangoDesde.TextChanged -= TextBox2_TextChanged;  // evita error de concurrencia de DbContext
                 textBox2ImprimirRangoDesde.Visible = true;
-                textBox2ImprimirRangoDesde.TextChanged += TextBox2_TextChanged;
-                //
-                textBox3ImprimirRangoHasta.TextChanged -= TextBox3_TextChanged;  // evita error de concurrencia de DbContext
                 textBox3ImprimirRangoHasta.Visible = true;
-                textBox3ImprimirRangoHasta.TextChanged += TextBox3_TextChanged;
-                //
                 label4.Visible = true;
                 label5.Visible = true;
             }
@@ -133,7 +121,7 @@ namespace linway_app.Forms
                         _scope.Dispose();
                         _scope = Program.LinwayServiceProvider.CreateScope();  // renueva scope para que tome los cambios hechos en otros scopes
                         await ActualizarNotas();
-                        ActualizarGrid1(_lstNotaDeEnvios);
+                        EventoCombobox1ListaModalidad();
                     }
                 };
                 form.Show(this);

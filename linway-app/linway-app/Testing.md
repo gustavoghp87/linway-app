@@ -19,7 +19,10 @@ C_Productos
 -----------
 -Agregar producto nuevo: obligatorios nombre, precio positivo y tipo
 -Editar producto: solo editables precio y tipo, no nombre, mismos obligatorios que agregar
--Eliminar: buscar por nombre o por ID; que funcione Estoy Seguro
+-Eliminar: buscar por nombre o por ID
+		   que funcione Estoy Seguro
+		   elimina también el contador de Ventas (se revisa en FormVentas)
+		   pero se cancela todo si el producto tiene notas de envió, pedidos o registros de venta asociados, indicando en pantalla cuáles
 
 D_NotasDeEnvio
 --------------
@@ -65,14 +68,13 @@ E_Ventas
 
 F_Reparto
 ---------
--Lista por reparto (día + nombre): muestra cantidades de reparto, filtro Entregar/Todos, atajo Eliminar Pedido (refresca cantidades)
+-Lista por reparto (día + nombre): muestra cantidades de reparto, filtro Entregar/Todos, atajo Eliminar Pedido (refresca cantidades), exportar a Excel
 -Agregar reparto a día (los días son 6 y están fijados), no admite combinación repetida Día-Nombre
 -Agregar cliente en reparto o sea crea un pedido vacío, no admite combinación repetida
 -Limpiar: (1) todos, (2) repartos de un día, (3) pedidos de un reparto, (4) pedido... r
-
+-Reposicionar cliente: manda al primero elegido después del segundo elegido (para poner a uno primero hay que hacer 2 pasos...)
+-Borrar cliente de recorrido: hace lo mismo que el botón en la lista
 -Todos los cancelar borran sección
-
-
 No existe aun eliminar Reparto
 
 G_Recibos

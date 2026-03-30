@@ -16,6 +16,7 @@ namespace linway_app.PresentationHelpers
                 if (owner != null)
                 {
                     LoadingOverlayHelper.ShowOverlay(owner);
+                    await Task.Yield();
                 }
                 return await action(scope.ServiceProvider);
             }

@@ -15,7 +15,7 @@ namespace linway_app.Forms
     public partial class FormProductos : Form
     {
         private Producto _productoAEliminar;
-        private async void TextBox21_TextChanged(object sender, EventArgs ev)  // por id
+        private async void TextBox21_TextChanged(object sender, EventArgs ev)  // producto por id
         {
             _productoAEliminar = null;
             cbSeguroBorrar.Checked = false;
@@ -50,7 +50,7 @@ namespace linway_app.Forms
             label46EliminarProductoNombre.Text = producto.Nombre;
             button22Eliminar.Enabled = true;
         }
-        private async void TextBox1_TextChanged(object sender, EventArgs ev)  // por nombre
+        private async void TextBox1_TextChanged(object sender, EventArgs ev)  // producto por nombre
         {
             _productoAEliminar = null;
             cbSeguroBorrar.Checked = false;
@@ -86,17 +86,28 @@ namespace linway_app.Forms
             var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
             List<ProdVendido> prodVendidos = await prodVendidoServices.GetAllAsync();
             List<ProdVendido> prodVendidosDelProducto = prodVendidos.FindAll(pv => pv.ProductoId == _productoAEliminar.Id);
+            string excepcion = "";
             if (prodVendidosDelProducto.Any(pv => pv.NotaDeEnvioId != null))
             {
-                throw new InvalidOperationException("No se puede eliminar el producto porque tiene Notas de Envío asociadas");
-            }
-            if (prodVendidosDelProducto.Any(pv => pv.RegistroVentaId != null))
-            {
-                throw new InvalidOperationException("No se puede eliminar el producto porque tiene Registros de Venta asociados");
+                excepcion += "\n\n";
+                excepcion += $"No se puede eliminar el producto porque tiene las siguientes Notas de Envío asociadas: ";
+                excepcion += string.Join(", ", prodVendidosDelProducto.Where(pv => pv.NotaDeEnvioId != null).Select(pv => pv.NotaDeEnvioId));
             }
             if (prodVendidosDelProducto.Any(pv => pv.PedidoId != null))
             {
-                throw new InvalidOperationException("No se puede eliminar el producto porque tiene Pedidos asociados");
+                excepcion += "\n\n";
+                excepcion += $"No se puede eliminar el producto porque tiene los siguientes Pedidos asociados: ";
+                excepcion += string.Join(", ", prodVendidosDelProducto.Where(pv => pv.PedidoId != null).Select(pv => $"{pv.Pedido.Reparto.DiaReparto.Dia} {pv.Pedido.Reparto.Nombre}"));
+            }
+            if (prodVendidosDelProducto.Any(pv => pv.RegistroVentaId != null))
+            {
+                excepcion += "\n\n";
+                excepcion += $"No se puede eliminar el producto porque tiene los siguientes Registros de Venta asociados: ";
+                excepcion += string.Join(", ", prodVendidosDelProducto.Where(pv => pv.RegistroVentaId != null).Select(pv => pv.RegistroVentaId));
+            }
+            if (excepcion.Length > 0)
+            {
+                throw new InvalidOperationException(excepcion);
             }
         }
         private async void Eliminar_Click(object sender, EventArgs ev)

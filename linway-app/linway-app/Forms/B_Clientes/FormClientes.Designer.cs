@@ -44,7 +44,7 @@ namespace linway_app.Forms
             this.textBox1AgregarNombre = new System.Windows.Forms.TextBox();
             this.button2AgregarLimpiar = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.radioButton2AgregarRMonotributo = new System.Windows.Forms.RadioButton();
+            this.radioButton2AgregarRInscripto = new System.Windows.Forms.RadioButton();
             this.textBox3AgregarCuit = new System.Windows.Forms.TextBox();
             this.radioButton1AgregarRInscripto = new System.Windows.Forms.RadioButton();
             this.textBox4AgregarCP = new System.Windows.Forms.TextBox();
@@ -171,7 +171,7 @@ namespace linway_app.Forms
             this.gbAgregar.Controls.Add(this.textBox1AgregarNombre);
             this.gbAgregar.Controls.Add(this.button2AgregarLimpiar);
             this.gbAgregar.Controls.Add(this.textBox2);
-            this.gbAgregar.Controls.Add(this.radioButton2AgregarRMonotributo);
+            this.gbAgregar.Controls.Add(this.radioButton2AgregarRInscripto);
             this.gbAgregar.Controls.Add(this.textBox3AgregarCuit);
             this.gbAgregar.Controls.Add(this.radioButton1AgregarRInscripto);
             this.gbAgregar.Controls.Add(this.textBox4AgregarCP);
@@ -240,14 +240,14 @@ namespace linway_app.Forms
             // 
             // radioButton2AgregarRMonotributo
             // 
-            this.radioButton2AgregarRMonotributo.AutoSize = true;
-            this.radioButton2AgregarRMonotributo.Location = new System.Drawing.Point(59, 199);
-            this.radioButton2AgregarRMonotributo.Name = "radioButton2AgregarRMonotributo";
-            this.radioButton2AgregarRMonotributo.Size = new System.Drawing.Size(83, 19);
-            this.radioButton2AgregarRMonotributo.TabIndex = 19;
-            this.radioButton2AgregarRMonotributo.TabStop = true;
-            this.radioButton2AgregarRMonotributo.Text = "R.Inscripto";
-            this.radioButton2AgregarRMonotributo.UseVisualStyleBackColor = true;
+            this.radioButton2AgregarRInscripto.AutoSize = true;
+            this.radioButton2AgregarRInscripto.Location = new System.Drawing.Point(59, 199);
+            this.radioButton2AgregarRInscripto.Name = "radioButton2AgregarRMonotributo";
+            this.radioButton2AgregarRInscripto.Size = new System.Drawing.Size(83, 19);
+            this.radioButton2AgregarRInscripto.TabIndex = 19;
+            this.radioButton2AgregarRInscripto.TabStop = true;
+            this.radioButton2AgregarRInscripto.Text = "R.Inscripto";
+            this.radioButton2AgregarRInscripto.UseVisualStyleBackColor = true;
             // 
             // textBox3AgregarCuit
             // 
@@ -565,7 +565,7 @@ namespace linway_app.Forms
         private System.Windows.Forms.TextBox textBox1AgregarNombre;
         private System.Windows.Forms.Button button2AgregarLimpiar;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.RadioButton radioButton2AgregarRMonotributo;
+        private System.Windows.Forms.RadioButton radioButton2AgregarRInscripto;
         private System.Windows.Forms.TextBox textBox3AgregarCuit;
         private System.Windows.Forms.RadioButton radioButton1AgregarRInscripto;
         private System.Windows.Forms.TextBox textBox4AgregarCP;

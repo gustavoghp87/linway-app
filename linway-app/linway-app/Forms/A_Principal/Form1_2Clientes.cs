@@ -24,16 +24,9 @@ namespace linway_app.Forms
             dataGridViewClientes.Columns[5].Width = 65;
             dataGridViewClientes.Columns[6].Width = 40;
         }
-        private void FiltrarDatosC(string texto)                      // filtra por dirección de clientes
+        private void FiltrarDatosC(string texto)  // filtra por dirección de clientes
         {
-            var lstClientesFiltrados = new List<Cliente>();
-            foreach (var cliente in _lstClientes)
-            {
-                if (cliente.Direccion.ToLower().Contains(texto.ToLower()))
-                {
-                    lstClientesFiltrados.Add(cliente);
-                }
-            }
+            var lstClientesFiltrados = _lstClientes.FindAll(c => c.Direccion.ToLower().Contains(texto.ToLower()));
             CargarGridClientes(lstClientesFiltrados);
         }
         private void TextBox8_TextChanged(object sender, EventArgs ev)

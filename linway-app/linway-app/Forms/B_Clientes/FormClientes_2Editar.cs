@@ -65,7 +65,7 @@ namespace linway_app.Forms
                 radioButton4.Checked = true;
             }
         }
-        private async void TextBox14_TextChanged(object sender, EventArgs ev)
+        private async void TextBox14_TextChanged(object sender, EventArgs ev)  // cliente por Id
         {
             _clienteAEditar = null;
             var numeroDeCliente = textBox14.Text;
@@ -100,7 +100,7 @@ namespace linway_app.Forms
             }
             ActualizarEtiquetasDeClienteAEDitar(cliente);
         }
-        private async void TextBox6_TextChanged(object sender, EventArgs ev)
+        private async void TextBox6_TextChanged(object sender, EventArgs ev)  // cliente por dirección
         {
             _clienteAEditar = null;
             string direccion = textBox6.Text;

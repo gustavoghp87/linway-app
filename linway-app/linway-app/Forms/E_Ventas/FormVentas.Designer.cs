@@ -30,6 +30,7 @@ namespace linway_app.Forms
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormVentas));
             this.label27 = new System.Windows.Forms.Label();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.gbNuevaVenta = new System.Windows.Forms.GroupBox();
@@ -279,17 +280,17 @@ namespace linway_app.Forms
             this.label6.Text = "Dia:";
             this.label6.Visible = false;
             // 
-            // comboBox2
+            // comboBox2AgregarRegVentaRepartos
             // 
             this.comboBox2AgregarRegVentaRepartos.FormattingEnabled = true;
             this.comboBox2AgregarRegVentaRepartos.Location = new System.Drawing.Point(248, 340);
-            this.comboBox2AgregarRegVentaRepartos.Name = "comboBox2";
+            this.comboBox2AgregarRegVentaRepartos.Name = "comboBox2AgregarRegVentaRepartos";
             this.comboBox2AgregarRegVentaRepartos.Size = new System.Drawing.Size(99, 23);
             this.comboBox2AgregarRegVentaRepartos.TabIndex = 39;
             this.comboBox2AgregarRegVentaRepartos.Visible = false;
             this.comboBox2AgregarRegVentaRepartos.SelectedIndexChanged += new System.EventHandler(this.ComboBox2_SelectedIndexChanged);
             // 
-            // comboBox1
+            // comboBox1AgregarRegVentaDias
             // 
             this.comboBox1AgregarRegVentaDias.FormattingEnabled = true;
             this.comboBox1AgregarRegVentaDias.Items.AddRange(new object[] {
@@ -300,7 +301,7 @@ namespace linway_app.Forms
             "Viernes",
             "Sábado"});
             this.comboBox1AgregarRegVentaDias.Location = new System.Drawing.Point(66, 340);
-            this.comboBox1AgregarRegVentaDias.Name = "comboBox1";
+            this.comboBox1AgregarRegVentaDias.Name = "comboBox1AgregarRegVentaDias";
             this.comboBox1AgregarRegVentaDias.Size = new System.Drawing.Size(99, 23);
             this.comboBox1AgregarRegVentaDias.TabIndex = 23;
             this.comboBox1AgregarRegVentaDias.Visible = false;
@@ -655,15 +656,13 @@ namespace linway_app.Forms
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Maroon;
-            this.label3.Location = new System.Drawing.Point(31, 328);
+            this.label3.Location = new System.Drawing.Point(15, 318);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(316, 26);
+            this.label3.Size = new System.Drawing.Size(358, 55);
             this.label3.TabIndex = 27;
-            this.label3.Text = "Al deshacher una venta, se borrará el registro y se descontará del\r\nlistado de ve" +
-    "ntas.";
+            this.label3.Text = resources.GetString("label3.Text");
             // 
             // groupBox1
             // 
@@ -678,10 +677,10 @@ namespace linway_app.Forms
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtrar datos";
             // 
-            // textBox2
+            // textBox2RegistrosFiltro
             // 
             this.textBox2RegistrosFiltro.Location = new System.Drawing.Point(216, 20);
-            this.textBox2RegistrosFiltro.Name = "textBox2";
+            this.textBox2RegistrosFiltro.Name = "textBox2RegistrosFiltro";
             this.textBox2RegistrosFiltro.Size = new System.Drawing.Size(158, 21);
             this.textBox2RegistrosFiltro.TabIndex = 6;
             this.textBox2RegistrosFiltro.Visible = false;
