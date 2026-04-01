@@ -14,7 +14,6 @@ namespace linway_app.Forms
         private List<DiaReparto> _dias = new List<DiaReparto>();
         private List<RegistroVenta> _lstRegistros = new List<RegistroVenta>();
         private List<Venta> _lstVentas = new List<Venta>();
-        private string showing = "agregarReg";
         private readonly IServiceScope _scope;
         public FormVentas()
         {
@@ -96,17 +95,9 @@ namespace linway_app.Forms
                 ev.Handled = true;
             }
         }
-        private void VerRegistro_ToolStripMenuItem_Click(object sender, EventArgs ev)
-        {
-            LimpiarPantalla();
-            showing = "verReg";
-            gbVerRegistro.Visible = true;
-            ActualizarGrid2ProdVendidos(new List<ProdVendido>());
-        }
         private void NuevaVenta_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {
             LimpiarPantalla();
-            showing = "agregarReg";
             gbNuevaVenta.Visible = true;
             _lstAgregarVentas.Clear();
             ActualizarGrid5(_lstAgregarVentas);
@@ -115,6 +106,12 @@ namespace linway_app.Forms
         {
             LimpiarPantalla();
             groupBox7.Visible = true;
+        }
+        private void VerRegistro_ToolStripMenuItem_Click(object sender, EventArgs ev)
+        {
+            LimpiarPantalla();
+            gbVerRegistro.Visible = true;
+            ActualizarGrid2ProdVendidos(new List<ProdVendido>());
         }
         private void BorrarRegistros_ToolStripMenuItem_Click(object sender, EventArgs ev)
         {

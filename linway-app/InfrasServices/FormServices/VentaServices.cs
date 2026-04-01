@@ -35,6 +35,7 @@ namespace linway_app.Services.FormServices
                     venta.Cantidad = addingUp
                         ? venta.Cantidad + prodVendido.Cantidad
                         : venta.Cantidad - prodVendido.Cantidad;
+                    venta.Cantidad = venta.Cantidad < 0 ? 0 : venta.Cantidad;  // no puede ser negativa
                     ventasAEditar.Add(venta);
                 }
                 else if (addingUp)  // no existe, se agrega solo si se está sumando (si es resta hay un error)

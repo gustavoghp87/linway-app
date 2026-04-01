@@ -433,13 +433,13 @@
     <Compile Include="Forms\D_NotasDeEnvio\Imprimir\FormImprimirNota.Designer.cs">
       <DependentUpon>FormImprimirNota.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\E_Ventas\FormVentas_6Eliminar.cs">
+    <Compile Include="Forms\E_Ventas\FormVentas_6EliminarRegistros.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\E_Ventas\FormVentas_5VerEliminarRegistro.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\E_Ventas\FormVentas_4Reiniciar.cs">
+    <Compile Include="Forms\E_Ventas\FormVentas_4EliminarVentas.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\E_Ventas\FormVentas_3Agregar.cs">

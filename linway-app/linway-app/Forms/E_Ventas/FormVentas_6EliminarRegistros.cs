@@ -10,58 +10,38 @@ namespace linway_app.Forms
 {
     public partial class FormVentas : Form
     {
+        private List<RegistroVenta> _registrosAEliminar = new List<RegistroVenta>();
         private void CheckBox1_CheckedChanged(object sender, EventArgs ev)
         {
             bBorrarRegVentas.Enabled = !bBorrarRegVentas.Enabled;
         }
-        private bool IntervaloCorrecto()
+        private void CargarListaDeRegistrosAEliminar()
         {
-            try
+            _registrosAEliminar.Clear();
+            if (long.TryParse(tbDesde.Text, out long menor))
             {
-                bool todoOk = false;
-                long primero = long.Parse(tbDesde.Text);
-                long segundo = tbHasta.Text != "" ? long.Parse(tbHasta.Text) : primero;
-                todoOk = (primero <= segundo);
-                if (!todoOk)
+                if (tbHasta.Text == "" || !long.TryParse(tbHasta.Text, out long mayor))
                 {
-                    MessageBox.Show("intervalo incorrecto.");
+                    mayor = menor;
                 }
-                return todoOk;
+                _registrosAEliminar = _lstRegistros.FindAll(r => menor <= r.Id && mayor >= r.Id);
             }
-            catch
-            {
-                MessageBox.Show("Falta llenar algunos campos");
-                return false;
-            }
+            checkBox1.Text = $"Estoy seguro de borrar los registros \r\nseleccionados. Seleccionados: {_registrosAEliminar.Count}";
         }
-        private bool SeEncuentraEnIntervalo(long id)
+        private void EliminarRegistrosRango_TextChanged(object sender, EventArgs ev)
         {
-            try
-            {
-                long primero = long.Parse(tbDesde.Text);
-                long segundo = long.Parse(tbHasta.Text);
-                bool seEncuentraEnIntervalo = primero <= id && segundo >= id;
-                return seEncuentraEnIntervalo;
-            }
-            catch {
-                return false;
-            }
+            CargarListaDeRegistrosAEliminar();
         }
         private async void BorrarRegVentas_Click(object sender, EventArgs ev)
         {
-            if (!IntervaloCorrecto())
+            CargarListaDeRegistrosAEliminar();
+            if (_registrosAEliminar.Count == 0)
             {
                 return;
             }
-            var registrosABorrar = new List<RegistroVenta>();
             var prodVendidosAEditarOEliminar = new List<ProdVendido>();
-            foreach (RegistroVenta registroVenta in _lstRegistros)
+            foreach (RegistroVenta registroVenta in _registrosAEliminar)
             {
-                if (!SeEncuentraEnIntervalo(registroVenta.Id))
-                {
-                    continue;
-                }
-                registrosABorrar.Add(registroVenta);
                 prodVendidosAEditarOEliminar.AddRange(registroVenta.ProdVendidos);
             }
             bool logrado = await UIExecutor.ExecuteAsync(
@@ -78,9 +58,9 @@ namespace linway_app.Forms
                     }
                     prodVendidoServices.EditOrDeleteMany(prodVendidosAEditarOEliminar);
                     //
-                    registroVentaServices.DeleteMany(registrosABorrar);
+                    registroVentaServices.DeleteMany(_registrosAEliminar);
                     //
-                    await ventaServices.UpdateDesdeProdVendidosAsync(prodVendidosAEditarOEliminar, false);  // resta de las ventas
+                    //await ventaServices.UpdateDesdeProdVendidosAsync(prodVendidosAEditarOEliminar, false);  // resta de las ventas
                     //
                     bool guardado = await savingServices.SaveAsync();
                     if (!guardado)

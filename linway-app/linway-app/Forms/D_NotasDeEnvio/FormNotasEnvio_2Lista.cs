@@ -16,10 +16,6 @@ namespace linway_app.Forms
                 grid.Add(Form1.Mapper.Map<ENotaDeEnvio>(nota));
             }
             dataGridView1.DataSource = grid;
-            //foreach (var item in dataGridView1.Rows)   muy lento
-            //{
-            //    ((DataGridViewRow)item).Height = 35;
-            //}
             dataGridView1.Columns[0].Width = 50;
             dataGridView1.Columns[1].Width = 70;
             dataGridView1.Columns[2].Width = 210;

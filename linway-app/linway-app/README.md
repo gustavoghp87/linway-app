@@ -164,6 +164,9 @@ DELETE FROM ProdVendidos WHERE NotaDeEnvioId IS NULL AND PedidoId IS NULL AND Re
 DELETE FROM Productos WHERE Id IN (52, 263, 264);
 SELECT pr.Id, pr.Nombre, COUNT(pv.Id) AS CantidadVendida, COUNT(ne.Id) AS CantidadNotas, COUNT(pe.Id) AS CantidadPedidos, COUNT(rv.Id) AS CantidadVentas FROM Productos pr LEFT JOIN ProdVendidos pv ON pv.ProductoId = pr.Id LEFT JOIN NotaDeEnvios ne ON ne.Id = pv.NotaDeEnvioId LEFT JOIN Pedidos pe ON pe.Id = pv.PedidoId LEFT JOIN RegistroVentas rv ON rv.Id = pv.RegistroVentaId WHERE pr.Nombre LIKE "ELIMINADO %" GROUP BY pr.Id ORDER BY pr.Id;
 --
+DELETE FROM Pedidos WHERE Id IN (355, 460, 529, 544, 547, 1118, 1886, 1969, 2217);
+ALTER TABLE Pedidos ADD UNIQUE KEY (RepartoId, ClienteId);
+--
 
 
 ___________________________________Sistema Linway 14__________________________________    junio 2023

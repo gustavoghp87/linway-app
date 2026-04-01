@@ -29,8 +29,9 @@ namespace linway_app.Forms
             grid = grid.OrderBy(x => x.Detalle).ToList();
             dataGridView5.DataSource = grid;
             dataGridView5.Columns[0].Width = 35;
+            dataGridView5.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
             dataGridView5.Columns[2].Width = 40;
-            dataGridView5.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView5.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
         }
         private async void InputProductoId_TextChanged(object sender, EventArgs ev)  // producto por ID
         {

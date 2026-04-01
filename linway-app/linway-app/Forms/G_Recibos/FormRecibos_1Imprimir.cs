@@ -30,61 +30,35 @@ namespace linway_app.Forms
         }
         private List<Recibo> ObtenerListaAImprimir()
         {
-            var listaAImprimir = new List<Recibo>();
-            string opcion = comboBox2ImprimirTipo.SelectedItem.ToString();
-            if (opcion == null)
-            {
-                return listaAImprimir;
-            }
+            string opcion = comboBox2ImprimirTipo.SelectedItem?.ToString();
             if (opcion == "No impresas")
             {
-                foreach (Recibo recibo in _lstRecibos)
-                {
-                    if (recibo != null && recibo.Impreso == 0)
-                    {
-                        listaAImprimir.Add(recibo);
-                    }
-                }
+                return _lstRecibos.FindAll(r => r.Impreso == 0);
             }
             else if (opcion == "Hoy")
             {
-                foreach (Recibo recibo in _lstRecibos)
-                {
-                    if (recibo != null && recibo.Fecha == DateTime.Now.ToString("yyy-MM-dd"))
-                    {
-                        listaAImprimir.Add(recibo);
-                    }
-                }
+                return _lstRecibos.FindAll(r => r.Fecha == DateTime.Now.ToString("yyy-MM-dd"));
             }
             else if (opcion == "Establecer rango" && textBox2ImprimirRangoDesde.Text != "")
             {
+                var listaAImprimir = new List<Recibo>();
                 try
                 {
                     int rangoDesde = int.Parse(textBox2ImprimirRangoDesde.Text);
                     int rangoHasta = textBox3ImprimirRangoHasta.Text != "" ? int.Parse(textBox3ImprimirRangoHasta.Text) : rangoDesde;
-                    if (rangoDesde <= rangoHasta)
-                    {
-                        for (int i = rangoDesde; i <= rangoHasta; i++)
-                        {
-                            Recibo recibo = _lstRecibos.Find(x => x.Id == i);
-                            if (recibo == null)
-                            {
-                                continue;
-                            }
-                            listaAImprimir.Add(recibo);
-                        }
-                    }
+                    return _lstRecibos.FindAll(r => r.Id >= rangoDesde && r.Id <= rangoHasta);
                 }
                 catch
                 {
                     MessageBox.Show("Rango establecido incorrecto");
                 }
             }
-            return listaAImprimir;
+            return new List<Recibo>();
         }
         private void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            if (comboBox2ImprimirTipo.SelectedItem.ToString() == "No impresas" || comboBox2ImprimirTipo.SelectedItem.ToString() == "Hoy")
+            string opcion = comboBox2ImprimirTipo.SelectedItem.ToString();
+            if (opcion == "No impresas" || opcion == "Hoy")
             {
                 textBox2ImprimirRangoDesde.Visible = false;
                 textBox3ImprimirRangoHasta.Visible = false;
@@ -93,7 +67,7 @@ namespace linway_app.Forms
                 textBox3ImprimirRangoHasta.Text = "";
                 textBox2ImprimirRangoDesde.Text = "";
             }
-            else if (comboBox2ImprimirTipo.SelectedItem.ToString() == "Establecer rango")
+            else if (opcion == "Establecer rango")
             {
                 textBox2ImprimirRangoDesde.Visible = true;
                 textBox3ImprimirRangoHasta.Visible = true;

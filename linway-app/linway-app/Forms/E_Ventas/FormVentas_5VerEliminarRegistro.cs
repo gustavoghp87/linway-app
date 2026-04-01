@@ -22,15 +22,13 @@ namespace linway_app.Forms
                 grid.Add(Form1.Mapper.Map<EProdVendido>(prodVendido));
             }
             dataGridView2.DataSource = grid;
-            if (showing == "agregarReg")
-            {
-                dataGridView2.Columns[0].Width = 150;
-            }
-            if (showing == "verReg")
-            {
-                dataGridView2.Columns[0].Width = 28;
-                dataGridView2.Columns[1].Width = 150;
-            }
+            dataGridView2.Columns[0].Width = 28;
+            dataGridView2.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
+            dataGridView2.Columns[1].Width = 150;
+            dataGridView2.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridView2.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
+            dataGridView2.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
+            dataGridView2.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
         }
         private async void TextBox1_TextChanged(object sender, EventArgs ev)  // registro por Id
         {

@@ -127,7 +127,7 @@ namespace linway_app.Forms
             this.dataGridView3.Name = "dataGridView3";
             this.dataGridView3.ReadOnly = true;
             this.dataGridView3.RowHeadersWidth = 10;
-            this.dataGridView3.Size = new System.Drawing.Size(261, 382);
+            this.dataGridView3.Size = new System.Drawing.Size(261, 371);
             this.dataGridView3.TabIndex = 32;
             // 
             // gbNuevaVenta
@@ -534,7 +534,7 @@ namespace linway_app.Forms
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 10;
-            this.dataGridView1.Size = new System.Drawing.Size(380, 382);
+            this.dataGridView1.Size = new System.Drawing.Size(380, 371);
             this.dataGridView1.TabIndex = 43;
             // 
             // label1
@@ -757,6 +757,7 @@ namespace linway_app.Forms
             this.tbHasta.Name = "tbHasta";
             this.tbHasta.Size = new System.Drawing.Size(100, 22);
             this.tbHasta.TabIndex = 27;
+            this.tbHasta.TextChanged += new System.EventHandler(this.EliminarRegistrosRango_TextChanged);
             this.tbHasta.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
             // 
             // tbDesde
@@ -765,6 +766,7 @@ namespace linway_app.Forms
             this.tbDesde.Name = "tbDesde";
             this.tbDesde.Size = new System.Drawing.Size(100, 22);
             this.tbDesde.TabIndex = 26;
+            this.tbDesde.TextChanged += new System.EventHandler(this.EliminarRegistrosRango_TextChanged);
             this.tbDesde.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumero_KeyPress);
             // 
             // label4
@@ -789,9 +791,9 @@ namespace linway_app.Forms
             // ExportBtn
             // 
             this.ExportBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExportBtn.Location = new System.Drawing.Point(792, 442);
+            this.ExportBtn.Location = new System.Drawing.Point(792, 434);
             this.ExportBtn.Name = "ExportBtn";
-            this.ExportBtn.Size = new System.Drawing.Size(261, 30);
+            this.ExportBtn.Size = new System.Drawing.Size(261, 38);
             this.ExportBtn.TabIndex = 52;
             this.ExportBtn.Text = "Exportar Ventas a Excel";
             this.ExportBtn.UseVisualStyleBackColor = true;

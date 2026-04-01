@@ -75,6 +75,7 @@ namespace Infrastructure.Repositories.DbContexts
                     .WithMany(p => p.Pedidos)
                     .HasForeignKey(d => d.RepartoId)
                     .OnDelete(DeleteBehavior.Restrict);
+                entity.HasIndex(e => new { e.ClienteId, e.RepartoId }).IsUnique();
             });
             modelBuilder.Entity<ProdVendido>(entity =>
             {
