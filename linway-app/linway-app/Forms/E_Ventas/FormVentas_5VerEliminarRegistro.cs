@@ -1,7 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
 using linway_app.Services.FormServices;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Entities;
 using System;
@@ -33,6 +31,7 @@ namespace linway_app.Forms
         private async void TextBox1_TextChanged(object sender, EventArgs ev)  // registro por Id
         {
             _registroVerEliminar = null;
+            checkBox3EliminarRegistroRestarDeVentas.Checked = false;
             string numeroDeRegistroVenta = textBox1.Text;
             if (numeroDeRegistroVenta == "")
             {
@@ -50,8 +49,8 @@ namespace linway_app.Forms
             RegistroVenta registroVenta = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
-                    return await registroVentaServices.GetPorIdAsync(registroVentaId);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.RegistroVentaServices.GetPorIdAsync(registroVentaId);
                 },
                 "No se pudo buscar el Registro de Venta",
                 null
@@ -77,25 +76,23 @@ namespace linway_app.Forms
             labelTotal.Text = "Total: $" + importeTotal.ToString();
             bDeshacerVenta.Enabled = true;
         }
-        private async void DeshacerVenta_Click(object sender, EventArgs ev)  // elimina registro y resetea contador de ventas
+        private async void DeshacerVenta_Click(object sender, EventArgs ev)  // elimina registro, quitándolo de pedido y nota de envío, y opcionalmente resetea contador de ventas
         {
             if (!cbSeguro.Checked)
             {
                 MessageBox.Show("Debe confirmar que está seguro de eliminar el Registro y reiniciar el contador de Ventas.");
                 return;
             }
-            ;
+            bool restarDeVentas = checkBox3EliminarRegistroRestarDeVentas.Checked;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
-                    var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
-                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    var ventaServices = sp.GetRequiredService<IVentaServices>();
+                    var servicesContext = ServiceContext.Get(sp);
                     //
-                    await ventaServices.UpdateDesdeProdVendidosAsync(_registroVerEliminar.ProdVendidos, false);
+                    if (restarDeVentas)
+                    {
+                        await servicesContext.VentaServices.RestarDesdeProdVendidosAsync(_registroVerEliminar.ProdVendidos);
+                    }
                     //
                     var pedido = _registroVerEliminar.ProdVendidos.FirstOrDefault(pv => pv.PedidoId != null)?.Pedido;
                     if (pedido != null)
@@ -103,12 +100,12 @@ namespace linway_app.Forms
                         var prodVendidos = pedido.ProdVendidos.Where(pv => pv.RegistroVentaId != _registroVerEliminar.Id).ToList();
                         pedido.ProdVendidos = prodVendidos;
                         PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, pedido.Entregar == 1);
-                        pedidoServices.Edit(pedido);
+                        servicesContext.PedidoServices.Edit(pedido);
                         //
-                        Reparto reparto = await repartoServices.GetPorIdAsync(pedido.RepartoId);
+                        Reparto reparto = await servicesContext.RepartoServices.GetPorIdAsync(pedido.RepartoId);
                         reparto.Pedidos.Remove(pedido);
                         RepartoServices.ActualizarCantidadesDeReparto(reparto);
-                        repartoServices.Edit(reparto);
+                        servicesContext.RepartoServices.Edit(reparto);
                     }
                     //
                     foreach (ProdVendido pv in _registroVerEliminar.ProdVendidos)
@@ -116,14 +113,14 @@ namespace linway_app.Forms
                         pv.RegistroVentaId = null;
                         pv.PedidoId = null;
                     }
-                    prodVendidoServices.EditOrDeleteMany(_registroVerEliminar.ProdVendidos.ToList());
+                    servicesContext.ProdVendidoServices.EditOrDeleteMany(_registroVerEliminar.ProdVendidos.ToList());
                     //
-                    registroVentaServices.Delete(_registroVerEliminar);
+                    servicesContext.RegistroVentaServices.Delete(_registroVerEliminar);
                     //
-                    bool guardado = await savingServices.SaveAsync();
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;

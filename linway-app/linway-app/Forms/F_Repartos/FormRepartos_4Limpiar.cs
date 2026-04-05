@@ -1,7 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
 using linway_app.Services.FormServices;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -23,10 +21,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
+                    var servicesContext = ServiceContext.Get(sp);
                     //
                     List<Reparto> repartosALimpiar = _lstDiaRepartos.SelectMany(x => x.Repartos).ToList();
                     List<ProdVendido> prodVendidosALimpiar = repartosALimpiar.SelectMany(x => x.Pedidos).SelectMany(x => x.ProdVendidos).ToList();
@@ -35,7 +30,7 @@ namespace linway_app.Forms
                     {
                         prodVendido.PedidoId = null;
                     }
-                    prodVendidoServices.EditMany(prodVendidosALimpiar);
+                    servicesContext.ProdVendidoServices.EditMany(prodVendidosALimpiar);
                     //
                     foreach (Reparto reparto in repartosALimpiar)
                     {
@@ -46,13 +41,13 @@ namespace linway_app.Forms
                         }
                         RepartoServices.ActualizarCantidadesDeReparto(reparto);
                     }
-                    pedidoServices.EditMany(repartosALimpiar.SelectMany(x => x.Pedidos).ToList());
-                    repartoServices.EditMany(repartosALimpiar);
+                    servicesContext.PedidoServices.EditMany(repartosALimpiar.SelectMany(x => x.Pedidos).ToList());
+                    servicesContext.RepartoServices.EditMany(repartosALimpiar);
                     //
-                    bool guardado = await savingServices.SaveAsync();
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;
@@ -85,10 +80,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
-                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
+                    var servicesContext = ServiceContext.Get(sp);
                     //
                     List<Reparto> repartosALimpiar = _lstDiaRepartos.Find(x => x.Dia == diaReparto).Repartos.ToList();
                     List<ProdVendido> prodVendidosALimpiar = repartosALimpiar.SelectMany(x => x.Pedidos).SelectMany(x => x.ProdVendidos).ToList();
@@ -97,7 +89,7 @@ namespace linway_app.Forms
                     {
                         prodVendido.PedidoId = null;
                     }
-                    prodVendidoServices.EditMany(prodVendidosALimpiar);
+                    servicesContext.ProdVendidoServices.EditMany(prodVendidosALimpiar);
                     //
                     foreach (var reparto in repartosALimpiar)
                     {
@@ -108,13 +100,13 @@ namespace linway_app.Forms
                         }
                         RepartoServices.ActualizarCantidadesDeReparto(reparto);
                     }
-                    pedidoServices.EditMany(repartosALimpiar.SelectMany(x => x.Pedidos).ToList());
-                    repartoServices.EditMany(repartosALimpiar);
+                    servicesContext.PedidoServices.EditMany(repartosALimpiar.SelectMany(x => x.Pedidos).ToList());
+                    servicesContext.RepartoServices.EditMany(repartosALimpiar);
                     //
-                    bool guardado = await savingServices.SaveAsync();
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;
@@ -150,10 +142,7 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
-                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
+                    var servicesContext = ServiceContext.Get(sp);
                     //
                     Reparto repartoALimpiar = _lstDiaRepartos
                         .Find(x => x.Dia == diaReparto).Repartos.ToList()
@@ -164,7 +153,7 @@ namespace linway_app.Forms
                     {
                         prodVendido.PedidoId = null;
                     }
-                    prodVendidoServices.EditMany(prodVendidosALimpiar);
+                    servicesContext.ProdVendidoServices.EditMany(prodVendidosALimpiar);
                     //
                     foreach (Pedido pedido in repartoALimpiar.Pedidos)
                     {
@@ -172,13 +161,13 @@ namespace linway_app.Forms
                         PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, false);
                     }
                     RepartoServices.ActualizarCantidadesDeReparto(repartoALimpiar);
-                    pedidoServices.EditMany(repartoALimpiar.Pedidos);
-                    repartoServices.Edit(repartoALimpiar);
+                    servicesContext.PedidoServices.EditMany(repartoALimpiar.Pedidos);
+                    servicesContext.RepartoServices.Edit(repartoALimpiar);
                     //
-                    bool guardado = await savingServices.SaveAsync();
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                         return null;
                     }
@@ -209,41 +198,38 @@ namespace linway_app.Forms
             Reparto reparto = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
-                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
+                    var servicesContext = ServiceContext.Get(sp);
                     //
                     Pedido pedidoAEditar = _lstPedidos.Find(x => x.Direccion.Equals(direccion));
                     Reparto repartoAEditar = pedidoAEditar.Reparto;
                     List<ProdVendido> prodVendidosALimpiar = pedidoAEditar.ProdVendidos.ToList();
                     //
-                    foreach (var prodVendido in prodVendidosALimpiar)
+                    foreach (ProdVendido prodVendido in prodVendidosALimpiar)
                     {
                         prodVendido.PedidoId = null;
                     }
-                    prodVendidoServices.EditMany(prodVendidosALimpiar);
+                    servicesContext.ProdVendidoServices.EditMany(prodVendidosALimpiar);
                     //
-                    foreach (var pedido in repartoAEditar.Pedidos)
+                    foreach (Pedido pedido in repartoAEditar.Pedidos)
                     {
                         if (pedido.Id == pedidoAEditar.Id)
                         {
                             pedido.ProdVendidos = new List<ProdVendido>();
                             PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, false);
-                            pedidoServices.Edit(pedido);
+                            servicesContext.PedidoServices.Edit(pedido);
                         }
                     }
                     RepartoServices.ActualizarCantidadesDeReparto(repartoAEditar);
-                    repartoServices.Edit(repartoAEditar);
+                    servicesContext.RepartoServices.Edit(repartoAEditar);
                     //
-                    bool guardado = await savingServices.SaveAsync();
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                         return null;
                     }
-                    return await repartoServices.GetPorIdAsync(pedidoAEditar.RepartoId);
+                    return await servicesContext.RepartoServices.GetPorIdAsync(pedidoAEditar.RepartoId);
                 },
                 "No se pudo realizar",
                 this

@@ -1,7 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
 using linway_app.Services.FormServices;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -48,8 +46,8 @@ namespace linway_app.Forms
             Cliente cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetPorIdAsync(clienteId);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ClienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -73,8 +71,8 @@ namespace linway_app.Forms
             Cliente cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetPorDireccionAsync(direccion);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ClienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -102,23 +100,22 @@ namespace linway_app.Forms
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
+                    var servicesContext = ServiceContext.Get(sp);
                     Reparto reparto = _lstDiaRepartos
                         .Find(x => x.Dia == diaReparto).Repartos.ToList()
                         .Find(x => x.Nombre == nombreReparto);
                     if (_lstPedidos.Exists(x => x.ClienteId == _clienteAReparto.Id && x.RepartoId == reparto.Id))
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("Ese cliente ya estaba en el Reparto");
                         return false;
                     }
                     var pedido = PedidoServices.GetNuevoPedido(_clienteAReparto, reparto);
-                    await pedidoServices.AddAsync(pedido);
-                    bool guardado = await savingServices.SaveAsync();
+                    await servicesContext.PedidoServices.AddAsync(pedido);
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;

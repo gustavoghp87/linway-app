@@ -1,6 +1,4 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Entities;
 using System;
@@ -70,15 +68,15 @@ namespace linway_app.Forms
             DialogResult dialogResult = MessageBox.Show("Exportar " + diaReparto + " - " + nombreReparto + " ¿Confirmar?", "Exportar Reparto a Excel", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
+                Reparto reparto = _lstDiaRepartos
+                    .Find(x => x.Dia == diaReparto).Repartos.ToList()
+                    .Find(x => x.Nombre == nombreReparto);
                 bool logrado = await UIExecutor.ExecuteAsync(
                     _scope,
                     async sp =>
                     {
-                        var exportarServices = sp.GetRequiredService<IExportarServices>();
-                        Reparto reparto = _lstDiaRepartos
-                            .Find(x => x.Dia == diaReparto).Repartos.ToList()
-                            .Find(x => x.Nombre == nombreReparto);
-                        exportarServices.ExportarReparto(reparto);
+                        var servicesContext = ServiceContext.Get(sp);
+                        servicesContext.ExportarServices.ExportarReparto(reparto);
                         return true;
                     },
                     "No se pudo exportar",

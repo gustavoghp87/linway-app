@@ -1,6 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
 using linway_app.Services.FormServices;
-using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Enums;
@@ -74,10 +73,14 @@ namespace linway_app.Forms
             await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    notaDeEnvioServices.Edit(_notaDeEnvio);
-                    return await savingServices.SaveAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    servicesContext.NotaDeEnvioServices.Edit(_notaDeEnvio);
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
+                    if (!guardado)
+                    {
+                        MessageBox.Show("No se hicieron cambios");
+                    }
+                    return guardado;
                 },
                 "No se pudo marcar la Nota de Envío como Imprimida",
                 null

@@ -1,6 +1,5 @@
 using linway_app.PresentationHelpers;
 using linway_app.Services.FormServices;
-using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
@@ -67,10 +66,9 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var reciboServices = sp.GetRequiredService<IReciboServices>();
-                    reciboServices.Edit(_recibo);
-                    return await savingServices.SaveAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    servicesContext.ReciboServices.Edit(_recibo);
+                    return await servicesContext.SavingServices.SaveAsync();
                 },
                 "No se pudo marcar Recibo como Imprimido",
                 null

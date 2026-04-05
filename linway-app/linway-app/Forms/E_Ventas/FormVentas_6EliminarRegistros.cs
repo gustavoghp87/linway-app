@@ -1,6 +1,4 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -47,25 +45,22 @@ namespace linway_app.Forms
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
-                    var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
-                    var ventaServices = sp.GetRequiredService<IVentaServices>();
+                    var servicesContext = ServiceContext.Get(sp);
                     //
                     foreach (ProdVendido pv in prodVendidosAEditarOEliminar)
                     {
                         pv.RegistroVentaId = null;
                     }
-                    prodVendidoServices.EditOrDeleteMany(prodVendidosAEditarOEliminar);
+                    servicesContext.ProdVendidoServices.EditOrDeleteMany(prodVendidosAEditarOEliminar);
                     //
-                    registroVentaServices.DeleteMany(_registrosAEliminar);
+                    servicesContext.RegistroVentaServices.DeleteMany(_registrosAEliminar);
                     //
-                    //await ventaServices.UpdateDesdeProdVendidosAsync(prodVendidosAEditarOEliminar, false);  // resta de las ventas
+                    await servicesContext.VentaServices.RestarDesdeProdVendidosAsync(prodVendidosAEditarOEliminar);
                     //
-                    bool guardado = await savingServices.SaveAsync();
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;

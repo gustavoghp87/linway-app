@@ -22,7 +22,33 @@ namespace linway_app.Services.FormServices
             List<Venta> ventas = await _services.GetAllAsync();
             return ventas;
         }
-        public async Task UpdateDesdeProdVendidosAsync(ICollection<ProdVendido> prodVendidos, bool addingUp)
+        public async Task RestarDesdeProdVendidosAsync(ProdVendido prodVendido)
+        {
+            await RestarDesdeProdVendidosAsync(new List<ProdVendido> { prodVendido });
+        }
+        public async Task RestarDesdeProdVendidosAsync(ICollection<ProdVendido> prodVendidos)
+        {
+            var ventasAEditar = new List<Venta>();
+            List<Venta> lstVentas = await GetAllAsync();
+            foreach (ProdVendido prodVendido in prodVendidos.Where(x => ProductoServices.IsProducto(x.Producto)))
+            {
+                var venta = lstVentas.FirstOrDefault(x => x.ProductoId == prodVendido.ProductoId);
+                if (venta != null)
+                {
+                    venta.Cantidad = (venta.Cantidad - prodVendido.Cantidad >= 0) ? venta.Cantidad - prodVendido.Cantidad : 0;  // no puede ser negativa
+                    ventasAEditar.Add(venta);
+                }
+            }
+            if (ventasAEditar.Count > 0)
+            {
+                _services.EditMany(ventasAEditar);
+            }
+        }
+        public async Task SumarDesdeProdVendidosAsync(ProdVendido prodVendido)
+        {
+            await SumarDesdeProdVendidosAsync(new List<ProdVendido> { prodVendido });
+        }
+        public async Task SumarDesdeProdVendidosAsync(ICollection<ProdVendido> prodVendidos)
         {
             var ventasAAgregar = new List<Venta>();
             var ventasAEditar = new List<Venta>();
@@ -30,15 +56,12 @@ namespace linway_app.Services.FormServices
             foreach (ProdVendido prodVendido in prodVendidos.Where(x => ProductoServices.IsProducto(x.Producto)))
             {
                 var venta = lstVentas.FirstOrDefault(x => x.ProductoId == prodVendido.ProductoId);
-                if (venta != null)  // existe, se suma o resta
+                if (venta != null)
                 {
-                    venta.Cantidad = addingUp
-                        ? venta.Cantidad + prodVendido.Cantidad
-                        : venta.Cantidad - prodVendido.Cantidad;
-                    venta.Cantidad = venta.Cantidad < 0 ? 0 : venta.Cantidad;  // no puede ser negativa
+                    venta.Cantidad = venta.Cantidad + prodVendido.Cantidad;
                     ventasAEditar.Add(venta);
                 }
-                else if (addingUp)  // no existe, se agrega solo si se está sumando (si es resta hay un error)
+                else  // no existe, se agrega
                 {
                     var nuevaVenta = new Venta
                     {

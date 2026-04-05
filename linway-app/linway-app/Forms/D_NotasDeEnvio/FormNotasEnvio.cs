@@ -1,5 +1,4 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
@@ -32,10 +31,9 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    List<NotaDeEnvio> notas = await notaDeEnvioServices.GetAllAsync();
-                    List<DiaReparto> dias = await diaRepartoServices.GetAllAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    List<NotaDeEnvio> notas = await servicesContext.NotaDeEnvioServices.GetAllAsync();
+                    List<DiaReparto> dias = await servicesContext.DiaRepartoServices.GetAllAsync();
                     return (notas, dias);
                 },
                 "No se pudieron buscar las Notas de Envío o los Repartos por Día",
@@ -54,10 +52,9 @@ namespace linway_app.Forms
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var exportarServices = sp.GetRequiredService<IExportarServices>();
-                    var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    List<NotaDeEnvio> notas = await notaDeEnvioServices.GetAllAsync();
-                    exportarServices.ExportarNotas(notas);
+                    var servicesContext = ServiceContext.Get(sp);
+                    List<NotaDeEnvio> notas = await servicesContext.NotaDeEnvioServices.GetAllAsync();
+                    servicesContext.ExportarServices.ExportarNotas(notas);
                     return true;
                 },
                 "Algo falló",

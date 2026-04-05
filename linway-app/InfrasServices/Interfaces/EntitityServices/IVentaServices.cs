@@ -8,6 +8,9 @@ namespace linway_app.Services.Interfaces
     {
         void DeleteMany(ICollection<Venta> ventas);
         Task<List<Venta>> GetAllAsync();
-        Task UpdateDesdeProdVendidosAsync(ICollection<ProdVendido> prodVendidos, bool addingUp);
+        Task RestarDesdeProdVendidosAsync(ProdVendido prodVendido);
+        Task RestarDesdeProdVendidosAsync(ICollection<ProdVendido> prodVendidos);
+        Task SumarDesdeProdVendidosAsync(ProdVendido prodVendido);
+        Task SumarDesdeProdVendidosAsync(ICollection<ProdVendido> prodVendidos);
     }
 }

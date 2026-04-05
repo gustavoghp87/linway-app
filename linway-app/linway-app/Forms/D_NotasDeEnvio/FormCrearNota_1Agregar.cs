@@ -1,7 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
 using linway_app.Services.FormServices;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Enums;
 using System;
@@ -30,8 +28,8 @@ namespace linway_app.Forms
             Cliente cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetPorIdAsync(clienteId);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ClienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el cliente",
                 null
@@ -60,8 +58,8 @@ namespace linway_app.Forms
             Cliente cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetPorDireccionAsync(direccion);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ClienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el cliente",
                 null
@@ -96,8 +94,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetPorIdAsync(productoId);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ProductoServices.GetPorIdAsync(productoId);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -129,8 +127,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetPorNombreAsync(nombreDeProducto);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ProductoServices.GetPorNombreAsync(nombreDeProducto);
                 },
                 "No se pudo buscar el Producto",
                 null

@@ -1,6 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
 using linway_app.Services.FormServices;
-using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
@@ -33,8 +32,8 @@ namespace linway_app.Forms
             List<DiaReparto> diaRepartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    return await diaRepartoServices.GetAllAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.DiaRepartoServices.GetAllAsync();
                 },
                 "No se pudieron buscar los Días de Reparto",
                 null
@@ -48,8 +47,7 @@ namespace linway_app.Forms
         //        _scope,
         //        async sp =>
         //        {
-        //            var savingServices = sp.GetRequiredService<ISavingServices>();
-        //            var diaRepartoServicios = sp.GetRequiredService<IDiaRepartoServices>();
+        //            var servicesContext = ServiceContext.Get(sp);
         //            var nuevoDia = new DiaReparto();
         //            string[] dias = new string[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" };
         //            foreach (string dia in dias)
@@ -82,13 +80,12 @@ namespace linway_app.Forms
             //    _scope,
             //    async sp =>
             //    {
-            //        var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-            //        var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-            //        List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
+            //        var servicesContext = ServiceContext.Get(sp);
+            //        List<DiaReparto> lstDiasRep = await servicesContext.DiaRepartoServices.GetAllAsync();
             //        Reparto reparto = lstDiasRep
             //            .Find(x => x.Dia == diaReparto).Repartos.ToList()
             //            .Find(x => x.Nombre == nombreReparto);
-            //        var pedidos = await pedidoServices.GetPorRepartoIdAsync(reparto.Id);
+            //        var pedidos = await servicesContext.PedidoServices.GetPorRepartoIdAsync(reparto.Id);
             //        return pedidos.OrderBy(x => x.Orden).ToList();
             //    },
             //    "No se pudieron buscar los Pedidos",
@@ -110,6 +107,7 @@ namespace linway_app.Forms
             groupBox7.Visible = false;
             groupBox8.Visible = false;
             groupBox9.Visible = false;
+            groupBox10.Visible = false;
             label30.Text = "";
             label31.Text = "";
             textBox3.Text = "";
@@ -128,39 +126,37 @@ namespace linway_app.Forms
             //checkBox1.Checked = false;
             label32EliminarPedido_Direccion.Text = "";
             label36.Text = "";
+            checkBox2.Checked = false;
         }
         private async Task<bool> EliminarPedidoAsync(Pedido pedidoAEliminar)  // handler
         {
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
-                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    Reparto reparto = await repartoServices.GetPorIdAsync(pedidoAEliminar.RepartoId);
+                    var servicesContext = ServiceContext.Get(sp);
+                    Reparto reparto = await servicesContext.RepartoServices.GetPorIdAsync(pedidoAEliminar.RepartoId);
                     //
                     List<ProdVendido> prodVendidosDelPedido;
                     {
-                        List<ProdVendido> prodVendidos = await prodVendidoServices.GetAllAsync();
+                        List<ProdVendido> prodVendidos = await servicesContext.ProdVendidoServices.GetAllAsync();
                         prodVendidosDelPedido = prodVendidos.Where(x => x.PedidoId == pedidoAEliminar.Id).ToList();
                     }
                     foreach (ProdVendido prodVendido in prodVendidosDelPedido)
                     {
                         prodVendido.PedidoId = null;
                     }
-                    prodVendidoServices.EditOrDeleteMany(prodVendidosDelPedido);
+                    servicesContext.ProdVendidoServices.EditOrDeleteMany(prodVendidosDelPedido);
                     //
                     reparto.Pedidos.Remove(pedidoAEliminar);
                     RepartoServices.ActualizarCantidadesDeReparto(reparto);
-                    repartoServices.Edit(reparto);
+                    servicesContext.RepartoServices.Edit(reparto);
                     //
-                    pedidoServices.Delete(pedidoAEliminar);
+                    servicesContext.PedidoServices.Delete(pedidoAEliminar);
                     //
-                    bool guardado = await savingServices.SaveAsync();
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;
@@ -215,6 +211,12 @@ namespace linway_app.Forms
         {
             LimpiarPantalla();
             groupBox8.Visible = true;
+        }
+        private void EliminarRepartoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LimpiarPantalla();
+            groupBox10.Visible = true;
+            //groupBox10.BringToFront();
         }
     }
 }

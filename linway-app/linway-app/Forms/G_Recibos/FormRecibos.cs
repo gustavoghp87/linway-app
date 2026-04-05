@@ -1,8 +1,6 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
-using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -36,8 +34,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var reciboServices = sp.GetRequiredService<IReciboServices>();
-                    return await reciboServices.GetAllAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ReciboServices.GetAllAsync();
                 },
                 "No se pudieron buscar los Recibos",
                 null

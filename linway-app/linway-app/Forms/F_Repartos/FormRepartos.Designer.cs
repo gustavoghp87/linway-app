@@ -29,7 +29,7 @@ namespace linway_app.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.comboBox1ListaDias = new System.Windows.Forms.ComboBox();
@@ -46,6 +46,7 @@ namespace linway_app.Forms
             this.destinoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.posicionarDestinoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.borrarUnDestinoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eliminarRepartoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
@@ -124,6 +125,11 @@ namespace linway_app.Forms
             this.labelDire = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.button12 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -136,6 +142,7 @@ namespace linway_app.Forms
             this.gpNuevoReparto.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox10.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -159,7 +166,7 @@ namespace linway_app.Forms
             this.label2.Text = "Reparto: ";
             this.label2.Visible = false;
             // 
-            // comboBox1
+            // comboBox1ListaDias
             // 
             this.comboBox1ListaDias.FormattingEnabled = true;
             this.comboBox1ListaDias.Items.AddRange(new object[] {
@@ -170,16 +177,16 @@ namespace linway_app.Forms
             "Viernes",
             "Sábado"});
             this.comboBox1ListaDias.Location = new System.Drawing.Point(62, 34);
-            this.comboBox1ListaDias.Name = "comboBox1";
+            this.comboBox1ListaDias.Name = "comboBox1ListaDias";
             this.comboBox1ListaDias.Size = new System.Drawing.Size(121, 26);
             this.comboBox1ListaDias.TabIndex = 2;
             this.comboBox1ListaDias.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
-            // comboBox2
+            // comboBox2ListaRepartos
             // 
             this.comboBox2ListaRepartos.FormattingEnabled = true;
             this.comboBox2ListaRepartos.Location = new System.Drawing.Point(296, 34);
-            this.comboBox2ListaRepartos.Name = "comboBox2";
+            this.comboBox2ListaRepartos.Name = "comboBox2ListaRepartos";
             this.comboBox2ListaRepartos.Size = new System.Drawing.Size(134, 26);
             this.comboBox2ListaRepartos.TabIndex = 3;
             this.comboBox2ListaRepartos.Visible = false;
@@ -216,7 +223,8 @@ namespace linway_app.Forms
             this.agregarDestinoToolStripMenuItem,
             this.limpiarPlanillaToolStripMenuItem,
             this.posicionarDestinoToolStripMenuItem,
-            this.borrarUnDestinoToolStripMenuItem});
+            this.borrarUnDestinoToolStripMenuItem,
+            this.eliminarRepartoToolStripMenuItem});
             this.opcionesToolStripMenuItem.Name = "opcionesToolStripMenuItem";
             this.opcionesToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.opcionesToolStripMenuItem.Text = "Acciones";
@@ -287,6 +295,13 @@ namespace linway_app.Forms
             this.borrarUnDestinoToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.borrarUnDestinoToolStripMenuItem.Text = "Borrar Cliente de Recorrido";
             this.borrarUnDestinoToolStripMenuItem.Click += new System.EventHandler(this.BorrarUnDestino_ToolStripMenuItem_Click);
+            // 
+            // eliminarRepartoToolStripMenuItem
+            // 
+            this.eliminarRepartoToolStripMenuItem.Name = "eliminarRepartoToolStripMenuItem";
+            this.eliminarRepartoToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.eliminarRepartoToolStripMenuItem.Text = "Eliminar Reparto";
+            this.eliminarRepartoToolStripMenuItem.Click += new System.EventHandler(this.EliminarRepartoToolStripMenuItem_Click);
             // 
             // groupBox3
             // 
@@ -623,7 +638,7 @@ namespace linway_app.Forms
             this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox7.Location = new System.Drawing.Point(504, 40);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(346, 188);
+            this.groupBox7.Size = new System.Drawing.Size(346, 201);
             this.groupBox7.TabIndex = 15;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Modificar recorrido:";
@@ -806,14 +821,14 @@ namespace linway_app.Forms
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView1.Location = new System.Drawing.Point(12, 302);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -852,10 +867,10 @@ namespace linway_app.Forms
             this.label3.TabIndex = 6;
             this.label3.Text = "Nombre de reparto:";
             // 
-            // textBox1
+            // textBox1AgregarRepartoNombre
             // 
             this.textBox1AgregarRepartoNombre.Location = new System.Drawing.Point(167, 31);
-            this.textBox1AgregarRepartoNombre.Name = "textBox1";
+            this.textBox1AgregarRepartoNombre.Name = "textBox1AgregarRepartoNombre";
             this.textBox1AgregarRepartoNombre.Size = new System.Drawing.Size(100, 24);
             this.textBox1AgregarRepartoNombre.TabIndex = 7;
             // 
@@ -924,10 +939,10 @@ namespace linway_app.Forms
             this.label35.TabIndex = 6;
             this.label35.Text = "Direccion";
             // 
-            // textBox5
+            // textBox5EliminarPedido_Direccion
             // 
             this.textBox5EliminarPedido_Direccion.Location = new System.Drawing.Point(92, 102);
-            this.textBox5EliminarPedido_Direccion.Name = "textBox5";
+            this.textBox5EliminarPedido_Direccion.Name = "textBox5EliminarPedido_Direccion";
             this.textBox5EliminarPedido_Direccion.Size = new System.Drawing.Size(124, 24);
             this.textBox5EliminarPedido_Direccion.TabIndex = 7;
             this.textBox5EliminarPedido_Direccion.TextChanged += new System.EventHandler(this.TextBox5_TextChanged);
@@ -941,7 +956,7 @@ namespace linway_app.Forms
             this.label34.TabIndex = 8;
             this.label34.Text = "Día:";
             // 
-            // comboBox10
+            // comboBox10Repartos_Dia
             // 
             this.comboBox10Repartos_Dia.FormattingEnabled = true;
             this.comboBox10Repartos_Dia.Items.AddRange(new object[] {
@@ -952,7 +967,7 @@ namespace linway_app.Forms
             "Viernes",
             "Sábado"});
             this.comboBox10Repartos_Dia.Location = new System.Drawing.Point(41, 33);
-            this.comboBox10Repartos_Dia.Name = "comboBox10";
+            this.comboBox10Repartos_Dia.Name = "comboBox10Repartos_Dia";
             this.comboBox10Repartos_Dia.Size = new System.Drawing.Size(88, 26);
             this.comboBox10Repartos_Dia.TabIndex = 9;
             this.comboBox10Repartos_Dia.SelectedIndexChanged += new System.EventHandler(this.ComboBox10_SelectedIndexChanged);
@@ -967,11 +982,11 @@ namespace linway_app.Forms
             this.label33.TabIndex = 10;
             this.label33.Text = "Reparto: ";
             // 
-            // comboBox9
+            // comboBox9Repartos_Nombre
             // 
             this.comboBox9Repartos_Nombre.FormattingEnabled = true;
             this.comboBox9Repartos_Nombre.Location = new System.Drawing.Point(85, 64);
-            this.comboBox9Repartos_Nombre.Name = "comboBox9";
+            this.comboBox9Repartos_Nombre.Name = "comboBox9Repartos_Nombre";
             this.comboBox9Repartos_Nombre.Size = new System.Drawing.Size(97, 26);
             this.comboBox9Repartos_Nombre.TabIndex = 11;
             this.comboBox9Repartos_Nombre.SelectedIndexChanged += new System.EventHandler(this.ComboBox9_SelectedIndexChanged);
@@ -987,12 +1002,12 @@ namespace linway_app.Forms
             this.button15.UseVisualStyleBackColor = true;
             this.button15.Click += new System.EventHandler(this.Button15_Click);
             // 
-            // label32
+            // label32EliminarPedido_Direccion
             // 
             this.label32EliminarPedido_Direccion.AutoSize = true;
             this.label32EliminarPedido_Direccion.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label32EliminarPedido_Direccion.Location = new System.Drawing.Point(6, 133);
-            this.label32EliminarPedido_Direccion.Name = "label32";
+            this.label32EliminarPedido_Direccion.Name = "label32EliminarPedido_Direccion";
             this.label32EliminarPedido_Direccion.Size = new System.Drawing.Size(54, 18);
             this.label32EliminarPedido_Direccion.TabIndex = 13;
             this.label32EliminarPedido_Direccion.Text = "label32";
@@ -1055,7 +1070,7 @@ namespace linway_app.Forms
             this.label5.TabIndex = 8;
             this.label5.Text = "Día:";
             // 
-            // comboBox4
+            // comboBox4AgregarPedidido_Dia
             // 
             this.comboBox4AgregarPedidido_Dia.FormattingEnabled = true;
             this.comboBox4AgregarPedidido_Dia.Items.AddRange(new object[] {
@@ -1066,7 +1081,7 @@ namespace linway_app.Forms
             "Viernes",
             "Sábado"});
             this.comboBox4AgregarPedidido_Dia.Location = new System.Drawing.Point(41, 33);
-            this.comboBox4AgregarPedidido_Dia.Name = "comboBox4";
+            this.comboBox4AgregarPedidido_Dia.Name = "comboBox4AgregarPedidido_Dia";
             this.comboBox4AgregarPedidido_Dia.Size = new System.Drawing.Size(88, 26);
             this.comboBox4AgregarPedidido_Dia.TabIndex = 9;
             this.comboBox4AgregarPedidido_Dia.SelectedIndexChanged += new System.EventHandler(this.ComboBox4_SelectedIndexChanged);
@@ -1081,11 +1096,11 @@ namespace linway_app.Forms
             this.label7.TabIndex = 10;
             this.label7.Text = "Reparto: ";
             // 
-            // comboBox5
+            // comboBox5AgregarPedido_Nombre
             // 
             this.comboBox5AgregarPedido_Nombre.FormattingEnabled = true;
             this.comboBox5AgregarPedido_Nombre.Location = new System.Drawing.Point(231, 33);
-            this.comboBox5AgregarPedido_Nombre.Name = "comboBox5";
+            this.comboBox5AgregarPedido_Nombre.Name = "comboBox5AgregarPedido_Nombre";
             this.comboBox5AgregarPedido_Nombre.Size = new System.Drawing.Size(97, 26);
             this.comboBox5AgregarPedido_Nombre.TabIndex = 11;
             // 
@@ -1100,13 +1115,13 @@ namespace linway_app.Forms
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
-            // label8
+            // label8AgregarPedidoDireccion
             // 
             this.label8AgregarPedidoDireccion.AutoSize = true;
             this.label8AgregarPedidoDireccion.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8AgregarPedidoDireccion.ForeColor = System.Drawing.SystemColors.Highlight;
             this.label8AgregarPedidoDireccion.Location = new System.Drawing.Point(16, 142);
-            this.label8AgregarPedidoDireccion.Name = "label8";
+            this.label8AgregarPedidoDireccion.Name = "label8AgregarPedidoDireccion";
             this.label8AgregarPedidoDireccion.Size = new System.Drawing.Size(46, 18);
             this.label8AgregarPedidoDireccion.TabIndex = 13;
             this.label8AgregarPedidoDireccion.Text = "label8";
@@ -1150,11 +1165,68 @@ namespace linway_app.Forms
             this.groupBox2.Text = "Agregar Cliente a recorrido";
             this.groupBox2.Visible = false;
             // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.button12);
+            this.groupBox10.Controls.Add(this.button3);
+            this.groupBox10.Controls.Add(this.checkBox2);
+            this.groupBox10.Controls.Add(this.label8);
+            this.groupBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox10.Location = new System.Drawing.Point(496, 38);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(386, 190);
+            this.groupBox10.TabIndex = 20;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Eliminar Reparto";
+            this.groupBox10.Visible = false;
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(213, 145);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(117, 29);
+            this.button12.TabIndex = 3;
+            this.button12.Text = "Cancelar";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.Button12_Click);
+            // 
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Location = new System.Drawing.Point(58, 134);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(126, 41);
+            this.button3.TabIndex = 2;
+            this.button3.Text = "Eliminar";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.EliminarReparto_Button3_Click);
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.checkBox2.Location = new System.Drawing.Point(12, 99);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(370, 20);
+            this.checkBox2.TabIndex = 1;
+            this.checkBox2.Text = "Estoy seguro de que quiero eliminar este Reparto";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(30, 30);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(326, 67);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "Si se elimina un Reparto, se eliminan también todos sus Pedidos asociados. No rep" +
+    "ercute sobre Ventas ni sobre Notas de Envío.";
+            // 
             // FormRepartos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1018, 676);
+            this.Controls.Add(this.groupBox10);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.exportarButton);
             this.Controls.Add(this.groupBox8);
@@ -1200,6 +1272,8 @@ namespace linway_app.Forms
             this.groupBox8.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1301,5 +1375,11 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label labelDire;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ToolStripMenuItem eliminarRepartoToolStripMenuItem;
     }
 }

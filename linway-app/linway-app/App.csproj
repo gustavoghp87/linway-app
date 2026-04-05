@@ -454,7 +454,10 @@
     <Compile Include="Forms\E_Ventas\FormVentas.Designer.cs">
       <DependentUpon>FormVentas.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\F_Repartos\FormRepartos_6Eliminar.cs">
+    <Compile Include="Forms\F_Repartos\FormRepartos_7EliminarReparto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\F_Repartos\FormRepartos_6EliminarPedido.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\F_Repartos\FormRepartos_5Reposicionar.cs">
@@ -530,6 +533,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PresentationHelpers\LoadingOverlayHelper.cs" />
+    <Compile Include="PresentationHelpers\ServiceContext.cs" />
     <Compile Include="PresentationHelpers\UIExecutor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

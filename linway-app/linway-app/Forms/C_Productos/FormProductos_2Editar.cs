@@ -1,6 +1,4 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Enums;
 using System;
@@ -128,8 +126,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetPorIdAsync(productoId);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ProductoServices.GetPorIdAsync(productoId);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -158,8 +156,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetPorNombreAsync(nombreDeProducto);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ProductoServices.GetPorNombreAsync(nombreDeProducto);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -195,13 +193,12 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var productoServices = sp.GetRequiredService<IProductoServices>();
-                    productoServices.Edit(_productoAEditar);
-                    bool guardado = await savingServices.SaveAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    servicesContext.ProductoServices.Edit(_productoAEditar);
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;

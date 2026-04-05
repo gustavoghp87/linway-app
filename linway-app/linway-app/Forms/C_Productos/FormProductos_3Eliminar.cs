@@ -1,9 +1,7 @@
 ﻿using linway_app.PresentationHelpers;
 using linway_app.Services.Interfaces;
 using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
-using Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,8 +32,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetPorIdAsync(productoId);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ProductoServices.GetPorIdAsync(productoId);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -65,8 +63,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var productoServices = sp.GetRequiredService<IProductoServices>();
-                    return await productoServices.GetPorNombreAsync(nombreDeProducto);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ProductoServices.GetPorNombreAsync(nombreDeProducto);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -81,9 +79,8 @@ namespace linway_app.Forms
             label46EliminarProductoNombre.Text = producto.Nombre;
             button22Eliminar.Enabled = true;
         }
-        private async Task ValidarSiSePuedeEliminarAsync(IServiceProvider sp)
+        private async Task ValidarSiSePuedeEliminarAsync(IProdVendidoServices prodVendidoServices)
         {
-            var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
             List<ProdVendido> prodVendidos = await prodVendidoServices.GetAllAsync();
             List<ProdVendido> prodVendidosDelProducto = prodVendidos.FindAll(pv => pv.ProductoId == _productoAEliminar.Id);
             string excepcion = "";
@@ -126,23 +123,22 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    await ValidarSiSePuedeEliminarAsync(sp);
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var productoServices = sp.GetRequiredService<IProductoServices>();
+                    var servicesContext = ServiceContext.Get(sp);
+                    await ValidarSiSePuedeEliminarAsync(servicesContext.ProdVendidoServices);
                     //
-                    var ventaServices = sp.GetRequiredService<IVentaServices>();
-                    List<Venta> ventas = await ventaServices.GetAllAsync();
+                    List<Venta> ventas = await servicesContext.VentaServices.GetAllAsync();
                     Venta venta = ventas.Find(v => v.ProductoId == _productoAEliminar.Id);
                     if (venta != null)
                     {
-                        ventaServices.DeleteMany(new List<Venta> { venta });
+                        servicesContext.VentaServices.DeleteMany(new List<Venta> { venta });
                     }
                     //
-                    productoServices.Delete(_productoAEliminar);
-                    bool guardado = await savingServices.SaveAsync();
+                    servicesContext.ProductoServices.Delete(_productoAEliminar);
+                    //
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;

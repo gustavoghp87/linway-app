@@ -35,7 +35,7 @@ namespace linway_app.Forms
                 //
                 ActualizarGrid1(_lstNotaDeEnvios.FindAll(n => n.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha)));
             }
-            else if (opcion == "Todas")
+            else if (opcion == null || opcion == "Todas")
             {
                 label2FiltrarPorDireccionOFecha.Text = "";
                 //

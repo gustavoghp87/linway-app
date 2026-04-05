@@ -1,6 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
 using linway_app.Services.FormServices;
-using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
@@ -33,8 +32,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    List<DiaReparto> lstDiasRep = await diaRepartoServices.GetAllAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    List<DiaReparto> lstDiasRep = await servicesContext.DiaRepartoServices.GetAllAsync();
                     return lstDiasRep;
                 },
                 "No se pudieron buscar los Días de Reparto",
@@ -80,13 +79,7 @@ namespace linway_app.Forms
             NotaDeEnvio nuevaNota = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
-                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
-                    var ventaServices = sp.GetRequiredService<IVentaServices>();
+                    var servicesContext = ServiceContext.Get(sp);
                     NotaDeEnvio nuevaNota = new NotaDeEnvio
                     {
                         Cliente = _cliente,
@@ -97,7 +90,7 @@ namespace linway_app.Forms
                         Impresa = 0,
                         //ProdVendidos = _lstProdVendidosAAgregar
                     };
-                    notaDeEnvioServices.Add(nuevaNota);
+                    servicesContext.NotaDeEnvioServices.Add(nuevaNota);
                     foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
                     {
                         prodVendido.NotaDeEnvio = nuevaNota;
@@ -111,14 +104,14 @@ namespace linway_app.Forms
                             Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
                             NombreCliente = _cliente.Direccion
                         };
-                        registroVentaServices.Add(nuevoRegistro);
+                        servicesContext.RegistroVentaServices.Add(nuevoRegistro);
                         foreach (var prodVendido in _lstProdVendidosAAgregar)
                         {
                             prodVendido.RegistroVenta = nuevoRegistro;
                             prodVendido.RegistroVentaId = nuevoRegistro.Id;
                             //_lstProdVendidosAAgregar.Find(x => x.Id == prodVendido.Id).RegistroVenta = nuevoRegistro;  // para que el siguiente checkbox no pise los cambios
                         }
-                        await ventaServices.UpdateDesdeProdVendidosAsync(_lstProdVendidosAAgregar, true);
+                        await servicesContext.VentaServices.SumarDesdeProdVendidosAsync(_lstProdVendidosAAgregar);
                     }
                     if (enviarAHojaDeReparto)
                     {
@@ -135,11 +128,11 @@ namespace linway_app.Forms
                         PedidoServices.ActualizarCantidadesYDescripcionDePedido(_pedido, true);  // pedido.Entregar = 1;
                         if (existiaPedido)
                         {
-                            pedidoServices.Edit(_pedido);
+                            servicesContext.PedidoServices.Edit(_pedido);
                         }
                         else
                         {
-                            await pedidoServices.AddAsync(_pedido);
+                            await servicesContext.PedidoServices.AddAsync(_pedido);
                         }
                         // reparto
                         foreach (var p in _reparto.Pedidos)
@@ -150,10 +143,10 @@ namespace linway_app.Forms
                             }
                         }
                         RepartoServices.ActualizarCantidadesDeReparto(_pedido.Reparto);
-                        repartoServices.Edit(_pedido.Reparto);
+                        servicesContext.RepartoServices.Edit(_pedido.Reparto);
                     }
                     //
-                    prodVendidoServices.AddMany(_lstProdVendidosAAgregar);
+                    servicesContext.ProdVendidoServices.AddMany(_lstProdVendidosAAgregar);
                     //
                     if (imprimir)
                     {
@@ -163,10 +156,10 @@ namespace linway_app.Forms
                         }
                     }
                     //
-                    bool guardado = await savingServices.SaveAsync();
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                         return null;
                     }

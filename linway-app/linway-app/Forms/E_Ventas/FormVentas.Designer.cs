@@ -94,6 +94,7 @@ namespace linway_app.Forms
             this.label4 = new System.Windows.Forms.Label();
             this.bCancelarBorrarReg = new System.Windows.Forms.Button();
             this.ExportBtn = new System.Windows.Forms.Button();
+            this.checkBox3EliminarRegistroRestarDeVentas = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.gbNuevaVenta.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
@@ -443,28 +444,28 @@ namespace linway_app.Forms
             // nuevaVentaToolStripMenuItem
             // 
             this.nuevaVentaToolStripMenuItem.Name = "nuevaVentaToolStripMenuItem";
-            this.nuevaVentaToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.nuevaVentaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.nuevaVentaToolStripMenuItem.Text = "Nueva venta";
             this.nuevaVentaToolStripMenuItem.Click += new System.EventHandler(this.NuevaVenta_ToolStripMenuItem_Click);
             // 
             // reiniciarVentasToolStripMenuItem
             // 
             this.reiniciarVentasToolStripMenuItem.Name = "reiniciarVentasToolStripMenuItem";
-            this.reiniciarVentasToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.reiniciarVentasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.reiniciarVentasToolStripMenuItem.Text = "Reiniciar ventas";
             this.reiniciarVentasToolStripMenuItem.Click += new System.EventHandler(this.ReiniciarVentas_ToolStripMenuItem_Click);
             // 
             // verRegistroToolStripMenuItem
             // 
             this.verRegistroToolStripMenuItem.Name = "verRegistroToolStripMenuItem";
-            this.verRegistroToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.verRegistroToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.verRegistroToolStripMenuItem.Text = "Ver registro...";
             this.verRegistroToolStripMenuItem.Click += new System.EventHandler(this.VerRegistro_ToolStripMenuItem_Click);
             // 
             // borrarRegistrosToolStripMenuItem
             // 
             this.borrarRegistrosToolStripMenuItem.Name = "borrarRegistrosToolStripMenuItem";
-            this.borrarRegistrosToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.borrarRegistrosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.borrarRegistrosToolStripMenuItem.Text = "Borrar registros";
             this.borrarRegistrosToolStripMenuItem.Click += new System.EventHandler(this.BorrarRegistros_ToolStripMenuItem_Click);
             // 
@@ -550,6 +551,7 @@ namespace linway_app.Forms
             // 
             // gbVerRegistro
             // 
+            this.gbVerRegistro.Controls.Add(this.checkBox3EliminarRegistroRestarDeVentas);
             this.gbVerRegistro.Controls.Add(this.cbSeguro);
             this.gbVerRegistro.Controls.Add(this.bDeshacerVenta);
             this.gbVerRegistro.Controls.Add(this.bSalirVerReg);
@@ -570,32 +572,32 @@ namespace linway_app.Forms
             // 
             // cbSeguro
             // 
-            this.cbSeguro.AutoSize = true;
-            this.cbSeguro.Location = new System.Drawing.Point(115, 266);
+            this.cbSeguro.Location = new System.Drawing.Point(12, 321);
             this.cbSeguro.Name = "cbSeguro";
-            this.cbSeguro.Size = new System.Drawing.Size(149, 34);
+            this.cbSeguro.Size = new System.Drawing.Size(264, 29);
             this.cbSeguro.TabIndex = 26;
-            this.cbSeguro.Text = "Estoy seguro de \r\nborrar este registro";
+            this.cbSeguro.Text = "Estoy seguro de borrar este resgistro";
             this.cbSeguro.UseVisualStyleBackColor = true;
             // 
             // bDeshacerVenta
             // 
             this.bDeshacerVenta.Enabled = false;
-            this.bDeshacerVenta.Location = new System.Drawing.Point(14, 252);
+            this.bDeshacerVenta.Location = new System.Drawing.Point(279, 294);
             this.bDeshacerVenta.Name = "bDeshacerVenta";
-            this.bDeshacerVenta.Size = new System.Drawing.Size(84, 51);
+            this.bDeshacerVenta.Size = new System.Drawing.Size(94, 51);
             this.bDeshacerVenta.TabIndex = 24;
-            this.bDeshacerVenta.Text = "Deshacer venta";
+            this.bDeshacerVenta.Text = "Deshacer Registro";
             this.bDeshacerVenta.UseVisualStyleBackColor = true;
             this.bDeshacerVenta.Click += new System.EventHandler(this.DeshacerVenta_Click);
             // 
             // bSalirVerReg
             // 
-            this.bSalirVerReg.Location = new System.Drawing.Point(284, 280);
+            this.bSalirVerReg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bSalirVerReg.Location = new System.Drawing.Point(279, 349);
             this.bSalirVerReg.Name = "bSalirVerReg";
-            this.bSalirVerReg.Size = new System.Drawing.Size(75, 23);
+            this.bSalirVerReg.Size = new System.Drawing.Size(94, 23);
             this.bSalirVerReg.TabIndex = 23;
-            this.bSalirVerReg.Text = "Salir";
+            this.bSalirVerReg.Text = "Cancelar";
             this.bSalirVerReg.UseVisualStyleBackColor = true;
             this.bSalirVerReg.Click += new System.EventHandler(this.CancelarClick_Click);
             // 
@@ -658,7 +660,7 @@ namespace linway_app.Forms
             // 
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Maroon;
-            this.label3.Location = new System.Drawing.Point(15, 318);
+            this.label3.Location = new System.Drawing.Point(15, 230);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(358, 55);
             this.label3.TabIndex = 27;
@@ -799,6 +801,16 @@ namespace linway_app.Forms
             this.ExportBtn.UseVisualStyleBackColor = true;
             this.ExportBtn.Click += new System.EventHandler(this.ExportBtn_Click_1);
             // 
+            // checkBox3
+            // 
+            this.checkBox3EliminarRegistroRestarDeVentas.AutoSize = true;
+            this.checkBox3EliminarRegistroRestarDeVentas.Location = new System.Drawing.Point(12, 301);
+            this.checkBox3EliminarRegistroRestarDeVentas.Name = "checkBox3";
+            this.checkBox3EliminarRegistroRestarDeVentas.Size = new System.Drawing.Size(135, 19);
+            this.checkBox3EliminarRegistroRestarDeVentas.TabIndex = 28;
+            this.checkBox3EliminarRegistroRestarDeVentas.Text = "Restar de Ventas";
+            this.checkBox3EliminarRegistroRestarDeVentas.UseVisualStyleBackColor = true;
+            // 
             // FormVentas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -912,5 +924,6 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label labelProductoN;
         private System.Windows.Forms.Button ExportBtn;
+        private System.Windows.Forms.CheckBox checkBox3EliminarRegistroRestarDeVentas;
     }
 }

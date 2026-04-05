@@ -23,6 +23,10 @@ namespace linway_app.Services.FormServices
             }
             _services.Add(reparto);
         }
+        public void Delete(Reparto reparto)
+        {
+            _services.Delete(reparto);
+        }
         public void Edit(Reparto reparto)
         {
             _services.Edit(reparto);

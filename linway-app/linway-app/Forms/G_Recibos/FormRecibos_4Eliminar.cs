@@ -1,6 +1,4 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -125,15 +123,13 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var reciboService = sp.GetRequiredService<IReciboServices>();
-                    var detalleReciboService = sp.GetRequiredService<IDetalleReciboServices>();
-                    detalleReciboService.DeleteMany(detallesAEliminar);  // primero
-                    reciboService.DeleteMany(recibosAEliminar);  // segundo
-                    bool guardado = await savingServices.SaveAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    servicesContext.DetalleReciboServices.DeleteMany(detallesAEliminar);  // primero
+                    servicesContext.ReciboServices.DeleteMany(recibosAEliminar);  // segundo
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;

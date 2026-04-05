@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
@@ -43,10 +42,9 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    var productoServices = sp.GetRequiredService<IProductoServices>();
-                    List<Producto> productos = await productoServices.GetAllAsync();
-                    List<Cliente> clientes = await clienteServices.GetAllAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    List<Producto> productos = await servicesContext.ProductoServices.GetAllAsync();
+                    List<Cliente> clientes = await servicesContext.ClienteServices.GetAllAsync();
                     return (clientes, productos);
                 },
                 "No se pudieron buscar los Clientes y los Productos",

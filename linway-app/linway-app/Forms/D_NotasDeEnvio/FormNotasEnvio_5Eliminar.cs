@@ -1,6 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
+using linway_app.Services.FormServices;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -35,37 +34,30 @@ namespace linway_app.Forms
         }
         private List<NotaDeEnvio> ObtenerListaABorrar()
         {
-            var listaABorrar = new List<NotaDeEnvio>();
             string opcion = comboBox3EliminarModalidad.SelectedItem.ToString();
             if (opcion == "Establecer rango" && textBox5EliminarDesde.Text != "")
             {
-                try
+                if (!long.TryParse(textBox5EliminarDesde.Text, out long rangoDesde))
                 {
-                    int rangoDesde = int.Parse(textBox5EliminarDesde.Text);
-                    int rangoHasta = textBox4EliminarHasta.Text != "" ? int.Parse(textBox4EliminarHasta.Text) : rangoDesde;
-                    for (int i = rangoDesde; i <= rangoHasta; i++)
-                    {
-                        NotaDeEnvio nota = _lstNotaDeEnvios.Find(x => x.Id == i);
-                        if (nota != null)
-                        {
-                            listaABorrar.Add(nota);
-                        }
-                    }
-                }
-                catch {
                     MessageBox.Show("Rango establecido incorrecto");
                     return new List<NotaDeEnvio>();
                 }
+                long rangoHasta = rangoDesde;
+                if (!string.IsNullOrWhiteSpace(textBox4EliminarHasta.Text))
+                {
+                    long.TryParse(textBox4EliminarHasta.Text, out rangoHasta);
+                }
+                return _lstNotaDeEnvios.Where(ne => ne != null && ne.Id >= rangoDesde && ne.Id <= rangoHasta).ToList();
             }
             else if (opcion == "Todas")
             {
-                listaABorrar = _lstNotaDeEnvios.Where(ne => ne != null).ToList();
+                return _lstNotaDeEnvios.Where(ne => ne != null).ToList();
             }
             else if (opcion == "Impresas")
             {
-                listaABorrar.AddRange(_lstNotaDeEnvios.Where(ne => ne != null && ne.Impresa == 1).ToList());
+                return _lstNotaDeEnvios.Where(ne => ne != null && ne.Impresa == 1).ToList();
             }
-            return listaABorrar;
+            return new List<NotaDeEnvio>();
         }
         private void TextBox5_TextChanged(object sender, EventArgs ev)
         {
@@ -76,6 +68,11 @@ namespace linway_app.Forms
         {
             var lista = ObtenerListaABorrar();
             label10CantidadABorrar.Text = lista.Count.ToString();
+        }
+        private void CheckBox2EliminarIncluirRegistros_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBox1EliminarRestarDeVentas.Visible = checkBox2EliminarIncluirRegistros.Checked;
+            checkBox1EliminarRestarDeVentas.Checked = false;
         }
         private void Button3_Click(object sender, EventArgs ev)
         {
@@ -104,24 +101,69 @@ namespace linway_app.Forms
         }
         private async void Button4_Click(object sender, EventArgs ev)  // eliminar nota de envío
         {
-            List<NotaDeEnvio> notas = ObtenerListaABorrar();
+            List<NotaDeEnvio> notasAEliminar = ObtenerListaABorrar();
+            bool eliminarDeLosRepartos = checkBox1EliminarIncluirRepartos.Checked;
+            bool eliminarRegistros = checkBox2EliminarIncluirRegistros.Checked;
+            bool restarDeVentas = checkBox1EliminarRestarDeVentas.Checked;
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
-                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
-                    List<ProdVendido> prodVendidos = notas.SelectMany(n => n.ProdVendidos).ToList();
-                    foreach (var prodVendido in prodVendidos)
+                    var servicesContext = ServiceContext.Get(sp);
+                    List<ProdVendido> prodVendidosDeLasNotas = notasAEliminar.SelectMany(n => n.ProdVendidos).ToList();
+                    foreach (ProdVendido prod in prodVendidosDeLasNotas)
                     {
-                        prodVendido.NotaDeEnvioId = null;
+                        prod.NotaDeEnvioId = null;
                     }
-                    prodVendidoServices.EditOrDeleteMany(prodVendidos);
-                    notaDeEnvioServices.DeleteMany(notas);
-                    bool guardado = await savingServices.SaveAsync();
+                    //
+                    if (eliminarDeLosRepartos)
+                    {
+                        List<Reparto> repartos = prodVendidosDeLasNotas.Where(pv => pv.PedidoId != null).Select(pv => pv.Pedido).Select(p => p.Reparto).Distinct().ToList();
+                        foreach (Reparto reparto in repartos)
+                        {
+                            foreach (Pedido pedido in reparto.Pedidos)
+                            {
+                                foreach (ProdVendido prod in pedido.ProdVendidos.ToList())
+                                {
+                                    pedido.ProdVendidos.Remove(prod);
+                                }
+                                PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, pedido.Entregar == 1);
+                            }
+                            servicesContext.PedidoServices.EditMany(reparto.Pedidos);
+                            RepartoServices.ActualizarCantidadesDeReparto(reparto);
+                            servicesContext.RepartoServices.Edit(reparto);
+                        }
+                        //
+                        foreach (ProdVendido prod in prodVendidosDeLasNotas)
+                        {
+                            prod.PedidoId = null;
+                        }
+                    }
+                    //
+                    if (eliminarRegistros)
+                    {
+                        if (restarDeVentas)
+                        {
+                            List<ProdVendido> prodARestar = prodVendidosDeLasNotas.FindAll(x => x.RegistroVentaId != null);
+                            await servicesContext.VentaServices.RestarDesdeProdVendidosAsync(prodARestar);
+                        }
+                        //
+                        List<RegistroVenta> registrosAEliminar = prodVendidosDeLasNotas.Where(pv => pv.RegistroVentaId != null).Select(pv => pv.RegistroVenta).ToList();
+                        servicesContext.RegistroVentaServices.DeleteMany(registrosAEliminar);
+                        //
+                        foreach (ProdVendido prod in prodVendidosDeLasNotas)
+                        {
+                            prod.RegistroVentaId = null;
+                        }
+                    }
+                    //
+                    servicesContext.ProdVendidoServices.EditOrDeleteMany(prodVendidosDeLasNotas);
+                    //
+                    servicesContext.NotaDeEnvioServices.DeleteMany(notasAEliminar);
+                    //
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;
@@ -145,6 +187,9 @@ namespace linway_app.Forms
             textBox4EliminarHasta.Text = "";
             textBox5EliminarDesde.Visible = false;
             textBox5EliminarDesde.Text = "";
+            checkBox1EliminarIncluirRepartos.Checked = false;
+            checkBox2EliminarIncluirRegistros.Checked = false;
+            checkBox1EliminarRestarDeVentas.Checked = false;
             //
             await ActualizarNotas();
             EventoCombobox1ListaModalidad();

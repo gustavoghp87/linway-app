@@ -1,7 +1,5 @@
 ﻿using linway_app.PresentationHelpers;
 using linway_app.Services.FormServices;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -88,12 +86,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    var prodVendidoServices = sp.GetRequiredService<IProdVendidoServices>();
-                    var repartoServices = sp.GetRequiredService<IRepartoServices>();
-                    List<ProdVendido> prodVendidos = await prodVendidoServices.GetAllAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    List<ProdVendido> prodVendidos = await servicesContext.ProdVendidoServices.GetAllAsync();
                     Pedido pedidoEnElQueEsta = prodVendidos.FirstOrDefault(pv => pv.NotaDeEnvioId == _notaDeEnvioAReparto.Id)?.Pedido;
                     Pedido pedidoAlQueQuiereIr = _reparto.Pedidos.FirstOrDefault(x => x.ClienteId == _notaDeEnvioAReparto.ClienteId);
                     if (pedidoEnElQueEsta != null && pedidoAlQueQuiereIr != null && pedidoEnElQueEsta.Id == pedidoAlQueQuiereIr.Id)
@@ -103,7 +97,7 @@ namespace linway_app.Forms
                     }
                     if (pedidoAlQueQuiereIr == null)
                     {
-                        Cliente cliente = await clienteServices.GetPorIdAsync(_notaDeEnvioAReparto.ClienteId);
+                        Cliente cliente = await servicesContext.ClienteServices.GetPorIdAsync(_notaDeEnvioAReparto.ClienteId);
                         pedidoAlQueQuiereIr = PedidoServices.GetNuevoPedido(cliente, _reparto);
                     }
                     // prodVendidos
@@ -112,13 +106,13 @@ namespace linway_app.Forms
                     {
                         prodVendido.Pedido = pedidoAlQueQuiereIr;
                     }
-                    prodVendidoServices.EditMany(prodVendidosDeLaNota);
+                    servicesContext.ProdVendidoServices.EditMany(prodVendidosDeLaNota);
                     // pedido
                     if (pedidoAlQueQuiereIr.Id == 0)
                     {
                         pedidoAlQueQuiereIr.ProdVendidos = prodVendidosDeLaNota;
                         PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedidoAlQueQuiereIr, true);
-                        await pedidoServices.AddAsync(pedidoAlQueQuiereIr);
+                        await servicesContext.PedidoServices.AddAsync(pedidoAlQueQuiereIr);
                     }
                     else
                     {
@@ -127,27 +121,27 @@ namespace linway_app.Forms
                             pedidoAlQueQuiereIr.ProdVendidos.Add(pv);
                         }
                         PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedidoAlQueQuiereIr, true);
-                        pedidoServices.Edit(pedidoAlQueQuiereIr);
+                        servicesContext.PedidoServices.Edit(pedidoAlQueQuiereIr);
                     }
                     if (pedidoEnElQueEsta != null)
                     {
                         PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedidoEnElQueEsta, true);
-                        pedidoServices.Edit(pedidoEnElQueEsta);
+                        servicesContext.PedidoServices.Edit(pedidoEnElQueEsta);
                         Reparto repartoEnElQueEsta = pedidoEnElQueEsta.Reparto;
                         if (repartoEnElQueEsta.Id != _reparto.Id)
                         {
                             RepartoServices.ActualizarCantidadesDeReparto(repartoEnElQueEsta);
-                            repartoServices.Edit(repartoEnElQueEsta);
+                            servicesContext.RepartoServices.Edit(repartoEnElQueEsta);
                         }
                     }
                     // reparto
                     RepartoServices.ActualizarCantidadesDeReparto(_reparto);
-                    repartoServices.Edit(_reparto);
+                    servicesContext.RepartoServices.Edit(_reparto);
                     // guardado
-                    bool guardado = await savingServices.SaveAsync();
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;

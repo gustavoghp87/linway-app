@@ -121,6 +121,6 @@
     <value>17, 17</value>
   </metadata>
   <data name="label3.Text" xml:space="preserve">
-    <value>Al deshacer una Venta, se borrará el Registro y se descontarán los productos del listado de Ventas. También se sacarán estos productos del Reparto correspondiente si están en alguno. No se eliminará ninguna Nota de Envío aun si los productos tuvieran alguna asociada.</value>
+    <value>Se borrará el Registro. También se sacarán sus productos del Reparto correspondiente si están en alguno. Restar sus productos del contador de Ventas es opcional. No se eliminará ninguna Nota de Envío aun si los productos tuvieran alguna asociada.</value>
   </data>
 </root>

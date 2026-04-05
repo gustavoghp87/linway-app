@@ -1,6 +1,4 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -45,8 +43,7 @@ namespace linway_app.Forms
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
+                    var servicesContext = ServiceContext.Get(sp);
                     //
                     Reparto reparto = _lstDiaRepartos
                         .Find(x => x.Dia == diaReparto).Repartos.ToList()
@@ -91,11 +88,11 @@ namespace linway_app.Forms
                         pedidosAEditar.Add(pedido1);
                         pedidosAEditar.Add(pedido2);
                     }
-                    pedidoServices.EditMany(pedidosAEditar);
-                    bool guardado = await savingServices.SaveAsync();
+                    servicesContext.PedidoServices.EditMany(pedidosAEditar);
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;

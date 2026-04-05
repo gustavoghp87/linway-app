@@ -1,5 +1,4 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
@@ -30,12 +29,10 @@ namespace linway_app.Forms
             var respuesta = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    var ventaServices = sp.GetRequiredService<IVentaServices>();
-                    var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
-                    List<DiaReparto> dias = await diaRepartoServices.GetAllAsync();
-                    List<Venta> ventas = await ventaServices.GetAllAsync();
-                    List<RegistroVenta> registros = await registroVentaServices.GetAllAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    List<DiaReparto> dias = await servicesContext.DiaRepartoServices.GetAllAsync();
+                    List<Venta> ventas = await servicesContext.VentaServices.GetAllAsync();
+                    List<RegistroVenta> registros = await servicesContext.RegistroVentaServices.GetAllAsync();
                     return (dias, ventas, registros);
                 },
                 "No se pudieron buscar las Ventas y los Registros de Ventas",
@@ -72,6 +69,7 @@ namespace linway_app.Forms
             tbDesde.Text = "";
             tbHasta.Text = "";
             checkBox1.Checked = false;
+            checkBox3EliminarRegistroRestarDeVentas.Checked = false;
         }
         private void CancelarClick_Click(object sender, EventArgs ev)
         {
@@ -125,8 +123,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var exportarServices = sp.GetRequiredService<IExportarServices>();
-                    exportarServices.ExportarVentas(_lstVentas);
+                    var servicesContext = ServiceContext.Get(sp);
+                    servicesContext.ExportarServices.ExportarVentas(_lstVentas);
                     return true;
                 },
                 "No se pudieron buscar las Ventas y los Registros de Ventas",

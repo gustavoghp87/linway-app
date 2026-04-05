@@ -12,10 +12,6 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
-        public void Add(DiaReparto diaReparto)
-        {
-            _services.Add(diaReparto);
-        }
         public async Task<List<DiaReparto>> GetAllAsync()
         {
             List<DiaReparto> diasReparto = await _services.GetAllAsync();

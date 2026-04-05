@@ -6,7 +6,6 @@ Mejoras de características para próximas versiones:
 -Segundo campo para teléfono
 -En los campos de búsqueda por dirección hacer indistinto usar las tildes en las vocales
 -Lograr que la app sea reactiva a cambios en la base de datos
--Agregar opción de eliminar reparto
 -Lograr que se pueda usar la app sin tener encendida la pc host (base de datos en la nube)
 -En repartos reutilizar los 2 combobox en todas las opciones
 
@@ -30,6 +29,8 @@ ___________________________________Sistema Linway 15____________________________
  al usar "Enviar a Reparto" del Formulario de Ventas
 -En Formulario de Nota de Envío, en "Agregar a reparto", ahora avisa si la Nota de Envío ya
  estaba en el reparto destino y cancela
+-Se agregó opción de eliminar Reparto
+-Al eliminar o modificar Notas de Envío o Registros de Venta ahora hay opciones para impactar en Repartos y en Ventas
 -Datos ahora se eliminan realmente
 -Eliminar un cliente elimina sus Recibos y sus Detalles, sus Notas, sus Registros de Venta, y los
  Productos Vendidos asociados a estos últimos tres
@@ -38,6 +39,13 @@ ___________________________________Sistema Linway 15____________________________
 -Divididos los Forms en clases parciales por bloque de diseño
 -Índices de unicidad en la base de datos
 -Se corrieron los siguientes queries:
+
+--
+
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u linway -p -h localhost --no-tablespaces linway > linway_completo.sql
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u linway -p -h localhost --no-tablespaces --no-create-info linway > linway_completo.sql
+
+--
 
 DROP DATABASE linway;
 CREATE DATABASE linway;
@@ -164,6 +172,14 @@ DELETE FROM ProdVendidos WHERE NotaDeEnvioId IS NULL AND PedidoId IS NULL AND Re
 DELETE FROM Productos WHERE Id IN (52, 263, 264);
 SELECT pr.Id, pr.Nombre, COUNT(pv.Id) AS CantidadVendida, COUNT(ne.Id) AS CantidadNotas, COUNT(pe.Id) AS CantidadPedidos, COUNT(rv.Id) AS CantidadVentas FROM Productos pr LEFT JOIN ProdVendidos pv ON pv.ProductoId = pr.Id LEFT JOIN NotaDeEnvios ne ON ne.Id = pv.NotaDeEnvioId LEFT JOIN Pedidos pe ON pe.Id = pv.PedidoId LEFT JOIN RegistroVentas rv ON rv.Id = pv.RegistroVentaId WHERE pr.Nombre LIKE "ELIMINADO %" GROUP BY pr.Id ORDER BY pr.Id;
 --
+SELECT p.id, p.RepartoId, p.clienteId, p.Direccion, p.Entregar
+    FROM Pedidos
+    INNER JOIN (
+        SELECT * FROM Pedidos
+        WHERE Id IN (355, 460, 529, 544, 547, 1118, 1886, 1969, 2217)
+    ) p ON p.clienteId = Pedidos.ClienteId AND p.RepartoId = Pedidos.RepartoId
+    ORDER BY p.repartoId, p.clienteId
+;
 DELETE FROM Pedidos WHERE Id IN (355, 460, 529, 544, 547, 1118, 1886, 1969, 2217);
 ALTER TABLE Pedidos ADD UNIQUE KEY (RepartoId, ClienteId);
 --

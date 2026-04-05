@@ -1,6 +1,4 @@
 ﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Enums;
 using System;
@@ -88,8 +86,8 @@ namespace linway_app.Forms
             Cliente cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetPorIdAsync(clienteId);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ClienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -119,8 +117,8 @@ namespace linway_app.Forms
             Cliente cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    return await clienteServices.GetPorDireccionAsync(direccion);
+                    var servicesContext = ServiceContext.Get(sp);
+                    return await servicesContext.ClienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -148,12 +146,9 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var savingServices = sp.GetRequiredService<ISavingServices>();
-                    var clienteServices = sp.GetRequiredService<IClienteServices>();
-                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
-                    var pedidoServices = sp.GetRequiredService<IPedidoServices>();
-                    clienteServices.Edit(_clienteAEditar);
-                    List<DiaReparto> dias = await diaRepartoServices.GetAllAsync();
+                    var servicesContext = ServiceContext.Get(sp);
+                    servicesContext.ClienteServices.Edit(_clienteAEditar);
+                    List<DiaReparto> dias = await servicesContext.DiaRepartoServices.GetAllAsync();
                     List<Pedido> pedidosAEditar = dias
                         .SelectMany(dia => dia.Repartos)
                         .SelectMany(reparto => reparto.Pedidos)
@@ -163,11 +158,11 @@ namespace linway_app.Forms
                     {
                         pedido.Direccion = _clienteAEditar.Direccion;
                     }
-                    pedidoServices.EditMany(pedidosAEditar);
-                    bool guardado = await savingServices.SaveAsync();
+                    servicesContext.PedidoServices.EditMany(pedidosAEditar);
+                    bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {
-                        savingServices.DiscardChanges();
+                        servicesContext.SavingServices.DiscardChanges();
                         MessageBox.Show("No se hicieron cambios");
                     }
                     return guardado;
