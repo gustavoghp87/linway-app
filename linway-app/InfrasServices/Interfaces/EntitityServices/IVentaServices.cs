@@ -6,6 +6,7 @@ namespace linway_app.Services.Interfaces
 {
     public interface IVentaServices
     {
+        void Delete(Venta venta);
         void DeleteMany(ICollection<Venta> ventas);
         Task<List<Venta>> GetAllAsync();
         Task RestarDesdeProdVendidosAsync(ProdVendido prodVendido);

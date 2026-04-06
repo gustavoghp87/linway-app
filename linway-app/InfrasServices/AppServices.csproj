@@ -135,7 +135,6 @@
     <Compile Include="Interfaces\EntitityServices\ISavingServices.cs" />
     <Compile Include="Interfaces\IExportarServices.cs" />
     <Compile Include="FormServices\ClienteServices.cs" />
-    <Compile Include="AutoBackup.cs" />
     <Compile Include="FormServices\DetalleReciboServices.cs" />
     <Compile Include="FormServices\DiaRepartoServices.cs" />
     <Compile Include="Interfaces\EntitityServices\IVentaServices.cs" />

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Infrastructure.Repositories;
 using linway_app.PresentationHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
@@ -34,7 +35,7 @@ namespace linway_app.Forms
         private async void Form1_Load(object sender, EventArgs ev)
         {
             await Actualizar();
-            //generateDbBackup();
+            DbAutoBackup.Generar();
         }
         private async Task Actualizar()
         {

@@ -41,38 +41,6 @@ namespace linway_app.Forms
             _lstDiaRepartos = diaRepartos;
             ActualizarPedidosYGridDePedidos();
         }
-        //private async Task CrearDias()
-        //{
-        //    List<DiaReparto> diaDeRepartos = await UIExecutor.ExecuteAsync(
-        //        _scope,
-        //        async sp =>
-        //        {
-        //            var servicesContext = ServiceContext.Get(sp);
-        //            var nuevoDia = new DiaReparto();
-        //            string[] dias = new string[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" };
-        //            foreach (string dia in dias)
-        //            {
-        //                nuevoDia.Dia = dia;
-        //                diaRepartoServicios.Add(nuevoDia);
-        //            }
-        //            bool logradoFinal = await savingServices.SaveAsync();
-        //            if (!logradoFinal)
-        //            {
-        //                MessageBox.Show("No se crearon los Días de Reparto");
-        //                return null;
-        //            }
-        //            return await diaRepartoServicios.GetAllAsync();
-        //        },
-        //        "Algo falló",
-        //        this
-        //    );
-        //    if (diaDeRepartos == null || diaDeRepartos.Count == 0)
-        //    {
-        //        MessageBox.Show("Algo falla con la base de datos");
-        //        return;
-        //    }
-        //    _lstDiaRepartos = diaDeRepartos;
-        //}
         private async Task ReCargarHDR(string diaReparto, string nombreReparto)
         {
             await Actualizar();
@@ -108,8 +76,8 @@ namespace linway_app.Forms
             groupBox8.Visible = false;
             groupBox9.Visible = false;
             groupBox10.Visible = false;
-            label30.Text = "";
-            label31.Text = "";
+            label30ReposicionarObjetivo.Text = "";
+            label31ReposicionarReferencia.Text = "";
             textBox3.Text = "";
             textBox4.Text = "";
             textBox2.Text = "";
@@ -216,7 +184,6 @@ namespace linway_app.Forms
         {
             LimpiarPantalla();
             groupBox10.Visible = true;
-            //groupBox10.BringToFront();
         }
     }
 }

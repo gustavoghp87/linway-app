@@ -140,9 +140,10 @@ namespace Infrastructure.Repositories.DbContexts
             modelBuilder.Entity<Venta>(entity =>
             {
                 entity.HasIndex(e => e.Id);
-                entity.HasOne(d => d.Producto)
+                entity.HasIndex(e => e.ProductoId).IsUnique();
+                entity.HasOne(v => v.Producto)
                     .WithMany(p => p.Ventas)
-                    .HasForeignKey(d => d.ProductoId)
+                    .HasForeignKey(v => v.ProductoId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
             OnModelCreatingPartial(modelBuilder);

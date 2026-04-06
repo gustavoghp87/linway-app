@@ -79,8 +79,8 @@ namespace linway_app.Forms
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label31 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
+            this.label31ReposicionarReferencia = new System.Windows.Forms.Label();
+            this.label30ReposicionarObjetivo = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
@@ -628,8 +628,8 @@ namespace linway_app.Forms
             // 
             this.groupBox7.Controls.Add(this.textBox4);
             this.groupBox7.Controls.Add(this.textBox3);
-            this.groupBox7.Controls.Add(this.label31);
-            this.groupBox7.Controls.Add(this.label30);
+            this.groupBox7.Controls.Add(this.label31ReposicionarReferencia);
+            this.groupBox7.Controls.Add(this.label30ReposicionarObjetivo);
             this.groupBox7.Controls.Add(this.label29);
             this.groupBox7.Controls.Add(this.label28);
             this.groupBox7.Controls.Add(this.label27);
@@ -662,23 +662,23 @@ namespace linway_app.Forms
             // 
             // label31
             // 
-            this.label31.AutoSize = true;
-            this.label31.ForeColor = System.Drawing.Color.Blue;
-            this.label31.Location = new System.Drawing.Point(34, 134);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(61, 18);
-            this.label31.TabIndex = 17;
-            this.label31.Text = "label31";
+            this.label31ReposicionarReferencia.AutoSize = true;
+            this.label31ReposicionarReferencia.ForeColor = System.Drawing.Color.Blue;
+            this.label31ReposicionarReferencia.Location = new System.Drawing.Point(34, 134);
+            this.label31ReposicionarReferencia.Name = "label31";
+            this.label31ReposicionarReferencia.Size = new System.Drawing.Size(61, 18);
+            this.label31ReposicionarReferencia.TabIndex = 17;
+            this.label31ReposicionarReferencia.Text = "label31";
             // 
             // label30
             // 
-            this.label30.AutoSize = true;
-            this.label30.ForeColor = System.Drawing.Color.Blue;
-            this.label30.Location = new System.Drawing.Point(34, 83);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(61, 18);
-            this.label30.TabIndex = 16;
-            this.label30.Text = "label30";
+            this.label30ReposicionarObjetivo.AutoSize = true;
+            this.label30ReposicionarObjetivo.ForeColor = System.Drawing.Color.Blue;
+            this.label30ReposicionarObjetivo.Location = new System.Drawing.Point(34, 83);
+            this.label30ReposicionarObjetivo.Name = "label30";
+            this.label30ReposicionarObjetivo.Size = new System.Drawing.Size(61, 18);
+            this.label30ReposicionarObjetivo.TabIndex = 16;
+            this.label30ReposicionarObjetivo.Text = "label30";
             // 
             // label29
             // 
@@ -1330,8 +1330,8 @@ namespace linway_app.Forms
         private System.Windows.Forms.Button button14;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label31ReposicionarReferencia;
+        private System.Windows.Forms.Label label30ReposicionarObjetivo;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.CheckBox checkBox1;

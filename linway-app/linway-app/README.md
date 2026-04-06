@@ -38,12 +38,13 @@ ___________________________________Sistema Linway 15____________________________
  asociados a Registros de Venta, Pedidos o Notas de Envío
 -Divididos los Forms en clases parciales por bloque de diseño
 -Índices de unicidad en la base de datos
+-Implementado backup diario automático al abrir la aplicación por primera vez en el día (una copia local, una copia en OneDrive)
 -Se corrieron los siguientes queries:
 
 --
 
 "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u linway -p -h localhost --no-tablespaces linway > linway_completo.sql
-"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u linway -p -h localhost --no-tablespaces --no-create-info linway > linway_completo.sql
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u linway -p -h localhost --no-tablespaces --no-create-info linway > linway_datos.sql
 
 --
 
@@ -85,6 +86,7 @@ ALTER TABLE Recibos DROP COLUMN Estado;
 DELETE FROM Ventas WHERE Estado = "Eliminado";
 ALTER TABLE Ventas DROP COLUMN Estado;
 DELETE v FROM Ventas v INNER JOIN Productos p ON v.ProductoId = p.Id WHERE p.Estado = 'Eliminado';
+ALTER TABLE Ventas ADD UNIQUE KEY (ProductoId);
 --
 DELETE FROM Pedidos WHERE Estado = "Eliminado";
 ALTER TABLE Pedidos DROP COLUMN Estado;

@@ -25,27 +25,14 @@ namespace linway_app.Forms
         }
         private List<NotaDeEnvio> ObtenerListaAImprimir()
         {
-            var listaAImprimir = new List<NotaDeEnvio>();
-            string opcion = comboBox2TipoImprimir.SelectedItem.ToString();
+            string opcion = comboBox2TipoImprimir.SelectedItem?.ToString();
             if (opcion == "No impresas")
             {
-                foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
-                {
-                    if (nota.Impresa == 0)
-                    {
-                        listaAImprimir.Add(nota);
-                    }
-                }
+                return _lstNotaDeEnvios.FindAll(x => x.Impresa == 0);
             }
             else if (opcion == "Hoy")
             {
-                foreach (NotaDeEnvio nota in _lstNotaDeEnvios)
-                {
-                    if (nota.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha))
-                    {
-                        listaAImprimir.Add(nota);
-                    }
-                }
+                return _lstNotaDeEnvios.FindAll(x => x.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha));
             }
             else if (opcion == "Establecer rango" && textBox2ImprimirRangoDesde.Text != "")
             {
@@ -53,25 +40,18 @@ namespace linway_app.Forms
                 {
                     int rangoDesde = int.Parse(textBox2ImprimirRangoDesde.Text);
                     int rangoHasta = textBox3ImprimirRangoHasta.Text != "" ? int.Parse(textBox3ImprimirRangoHasta.Text) : rangoDesde;
-                    for (int i = rangoDesde; i <= rangoHasta; i++)
-                    {
-                        NotaDeEnvio nota = _lstNotaDeEnvios.Find(x => x.Id == i);
-                        if (nota != null)
-                        {
-                            listaAImprimir.Add(nota);
-                        }
-                    }
+                    return _lstNotaDeEnvios.FindAll(x => x.Id >= rangoDesde && x.Id <= rangoHasta);
                 }
                 catch {
                     MessageBox.Show("Rango establecido incorrecto");
                     return new List<NotaDeEnvio>();
                 }
             }
-            return listaAImprimir;
+            return new List<NotaDeEnvio>();
         }
         private void ComboBox2_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            string opcion = comboBox2TipoImprimir.SelectedItem.ToString();
+            string opcion = comboBox2TipoImprimir.SelectedItem?.ToString();
             if (opcion == "No impresas" || opcion == "Hoy")
             {
                 textBox2ImprimirRangoDesde.Visible = false;

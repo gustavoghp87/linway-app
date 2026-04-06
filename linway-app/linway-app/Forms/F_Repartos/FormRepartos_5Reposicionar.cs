@@ -16,11 +16,11 @@ namespace linway_app.Forms
                 //var auxList = _lstPedidos.Where(x => x.Entregar == 1).ToList();  comentado
                 var auxList = _lstPedidos.ToList();
                 var aux = auxList.Find(x => x.Direccion.ToLower().Contains(textBox3.Text.ToLower()));
-                label30.Text = aux != null ? aux.Direccion : "No encontrado";
+                label30ReposicionarObjetivo.Text = aux != null ? aux.Direccion : "No encontrado";
             }
             catch (Exception)
             {
-                label30.Text = "No encontrado";
+                label30ReposicionarObjetivo.Text = "No encontrado";
             }
         }
         private void TextBox4_TextChanged(object sender, EventArgs ev)
@@ -28,16 +28,16 @@ namespace linway_app.Forms
             //var auxList = _lstPedidos.Where(x => x.Entregar == 1).ToList();  comentado
             var auxList = _lstPedidos.ToList();
             var aux = auxList.Find(x => x.Direccion.ToLower().Contains(textBox4.Text.ToLower()));
-            label31.Text = aux != null ? aux.Direccion : "No encontrado";
+            label31ReposicionarReferencia.Text = aux != null ? aux.Direccion : "No encontrado";
         }
         private async void Button14_Click(object sender, EventArgs ev)           //   aceptar
         {
-            if (label30.Text == "No encontrado" || label30.Text == "" || label31.Text == "No encontrado" || label31.Text == "")
+            if (label30ReposicionarObjetivo.Text == "No encontrado" || label30ReposicionarObjetivo.Text == "" || label31ReposicionarReferencia.Text == "No encontrado" || label31ReposicionarReferencia.Text == "")
             {
                 return;
             }
-            string pedidoAMover = label30.Text;
-            string pedidoReferencia = label31.Text;
+            string pedidoAMover = label30ReposicionarObjetivo.Text;
+            string pedidoReferencia = label31ReposicionarReferencia.Text;
             string diaReparto = comboBox1ListaDias.Text;
             string nombreReparto = comboBox2ListaRepartos.Text;
             bool logrado = await UIExecutor.ExecuteAsync(

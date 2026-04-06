@@ -23,19 +23,12 @@ namespace linway_app.Forms
         }
         private void ComboBox3_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            var lFiltrada = new List<RegistroVenta>();
-            string opcion = comboBox3.SelectedItem.ToString();
+            string opcion = comboBox3.SelectedItem?.ToString();
             if (opcion == "Hoy")
             {
                 textBox2RegistrosFiltro.Text = "";
                 textBox2RegistrosFiltro.Visible = false;
-                foreach (RegistroVenta rActual in _lstRegistros)
-                {
-                    if (rActual.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha))
-                    {
-                        lFiltrada.Add(rActual);
-                    }
-                }
+                var lFiltrada = _lstRegistros.FindAll(rv => rv.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha));
                 ActualizarGrid1Registros(lFiltrada);
             }
             else if (opcion == "Todas")
@@ -64,15 +57,15 @@ namespace linway_app.Forms
         private void FiltrarDatos(string texto, char x)
         {
             texto = texto.Trim().ToLower();
-            var ListaFiltrada = new List<RegistroVenta>();
-            foreach (RegistroVenta rActual in _lstRegistros)
+            var listaFiltrada = new List<RegistroVenta>();
+            if (x == 'c')
             {
-                string nombreCliente = rActual.NombreCliente.Trim().ToLower();
-                if (x == 'c')
+                foreach (RegistroVenta rActual in _lstRegistros)
                 {
+                    string nombreCliente = rActual.NombreCliente.Trim().ToLower();
                     if (nombreCliente.Contains(texto))
                     {
-                        ListaFiltrada.Add(rActual);
+                        listaFiltrada.Add(rActual);
                     }
                     else
                     {
@@ -85,21 +78,18 @@ namespace linway_app.Forms
                         {
                             if (nombreCliente.Contains(nombre))
                             {
-                                ListaFiltrada.Add(rActual);
+                                listaFiltrada.Add(rActual);
                                 break;
                             }
                         }
                     }
                 }
-                else if (x == 'f')
-                {
-                    if (rActual.Fecha.Contains(texto))
-                    {
-                        ListaFiltrada.Add(rActual);
-                    }
-                }
             }
-            ActualizarGrid1Registros(ListaFiltrada);
+            else if (x == 'f')
+            {
+                listaFiltrada = _lstRegistros.FindAll(rv => rv.Fecha.Contains(texto));
+            }
+            ActualizarGrid1Registros(listaFiltrada);
         }
     }
 }

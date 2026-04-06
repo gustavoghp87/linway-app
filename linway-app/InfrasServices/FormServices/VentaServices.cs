@@ -13,6 +13,10 @@ namespace linway_app.Services.FormServices
         {
             _services = services;
         }
+        public void Delete(Venta venta)
+        {
+            _services.Delete(venta);
+        }
         public void DeleteMany(ICollection<Venta> ventas)
         {
             _services.DeleteMany(ventas);

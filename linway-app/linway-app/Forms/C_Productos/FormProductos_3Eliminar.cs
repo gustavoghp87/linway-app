@@ -130,7 +130,7 @@ namespace linway_app.Forms
                     Venta venta = ventas.Find(v => v.ProductoId == _productoAEliminar.Id);
                     if (venta != null)
                     {
-                        servicesContext.VentaServices.DeleteMany(new List<Venta> { venta });
+                        servicesContext.VentaServices.Delete(venta);
                     }
                     //
                     servicesContext.ProductoServices.Delete(_productoAEliminar);

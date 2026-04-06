@@ -34,7 +34,7 @@ namespace linway_app.Forms
         }
         private List<NotaDeEnvio> ObtenerListaABorrar()
         {
-            string opcion = comboBox3EliminarModalidad.SelectedItem.ToString();
+            string opcion = comboBox3EliminarModalidad.SelectedItem?.ToString();
             if (opcion == "Establecer rango" && textBox5EliminarDesde.Text != "")
             {
                 if (!long.TryParse(textBox5EliminarDesde.Text, out long rangoDesde))

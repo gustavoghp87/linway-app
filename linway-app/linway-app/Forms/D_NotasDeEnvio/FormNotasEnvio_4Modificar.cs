@@ -12,9 +12,6 @@ namespace linway_app.Forms
     public partial class FormNotasEnvio : Form
     {
         private NotaDeEnvio _notaDeEnvioAModificar;
-        private Producto _productoAAgregar;
-        private ProdVendido _prodVendidoAQuitar;
-        private int _cantidadAAgregar;
         private void ActualizarGrid2AgregarProductoANota(ICollection<ProdVendido> lstProdVendidos)
         {
             var grid = new List<EProdVendido>();
@@ -96,7 +93,12 @@ namespace linway_app.Forms
                 label29ModificarQuitarExplicacion.Text += " Y también lo remueve del Registro de Venta. Se resta de Ventas opcionalmente.";
             }
         }
-        // Agregar
+    }
+
+    public partial class FormNotasEnvio : Form  // Agregar un producto a la nota de envío
+    {
+        private Producto _productoAAgregar;
+        private int _cantidadAAgregar;
         private async void TextBox9_TextChanged(object sender, EventArgs ev)     // producto por Id
         {
             _productoAAgregar = null;
@@ -296,7 +298,11 @@ namespace linway_app.Forms
             label2ModificarAgregarExplicacion.Text = "";
             label29ModificarQuitarExplicacion.Text = "";
         }
-        //Quitar
+    }
+
+    public partial class FormNotasEnvio : Form  // Quitar un producto de la nota de envío
+    {
+        private ProdVendido _prodVendidoAQuitar;
         private void TextBox8_TextChanged(object sender, EventArgs ev)  // producto por nombre a quitar
         {
             _prodVendidoAQuitar = null;
@@ -355,9 +361,8 @@ namespace linway_app.Forms
                     _notaDeEnvioAModificar.Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(_notaDeEnvioAModificar.ProdVendidos);
                     servicesContext.NotaDeEnvioServices.Edit(_notaDeEnvioAModificar);
                     //
-                    _prodVendidoAQuitar.NotaDeEnvioId = null;
-                    _prodVendidoAQuitar.PedidoId = null;
-                    _prodVendidoAQuitar.RegistroVentaId = null;  // nada para actualizar en RV
+                    // nada para actualizar en RV
+                    //
                     servicesContext.ProdVendidoServices.Delete(_prodVendidoAQuitar);
                     //
                     bool guardado = await servicesContext.SavingServices.SaveAsync();

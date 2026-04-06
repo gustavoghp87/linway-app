@@ -39,22 +39,14 @@ namespace linway_app.Forms
         }
         private List<Recibo> ObtenerListaABorrar()
         {
-            var listaABorrar = new List<Recibo>();
-            string opcion = comboBox3EliminarTipo.SelectedItem.ToString();
+            string opcion = comboBox3EliminarTipo.SelectedItem?.ToString();
             if (opcion == "Establecer rango" && textBox5EliminarRangoDesde.Text != "")
             {
                 try
                 {
                     int rangoDesde = int.Parse(textBox5EliminarRangoDesde.Text);
                     int rangoHasta = textBox4EliminarRangoHasta.Text != "" ? int.Parse(textBox4EliminarRangoHasta.Text) : rangoDesde;
-                    for (int i = rangoDesde; i <= rangoHasta; i++)
-                    {
-                        var recibo = _lstRecibos.Find(x => x.Id == i);
-                        if (recibo != null)
-                        {
-                            listaABorrar.Add(recibo);
-                        }
-                    }
+                    return _lstRecibos.FindAll(x => x.Id >= rangoDesde && x.Id <= rangoHasta);
                 }
                 catch (Exception e)
                 {
@@ -64,25 +56,13 @@ namespace linway_app.Forms
             }
             else if (opcion == "Todas")
             {
-                foreach (Recibo recibo in _lstRecibos)
-                {
-                    if (recibo != null)
-                    {
-                        listaABorrar.Add(recibo);
-                    }
-                }
+                return _lstRecibos;
             }
             else if (opcion == "Impresas")
             {
-                foreach (Recibo recibo in _lstRecibos)
-                {
-                    if (recibo != null && recibo.Impreso == 1)
-                    {
-                        listaABorrar.Add(recibo);
-                    }
-                }
+                return _lstRecibos.FindAll(x => x.Impreso == 1);
             }
-            return listaABorrar;
+            return new List<Recibo>();
         }
         private void Button3_Click(object sender, EventArgs ev)      // aceptar antes de confirmar
         {

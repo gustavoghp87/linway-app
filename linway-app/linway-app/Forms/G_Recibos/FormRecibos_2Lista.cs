@@ -24,20 +24,13 @@ namespace linway_app.Forms
         }
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)
         {
-            var lstRecibosFiltrados = new List<Recibo>();
             string opcion = comboBox1FiltrarLista.SelectedItem?.ToString();
             if (opcion == "Hoy")
             {
                 label2.Text = "";
                 textBox1.Text = "";
                 textBox1.Visible = false;
-                foreach (Recibo recibo in _lstRecibos)
-                {
-                    if (recibo.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha))
-                    {
-                        lstRecibosFiltrados.Add(recibo);
-                    }
-                }
+                var lstRecibosFiltrados = _lstRecibos.FindAll(r => r.Fecha == DateTime.Now.ToString(Constants.FormatoDeFecha));
                 ActualizarGridRecibos(lstRecibosFiltrados);
             }
             else if (opcion == "Todas")
@@ -52,13 +45,7 @@ namespace linway_app.Forms
                 label2.Text = "";
                 textBox1.Text = "";
                 textBox1.Visible = false;
-                foreach (Recibo recibo in _lstRecibos)
-                {
-                    if (recibo.Impreso == 1)
-                    {
-                        lstRecibosFiltrados.Add(recibo);
-                    }
-                }
+                var lstRecibosFiltrados = _lstRecibos.FindAll(r => r.Impreso == 1);
                 ActualizarGridRecibos(lstRecibosFiltrados);
             }
             else if (opcion == "No impresas")
@@ -66,13 +53,7 @@ namespace linway_app.Forms
                 label2.Text = "";
                 textBox1.Text = "";
                 textBox1.Visible = false;
-                foreach (Recibo recibo in _lstRecibos)
-                {
-                    if (recibo.Impreso == 0)
-                    {
-                        lstRecibosFiltrados.Add(recibo);
-                    }
-                }
+                var lstRecibosFiltrados = _lstRecibos.FindAll(r => r.Impreso == 0);
                 ActualizarGridRecibos(lstRecibosFiltrados);
             }
             else if (opcion == "Cliente")
