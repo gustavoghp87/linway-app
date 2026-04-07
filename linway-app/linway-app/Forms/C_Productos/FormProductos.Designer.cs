@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormProductos));
             this.gbBorrar = new System.Windows.Forms.GroupBox();
+            this.label2EliminarExplicacion = new System.Windows.Forms.Label();
             this.textBox1EliminarProductoNombre = new System.Windows.Forms.TextBox();
             this.BusqNombreLabel = new System.Windows.Forms.Label();
             this.cbSeguroBorrar = new System.Windows.Forms.CheckBox();
@@ -70,6 +70,7 @@
             // 
             // gbBorrar
             // 
+            this.gbBorrar.Controls.Add(this.label2EliminarExplicacion);
             this.gbBorrar.Controls.Add(this.textBox1EliminarProductoNombre);
             this.gbBorrar.Controls.Add(this.BusqNombreLabel);
             this.gbBorrar.Controls.Add(this.cbSeguroBorrar);
@@ -84,6 +85,13 @@
             this.gbBorrar.TabIndex = 41;
             this.gbBorrar.TabStop = false;
             this.gbBorrar.Text = "Borrar Producto";
+            // 
+            // label2EliminarExplicacion
+            // 
+            this.label2EliminarExplicacion.Location = new System.Drawing.Point(10, 115);
+            this.label2EliminarExplicacion.Name = "label2EliminarExplicacion";
+            this.label2EliminarExplicacion.Size = new System.Drawing.Size(254, 70);
+            this.label2EliminarExplicacion.TabIndex = 8;
             // 
             // textBox1EliminarProductoNombre
             // 
@@ -107,20 +115,20 @@
             // cbSeguroBorrar
             // 
             this.cbSeguroBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbSeguroBorrar.Location = new System.Drawing.Point(14, 120);
+            this.cbSeguroBorrar.Location = new System.Drawing.Point(11, 192);
             this.cbSeguroBorrar.Name = "cbSeguroBorrar";
-            this.cbSeguroBorrar.Size = new System.Drawing.Size(254, 83);
+            this.cbSeguroBorrar.Size = new System.Drawing.Size(163, 41);
             this.cbSeguroBorrar.TabIndex = 5;
-            this.cbSeguroBorrar.Text = resources.GetString("cbSeguroBorrar.Text");
+            this.cbSeguroBorrar.Text = "Estoy seguro que quiero borrar este producto.";
             this.cbSeguroBorrar.UseVisualStyleBackColor = true;
             // 
             // button22Eliminar
             // 
             this.button22Eliminar.Enabled = false;
             this.button22Eliminar.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button22Eliminar.Location = new System.Drawing.Point(161, 204);
+            this.button22Eliminar.Location = new System.Drawing.Point(180, 188);
             this.button22Eliminar.Name = "button22Eliminar";
-            this.button22Eliminar.Size = new System.Drawing.Size(86, 29);
+            this.button22Eliminar.Size = new System.Drawing.Size(86, 45);
             this.button22Eliminar.TabIndex = 4;
             this.button22Eliminar.Text = "Aceptar";
             this.button22Eliminar.UseVisualStyleBackColor = true;
@@ -130,7 +138,7 @@
             // 
             this.label46EliminarProductoNombre.AutoSize = true;
             this.label46EliminarProductoNombre.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label46EliminarProductoNombre.Location = new System.Drawing.Point(21, 96);
+            this.label46EliminarProductoNombre.Location = new System.Drawing.Point(13, 93);
             this.label46EliminarProductoNombre.Name = "label46EliminarProductoNombre";
             this.label46EliminarProductoNombre.Size = new System.Drawing.Size(0, 15);
             this.label46EliminarProductoNombre.TabIndex = 2;
@@ -496,5 +504,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Label label2EliminarExplicacion;
     }
 }

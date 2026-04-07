@@ -2,6 +2,7 @@
 using linway_app.Services.FormServices;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,9 +85,7 @@ namespace linway_app.Forms
                     {
                         Cliente = _cliente,
                         ClienteId = _cliente.Id,
-                        Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(_lstProdVendidosAAgregar),
                         Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
-                        ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(_lstProdVendidosAAgregar),
                         Impresa = 0,
                         //ProdVendidos = _lstProdVendidosAAgregar
                     };
@@ -120,12 +119,12 @@ namespace linway_app.Forms
                         {
                             _pedido = PedidoServices.GetNuevoPedido(_cliente, _reparto);
                         }
+                        _pedido.Entregar = 1;
                         foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
                         {
                             prodVendido.Pedido = _pedido;
                             _pedido.ProdVendidos.Add(prodVendido);
                         }
-                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(_pedido, true);  // pedido.Entregar = 1;
                         if (existiaPedido)
                         {
                             servicesContext.PedidoServices.Edit(_pedido);
@@ -142,8 +141,6 @@ namespace linway_app.Forms
                                 p.ProdVendidos = _pedido.ProdVendidos;
                             }
                         }
-                        RepartoServices.ActualizarCantidadesDeReparto(_pedido.Reparto);
-                        servicesContext.RepartoServices.Edit(_pedido.Reparto);
                     }
                     //
                     servicesContext.ProdVendidoServices.AddMany(_lstProdVendidosAAgregar);

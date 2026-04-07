@@ -1,6 +1,7 @@
 ﻿using linway_app.PresentationHelpers;
 using linway_app.Services.FormServices;
 using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -111,8 +112,6 @@ namespace linway_app.Forms
                     if (pedidoAlQueQuiereIr.Id == 0)
                     {
                         pedidoAlQueQuiereIr.ProdVendidos = prodVendidosDeLaNota;
-                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedidoAlQueQuiereIr, true);
-                        await servicesContext.PedidoServices.AddAsync(pedidoAlQueQuiereIr);
                     }
                     else
                     {
@@ -120,23 +119,9 @@ namespace linway_app.Forms
                         {
                             pedidoAlQueQuiereIr.ProdVendidos.Add(pv);
                         }
-                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedidoAlQueQuiereIr, true);
+                        pedidoAlQueQuiereIr.Entregar = 1;
                         servicesContext.PedidoServices.Edit(pedidoAlQueQuiereIr);
                     }
-                    if (pedidoEnElQueEsta != null)
-                    {
-                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedidoEnElQueEsta, true);
-                        servicesContext.PedidoServices.Edit(pedidoEnElQueEsta);
-                        Reparto repartoEnElQueEsta = pedidoEnElQueEsta.Reparto;
-                        if (repartoEnElQueEsta.Id != _reparto.Id)
-                        {
-                            RepartoServices.ActualizarCantidadesDeReparto(repartoEnElQueEsta);
-                            servicesContext.RepartoServices.Edit(repartoEnElQueEsta);
-                        }
-                    }
-                    // reparto
-                    RepartoServices.ActualizarCantidadesDeReparto(_reparto);
-                    servicesContext.RepartoServices.Edit(_reparto);
                     // guardado
                     bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)

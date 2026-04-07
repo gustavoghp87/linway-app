@@ -21,13 +21,13 @@ namespace linway_app.Forms
                 Nombre = textBox1AgregarRepartoNombre.Text,
                 DiaReparto = diaRep,
                 DiaRepartoId = diaRep.Id,
-                Ta = 0,
-                Tae = 0,
-                Td = 0,
-                Te = 0,
-                Tl = 0,
-                TotalB = 0,
-                Tt = 0
+                //Ta = 0,
+                //Tae = 0,
+                //Td = 0,
+                //Te = 0,
+                //Tl = 0,
+                //TotalB = 0,
+                //Tt = 0
             };
             var logrado = await UIExecutor.ExecuteAsync(
                 _scope,

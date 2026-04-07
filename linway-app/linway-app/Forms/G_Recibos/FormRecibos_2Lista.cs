@@ -17,9 +17,13 @@ namespace linway_app.Forms
             }
             dataGridView1.DataSource = grid1;
             dataGridView1.Columns[0].Width = 50;
+            dataGridView1.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
             dataGridView1.Columns[1].Width = 50;
+            dataGridView1.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
             dataGridView1.Columns[2].Width = 350;
+            dataGridView1.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
             dataGridView1.Columns[3].Width = 80;
+            dataGridView1.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
             lCantRecibos.Text = lstRecibos.Count.ToString() + " recibos.";
         }
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs ev)

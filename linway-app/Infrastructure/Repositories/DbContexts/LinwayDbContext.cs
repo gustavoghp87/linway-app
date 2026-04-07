@@ -65,8 +65,8 @@ namespace Infrastructure.Repositories.DbContexts
             modelBuilder.Entity<Pedido>(entity =>
             {
                 entity.HasIndex(e => e.Id);
-                entity.Property(e => e.Ae).HasColumnName("AE");
-                entity.Property(e => e.Direccion).IsRequired().HasMaxLength(80);
+                //entity.Property(e => e.Ae).HasColumnName("AE");
+                //entity.Property(e => e.Direccion).IsRequired().HasMaxLength(80);
                 entity.HasOne(d => d.Cliente)
                     .WithMany(p => p.Pedidos)
                     .HasForeignKey(d => d.ClienteId)
@@ -76,6 +76,12 @@ namespace Infrastructure.Repositories.DbContexts
                     .HasForeignKey(d => d.RepartoId)
                     .OnDelete(DeleteBehavior.Restrict);
                 entity.HasIndex(e => new { e.ClienteId, e.RepartoId }).IsUnique();
+            });
+            modelBuilder.Entity<Producto>(entity =>
+            {
+                entity.HasIndex(e => e.Id);
+                entity.Property(e => e.Nombre).IsRequired().HasMaxLength(60);
+                entity.HasIndex(e => e.Nombre).IsUnique();
             });
             modelBuilder.Entity<ProdVendido>(entity =>
             {
@@ -94,12 +100,6 @@ namespace Infrastructure.Repositories.DbContexts
                 entity.HasOne(d => d.RegistroVenta)
                     .WithMany(p => p.ProdVendidos)
                     .HasForeignKey(d => d.RegistroVentaId);
-            });
-            modelBuilder.Entity<Producto>(entity =>
-            {
-                entity.HasIndex(e => e.Id);
-                entity.Property(e => e.Nombre).IsRequired().HasMaxLength(60);
-                entity.HasIndex(e => e.Nombre).IsUnique();
             });
             modelBuilder.Entity<Recibo>(entity =>
             {
@@ -125,12 +125,12 @@ namespace Infrastructure.Repositories.DbContexts
             {
                 entity.HasIndex(e => e.Id);
                 entity.Property(e => e.Nombre).IsRequired().HasMaxLength(40);
-                entity.Property(e => e.Ta).HasColumnName("TA");
-                entity.Property(e => e.Tae).HasColumnName("TAE");
-                entity.Property(e => e.Td).HasColumnName("TD");
-                entity.Property(e => e.Te).HasColumnName("TE");
-                entity.Property(e => e.Tl).HasColumnName("TL");
-                entity.Property(e => e.Tt).HasColumnName("TT");
+                //entity.Property(e => e.Ta).HasColumnName("TA");
+                //entity.Property(e => e.Tae).HasColumnName("TAE");
+                //entity.Property(e => e.Td).HasColumnName("TD");
+                //entity.Property(e => e.Te).HasColumnName("TE");
+                //entity.Property(e => e.Tl).HasColumnName("TL");
+                //entity.Property(e => e.Tt).HasColumnName("TT");
                 entity.HasOne(d => d.DiaReparto)
                     .WithMany(p => p.Repartos)
                     .HasForeignKey(d => d.DiaRepartoId)

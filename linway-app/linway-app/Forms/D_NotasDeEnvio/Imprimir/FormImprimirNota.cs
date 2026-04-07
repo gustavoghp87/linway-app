@@ -2,10 +2,12 @@
 using linway_app.Services.FormServices;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
+using Models.Entities;
 using Models.Enums;
 using System;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -41,7 +43,7 @@ namespace linway_app.Forms
                 lCalle.Text = _notaDeEnvio.Cliente.Direccion;
                 //lLocalidad.Text = nota_notaDeEnvioDeEnvio.Client.Direccion.Substring(separador + 1);
                 lLocalidad.Text = " ";
-                lTotal.Text = "$ " + _notaDeEnvio.ImporteTotal.ToString(".00");
+                lTotal.Text = "$ " + _notaDeEnvio.ProdVendidos.ToList().Sum(prodVendido => prodVendido.Cantidad * prodVendido.Precio).ToString(".00");
                 foreach (ProdVendido pvActual in _notaDeEnvio.ProdVendidos)
                 {
                     if (pvActual.Producto.Tipo == TipoProducto.Saldo.ToString())

@@ -103,19 +103,11 @@ namespace linway_app.Forms
                         servicesContext.NotaDeEnvioServices.DeleteMany(notasDelCliente);
                     }
                     {
-                        // se eliminan sus Pedidos con sus Productos Vendidos, y se actualizan los Repartos a los que correspondan
+                        // se eliminan sus Pedidos con sus Productos Vendidos
                         List<Pedido> pedidos = await servicesContext.PedidoServices.GetAllAsync();
                         List<Pedido> pedidosDelCliente = pedidos.FindAll(p => p.ClienteId == _clienteAEliminar.Id);
                         servicesContext.ProdVendidoServices.DeleteMany(pedidosDelCliente.SelectMany(p => p.ProdVendidos).ToList());
                         servicesContext.PedidoServices.DeleteMany(pedidosDelCliente);
-                        List<Reparto> repartos = await servicesContext.RepartoServices.GetAllAsync();
-                        List<Reparto> repartosDelCliente = repartos.FindAll(r => r.Pedidos.Any(p => p.ClienteId == _clienteAEliminar.Id));
-                        foreach (Reparto reparto in repartosDelCliente)
-                        {
-                            reparto.Pedidos.ToList().RemoveAll(p => p.ClienteId == _clienteAEliminar.Id);
-                            RepartoServices.ActualizarCantidadesDeReparto(reparto);
-                            servicesContext.RepartoServices.Edit(reparto);
-                        }
                     }
                     {
                         // se eliminan sus Registros de Venta con sus Productos Vendidos

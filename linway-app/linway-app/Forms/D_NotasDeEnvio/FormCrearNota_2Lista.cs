@@ -17,7 +17,11 @@ namespace linway_app.Forms
             }
             dataGridView4.DataSource = grid;
             dataGridView4.Columns[0].Width = 28;
+            dataGridView4.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
             dataGridView4.Columns[1].Width = 200;
+            dataGridView4.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
+            dataGridView4.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
+            dataGridView4.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
         }
         private void LimpiarLista()
         {

@@ -19,7 +19,6 @@ namespace linway_app.Services.FormServices
             {
                 producto.Nombre = producto.Nombre.Replace(char.Parse("'"), '"');
             }
-            // TODO: no permitir nombres repetidos
             _services.Add(producto);
         }
         public void Delete(Producto producto)
@@ -61,31 +60,31 @@ namespace linway_app.Services.FormServices
                 && producto.SubTipo == TipoSaldo.ACobrar.ToString();
             return isACobrar;
         }
-        public static bool IsBlanqueador(Producto product)
+        public static bool IsBlanqueador(Producto producto)
         {
-            bool isBlanqueador = product != null
-                && product.Tipo == TipoProducto.Polvo.ToString()
-                && product.SubTipo != null
-                && product.SubTipo == TipoPolvo.Blanqueador.ToString();
+            bool isBlanqueador = producto != null
+                && producto.Tipo == TipoProducto.Polvo.ToString()
+                && producto.SubTipo != null
+                && producto.SubTipo == TipoPolvo.Blanqueador.ToString();
             return isBlanqueador;
         }
-        public static bool IsLiquido(Producto product)
+        public static bool IsLiquido(Producto producto)
         {
-            bool isLiquido = product != null && product.Tipo == TipoProducto.Líquido.ToString();
+            bool isLiquido = producto != null && producto.Tipo == TipoProducto.Líquido.ToString();
             return isLiquido;
         }
-        public static bool IsNegativePrice(Producto product)
+        public static bool IsNegativePrice(Producto producto)
         {
-            bool isNegativePrice = product.Tipo == TipoProducto.Saldo.ToString()
-                && (product.SubTipo == TipoSaldo.Bonificacion.ToString()
-                    || product.SubTipo == TipoSaldo.Devolucion.ToString()
-                    || product.SubTipo == TipoSaldo.SaldoAFavor.ToString()
+            bool isNegativePrice = producto.Tipo == TipoProducto.Saldo.ToString()
+                && (producto.SubTipo == TipoSaldo.Bonificacion.ToString()
+                    || producto.SubTipo == TipoSaldo.Devolucion.ToString()
+                    || producto.SubTipo == TipoSaldo.SaldoAFavor.ToString()
                 );
             return isNegativePrice;
         }
-        public static bool IsPolvo(Producto product)
+        public static bool IsPolvo(Producto producto)
         {
-            bool isPolvo = product != null && product.Tipo == TipoProducto.Polvo.ToString();
+            bool isPolvo = producto != null && producto.Tipo == TipoProducto.Polvo.ToString();
             return isPolvo;
         }
         public static bool IsProducto(Producto producto)
@@ -93,9 +92,9 @@ namespace linway_app.Services.FormServices
             bool isProducto = producto.Tipo != TipoProducto.Saldo.ToString();
             return isProducto;
         }
-        public static bool IsSaldo(Producto product)
+        public static bool IsSaldo(Producto producto)
         {
-            bool isSaldo = product != null && product.Tipo == TipoProducto.Saldo.ToString();
+            bool isSaldo = producto != null && producto.Tipo == TipoProducto.Saldo.ToString();
             return isSaldo;
         }
         #endregion

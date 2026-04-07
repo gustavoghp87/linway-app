@@ -21,6 +21,7 @@ namespace linway_app.Forms
             }
             dataGridView2.DataSource = grid2;
             dataGridView2.Columns[0].Width = 140;
+            dataGridView2.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
         }
         private async void ClienteId_TextChanged(object sender, EventArgs ev)  // cliente por Id
         {

@@ -147,21 +147,7 @@ namespace linway_app.Forms
                 async sp =>
                 {
                     var servicesContext = ServiceContext.Get(sp);
-                    //
                     servicesContext.ClienteServices.Edit(_clienteAEditar);
-                    //
-                    List<DiaReparto> dias = await servicesContext.DiaRepartoServices.GetAllAsync();
-                    List<Pedido> pedidosAEditar = dias
-                        .SelectMany(dia => dia.Repartos)
-                        .SelectMany(reparto => reparto.Pedidos)
-                        .Where(pedido => pedido.ClienteId == _clienteAEditar.Id)
-                        .ToList();
-                    foreach (var pedido in pedidosAEditar)
-                    {
-                        pedido.Direccion = _clienteAEditar.Direccion;
-                    }
-                    servicesContext.PedidoServices.EditMany(pedidosAEditar);
-                    //
                     bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
                     {

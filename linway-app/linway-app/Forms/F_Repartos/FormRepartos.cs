@@ -104,20 +104,12 @@ namespace linway_app.Forms
                     var servicesContext = ServiceContext.Get(sp);
                     Reparto reparto = await servicesContext.RepartoServices.GetPorIdAsync(pedidoAEliminar.RepartoId);
                     //
-                    List<ProdVendido> prodVendidosDelPedido;
-                    {
-                        List<ProdVendido> prodVendidos = await servicesContext.ProdVendidoServices.GetAllAsync();
-                        prodVendidosDelPedido = prodVendidos.Where(x => x.PedidoId == pedidoAEliminar.Id).ToList();
-                    }
+                    List<ProdVendido> prodVendidosDelPedido = pedidoAEliminar.ProdVendidos.ToList();
                     foreach (ProdVendido prodVendido in prodVendidosDelPedido)
                     {
                         prodVendido.PedidoId = null;
                     }
                     servicesContext.ProdVendidoServices.EditOrDeleteMany(prodVendidosDelPedido);
-                    //
-                    reparto.Pedidos.Remove(pedidoAEliminar);
-                    RepartoServices.ActualizarCantidadesDeReparto(reparto);
-                    servicesContext.RepartoServices.Edit(reparto);
                     //
                     servicesContext.PedidoServices.Delete(pedidoAEliminar);
                     //

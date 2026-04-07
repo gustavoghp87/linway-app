@@ -1,5 +1,4 @@
-﻿using Models.OModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace Models.Entities
 {
@@ -12,8 +11,6 @@ namespace Models.Entities
 
         [DisplayName("Dirección")]
         public string Direccion { get; set; }
-
-        //public long RepartoId { get; set; }
 
         [DisplayName("Productos")]
         public string ProductosText { get; set; }

@@ -36,13 +36,10 @@ namespace linway_app.Forms
                     {
                         foreach (Pedido pedido in reparto.Pedidos)
                         {
-                            pedido.ProdVendidos = new List<ProdVendido>();
-                            PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, false);
+                            pedido.Entregar = 0;
                         }
-                        RepartoServices.ActualizarCantidadesDeReparto(reparto);
                     }
                     servicesContext.PedidoServices.EditMany(repartosALimpiar.SelectMany(x => x.Pedidos).ToList());
-                    servicesContext.RepartoServices.EditMany(repartosALimpiar);
                     //
                     bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
@@ -95,13 +92,10 @@ namespace linway_app.Forms
                     {
                         foreach (Pedido pedido in reparto.Pedidos)
                         {
-                            pedido.ProdVendidos = new List<ProdVendido>();
-                            PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, false);
+                            pedido.Entregar = 0;
                         }
-                        RepartoServices.ActualizarCantidadesDeReparto(reparto);
                     }
                     servicesContext.PedidoServices.EditMany(repartosALimpiar.SelectMany(x => x.Pedidos).ToList());
-                    servicesContext.RepartoServices.EditMany(repartosALimpiar);
                     //
                     bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
@@ -157,12 +151,9 @@ namespace linway_app.Forms
                     //
                     foreach (Pedido pedido in repartoALimpiar.Pedidos)
                     {
-                        pedido.ProdVendidos = new List<ProdVendido>();
-                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, false);
+                        pedido.Entregar = 0;
                     }
-                    RepartoServices.ActualizarCantidadesDeReparto(repartoALimpiar);
                     servicesContext.PedidoServices.EditMany(repartoALimpiar.Pedidos);
-                    servicesContext.RepartoServices.Edit(repartoALimpiar);
                     //
                     bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
@@ -188,8 +179,8 @@ namespace linway_app.Forms
         // 4. limpiar un pedido
         private void TextBox7_TextChanged(object sender, EventArgs ev)
         {
-            Pedido pedido = _lstPedidos.Find(x => x.Direccion.ToLower().Contains(textBox7.Text.ToLower()));
-            label36.Text = pedido != null ? pedido.Direccion : "No encontrado";
+            Pedido pedido = _lstPedidos.Find(x => x.Cliente.Direccion.ToLower().Contains(textBox7.Text.ToLower()));
+            label36.Text = pedido != null ? pedido.Cliente.Direccion : "No encontrado";
         }
         private async void Button18_Click(object sender, EventArgs ev)  // limpiar un pedido
         {
@@ -200,7 +191,7 @@ namespace linway_app.Forms
                 async sp => {
                     var servicesContext = ServiceContext.Get(sp);
                     //
-                    Pedido pedidoAEditar = _lstPedidos.Find(x => x.Direccion.Equals(direccion));
+                    Pedido pedidoAEditar = _lstPedidos.Find(x => x.Cliente.Direccion.Equals(direccion));
                     Reparto repartoAEditar = pedidoAEditar.Reparto;
                     List<ProdVendido> prodVendidosALimpiar = pedidoAEditar.ProdVendidos.ToList();
                     //
@@ -214,13 +205,10 @@ namespace linway_app.Forms
                     {
                         if (pedido.Id == pedidoAEditar.Id)
                         {
-                            pedido.ProdVendidos = new List<ProdVendido>();
-                            PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, false);
-                            servicesContext.PedidoServices.Edit(pedido);
+                            pedido.Entregar = 0;
                         }
                     }
-                    RepartoServices.ActualizarCantidadesDeReparto(repartoAEditar);
-                    servicesContext.RepartoServices.Edit(repartoAEditar);
+                    servicesContext.PedidoServices.EditMany(repartoAEditar.Pedidos);
                     //
                     bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)

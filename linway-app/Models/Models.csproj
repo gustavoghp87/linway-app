@@ -142,6 +142,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\EReparto.cs" />
     <Compile Include="LogsService.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Constants\Constants.cs" />
@@ -156,7 +157,6 @@
     <Compile Include="Entities\ERecibo.cs" />
     <Compile Include="Entities\ERegistroVenta.cs" />
     <Compile Include="Entities\EVenta.cs" />
-    <Compile Include="Entities\Mapping\MappingProfile.cs" />
     <Compile Include="Enums\TipoLiquido.cs" />
     <Compile Include="Enums\TipoPolvo.cs" />
     <Compile Include="Enums\TipoProducto.cs" />

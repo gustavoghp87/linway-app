@@ -2,6 +2,7 @@
 using linway_app.Services.Interfaces;
 using Microsoft.EntityFrameworkCore.Internal;
 using Models;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,32 @@ namespace linway_app.Forms
     public partial class FormProductos : Form
     {
         private Producto _productoAEliminar;
+        private void CargarEtiquetas()
+        {
+            label46EliminarProductoNombre.Text = $"{_productoAEliminar.Id} - {_productoAEliminar.Nombre}";
+            var tieneVentas = _productoAEliminar.Ventas.Any();
+            var tieneNotas = _productoAEliminar.ProdVendidos.Any(x => x.NotaDeEnvioId != null);
+            var tienePedidos = _productoAEliminar.ProdVendidos.Any(x => x.PedidoId != null);
+            var tieneRegistros = _productoAEliminar.ProdVendidos.Any(x => x.RegistroVentaId != null);
+            if (tieneNotas || tienePedidos || tieneRegistros)
+            {
+                label2EliminarExplicacion.Text = "No se puede eliminar este Producto porque tiene Notas, Pedidos y/o Registros asociados. Intentar eliminar para ver cuáles son.";
+            }
+            else if (tieneVentas)
+            {
+                label2EliminarExplicacion.Text = "Al eliminarse este Producto, se van a eliminar también sus Ventas";
+            }
+            else
+            {
+                label2EliminarExplicacion.Text = "Este Producto no tiene Notas, Pedidos, Registros ni Ventas asociados.";
+            }
+            button22Eliminar.Enabled = true;
+        }
         private async void TextBox21_TextChanged(object sender, EventArgs ev)  // producto por id
         {
             _productoAEliminar = null;
             cbSeguroBorrar.Checked = false;
+            label2EliminarExplicacion.Text = "";
             string numeroDeProducto = textBox21EliminarProductoNumero.Text;
             if (numeroDeProducto == "")
             {
@@ -45,13 +68,13 @@ namespace linway_app.Forms
                 return;
             }
             _productoAEliminar = producto;
-            label46EliminarProductoNombre.Text = producto.Nombre;
-            button22Eliminar.Enabled = true;
+            CargarEtiquetas();
         }
         private async void TextBox1_TextChanged(object sender, EventArgs ev)  // producto por nombre
         {
             _productoAEliminar = null;
             cbSeguroBorrar.Checked = false;
+            label2EliminarExplicacion.Text = "";
             string nombreDeProducto = textBox1EliminarProductoNombre.Text;
             if (nombreDeProducto == "")
             {
@@ -76,8 +99,7 @@ namespace linway_app.Forms
                 return;
             }
             _productoAEliminar = producto;
-            label46EliminarProductoNombre.Text = producto.Nombre;
-            button22Eliminar.Enabled = true;
+            CargarEtiquetas();
         }
         private async Task ValidarSiSePuedeEliminarAsync(IProdVendidoServices prodVendidoServices)
         {
@@ -154,6 +176,7 @@ namespace linway_app.Forms
             textBox21EliminarProductoNumero.Text = "";
             textBox1EliminarProductoNombre.Text = "";
             label46EliminarProductoNombre.Text = "";
+            label2EliminarExplicacion.Text = "";
             cbSeguroBorrar.Checked = false;
         }
     }

@@ -91,13 +91,14 @@ namespace linway_app.Forms
         }
         private void ActualizarCantidadesDeReparto(Reparto reparto)
         {
-            label14.Text = reparto.Ta.ToString();
-            label15.Text = reparto.Te.ToString();
-            label16.Text = reparto.Td.ToString();
-            label17.Text = reparto.Tt.ToString();
-            label18.Text = reparto.Tae.ToString();
-            label21.Text = reparto.TotalB.ToString();
-            label22.Text = reparto.Tl.ToString() + " litros";
+            var eReparto = Form1.Mapper.Map<EReparto>(reparto);
+            label14.Text = eReparto.Ta.ToString();
+            label15.Text = eReparto.Te.ToString();
+            label16.Text = eReparto.Td.ToString();
+            label17.Text = eReparto.Tt.ToString();
+            label18.Text = eReparto.Tae.ToString();
+            label21.Text = eReparto.TotalB.ToString();
+            label22.Text = eReparto.Tl.ToString() + " litros";
         }
         private void ActualizarCombobox1()
         {
@@ -174,7 +175,7 @@ namespace linway_app.Forms
             {
                 int row = e.RowIndex;
                 Pedido pedido = _lstPedidos.OrderBy(x => x.Orden).ToList()[row];
-                string direccion = pedido.Direccion;
+                string direccion = pedido.Cliente.Direccion;
                 DialogResult result = MessageBox.Show(
                     $"¿Eliminar {direccion} ? Cliente: {pedido.ClienteId}",
                     "Se va a eliminar " + direccion,

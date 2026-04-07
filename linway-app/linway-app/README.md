@@ -13,10 +13,8 @@ Mejoras de sistema para próximas versiones:
 ------------------------------------------
 -Separar dirección de localidad
 -Migrar de Windows Forms a WPS u otro más moderno
--Ver si eliminar el atributo Pedido.Direccion
 -ClienteId no debería ser obligatorio en Registro de Venta (por venta particular cargada desde Ventas)
 -Hacer queries de búsqueda a DB en lugar de traer toda una colección y filtrar por Linq
--Las etiquetas de los Repartos y las cantidades de los Pedidos y los Repartos deberían ser calculados dinámicamente ondemand o por procedimiento en la DB para simplificar todo
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,9 +46,9 @@ ___________________________________Sistema Linway 15____________________________
 
 --
 
-DROP DATABASE linway;
-CREATE DATABASE linway;
-USE linway;
+DROP DATABASE linway1;
+CREATE DATABASE linway1;
+USE linway1;
 SOURCE "C:\Users\g\Desktop\linway_completo.sql";
 
 --
@@ -122,29 +120,6 @@ DELETE pv FROM ProdVendidos pv INNER JOIN Pedidos pe ON pe.Id = pv.PedidoId INNE
 DELETE rv FROM RegistroVentas rv INNER JOIN Clientes c ON c.Id = rv.ClienteId WHERE c.Estado = 'Eliminado';
 DELETE ne FROM NotaDeEnvios ne INNER JOIN Clientes c ON c.Id = ne.ClienteId WHERE c.Estado = 'Eliminado';
 DELETE p FROM Pedidos p INNER JOIN Clientes c ON c.Id = p.ClienteId WHERE c.Estado = 'Eliminado';
-UPDATE Repartos r
-    JOIN (
-        SELECT 
-            RepartoId,
-            SUM(A)  AS Ta,
-            SUM(E)  AS Te,
-            SUM(D)  AS Td,
-            SUM(T)  AS Tt,
-            SUM(Ae) AS Tae,
-            SUM(L)  AS Tl,
-            SUM(A + E + T + Ae + D) AS TotalB
-        FROM Pedidos
-        GROUP BY RepartoId
-    ) p ON p.RepartoId = r.Id
-    SET 
-        r.Ta      = p.Ta,
-        r.Te      = p.Te,
-        r.Td      = p.Td,
-        r.Tt      = p.Tt,
-        r.Tae     = p.Tae,
-        r.Tl      = p.Tl,
-        r.TotalB  = p.TotalB
-;
 DELETE FROM Clientes WHERE Estado = "Eliminado";
 ALTER TABLE Clientes DROP COLUMN Estado;
 --
@@ -185,7 +160,23 @@ SELECT p.id, p.RepartoId, p.clienteId, p.Direccion, p.Entregar
 DELETE FROM Pedidos WHERE Id IN (355, 460, 529, 544, 547, 1118, 1886, 1969, 2217);
 ALTER TABLE Pedidos ADD UNIQUE KEY (RepartoId, ClienteId);
 --
-
+ALTER TABLE Repartos DROP COLUMN `TA`;
+ALTER TABLE Repartos DROP COLUMN `TE`;
+ALTER TABLE Repartos DROP COLUMN `TD`;
+ALTER TABLE Repartos DROP COLUMN `TT`;
+ALTER TABLE Repartos DROP COLUMN `TAE`;
+ALTER TABLE Repartos DROP COLUMN `TotalB`;
+ALTER TABLE Repartos DROP COLUMN `TL`;
+--
+ALTER TABLE Pedidos DROP COLUMN `Direccion`;
+ALTER TABLE Pedidos DROP COLUMN `L`;
+ALTER TABLE Pedidos DROP COLUMN `A`;
+ALTER TABLE Pedidos DROP COLUMN `E`;
+ALTER TABLE Pedidos DROP COLUMN `D`;
+ALTER TABLE Pedidos DROP COLUMN `T`;
+ALTER TABLE Pedidos DROP COLUMN `AE`;
+ALTER TABLE Pedidos DROP COLUMN `ProductosText`;
+--
 
 ___________________________________Sistema Linway 14__________________________________    junio 2023
 -Cambia base de datos de sqlite a MySQL

@@ -94,20 +94,6 @@ namespace linway_app.Forms
                         await servicesContext.VentaServices.RestarDesdeProdVendidosAsync(_registroVerEliminar.ProdVendidos);
                     }
                     //
-                    var pedido = _registroVerEliminar.ProdVendidos.FirstOrDefault(pv => pv.PedidoId != null)?.Pedido;
-                    if (pedido != null)
-                    {
-                        var prodVendidos = pedido.ProdVendidos.Where(pv => pv.RegistroVentaId != _registroVerEliminar.Id).ToList();
-                        pedido.ProdVendidos = prodVendidos;
-                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, pedido.Entregar == 1);
-                        servicesContext.PedidoServices.Edit(pedido);
-                        //
-                        Reparto reparto = await servicesContext.RepartoServices.GetPorIdAsync(pedido.RepartoId);
-                        reparto.Pedidos.Remove(pedido);
-                        RepartoServices.ActualizarCantidadesDeReparto(reparto);
-                        servicesContext.RepartoServices.Edit(reparto);
-                    }
-                    //
                     foreach (ProdVendido pv in _registroVerEliminar.ProdVendidos)
                     {
                         pv.RegistroVentaId = null;

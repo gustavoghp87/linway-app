@@ -15,8 +15,8 @@ namespace linway_app.Forms
             {
                 //var auxList = _lstPedidos.Where(x => x.Entregar == 1).ToList();  comentado
                 var auxList = _lstPedidos.ToList();
-                var aux = auxList.Find(x => x.Direccion.ToLower().Contains(textBox3.Text.ToLower()));
-                label30ReposicionarObjetivo.Text = aux != null ? aux.Direccion : "No encontrado";
+                var aux = auxList.Find(x => x.Cliente.Direccion.ToLower().Contains(textBox3.Text.ToLower()));
+                label30ReposicionarObjetivo.Text = aux != null ? aux.Cliente.Direccion : "No encontrado";
             }
             catch (Exception)
             {
@@ -27,8 +27,8 @@ namespace linway_app.Forms
         {
             //var auxList = _lstPedidos.Where(x => x.Entregar == 1).ToList();  comentado
             var auxList = _lstPedidos.ToList();
-            var aux = auxList.Find(x => x.Direccion.ToLower().Contains(textBox4.Text.ToLower()));
-            label31ReposicionarReferencia.Text = aux != null ? aux.Direccion : "No encontrado";
+            var aux = auxList.Find(x => x.Cliente.Direccion.ToLower().Contains(textBox4.Text.ToLower()));
+            label31ReposicionarReferencia.Text = aux != null ? aux.Cliente.Direccion : "No encontrado";
         }
         private async void Button14_Click(object sender, EventArgs ev)           //   aceptar
         {
@@ -48,8 +48,8 @@ namespace linway_app.Forms
                     Reparto reparto = _lstDiaRepartos
                         .Find(x => x.Dia == diaReparto).Repartos.ToList()
                         .Find(x => x.Nombre == nombreReparto);
-                    Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoAMover);
-                    Pedido pedido2 = reparto.Pedidos.ToList().Find(x => x.Direccion == pedidoReferencia);
+                    Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Cliente.Direccion == pedidoAMover);
+                    Pedido pedido2 = reparto.Pedidos.ToList().Find(x => x.Cliente.Direccion == pedidoReferencia);
                     long order1 = pedido1.Orden;
                     long order2 = pedido2.Orden;
                     if (order2 == order1)

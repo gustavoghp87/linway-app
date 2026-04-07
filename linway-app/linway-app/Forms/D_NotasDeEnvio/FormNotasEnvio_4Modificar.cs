@@ -240,23 +240,10 @@ namespace linway_app.Forms
                         existingProdVendido.Cantidad += nuevoProdVendido.Cantidad;
                         servicesContext.ProdVendidoServices.Edit(existingProdVendido);
                     }
-                    // se actualiza la nota de envío
-                    _notaDeEnvioAModificar.ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(_notaDeEnvioAModificar.ProdVendidos);
-                    _notaDeEnvioAModificar.Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(_notaDeEnvioAModificar.ProdVendidos);
-                    servicesContext.NotaDeEnvioServices.Edit(_notaDeEnvioAModificar);
                     // se actualizan las ventas
                     if (registroDeVentaId != null)
                     {
                         await servicesContext.VentaServices.SumarDesdeProdVendidosAsync(nuevoProdVendido);
-                    }
-                    // se actualiza el reparto si está la nota en el reparto (mediante sus prod. vendidos)
-                    if (pedido != null)
-                    {
-                        var reparto = await servicesContext.RepartoServices.GetPorIdAsync(pedido.RepartoId);
-                        RepartoServices.ActualizarCantidadesDeReparto(reparto);
-                        servicesContext.RepartoServices.Edit(reparto);
-                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, pedido.Entregar == 1);
-                        servicesContext.PedidoServices.Edit(pedido);
                     }
                     //
                     bool guardado = await servicesContext.SavingServices.SaveAsync();
@@ -346,21 +333,6 @@ namespace linway_app.Forms
                         await servicesContext.VentaServices.RestarDesdeProdVendidosAsync(_prodVendidoAQuitar);
                     }
                     //
-                    if (_prodVendidoAQuitar.PedidoId != null)
-                    {
-                        Pedido pedido = await servicesContext.PedidoServices.GetPorIdAsync((long)_prodVendidoAQuitar.PedidoId);
-                        pedido.ProdVendidos.Remove(_prodVendidoAQuitar);
-                        PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, pedido.Entregar == 1);
-                        servicesContext.PedidoServices.Edit(pedido);
-                        RepartoServices.ActualizarCantidadesDeReparto(pedido.Reparto);
-                        servicesContext.RepartoServices.Edit(pedido.Reparto);
-                    }
-                    //
-                    _notaDeEnvioAModificar.ProdVendidos.Remove(_prodVendidoAQuitar);
-                    _notaDeEnvioAModificar.ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(_notaDeEnvioAModificar.ProdVendidos);
-                    _notaDeEnvioAModificar.Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(_notaDeEnvioAModificar.ProdVendidos);
-                    servicesContext.NotaDeEnvioServices.Edit(_notaDeEnvioAModificar);
-                    //
                     // nada para actualizar en RV
                     //
                     servicesContext.ProdVendidoServices.Delete(_prodVendidoAQuitar);
@@ -384,7 +356,7 @@ namespace linway_app.Forms
             EventoCombobox1ListaModalidad();
             _lstProdVendidos = _notaDeEnvioAModificar.ProdVendidos.ToList();
             ActualizarGrid2AgregarProductoANota(_lstProdVendidos);
-            label20ModificarImporteTotal.Text = _notaDeEnvioAModificar.ImporteTotal.ToString();
+            label20ModificarImporteTotal.Text = _notaDeEnvioAModificar.ProdVendidos.ToList().Sum(prodVendido => prodVendido.Cantidad * prodVendido.Precio).ToString();
             textBox8QuitarProducto_Nombre.Text = "";
             checkBox1ModificarRestarDeVentas.Visible = false;
             label22ModificarQuitarProductoIdNombre.Text = "";

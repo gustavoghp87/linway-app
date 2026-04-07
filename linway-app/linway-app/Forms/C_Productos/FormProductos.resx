@@ -117,7 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="cbSeguroBorrar.Text" xml:space="preserve">
-    <value>Si el Producto a eliminar tiene contador de Ventas, se eliminará también. No se puede eliminar un Producto con Notas de Envío, Registros de Venta o Pedidos asociados. Estoy seguro que quiero borrar este producto.</value>
-  </data>
 </root>

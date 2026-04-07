@@ -1,5 +1,7 @@
 ﻿using linway_app.Services.Interfaces;
 using Models;
+using Models.Entities;
+using Models.Entities.Mapping;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
@@ -90,6 +92,7 @@ namespace linway_app.Services.Excel
             {
                 throw new Exception("No hay Repartos para exportar");
             }
+            var eReparto = MappingProfile.GetEReparto(reparto);
             string path = @"Excels/reparto-"
                 + DateTime.Now.ToString(Constants.FormatoDeFecha) + "-"
                 + reparto.DiaReparto.Dia.ToUpper() + "-" + reparto.Nombre + "-"
@@ -166,62 +169,63 @@ namespace linway_app.Services.Excel
 
             foreach (Pedido pedido in reparto.Pedidos.Where(x => x.Entregar == 1).OrderBy(x => x.Orden))
             {
+                var ePedido = MappingProfile.GetEPedido(pedido);
                 IRow row = sheet1.CreateRow(rowIndex);
 
                 ICell cellA = row.CreateCell(0);
-                cellA.SetCellValue(pedido.Direccion);
+                cellA.SetCellValue(ePedido.Direccion);
                 cellsToWrap.Add(cellA);
                 ICell cellB = row.CreateCell(1);
-                if (pedido.L != 0) cellB.SetCellValue(pedido.L);
+                if (ePedido.L != 0) cellB.SetCellValue(ePedido.L);
                 cellsToBold.Add(cellB);
                 ICell cellC = row.CreateCell(2);
-                if (pedido.ProductosText.Contains("x ")) pedido.ProductosText = pedido.ProductosText.Replace("x ", " ");
-                cellC.SetCellValue(pedido.ProductosText);
+                if (ePedido.ProductosText.Contains("x ")) ePedido.ProductosText = ePedido.ProductosText.Replace("x ", " ");
+                cellC.SetCellValue(ePedido.ProductosText);
                 cellsToWrap.Add(cellC);
                 ICell cellD = row.CreateCell(3);
-                if (pedido.A != 0)
+                if (ePedido.A != 0)
                 {
-                    cellD.SetCellValue(pedido.A);
-                    totalBolsas += (int)pedido.A;
-                    totalBolsasA += (int)pedido.A;
+                    cellD.SetCellValue(ePedido.A);
+                    totalBolsas += (int)ePedido.A;
+                    totalBolsasA += (int)ePedido.A;
                 }
                 cellsToBold.Add(cellD);
                 ICell cellE = row.CreateCell(4);
-                if (pedido.E != 0)
+                if (ePedido.E != 0)
                 {
-                    cellE.SetCellValue(pedido.E);
-                    totalBolsas += (int)pedido.E;
-                    totalBolsasE += (int)pedido.E;
+                    cellE.SetCellValue(ePedido.E);
+                    totalBolsas += (int)ePedido.E;
+                    totalBolsasE += (int)ePedido.E;
                 }
                 cellsToBold.Add(cellE);
                 ICell cellF = row.CreateCell(5);
-                if (pedido.D != 0)
+                if (ePedido.D != 0)
                 {
-                    cellF.SetCellValue(pedido.D);
-                    totalBolsas += (int)pedido.D;
-                    totalBolsasD += (int)pedido.D;
+                    cellF.SetCellValue(ePedido.D);
+                    totalBolsas += (int)ePedido.D;
+                    totalBolsasD += (int)ePedido.D;
                 }
                 cellsToBold.Add(cellF);
                 ICell cellG = row.CreateCell(6);
-                if (pedido.T != 0)
+                if (ePedido.T != 0)
                 {
-                    cellG.SetCellValue(pedido.T);
-                    totalBolsas += (int)pedido.T;
-                    totalBolsasT += (int)pedido.T;
+                    cellG.SetCellValue(ePedido.T);
+                    totalBolsas += (int)ePedido.T;
+                    totalBolsasT += (int)ePedido.T;
                 }
                 cellsToBold.Add(cellG);
                 ICell cellH = row.CreateCell(7);
-                if (pedido.Ae != 0)
+                if (ePedido.Ae != 0)
                 {
-                    cellH.SetCellValue(pedido.Ae);
-                    totalBolsas += (int)pedido.Ae;
-                    totalBolsasAe += (int)pedido.Ae;
+                    cellH.SetCellValue(ePedido.Ae);
+                    totalBolsas += (int)ePedido.Ae;
+                    totalBolsasAe += (int)ePedido.Ae;
                 }
                 cellsToBold.Add(cellH);
 
-                row.Height = pedido.Direccion.Length > 40 || pedido.ProductosText.Length > 120 ? (short)500 : row.Height;
-                row.Height = pedido.Direccion.Length > 80 || pedido.ProductosText.Length > 240 ? (short)1000 : row.Height;
-                row.Height = pedido.Direccion.Length > 120 || pedido.ProductosText.Length > 360 ? (short)1500 : row.Height;
+                row.Height = ePedido.Direccion.Length > 40 || ePedido.ProductosText.Length > 120 ? (short)500 : row.Height;
+                row.Height = ePedido.Direccion.Length > 80 || ePedido.ProductosText.Length > 240 ? (short)1000 : row.Height;
+                row.Height = ePedido.Direccion.Length > 120 || ePedido.ProductosText.Length > 360 ? (short)1500 : row.Height;
 
                 rowIndex++;
             }
@@ -244,9 +248,9 @@ namespace linway_app.Services.Excel
             IRow rowFinal = sheet1.CreateRow(rowIndex + 1);
             rowFinal.Height = 30 * 15;
             ICell cell15 = rowFinal.CreateCell(1);
-            cell15.SetCellValue(reparto.Tl);
+            cell15.SetCellValue(eReparto.Tl);
             ICell cell15b = rowFinal.CreateCell(2);
-            cell15b.SetCellValue("     PESO | Total litros: " + reparto.Tl + ",  Total bolsas: " + totalBolsas);
+            cell15b.SetCellValue("     PESO | Total litros: " + eReparto.Tl + ",  Total bolsas: " + totalBolsas);
             ICell cell16 = rowFinal.CreateCell(3);
             cell16.SetCellValue(totalBolsasA);
             ICell cell17 = rowFinal.CreateCell(4);

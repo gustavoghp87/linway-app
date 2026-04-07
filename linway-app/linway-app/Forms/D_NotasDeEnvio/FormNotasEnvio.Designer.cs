@@ -29,8 +29,8 @@ namespace linway_app.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button1Imprimir = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -101,11 +101,11 @@ namespace linway_app.Forms
             this.label17 = new System.Windows.Forms.Label();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.checkBox1EliminarIncluirRepartos = new System.Windows.Forms.CheckBox();
             this.checkBox2EliminarIncluirRegistros = new System.Windows.Forms.CheckBox();
             this.checkBox1EliminarRestarDeVentas = new System.Windows.Forms.CheckBox();
             this.labelCantidadDeNotas = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
-            this.checkBox1EliminarIncluirRepartos = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -125,14 +125,14 @@ namespace linway_app.Forms
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.Location = new System.Drawing.Point(12, 243);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -726,7 +726,7 @@ namespace linway_app.Forms
             this.label25ModificarAgregarProductoNombre.AutoSize = true;
             this.label25ModificarAgregarProductoNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label25ModificarAgregarProductoNombre.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label25ModificarAgregarProductoNombre.Location = new System.Drawing.Point(66, 69);
+            this.label25ModificarAgregarProductoNombre.Location = new System.Drawing.Point(122, 13);
             this.label25ModificarAgregarProductoNombre.Name = "label25ModificarAgregarProductoNombre";
             this.label25ModificarAgregarProductoNombre.Size = new System.Drawing.Size(0, 16);
             this.label25ModificarAgregarProductoNombre.TabIndex = 24;
@@ -892,14 +892,14 @@ namespace linway_app.Forms
             this.dataGridView2.AllowUserToDeleteRows = false;
             this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView2.Location = new System.Drawing.Point(3, 209);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
@@ -931,6 +931,16 @@ namespace linway_app.Forms
             this.tabPage2.Size = new System.Drawing.Size(460, 562);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Borrar";
+            // 
+            // checkBox1EliminarIncluirRepartos
+            // 
+            this.checkBox1EliminarIncluirRepartos.AutoSize = true;
+            this.checkBox1EliminarIncluirRepartos.Location = new System.Drawing.Point(12, 184);
+            this.checkBox1EliminarIncluirRepartos.Name = "checkBox1EliminarIncluirRepartos";
+            this.checkBox1EliminarIncluirRepartos.Size = new System.Drawing.Size(257, 17);
+            this.checkBox1EliminarIncluirRepartos.TabIndex = 20;
+            this.checkBox1EliminarIncluirRepartos.Text = "Eliminar de los Repartos cuando estén en alguno";
+            this.checkBox1EliminarIncluirRepartos.UseVisualStyleBackColor = true;
             // 
             // checkBox2EliminarIncluirRegistros
             // 
@@ -975,16 +985,6 @@ namespace linway_app.Forms
             this.button2.Text = "EXPORTAR A EXCEL";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.ExportarAExcel_Btn_Click);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1EliminarIncluirRepartos.AutoSize = true;
-            this.checkBox1EliminarIncluirRepartos.Location = new System.Drawing.Point(12, 184);
-            this.checkBox1EliminarIncluirRepartos.Name = "checkBox1";
-            this.checkBox1EliminarIncluirRepartos.Size = new System.Drawing.Size(257, 17);
-            this.checkBox1EliminarIncluirRepartos.TabIndex = 20;
-            this.checkBox1EliminarIncluirRepartos.Text = "Eliminar de los Repartos cuando estén en alguno";
-            this.checkBox1EliminarIncluirRepartos.UseVisualStyleBackColor = true;
             // 
             // FormNotasEnvio
             // 

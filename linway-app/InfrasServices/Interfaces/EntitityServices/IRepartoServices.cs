@@ -8,9 +8,6 @@ namespace linway_app.Services.Interfaces
     {
         void Add(Reparto reparto, List<DiaReparto> diaRepartos);
         void Delete(Reparto reparto);
-        void Edit(Reparto reparto);
-        void EditMany(ICollection<Reparto> repartos);
         Task<Reparto> GetPorIdAsync(long repartoId);
-        Task<List<Reparto>> GetAllAsync();
     }
 }

@@ -273,6 +273,7 @@ namespace linway_app.Forms
                         {
                             Cantidad = ventaNueva.Cantidad,
                             Descripcion = producto.Nombre,
+                            Pedido = enviarAReparto ? pedido : null,
                             Precio = producto.Precio,
                             ProductoId = producto.Id,
                             RegistroVenta = nuevoRegistroVenta
@@ -286,29 +287,12 @@ namespace linway_app.Forms
                     {
                         if (pedido.Id == 0)
                         {
-                            // Pedido
-                            pedido.ProdVendidos = prodVendidosAAgregar;
-                            PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, true);
                             await servicesContext.PedidoServices.AddAsync(pedido);
-                            // Reparto
-                            _repartoAgregar.Pedidos.Add(pedido);
-                            RepartoServices.ActualizarCantidadesDeReparto(pedido.Reparto);
-                            servicesContext.RepartoServices.Edit(pedido.Reparto);
                         }
                         else
                         {
-                            // Pedido
-                            foreach (var pv in prodVendidosAAgregar)
-                            {
-                                pedido.ProdVendidos.Add(pv);
-                            }
-                            PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, true);
+                            pedido.Entregar = 1;
                             servicesContext.PedidoServices.Edit(pedido);
-                            // Reparto
-                            var pedidoExistente = _repartoAgregar.Pedidos.FirstOrDefault(p => p.Id == pedido.Id);
-                            pedidoExistente.ProdVendidos = pedido.ProdVendidos;
-                            RepartoServices.ActualizarCantidadesDeReparto(_repartoAgregar);
-                            servicesContext.RepartoServices.Edit(_repartoAgregar);
                         }
                     }
                     //

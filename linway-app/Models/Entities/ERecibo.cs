@@ -1,5 +1,4 @@
-﻿using Models.OModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace Models.Entities
 {

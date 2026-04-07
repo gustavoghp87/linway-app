@@ -27,45 +27,10 @@ namespace linway_app.Services.FormServices
         {
             _services.Delete(reparto);
         }
-        public void Edit(Reparto reparto)
-        {
-            _services.Edit(reparto);
-        }
-        public void EditMany(ICollection<Reparto> repartos)
-        {
-            _services.EditMany(repartos);
-        }
         public async Task<Reparto> GetPorIdAsync(long repartoId)
         {
             Reparto reparto = await _services.GetAsync(repartoId);
             return reparto;
         }
-        public async Task<List<Reparto>> GetAllAsync()
-        {
-            List<Reparto> repartos = await _services.GetAllAsync();
-            return repartos;
-        }
-        #region static methods
-        public static void ActualizarCantidadesDeReparto(Reparto reparto)  // primero pedido, luego reparto
-        {
-            reparto.Ta = 0;
-            reparto.Te = 0;
-            reparto.Tt = 0;
-            reparto.Tae = 0;
-            reparto.Td = 0;
-            reparto.TotalB = 0;
-            reparto.Tl = 0;
-            reparto.Pedidos.ToList().ForEach(pedido =>
-            {
-                reparto.Ta += pedido.A;
-                reparto.Te += pedido.E;
-                reparto.Tt += pedido.T;
-                reparto.Tae += pedido.Ae;
-                reparto.Td += pedido.D;
-                reparto.TotalB += pedido.A + pedido.E + pedido.T + pedido.Ae + pedido.D;
-                reparto.Tl += pedido.L;
-            });
-        }
-        #endregion
     }
 }

@@ -117,22 +117,6 @@ namespace linway_app.Forms
                     //
                     if (eliminarDeLosRepartos)
                     {
-                        List<Reparto> repartos = prodVendidosDeLasNotas.Where(pv => pv.PedidoId != null).Select(pv => pv.Pedido).Select(p => p.Reparto).Distinct().ToList();
-                        foreach (Reparto reparto in repartos)
-                        {
-                            foreach (Pedido pedido in reparto.Pedidos)
-                            {
-                                foreach (ProdVendido prod in pedido.ProdVendidos.ToList())
-                                {
-                                    pedido.ProdVendidos.Remove(prod);
-                                }
-                                PedidoServices.ActualizarCantidadesYDescripcionDePedido(pedido, pedido.Entregar == 1);
-                            }
-                            servicesContext.PedidoServices.EditMany(reparto.Pedidos);
-                            RepartoServices.ActualizarCantidadesDeReparto(reparto);
-                            servicesContext.RepartoServices.Edit(reparto);
-                        }
-                        //
                         foreach (ProdVendido prod in prodVendidosDeLasNotas)
                         {
                             prod.PedidoId = null;

@@ -49,14 +49,14 @@ namespace linway_app.Forms
                 _pedidoAEliminar = null;
                 return;
             }
-            Pedido pedido = _lstPedidos.Find(x => x.Direccion.Trim().ToLower().Contains(direccion));
+            Pedido pedido = _lstPedidos.Find(x => x.Cliente.Direccion.Trim().ToLower().Contains(direccion));
             if (pedido == null)
             {
                 label32EliminarPedido_Direccion.Text = "No encontrado";
                 _pedidoAEliminar = null;
                 return;
             }
-            label32EliminarPedido_Direccion.Text = pedido.Direccion;
+            label32EliminarPedido_Direccion.Text = pedido.Cliente.Direccion;
             _pedidoAEliminar = pedido;
         }
         private void Button15_Click(object sender, EventArgs ev)

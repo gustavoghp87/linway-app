@@ -74,98 +74,13 @@ namespace linway_app.Services.FormServices
         }
         #endregion
         #region static methods
-        public static void ActualizarCantidadesYDescripcionDePedido(Pedido pedido, bool entregar)  // primero pedido, luego reparto
-        {
-            if (pedido == null)
-            {
-                return;
-            }
-            pedido.ProductosText = "";
-            pedido.A = 0;
-            pedido.Ae = 0;
-            pedido.D = 0;
-            pedido.E = 0;
-            pedido.L = 0;
-            pedido.T = 0;
-            var gruposPorProducto = pedido.ProdVendidos.GroupBy(pv => pv.Producto.Id);  // se agrupa para que Productos repetidos no tengan Descripción repetida
-            foreach (var grupo in gruposPorProducto)
-            {
-                ProdVendido referencia = grupo.First();
-                Producto producto = referencia.Producto;
-                long cantidadTotal = grupo.Sum(x => x.Cantidad);
-                string description = ProductoServices.IsProducto(producto)
-                    ? ProdVendidoServices.GetEditedDescripcion(referencia.Descripcion)
-                    : referencia.Descripcion;
-                if (ProductoServices.IsPolvo(producto) && !ProductoServices.IsBlanqueador(producto))
-                {
-                    int kilos = 20;
-                    long cantidadDeBolsas = cantidadTotal / kilos;
-                    switch (producto.SubTipo)
-                    {
-                        case string a when a == TipoPolvo.AlisonEspecial.ToString():
-                            pedido.Ae += cantidadDeBolsas;
-                            break;
-                        case string a when a == TipoPolvo.Alison.ToString():
-                            pedido.A += cantidadDeBolsas;
-                            break;
-                        case string a when a == TipoPolvo.Dispersán.ToString():
-                            pedido.D += cantidadDeBolsas;
-                            break;
-                        case string a when a == TipoPolvo.Texapol.ToString():
-                            pedido.T += cantidadDeBolsas;
-                            break;
-                        case string a when a == TipoPolvo.Eslabón.ToString():
-                            pedido.E += cantidadDeBolsas;
-                            break;
-                    }
-                    pedido.ProductosText += cantidadDeBolsas + "x20 " + description + " | ";
-                }
-                else if (!ProductoServices.IsSaldo(producto))
-                {
-                    if (ProductoServices.IsLiquido(producto))
-                    {
-                        pedido.L += cantidadTotal;
-                    }
-
-                    if (ProductoServices.IsBlanqueador(producto))
-                    {
-                        pedido.ProductosText += cantidadTotal.ToString() + " kg " + description + " | ";
-                    }
-                    else
-                    {
-                        pedido.ProductosText += cantidadTotal.ToString() + "x " + description + " | ";
-                    }
-                }
-                else if (ProductoServices.IsACobrar(producto))
-                {
-                    pedido.ProductosText += "A cobrar | ";
-                }
-            }
-            if (pedido.ProductosText.Length > 3)
-            {
-                var ultimosTres = pedido.ProductosText.Substring(pedido.ProductosText.Length - 3, 3);
-                if (ultimosTres == " | ")
-                {
-                    pedido.ProductosText = pedido.ProductosText.Substring(0, pedido.ProductosText.Length - 3);
-                }
-            }
-            pedido.Entregar = entregar ? 1 : 0;
-        }
         public static Pedido GetNuevoPedido(Cliente cliente, Reparto reparto)
         {
             return new Pedido()
             {
                 Cliente = cliente,
-                Direccion = cliente.Direccion,
-                Reparto = reparto,
                 Entregar = 1,
-                ProductosText = "",
-                L = 0,
-                A = 0,
-                Ae = 0,
-                D = 0,
-                E = 0,
-                T = 0
+                Reparto = reparto
             };
         }
         #endregion
