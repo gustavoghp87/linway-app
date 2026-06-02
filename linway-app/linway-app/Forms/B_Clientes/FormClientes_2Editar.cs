@@ -14,69 +14,65 @@ namespace linway_app.Forms
         private void LimpiarEditar_Click(object sender, EventArgs ev)
         {
             _clienteAEditar = null;
-            label23.Text = "";
-            radioButton3.Checked = false;
-            radioButton4.Checked = false;
-            textBox6.Text = "";
-            textBox10.Text = "";
-            textBox11.Text = "";
-            textBox14.Text = "";
-            textBox23.Text = "";
-            textBox24.Text = "";
-            textBox25.Text = "";
+            label23EditarDireccionActual.Text = "";
+            radioButton3EditarInscripto.Checked = false;
+            radioButton4EditarMonotributo.Checked = false;
+            textBox6EditarBusquedaDireccion.Text = "";
+            textBox10EditarCuitActual.Text = "";
+            textBox11EditarNombreActual.Text = "";
+            textBox14EditarBusquedaNumero.Text = "";
+            textBox23EditarDireccionNueva.Text = "";
+            textBox24EditarTelefonoActual.Text = "";
+            textBox25EditarCpActual.Text = "";
         }
         bool TodoOkModificarC()
         {
-            //var cuit = textBox10.Text;
-            //var nombre = textBox11.Text;
-            //var telefono = textBox24.Text;
-            //var cp = textBox25.Text;
-            var direccion = textBox23.Text;
-            return _clienteAEditar != null && direccion != "";
+            var direccionNueva = textBox23EditarDireccionNueva.Text;
+            return _clienteAEditar != null && direccionNueva != "" && (radioButton3EditarInscripto.Checked || radioButton4EditarMonotributo.Checked);
         }
         private void ActualizarEtiquetasDeClienteAEDitar(Cliente cliente)
         {
             if (cliente == null)
             {
-                label23.Text = "No encontrado";
-                textBox11.Text = "";
-                textBox10.Text = "";
-                textBox23.Text = "";
-                textBox24.Text = "";
-                textBox25.Text = "";
-                radioButton3.Checked = false;
-                radioButton4.Checked = false;
+                label23EditarDireccionActual.Text = "No encontrado";
+                textBox11EditarNombreActual.Text = "";
+                textBox10EditarCuitActual.Text = "";
+                textBox23EditarDireccionNueva.Text = "";
+                textBox24EditarTelefonoActual.Text = "";
+                textBox25EditarCpActual.Text = "";
+                radioButton3EditarInscripto.Checked = false;
+                radioButton4EditarMonotributo.Checked = false;
                 return;
             }
-            label23.Text = cliente.Direccion;
-            textBox23.Text = cliente.Direccion;
-            textBox24.Text = cliente.Telefono?.ToString();
-            textBox25.Text = cliente.CodigoPostal?.ToString();
-            textBox11.Text = cliente.Nombre;
-            textBox10.Text = cliente.Cuit;
+            label23EditarDireccionActual.Text = cliente.Direccion;
+            textBox23EditarDireccionNueva.Text = cliente.Direccion;
+            textBox24EditarTelefonoActual.Text = cliente.Telefono?.ToString();
+            textBox25EditarCpActual.Text = cliente.CodigoPostal?.ToString();
+            textBox11EditarNombreActual.Text = cliente.Nombre;
+            textBox10EditarCuitActual.Text = cliente.Cuit;
             if (cliente.Tipo == TipoR.Inscripto.ToString())
             {
-                radioButton3.Checked = true;
+                radioButton3EditarInscripto.Checked = true;
             }
             else
             {
-                radioButton4.Checked = true;
+                radioButton4EditarMonotributo.Checked = true;
             }
         }
         private async void TextBox14_TextChanged(object sender, EventArgs ev)  // cliente por Id
         {
             _clienteAEditar = null;
-            var numeroDeCliente = textBox14.Text;
+            var numeroDeCliente = textBox14EditarBusquedaNumero.Text;
             if (numeroDeCliente == "")
             {
-                label23.Text = "";
-                textBox11.Text = "";
-                textBox10.Text = "";
-                textBox23.Text = "";
-                textBox24.Text = "";
-                textBox25.Text = "";
-                radioButton3.Checked = false;
-                radioButton4.Checked = false;
+                label23EditarDireccionActual.Text = "";
+                textBox11EditarNombreActual.Text = "";
+                textBox10EditarCuitActual.Text = "";
+                textBox23EditarDireccionNueva.Text = "";
+                textBox24EditarTelefonoActual.Text = "";
+                textBox25EditarCpActual.Text = "";
+                radioButton3EditarInscripto.Checked = false;
+                radioButton4EditarMonotributo.Checked = false;
                 return;
             }
             if (!long.TryParse(numeroDeCliente, out long clienteId))
@@ -101,17 +97,17 @@ namespace linway_app.Forms
         private async void TextBox6_TextChanged(object sender, EventArgs ev)  // cliente por dirección
         {
             _clienteAEditar = null;
-            string direccion = textBox6.Text;
+            string direccion = textBox6EditarBusquedaDireccion.Text;
             if (direccion == "")
             {
-                label23.Text = "";
-                textBox11.Text = "";
-                textBox10.Text = "";
-                textBox23.Text = "";
-                textBox24.Text = "";
-                textBox25.Text = "";
-                radioButton3.Checked = false;
-                radioButton4.Checked = false;
+                label23EditarDireccionActual.Text = "";
+                textBox11EditarNombreActual.Text = "";
+                textBox10EditarCuitActual.Text = "";
+                textBox23EditarDireccionNueva.Text = "";
+                textBox24EditarTelefonoActual.Text = "";
+                textBox25EditarCpActual.Text = "";
+                radioButton3EditarInscripto.Checked = false;
+                radioButton4EditarMonotributo.Checked = false;
                 return;
             }
             Cliente cliente = await UIExecutor.ExecuteAsync(
@@ -136,12 +132,12 @@ namespace linway_app.Forms
                 MessageBox.Show("Verifique que los campos sean correctos");
                 return;
             }
-            _clienteAEditar.Direccion = textBox23.Text;
-            _clienteAEditar.Telefono = textBox24.Text;
-            _clienteAEditar.CodigoPostal = textBox25.Text;
-            _clienteAEditar.Nombre = textBox11.Text;
-            _clienteAEditar.Cuit = textBox10.Text;
-            _clienteAEditar.Tipo = radioButton3.Checked ? TipoR.Inscripto.ToString() : TipoR.Monotributo.ToString();
+            _clienteAEditar.Direccion = textBox23EditarDireccionNueva.Text;
+            _clienteAEditar.Telefono = textBox24EditarTelefonoActual.Text;
+            _clienteAEditar.CodigoPostal = textBox25EditarCpActual.Text;
+            _clienteAEditar.Nombre = textBox11EditarNombreActual.Text;
+            _clienteAEditar.Cuit = textBox10EditarCuitActual.Text;
+            _clienteAEditar.Tipo = radioButton3EditarInscripto.Checked ? TipoR.Inscripto.ToString() : TipoR.Monotributo.ToString();
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>

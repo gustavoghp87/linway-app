@@ -40,12 +40,6 @@ namespace linway_app.Services.FormServices
             Producto producto = productos.Find(x => x.Nombre.ToLower().Contains(nombre.ToLower()));
             return producto;
         }
-        public async Task<Producto> GetPorNombreExactoAsync(string nombre)
-        {
-            List<Producto> productos = await GetAllAsync();
-            Producto producto = productos.Find(x => x.Nombre.Equals(nombre));
-            return producto;
-        }
         public async Task<List<Producto>> GetAllAsync()
         {
             List<Producto> producto = await _services.GetAllAsync();

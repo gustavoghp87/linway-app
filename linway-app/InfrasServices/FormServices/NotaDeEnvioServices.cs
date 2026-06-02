@@ -1,6 +1,7 @@
 ﻿using linway_app.Services.Interfaces;
 using Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace linway_app.Services.FormServices
@@ -21,7 +22,6 @@ namespace linway_app.Services.FormServices
         {
             _services.DeleteMany(notas);
         }
-
         public void Edit(NotaDeEnvio notaDeEnvio)
         {
             _services.Edit(notaDeEnvio);
@@ -36,5 +36,21 @@ namespace linway_app.Services.FormServices
             List<NotaDeEnvio> notas = await _services.GetAllAsync();
             return notas;
         }
+        #region static methods
+        public static string ExtraerDetalleDeNotaDeEnvio(ICollection<ProdVendido> lstProdVendidos)
+        {
+            string detalle = "";
+            foreach (ProdVendido prodVendido in lstProdVendidos)
+            {
+                detalle += prodVendido.Cantidad.ToString() + "x " + ProdVendidoServices.GetDescripcionEditada(prodVendido.Descripcion) + ". ";
+            }
+            return detalle;
+        }
+        public static decimal ExtraerImporteDeNotaDeEnvio(ICollection<ProdVendido> lstProdVendidos)
+        {
+            decimal importeTotal = lstProdVendidos.ToList().Sum(prodVendido => prodVendido.Cantidad * prodVendido.Precio);
+            return importeTotal;
+        }
+        #endregion
     }
 }

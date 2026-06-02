@@ -16,16 +16,6 @@ namespace linway_app.Services.FormServices
         {
             _services.Add(recibo);
         }
-        //public decimal CalculateTotalRecibo(Recibo recibo)
-        //{
-        //    decimal total = 0;
-        //    if (recibo.DetalleRecibos == null || recibo.DetalleRecibos.Count == 0) return total;
-        //    foreach (DetalleRecibo detalle in recibo.DetalleRecibos)
-        //    {
-        //        total += detalle.Importe;
-        //    }
-        //    return total;
-        //}
         public void DeleteMany(ICollection<Recibo> recibos)
         {
             _services.DeleteMany(recibos);

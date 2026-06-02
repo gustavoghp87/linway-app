@@ -54,10 +54,10 @@ namespace linway_app.Forms
             this.label10 = new System.Windows.Forms.Label();
             this.buttonMostrarFiltroProductos = new System.Windows.Forms.Button();
             this.buttonMostrarFiltroClientes = new System.Windows.Forms.Button();
-            this.BuscadorProductos = new System.Windows.Forms.TextBox();
+            this.textBoxBuscadorProductos = new System.Windows.Forms.TextBox();
             this.dataGridViewClientes = new System.Windows.Forms.DataGridView();
             this.labelBuscarPorNombreCliente = new System.Windows.Forms.Label();
-            this.BuscadorClientes = new System.Windows.Forms.TextBox();
+            this.textBoxBuscadorClientes = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.dataGridViewProductos = new System.Windows.Forms.DataGridView();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -223,11 +223,11 @@ namespace linway_app.Forms
             // 
             // BuscadorProductos
             // 
-            this.BuscadorProductos.Location = new System.Drawing.Point(241, 48);
-            this.BuscadorProductos.Name = "BuscadorProductos";
-            this.BuscadorProductos.Size = new System.Drawing.Size(114, 20);
-            this.BuscadorProductos.TabIndex = 28;
-            this.BuscadorProductos.TextChanged += new System.EventHandler(this.BuscadorProductos_TextChanged);
+            this.textBoxBuscadorProductos.Location = new System.Drawing.Point(241, 48);
+            this.textBoxBuscadorProductos.Name = "BuscadorProductos";
+            this.textBoxBuscadorProductos.Size = new System.Drawing.Size(114, 20);
+            this.textBoxBuscadorProductos.TabIndex = 28;
+            this.textBoxBuscadorProductos.TextChanged += new System.EventHandler(this.BuscadorProductos_TextChanged);
             // 
             // dataGridView1
             // 
@@ -269,11 +269,11 @@ namespace linway_app.Forms
             // 
             // BuscadorClientes
             // 
-            this.BuscadorClientes.Location = new System.Drawing.Point(252, 379);
-            this.BuscadorClientes.Name = "BuscadorClientes";
-            this.BuscadorClientes.Size = new System.Drawing.Size(110, 20);
-            this.BuscadorClientes.TabIndex = 20;
-            this.BuscadorClientes.TextChanged += new System.EventHandler(this.TextBox8_TextChanged);
+            this.textBoxBuscadorClientes.Location = new System.Drawing.Point(252, 379);
+            this.textBoxBuscadorClientes.Name = "BuscadorClientes";
+            this.textBoxBuscadorClientes.Size = new System.Drawing.Size(110, 20);
+            this.textBoxBuscadorClientes.TabIndex = 20;
+            this.textBoxBuscadorClientes.TextChanged += new System.EventHandler(this.TextBox8_TextChanged);
             // 
             // label12
             // 
@@ -338,10 +338,10 @@ namespace linway_app.Forms
             this.ClientSize = new System.Drawing.Size(925, 699);
             this.Controls.Add(this.dataGridViewProductos);
             this.Controls.Add(this.label12);
-            this.Controls.Add(this.BuscadorClientes);
+            this.Controls.Add(this.textBoxBuscadorClientes);
             this.Controls.Add(this.labelBuscarPorNombreCliente);
             this.Controls.Add(this.dataGridViewClientes);
-            this.Controls.Add(this.BuscadorProductos);
+            this.Controls.Add(this.textBoxBuscadorProductos);
             this.Controls.Add(this.buttonMostrarFiltroClientes);
             this.Controls.Add(this.buttonMostrarFiltroProductos);
             this.Controls.Add(this.label10);
@@ -377,10 +377,10 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button buttonMostrarFiltroProductos;
         private System.Windows.Forms.Button buttonMostrarFiltroClientes;
-        private System.Windows.Forms.TextBox BuscadorProductos;
+        private System.Windows.Forms.TextBox textBoxBuscadorProductos;
         private System.Windows.Forms.DataGridView dataGridViewClientes;
         private System.Windows.Forms.Label labelBuscarPorNombreCliente;
-        private System.Windows.Forms.TextBox BuscadorClientes;
+        private System.Windows.Forms.TextBox textBoxBuscadorClientes;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.DataGridView dataGridViewProductos;
         private System.Windows.Forms.ToolStripMenuItem remitosToolStripMenuItem;

@@ -13,7 +13,9 @@ B_Clientes
 ----------
 -Agregar cliente nuevo: obligatorios dirección y tipo fiscal; que funcione Limpiar
 -Editar cliente: buscar por dirección o por ID, mismos obligatorios que agregar; que funcione Limpiar
--Eliminar: buscar por dirección o por ID; que funcione Estoy Seguro
+-Eliminar: buscar por dirección o por ID;
+		   que funcione Estoy Seguro
+		   que elimine las Notas, los Pedidos, los Recibos y los Registros de Venta asociados al cliente
 
 C_Productos
 -----------
@@ -21,8 +23,9 @@ C_Productos
 -Editar producto: solo editables precio y tipo, no nombre, mismos obligatorios que agregar
 -Eliminar: buscar por nombre o por ID
 		   que funcione Estoy Seguro
-		   elimina también el contador de Ventas (se revisa en FormVentas)
-		   pero se cancela todo si el producto tiene notas de envió, pedidos o registros de venta asociados, indicando en pantalla cuáles
+		   que muestre si tiene Notas, Pedidos y/o Registros asociados
+		   que no permita eliminar si tiene, mostrando cuáles son por ID al intentar eliminar
+		   elimina también su contador de Ventas (se revisa en FormVentas)
 
 D_NotasDeEnvio
 --------------

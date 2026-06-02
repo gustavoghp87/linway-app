@@ -59,8 +59,8 @@ namespace linway_app.Forms
             _lstProductos = respuesta.productos;
             CargarGridClientes(_lstClientes);
             CargarGridProductos(_lstProductos);
-            FiltrarDatosC(BuscadorClientes.Text);
-            FiltrarDatosP(BuscadorProductos.Text);
+            FiltrarDatosC(textBoxBuscadorClientes.Text);
+            FiltrarDatosP(textBoxBuscadorProductos.Text);
         }
         private async void Frm_FormClosing(object sender, FormClosingEventArgs ev)
         {

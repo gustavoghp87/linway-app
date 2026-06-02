@@ -11,7 +11,6 @@ namespace linway_app.Services.Interfaces
         void Edit(Producto producto);
         Task<Producto> GetPorIdAsync(long productId);
         Task<Producto> GetPorNombreAsync(string nombre);
-        Task<Producto> GetPorNombreExactoAsync(string nombre);
         Task<List<Producto>> GetAllAsync();
     }
 }

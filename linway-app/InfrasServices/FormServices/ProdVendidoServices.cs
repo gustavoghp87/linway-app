@@ -60,7 +60,7 @@ namespace linway_app.Services.FormServices
             return prodVendidos;
         }
         #region static methods
-        public static string GetEditedDescripcion(string description)
+        public static string GetDescripcionEditada(string description)
         {
             if (description.Contains("-"))
             {

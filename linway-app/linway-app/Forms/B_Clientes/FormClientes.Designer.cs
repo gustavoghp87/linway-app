@@ -56,21 +56,21 @@ namespace linway_app.Forms
             this.label5 = new System.Windows.Forms.Label();
             this.gbModificar = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox25 = new System.Windows.Forms.TextBox();
+            this.textBox6EditarBusquedaDireccion = new System.Windows.Forms.TextBox();
+            this.textBox25EditarCpActual = new System.Windows.Forms.TextBox();
             this.label50 = new System.Windows.Forms.Label();
-            this.textBox24 = new System.Windows.Forms.TextBox();
+            this.textBox24EditarTelefonoActual = new System.Windows.Forms.TextBox();
             this.label49 = new System.Windows.Forms.Label();
-            this.textBox23 = new System.Windows.Forms.TextBox();
+            this.textBox23EditarDireccionNueva = new System.Windows.Forms.TextBox();
             this.button8EditarLimpiar = new System.Windows.Forms.Button();
             this.label25 = new System.Windows.Forms.Label();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.textBox14 = new System.Windows.Forms.TextBox();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.textBox11 = new System.Windows.Forms.TextBox();
+            this.radioButton3EditarInscripto = new System.Windows.Forms.RadioButton();
+            this.textBox14EditarBusquedaNumero = new System.Windows.Forms.TextBox();
+            this.radioButton4EditarMonotributo = new System.Windows.Forms.RadioButton();
+            this.textBox11EditarNombreActual = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
-            this.textBox10 = new System.Windows.Forms.TextBox();
-            this.label23 = new System.Windows.Forms.Label();
+            this.textBox10EditarCuitActual = new System.Windows.Forms.TextBox();
+            this.label23EditarDireccionActual = new System.Windows.Forms.Label();
             this.button9 = new System.Windows.Forms.Button();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
@@ -331,21 +331,21 @@ namespace linway_app.Forms
             // gbModificar
             // 
             this.gbModificar.Controls.Add(this.label6);
-            this.gbModificar.Controls.Add(this.textBox6);
-            this.gbModificar.Controls.Add(this.textBox25);
+            this.gbModificar.Controls.Add(this.textBox6EditarBusquedaDireccion);
+            this.gbModificar.Controls.Add(this.textBox25EditarCpActual);
             this.gbModificar.Controls.Add(this.label50);
-            this.gbModificar.Controls.Add(this.textBox24);
+            this.gbModificar.Controls.Add(this.textBox24EditarTelefonoActual);
             this.gbModificar.Controls.Add(this.label49);
-            this.gbModificar.Controls.Add(this.textBox23);
+            this.gbModificar.Controls.Add(this.textBox23EditarDireccionNueva);
             this.gbModificar.Controls.Add(this.button8EditarLimpiar);
             this.gbModificar.Controls.Add(this.label25);
-            this.gbModificar.Controls.Add(this.radioButton3);
-            this.gbModificar.Controls.Add(this.textBox14);
-            this.gbModificar.Controls.Add(this.radioButton4);
-            this.gbModificar.Controls.Add(this.textBox11);
+            this.gbModificar.Controls.Add(this.radioButton3EditarInscripto);
+            this.gbModificar.Controls.Add(this.textBox14EditarBusquedaNumero);
+            this.gbModificar.Controls.Add(this.radioButton4EditarMonotributo);
+            this.gbModificar.Controls.Add(this.textBox11EditarNombreActual);
             this.gbModificar.Controls.Add(this.label24);
-            this.gbModificar.Controls.Add(this.textBox10);
-            this.gbModificar.Controls.Add(this.label23);
+            this.gbModificar.Controls.Add(this.textBox10EditarCuitActual);
+            this.gbModificar.Controls.Add(this.label23EditarDireccionActual);
             this.gbModificar.Controls.Add(this.button9);
             this.gbModificar.Controls.Add(this.label22);
             this.gbModificar.Controls.Add(this.label21);
@@ -368,18 +368,18 @@ namespace linway_app.Forms
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(134, 49);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(131, 21);
-            this.textBox6.TabIndex = 24;
-            this.textBox6.TextChanged += new System.EventHandler(this.TextBox6_TextChanged);
+            this.textBox6EditarBusquedaDireccion.Location = new System.Drawing.Point(134, 49);
+            this.textBox6EditarBusquedaDireccion.Name = "textBox6";
+            this.textBox6EditarBusquedaDireccion.Size = new System.Drawing.Size(131, 21);
+            this.textBox6EditarBusquedaDireccion.TabIndex = 24;
+            this.textBox6EditarBusquedaDireccion.TextChanged += new System.EventHandler(this.TextBox6_TextChanged);
             // 
             // textBox25
             // 
-            this.textBox25.Location = new System.Drawing.Point(69, 218);
-            this.textBox25.Name = "textBox25";
-            this.textBox25.Size = new System.Drawing.Size(91, 21);
-            this.textBox25.TabIndex = 7;
+            this.textBox25EditarCpActual.Location = new System.Drawing.Point(69, 218);
+            this.textBox25EditarCpActual.Name = "textBox25";
+            this.textBox25EditarCpActual.Size = new System.Drawing.Size(91, 21);
+            this.textBox25EditarCpActual.TabIndex = 7;
             // 
             // label50
             // 
@@ -392,10 +392,10 @@ namespace linway_app.Forms
             // 
             // textBox24
             // 
-            this.textBox24.Location = new System.Drawing.Point(81, 128);
-            this.textBox24.Name = "textBox24";
-            this.textBox24.Size = new System.Drawing.Size(198, 21);
-            this.textBox24.TabIndex = 4;
+            this.textBox24EditarTelefonoActual.Location = new System.Drawing.Point(81, 128);
+            this.textBox24EditarTelefonoActual.Name = "textBox24";
+            this.textBox24EditarTelefonoActual.Size = new System.Drawing.Size(198, 21);
+            this.textBox24EditarTelefonoActual.TabIndex = 4;
             // 
             // label49
             // 
@@ -408,10 +408,10 @@ namespace linway_app.Forms
             // 
             // textBox23
             // 
-            this.textBox23.Location = new System.Drawing.Point(81, 100);
-            this.textBox23.Name = "textBox23";
-            this.textBox23.Size = new System.Drawing.Size(198, 21);
-            this.textBox23.TabIndex = 3;
+            this.textBox23EditarDireccionNueva.Location = new System.Drawing.Point(81, 100);
+            this.textBox23EditarDireccionNueva.Name = "textBox23";
+            this.textBox23EditarDireccionNueva.Size = new System.Drawing.Size(198, 21);
+            this.textBox23EditarDireccionNueva.TabIndex = 3;
             // 
             // button8EditarLimpiar
             // 
@@ -434,40 +434,40 @@ namespace linway_app.Forms
             // 
             // radioButton3
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(176, 188);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(83, 19);
-            this.radioButton3.TabIndex = 19;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "R.Inscripto";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3EditarInscripto.AutoSize = true;
+            this.radioButton3EditarInscripto.Location = new System.Drawing.Point(176, 188);
+            this.radioButton3EditarInscripto.Name = "radioButton3";
+            this.radioButton3EditarInscripto.Size = new System.Drawing.Size(83, 19);
+            this.radioButton3EditarInscripto.TabIndex = 19;
+            this.radioButton3EditarInscripto.TabStop = true;
+            this.radioButton3EditarInscripto.Text = "R.Inscripto";
+            this.radioButton3EditarInscripto.UseVisualStyleBackColor = true;
             // 
             // textBox14
             // 
-            this.textBox14.Location = new System.Drawing.Point(134, 24);
-            this.textBox14.Name = "textBox14";
-            this.textBox14.Size = new System.Drawing.Size(43, 21);
-            this.textBox14.TabIndex = 2;
-            this.textBox14.TextChanged += new System.EventHandler(this.TextBox14_TextChanged);
+            this.textBox14EditarBusquedaNumero.Location = new System.Drawing.Point(134, 24);
+            this.textBox14EditarBusquedaNumero.Name = "textBox14";
+            this.textBox14EditarBusquedaNumero.Size = new System.Drawing.Size(43, 21);
+            this.textBox14EditarBusquedaNumero.TabIndex = 2;
+            this.textBox14EditarBusquedaNumero.TextChanged += new System.EventHandler(this.TextBox14_TextChanged);
             // 
             // radioButton4
             // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(176, 217);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(103, 19);
-            this.radioButton4.TabIndex = 18;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "R.Monotributo";
-            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton4EditarMonotributo.AutoSize = true;
+            this.radioButton4EditarMonotributo.Location = new System.Drawing.Point(176, 217);
+            this.radioButton4EditarMonotributo.Name = "radioButton4";
+            this.radioButton4EditarMonotributo.Size = new System.Drawing.Size(103, 19);
+            this.radioButton4EditarMonotributo.TabIndex = 18;
+            this.radioButton4EditarMonotributo.TabStop = true;
+            this.radioButton4EditarMonotributo.Text = "R.Monotributo";
+            this.radioButton4EditarMonotributo.UseVisualStyleBackColor = true;
             // 
             // textBox11
             // 
-            this.textBox11.Location = new System.Drawing.Point(81, 156);
-            this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(198, 21);
-            this.textBox11.TabIndex = 5;
+            this.textBox11EditarNombreActual.Location = new System.Drawing.Point(81, 156);
+            this.textBox11EditarNombreActual.Name = "textBox11";
+            this.textBox11EditarNombreActual.Size = new System.Drawing.Size(198, 21);
+            this.textBox11EditarNombreActual.TabIndex = 5;
             // 
             // label24
             // 
@@ -480,20 +480,20 @@ namespace linway_app.Forms
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(69, 188);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(91, 21);
-            this.textBox10.TabIndex = 6;
+            this.textBox10EditarCuitActual.Location = new System.Drawing.Point(69, 188);
+            this.textBox10EditarCuitActual.Name = "textBox10";
+            this.textBox10EditarCuitActual.Size = new System.Drawing.Size(91, 21);
+            this.textBox10EditarCuitActual.TabIndex = 6;
             // 
             // label23
             // 
-            this.label23.AutoSize = true;
-            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label23.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label23.Location = new System.Drawing.Point(39, 76);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(0, 16);
-            this.label23.TabIndex = 9;
+            this.label23EditarDireccionActual.AutoSize = true;
+            this.label23EditarDireccionActual.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23EditarDireccionActual.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label23EditarDireccionActual.Location = new System.Drawing.Point(39, 76);
+            this.label23EditarDireccionActual.Name = "label23";
+            this.label23EditarDireccionActual.Size = new System.Drawing.Size(0, 16);
+            this.label23EditarDireccionActual.TabIndex = 9;
             // 
             // button9
             // 
@@ -576,20 +576,20 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox gbModificar;
-        private System.Windows.Forms.TextBox textBox25;
+        private System.Windows.Forms.TextBox textBox25EditarCpActual;
         private System.Windows.Forms.Label label50;
-        private System.Windows.Forms.TextBox textBox24;
+        private System.Windows.Forms.TextBox textBox24EditarTelefonoActual;
         private System.Windows.Forms.Label label49;
-        private System.Windows.Forms.TextBox textBox23;
+        private System.Windows.Forms.TextBox textBox23EditarDireccionNueva;
         private System.Windows.Forms.Button button8EditarLimpiar;
         private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.TextBox textBox14;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.TextBox textBox11;
+        private System.Windows.Forms.RadioButton radioButton3EditarInscripto;
+        private System.Windows.Forms.TextBox textBox14EditarBusquedaNumero;
+        private System.Windows.Forms.RadioButton radioButton4EditarMonotributo;
+        private System.Windows.Forms.TextBox textBox11EditarNombreActual;
         private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.TextBox textBox10;
-        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TextBox textBox10EditarCuitActual;
+        private System.Windows.Forms.Label label23EditarDireccionActual;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label21;
@@ -597,6 +597,6 @@ namespace linway_app.Forms
         private System.Windows.Forms.Label BusqPorDireLabel;
         private System.Windows.Forms.TextBox textBoxDireEnBorrar;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox textBox6EditarBusquedaDireccion;
     }
 }

@@ -245,6 +245,10 @@ namespace linway_app.Forms
                     {
                         await servicesContext.VentaServices.SumarDesdeProdVendidosAsync(nuevoProdVendido);
                     }
+                    // se actualiza la nota de envío
+                    _notaDeEnvioAModificar.ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(_notaDeEnvioAModificar.ProdVendidos);
+                    _notaDeEnvioAModificar.Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(_notaDeEnvioAModificar.ProdVendidos);
+                    servicesContext.NotaDeEnvioServices.Edit(_notaDeEnvioAModificar);
                     //
                     bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
@@ -279,7 +283,7 @@ namespace linway_app.Forms
             textBox12.Text = "";
             textBox11.Visible = false;
             button9ModificarAgregar.Enabled = false;
-            _notaDeEnvioAModificar = null;
+            //_notaDeEnvioAModificar = null;
             _productoAAgregar = null;
             _cantidadAAgregar = 0;
             label2ModificarAgregarExplicacion.Text = "";
@@ -336,6 +340,11 @@ namespace linway_app.Forms
                     // nada para actualizar en RV
                     //
                     servicesContext.ProdVendidoServices.Delete(_prodVendidoAQuitar);
+                    // se actualiza la nota de envío
+                    _notaDeEnvioAModificar.ProdVendidos = _notaDeEnvioAModificar.ProdVendidos.ToList().FindAll(pv => pv.Id != _prodVendidoAQuitar.Id);
+                    _notaDeEnvioAModificar.ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(_notaDeEnvioAModificar.ProdVendidos);
+                    _notaDeEnvioAModificar.Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(_notaDeEnvioAModificar.ProdVendidos);
+                    servicesContext.NotaDeEnvioServices.Edit(_notaDeEnvioAModificar);
                     //
                     bool guardado = await servicesContext.SavingServices.SaveAsync();
                     if (!guardado)
@@ -361,7 +370,7 @@ namespace linway_app.Forms
             checkBox1ModificarRestarDeVentas.Visible = false;
             label22ModificarQuitarProductoIdNombre.Text = "";
             button8ModificarQuitar.Enabled = false;
-            _notaDeEnvioAModificar = null;
+            //_notaDeEnvioAModificar = null;
             _prodVendidoAQuitar = null;
             label2ModificarAgregarExplicacion.Text = "";
             label29ModificarQuitarExplicacion.Text = "";

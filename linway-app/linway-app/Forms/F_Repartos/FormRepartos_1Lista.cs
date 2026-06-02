@@ -11,7 +11,7 @@ namespace linway_app.Forms
     public partial class FormRepartos : Form
     {
         private int _selectedIndex = -1;
-        private bool _usandoDialogo = false;  // ver que aparecen los eliminados en eliminar cliente de recorrido (por lista)>
+        private bool _usandoDialogo = false;
         private void ActualizarGridDePedidos(ICollection<Pedido> lstPedidos)
         {
             var grid1 = new List<EPedido>();

@@ -81,12 +81,14 @@ namespace linway_app.Forms
                 _scope,
                 async sp => {
                     var servicesContext = ServiceContext.Get(sp);
-                    NotaDeEnvio nuevaNota = new NotaDeEnvio
+                    var nuevaNota = new NotaDeEnvio
                     {
                         Cliente = _cliente,
                         ClienteId = _cliente.Id,
+                        Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(_lstProdVendidosAAgregar),
                         Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
-                        Impresa = 0,
+                        ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(_lstProdVendidosAAgregar),
+                        Impresa = 0
                         //ProdVendidos = _lstProdVendidosAAgregar
                     };
                     servicesContext.NotaDeEnvioServices.Add(nuevaNota);

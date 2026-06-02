@@ -11,30 +11,39 @@ namespace Models.Entities.Mapping
         {
             // Cliente
             CreateMap<Cliente, ECliente>();
+
             // Detalle de Recibo
             CreateMap<DetalleRecibo, EDetalleRecibo>();
+
             // Nota de Envío
             CreateMap<NotaDeEnvio, ENotaDeEnvio>()
                 .ForMember(x => x.Direccion, origin => origin.MapFrom(z => z.Cliente.Direccion))
                 .ForMember(x => x.Impresa, origin => origin.MapFrom(z => z.Impresa == 1 ? "Sí" : "No"));
+            
             // Pedido
             CreateMap<Pedido, EPedido>()
                 .ForMember(x => x.Direccion, origin => origin.MapFrom(z => z.Cliente.Direccion))
                 .ForMember(x => x.Entregar, origin => origin.MapFrom(z => z.Entregar == 1 ? "Sí" : "No"))
                 .AfterMap((src, dest) => SetValoresDePedido(src, dest));
+            
             // Producto
             CreateMap<Producto, EProducto>();
+            
             // Producto Vendido
             CreateMap<ProdVendido, EProdVendido>()
                 .ForMember(x => x.Total, origin => origin.MapFrom(z => z.Precio * z.Cantidad));
+            
             // Recibo
             CreateMap<Recibo, ERecibo>()
                 .ForMember(x => x.Impreso, origin => origin.MapFrom(z => z.Impreso == 1 ? "Sí" : "No"));
+            
             // Registro de Venta
             CreateMap<RegistroVenta, ERegistroVenta>();
+            
             // Reparto
             CreateMap<Reparto, EReparto>()
                 .AfterMap((src, dest) => SetValoresDeReparto(src, dest));
+            
             // Venta
             CreateMap<Venta, EVenta>()
                 .ForMember(x => x.Detalle, origin => origin.MapFrom(z => z.Producto.Nombre));
@@ -53,6 +62,7 @@ namespace Models.Entities.Mapping
             var eReparto = mapper.Map<EReparto>(reparto);
             return eReparto;
         }
+        #region private methods
         private static void SetValoresDePedido(Pedido src, EPedido dest)
         {
             dest.ProductosText = "";
@@ -69,7 +79,7 @@ namespace Models.Entities.Mapping
                 Producto producto = referencia.Producto;
                 long cantidadTotal = grupo.Sum(x => x.Cantidad);
                 string description = ProductoServices.IsProducto(producto)
-                    ? ProdVendidoServices.GetEditedDescripcion(referencia.Descripcion)
+                    ? ProdVendidoServices.GetDescripcionEditada(referencia.Descripcion)
                     : referencia.Descripcion;
                 if (ProductoServices.IsPolvo(producto) && !ProductoServices.IsBlanqueador(producto))
                 {
@@ -146,5 +156,6 @@ namespace Models.Entities.Mapping
                 dest.Tl += ePedido.L;
             });
         }
+        #endregion
     }
 }

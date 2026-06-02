@@ -27,24 +27,24 @@ namespace linway_app.Forms
         }
         private void Button10_Click(object sender, EventArgs ev)
         {
-            if (BuscadorProductos.Visible)
+            if (textBoxBuscadorProductos.Visible)
             {
                 buttonMostrarFiltroProductos.Text = ">>";
                 labelBuscarPorDireccion.Visible = false;
-                BuscadorProductos.Visible = false;
-                BuscadorProductos.Text = "";
+                textBoxBuscadorProductos.Visible = false;
+                textBoxBuscadorProductos.Text = "";
             }
             else
             {
                 buttonMostrarFiltroProductos.Text = "<<";
                 labelBuscarPorDireccion.Visible = true;
-                BuscadorProductos.Visible = true;
-                BuscadorClientes.Text = "";
+                textBoxBuscadorProductos.Visible = true;
+                textBoxBuscadorClientes.Text = "";
             }
         }
         private void BuscadorProductos_TextChanged(object sender, EventArgs ev)
         {
-            FiltrarDatosP(BuscadorProductos.Text);
+            FiltrarDatosP(textBoxBuscadorProductos.Text);
         }
     }
 }
