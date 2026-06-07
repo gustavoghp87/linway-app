@@ -1,5 +1,6 @@
-﻿using linway_app.PresentationHelpers;
-using linway_app.Services.FormServices;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Entities;
 using System;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormVentas : Form
     {
@@ -45,12 +46,12 @@ namespace linway_app.Forms
             {
                 return;
             }
-            Producto producto = await UIExecutor.ExecuteAsync(
+            var producto = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ProductoServices.GetPorIdAsync(productoId);
+                    var productoServices = sp.GetRequiredService<IProductoServices>();
+                    return await productoServices.GetPorIdAsync(productoId);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -75,12 +76,12 @@ namespace linway_app.Forms
                 labelPrecio.Text = "";
                 return;
             }
-            Producto producto = await UIExecutor.ExecuteAsync(
+            var producto = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ProductoServices.GetPorNombreAsync(nombreDeProducto);
+                    var productoServices = sp.GetRequiredService<IProductoServices>();
+                    return await productoServices.GetPorNombreAsync(nombreDeProducto);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -180,11 +181,11 @@ namespace linway_app.Forms
             {
                 return;
             }
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorIdAsync(clienteId);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el cliente",
                 null
@@ -206,11 +207,11 @@ namespace linway_app.Forms
                 label20.Text = "";
                 return;
             }
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorDireccionAsync(direccion);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el cliente",
                 null
@@ -236,79 +237,21 @@ namespace linway_app.Forms
                 MessageBox.Show("Faltan el Cliente o el Reparto");
                 return;
             }
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    //
-                    Pedido pedido = null;
-                    if (enviarAReparto)   // enviar a reparto
-                    {
-                        pedido = _repartoAgregar.Pedidos.FirstOrDefault(x => x.ClienteId == _clienteAgregar.Id);
-                        if (pedido == null)
-                        {
-                            pedido = PedidoServices.GetNuevoPedido(_clienteAgregar, _repartoAgregar);
-                        }
-                    }
-                    // se crea un Registro de Venta (para "Venta particular" o Cliente en Reparto si hay)
-                    // se recorren sus Ventas en bruto creando Ventas cuando no tienen y sumando cuando sí tienen
-                    // se recorren sus Ventas en bruto creando ProdVendidos (asociados al Pedido si hay) (nunca se editan ProdVendidos preexistentes porque podrían pertenecer a otras NotaDeEnvio preexistentes)
-                    // opcionalmente se envía a Reparto, actualizando las etiquetas del Reparto y del Pedido
-                    //   caso 1: el Reparto no existe, se crea uno
-                    //   caso 2: el Reparto existe, se agregan ProdVendidos
-                    var nuevoRegistroVenta = new RegistroVenta
-                    {   // si se envía a Reparto hay cliente
-                        ClienteId = _clienteAgregar != null ? _clienteAgregar.Id : 634,
-                        NombreCliente = _clienteAgregar != null ? _clienteAgregar.Direccion : "Venta particular",
-                        Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
-                    };
-                    servicesContext.RegistroVentaServices.Add(nuevoRegistroVenta);
-                    //
-                    var prodVendidosAAgregar = new List<ProdVendido>();
-                    List<Producto> productos = await servicesContext.ProductoServices.GetAllAsync();
-                    foreach (Venta ventaNueva in _lstAgregarVentas)
-                    {
-                        Producto producto = productos.Find(x => x.Id == ventaNueva.ProductoId);
-                        var nuevoProdVendido = new ProdVendido
-                        {
-                            Cantidad = ventaNueva.Cantidad,
-                            Descripcion = producto.Nombre,
-                            Pedido = enviarAReparto ? pedido : null,
-                            Precio = producto.Precio,
-                            ProductoId = producto.Id,
-                            RegistroVenta = nuevoRegistroVenta
-                        };
-                        prodVendidosAAgregar.Add(nuevoProdVendido);
-                    }
-                    servicesContext.ProdVendidoServices.AddMany(prodVendidosAAgregar);
-                    await servicesContext.VentaServices.SumarDesdeProdVendidosAsync(prodVendidosAAgregar);
-                    //
-                    if (enviarAReparto)
-                    {
-                        if (pedido.Id == 0)
-                        {
-                            await servicesContext.PedidoServices.AddAsync(pedido);
-                        }
-                        else
-                        {
-                            pedido.Entregar = 1;
-                            servicesContext.PedidoServices.Edit(pedido);
-                        }
-                    }
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IAgregarRegistroVentaUseCase>();
+                    return await useCase.ExecuteAsync(_lstAgregarVentas, _clienteAgregar, enviarAReparto, _repartoAgregar);
                 },
                 "No se pudo realizar",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             _repartoAgregar = null;

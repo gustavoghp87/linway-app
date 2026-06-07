@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.PresentationHelpers
+namespace AppLinway.PresentationHelpers
 {
     public static class LoadingOverlayHelper
     {

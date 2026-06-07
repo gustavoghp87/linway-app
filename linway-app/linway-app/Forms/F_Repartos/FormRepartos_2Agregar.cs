@@ -1,9 +1,11 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormRepartos : Form
     {
@@ -20,33 +22,23 @@ namespace linway_app.Forms
             {
                 Nombre = textBox1AgregarRepartoNombre.Text,
                 DiaReparto = diaRep,
-                DiaRepartoId = diaRep.Id,
-                //Ta = 0,
-                //Tae = 0,
-                //Td = 0,
-                //Te = 0,
-                //Tl = 0,
-                //TotalB = 0,
-                //Tt = 0
+                DiaRepartoId = diaRep.Id
             };
-            var logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    servicesContext.RepartoServices.Add(nuevoReparto, _lstDiaRepartos);
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IAgregarRepartoUseCase>();
+                    return await useCase.ExecuteAsync(nuevoReparto, _lstDiaRepartos);
                 },
                 "No se pudo agregar el Reparto",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             LimpiarPantalla();

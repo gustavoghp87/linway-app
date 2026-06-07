@@ -1,13 +1,13 @@
-﻿using linway_app.PresentationHelpers;
-using linway_app.Services.FormServices;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
-using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormNotasEnvio : Form
     {
@@ -83,59 +83,22 @@ namespace linway_app.Forms
             {
                 return;
             }
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    List<ProdVendido> prodVendidos = await servicesContext.ProdVendidoServices.GetAllAsync();
-                    Pedido pedidoEnElQueEsta = prodVendidos.FirstOrDefault(pv => pv.NotaDeEnvioId == _notaDeEnvioAReparto.Id)?.Pedido;
-                    Pedido pedidoAlQueQuiereIr = _reparto.Pedidos.FirstOrDefault(x => x.ClienteId == _notaDeEnvioAReparto.ClienteId);
-                    if (pedidoEnElQueEsta != null && pedidoAlQueQuiereIr != null && pedidoEnElQueEsta.Id == pedidoAlQueQuiereIr.Id)
-                    {
-                        MessageBox.Show("Esta Nota de Envío ya está en este Reparto");
-                        return false;
-                    }
-                    if (pedidoAlQueQuiereIr == null)
-                    {
-                        Cliente cliente = await servicesContext.ClienteServices.GetPorIdAsync(_notaDeEnvioAReparto.ClienteId);
-                        pedidoAlQueQuiereIr = PedidoServices.GetNuevoPedido(cliente, _reparto);
-                    }
-                    // prodVendidos
-                    List<ProdVendido> prodVendidosDeLaNota = prodVendidos.Where(x => x.NotaDeEnvioId == _notaDeEnvioAReparto.Id).ToList();
-                    foreach (ProdVendido prodVendido in prodVendidosDeLaNota)
-                    {
-                        prodVendido.Pedido = pedidoAlQueQuiereIr;
-                    }
-                    servicesContext.ProdVendidoServices.EditMany(prodVendidosDeLaNota);
-                    // pedido
-                    if (pedidoAlQueQuiereIr.Id == 0)
-                    {
-                        pedidoAlQueQuiereIr.ProdVendidos = prodVendidosDeLaNota;
-                    }
-                    else
-                    {
-                        foreach (var pv in prodVendidosDeLaNota)
-                        {
-                            pedidoAlQueQuiereIr.ProdVendidos.Add(pv);
-                        }
-                        pedidoAlQueQuiereIr.Entregar = 1;
-                        servicesContext.PedidoServices.Edit(pedidoAlQueQuiereIr);
-                    }
-                    // guardado
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IEnviarNotaDeEnvioARepartoUseCase>();
+                    return await useCase.ExecuteAsync(_notaDeEnvioAReparto, _reparto);
                 },
                 "No se pudo agregar a reparto",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             _reparto = null;

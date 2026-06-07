@@ -1,0 +1,42 @@
+﻿using AppServices.Interfaces;
+using Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace AppServices.EntityServices
+{
+    public class ReciboServices: IReciboServices
+    {
+        private readonly IServicesBase<Recibo> _services;
+        public ReciboServices(IServicesBase<Recibo> services)
+        {
+            _services = services;
+        }
+        public void Add(Recibo recibo)
+        {
+            _services.Add(recibo);
+        }
+        public void DeleteMany(ICollection<Recibo> recibos)
+        {
+            _services.DeleteMany(recibos);
+        }
+        public void Edit(Recibo recibo)
+        {
+            _services.Edit(recibo);
+        }
+        public async Task<List<Recibo>> GetAllAsync()
+        {
+            List<Recibo> recibos = await _services.GetAllAsync();
+            return recibos;
+        }
+        //public async Task<List<Recibo>> GetRecibosConDetalles()  // prueba de concepto invalidando Lazy Loading
+        //{  ... private readonly IRepository<Recibo> _repository;
+        //    return await _repository
+        //        .Query()
+        //        .Where(x => x.Estado != "Eliminado")
+        //        .Include(r => r.DetalleRecibos)
+        //        .AsNoTracking()
+        //        .ToListAsync();
+        //}
+    }
+}

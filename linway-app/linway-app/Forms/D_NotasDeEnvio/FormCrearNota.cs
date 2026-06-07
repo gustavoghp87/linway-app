@@ -1,14 +1,13 @@
-﻿using linway_app.PresentationHelpers;
-using linway_app.Services.FormServices;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
-using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormCrearNota : Form
     {
@@ -29,13 +28,12 @@ namespace linway_app.Forms
         private async void FormCrearNota_Load(object sender, EventArgs ev)
         {
             ActualizarGrid();
-            List<DiaReparto> diaRepartos = await UIExecutor.ExecuteAsync(
+            var diaRepartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    List<DiaReparto> lstDiasRep = await servicesContext.DiaRepartoServices.GetAllAsync();
-                    return lstDiasRep;
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                    return await diaRepartoServices.GetAllAsync();
                 },
                 "No se pudieron buscar los Días de Reparto",
                 null
@@ -77,104 +75,28 @@ namespace linway_app.Forms
                 MessageBox.Show("Falta el Reparto");
                 return;
             }
-            NotaDeEnvio nuevaNota = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    var nuevaNota = new NotaDeEnvio
-                    {
-                        Cliente = _cliente,
-                        ClienteId = _cliente.Id,
-                        Detalle = NotaDeEnvioServices.ExtraerDetalleDeNotaDeEnvio(_lstProdVendidosAAgregar),
-                        Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
-                        ImporteTotal = NotaDeEnvioServices.ExtraerImporteDeNotaDeEnvio(_lstProdVendidosAAgregar),
-                        Impresa = 0
-                        //ProdVendidos = _lstProdVendidosAAgregar
-                    };
-                    servicesContext.NotaDeEnvioServices.Add(nuevaNota);
-                    foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
-                    {
-                        prodVendido.NotaDeEnvio = nuevaNota;
-                        prodVendido.NotaDeEnvioId = nuevaNota.Id;
-                    }
-                    if (agregarProdVendidosARegistrosYVentas)
-                    {
-                        var nuevoRegistro = new RegistroVenta
-                        {
-                            ClienteId = _cliente.Id,
-                            Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha),
-                            NombreCliente = _cliente.Direccion
-                        };
-                        servicesContext.RegistroVentaServices.Add(nuevoRegistro);
-                        foreach (var prodVendido in _lstProdVendidosAAgregar)
-                        {
-                            prodVendido.RegistroVenta = nuevoRegistro;
-                            prodVendido.RegistroVentaId = nuevoRegistro.Id;
-                            //_lstProdVendidosAAgregar.Find(x => x.Id == prodVendido.Id).RegistroVenta = nuevoRegistro;  // para que el siguiente checkbox no pise los cambios
-                        }
-                        await servicesContext.VentaServices.SumarDesdeProdVendidosAsync(_lstProdVendidosAAgregar);
-                    }
-                    if (enviarAHojaDeReparto)
-                    {
-                        bool existiaPedido = _pedido != null;
-                        if (!existiaPedido)
-                        {
-                            _pedido = PedidoServices.GetNuevoPedido(_cliente, _reparto);
-                        }
-                        _pedido.Entregar = 1;
-                        foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
-                        {
-                            prodVendido.Pedido = _pedido;
-                            _pedido.ProdVendidos.Add(prodVendido);
-                        }
-                        if (existiaPedido)
-                        {
-                            servicesContext.PedidoServices.Edit(_pedido);
-                        }
-                        else
-                        {
-                            await servicesContext.PedidoServices.AddAsync(_pedido);
-                        }
-                        // reparto
-                        foreach (var p in _reparto.Pedidos)
-                        {
-                            if (p.Id == _pedido.Id)
-                            {
-                                p.ProdVendidos = _pedido.ProdVendidos;
-                            }
-                        }
-                    }
-                    //
-                    servicesContext.ProdVendidoServices.AddMany(_lstProdVendidosAAgregar);
-                    //
-                    if (imprimir)
-                    {
-                        foreach (ProdVendido prodVendido in _lstProdVendidosAAgregar)
-                        {
-                            prodVendido.Producto = _lstProductosAAgregar.Find(p => p.Id == prodVendido.ProductoId);
-                        }
-                    }
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                        return null;
-                    }
-                    return nuevaNota;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IAgregarNotaDeEnvioUseCase>();
+                    return await useCase.ExecuteAsync(_cliente, _lstProductosAAgregar, _lstProdVendidosAAgregar, _pedido, _reparto, agregarProdVendidosARegistrosYVentas, enviarAHojaDeReparto, imprimir);
                 },
                 "No se pudo realizar",
                 this
             );
-            if (nuevaNota == null)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             if (imprimir)  // imprimir
             {
                 var form = Program.LinwayServiceProvider.GetRequiredService<FormImprimirNota>();
-                form.Rellenar_Datos(nuevaNota);
+                var nuevaNotaDeEnvio = resultado.Data;
+                form.Rellenar_Datos(nuevaNotaDeEnvio);
                 form.Show(this);  // no necesita renovar scope porque el cambio a imprimido no se muestra en este form
             }
             _cliente = null;

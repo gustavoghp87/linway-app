@@ -1,10 +1,11 @@
-﻿using linway_app.PresentationHelpers;
-using Models;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models.Enums;
 using System;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormClientes : Form
     {
@@ -21,42 +22,33 @@ namespace linway_app.Forms
         }
         private async void AgregarCliente_Click(object sender, EventArgs ev)
         {
-            string direccion = textBox2.Text;
+            var direccion = textBox2.Text;
             if (direccion == "" || (!radioButton1AgregarRInscripto.Checked && !radioButton2AgregarRInscripto.Checked))
             {
                 MessageBox.Show("Los campos Dirección y Responsable Inscr/Monotributo son obligatorios");
                 return;
             }
-            TipoR tipo = radioButton2AgregarRInscripto.Checked ? TipoR.Inscripto : TipoR.Monotributo;
-            var nuevoCliente = new Cliente
-            {
-                Direccion = textBox18AgregarLocalidad.Text != ""
-                    ? direccion + " - " + textBox18AgregarLocalidad.Text
-                    : direccion,
-                CodigoPostal = textBox4AgregarCP.Text,
-                Telefono = textBox5AgregarTelefono.Text,
-                Nombre = textBox1AgregarNombre.Text,
-                Cuit = textBox3AgregarCuit.Text,
-                Tipo = tipo.ToString()
-            };
-            var logrado = await UIExecutor.ExecuteAsync(
+            var localidad = textBox18AgregarLocalidad.Text;
+            var codigoPostal = textBox4AgregarCP.Text;
+            var telefono = textBox5AgregarTelefono.Text;
+            var nombre = textBox1AgregarNombre.Text;
+            var cuit = textBox3AgregarCuit.Text;
+            var tipo = radioButton2AgregarRInscripto.Checked ? TipoR.Inscripto.ToString() : TipoR.Monotributo.ToString();
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    await servicesContext.ClienteServices.AddAsync(nuevoCliente);
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IAgregarClienteUseCase>();
+                    return await useCase.ExecuteAsync(direccion, localidad, codigoPostal, telefono, nombre, cuit, tipo);
                 },
                 "No se pudo agregar el Cliente",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             button2AgregarLimpiar.PerformClick();

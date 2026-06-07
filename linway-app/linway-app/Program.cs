@@ -1,18 +1,19 @@
-﻿using AutoMapper;
+﻿using AppServices.EntityServices;
+using AppServices.Excel;
+using AppServices.Interfaces;
+using AppServices.Mapping;
+using AppServices.Services;
+using AppServices.UseCases;
+using AutoMapper;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.DbContexts;
 using Infrastructure.Repositories.Interfaces;
-using linway_app.Forms;
-using linway_app.Services;
-using linway_app.Services.Excel;
-using linway_app.Services.FormServices;
-using linway_app.Services.Interfaces;
+using AppLinway.Forms;
 using Microsoft.Extensions.DependencyInjection;
-using Models.Entities.Mapping;
 using System;
 using System.Windows.Forms;
 
-namespace linway_app
+namespace AppLinway
 {
     static class Program
     {
@@ -57,6 +58,35 @@ namespace linway_app
             services.AddScoped<IRegistroVentaServices, RegistroVentaServices>();
             services.AddScoped<IRepartoServices, RepartoServices>();
             services.AddScoped<IVentaServices, VentaServices>();
+            //
+            services.AddScoped<IAgregarClienteUseCase, AgregarClienteUseCase>();
+            services.AddScoped<IAgregarNotaDeEnvioUseCase, AgregarNotaDeEnvioUseCase>();
+            services.AddScoped<IAgregarPedidoUseCase, AgregarPedidoUseCase>();
+            services.AddScoped<IAgregarProductoUseCase, AgregarProductoUseCase>();
+            services.AddScoped<IAgregarProdVendidoANotaDeEnvioUseCase, AgregarProdVendidoANotaDeEnvioUseCase>();
+            services.AddScoped<IAgregarReciboUseCase, AgregarReciboUseCase>();
+            services.AddScoped<IAgregarRegistroVentaUseCase, AgregarRegistroVentaUseCase>();
+            services.AddScoped<IAgregarRepartoUseCase, AgregarRepartoUseCase>();
+            services.AddScoped<IEditarClienteUseCase, EditarClienteUseCase>();
+            services.AddScoped<IEditarProductoUseCase, EditarProductoUseCase>();
+            services.AddScoped<IEliminarClienteUseCase, EliminarClienteUseCase>();
+            services.AddScoped<IEliminarNotaDeEnvioUseCase, EliminarNotaDeEnvioUseCase>();
+            services.AddScoped<IEliminarPedidoUseCase, EliminarPedidoUseCase>();
+            services.AddScoped<IEliminarProductoUseCase, EliminarProductoUseCase>();
+            services.AddScoped<IEliminarRecibosUseCase, EliminarRecibosUseCase>();
+            services.AddScoped<IEliminarRegistroVentasUseCase, EliminarRegistroVentasUseCase>();
+            services.AddScoped<IEliminarRegistroVentaUseCase, EliminarRegistroVentaUseCase>();
+            services.AddScoped<IEliminarRepartoUseCase, EliminarRepartoUseCase>();
+            services.AddScoped<IEliminarVentasUseCase, EliminarVentasUseCase>();
+            services.AddScoped<IEnviarNotaDeEnvioARepartoUseCase, EnviarNotaDeEnvioARepartoUseCase>();
+            services.AddScoped<ILimpiarDiaRepartoUseCase, LimpiarDiaRepartoUseCase>();
+            services.AddScoped<ILimpiarPedidoUseCase, LimpiarPedidoUseCase>();
+            services.AddScoped<ILimpiarRepartosUseCase, LimpiarRepartosUseCase>();
+            services.AddScoped<ILimpiarRepartoUseCase, LimpiarRepartoUseCase>();
+            services.AddScoped<IMarcarNotaDeEnvioComoImprimidaUseCase, MarcarNotaDeEnvioComoImprimidaUseCase>();
+            services.AddScoped<IMarcarReciboComoImprimidoUseCase, MarcarReciboComoImprimidoUseCase>();
+            services.AddScoped<IQuitarProdVendidoDeNotaDeEnvioUseCase, QuitarProdVendidoDeNotaDeEnvioUseCase>();
+            services.AddScoped<IReposicionarRepartoUseCase, ReposicionarRepartoUseCase>();
             //
             LinwayServiceProvider = services.BuildServiceProvider();
         }

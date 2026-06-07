@@ -1,11 +1,13 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormRecibos : Form
     {
@@ -37,11 +39,11 @@ namespace linway_app.Forms
             {
                 return;
             }
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorIdAsync(clienteId);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -69,11 +71,11 @@ namespace linway_app.Forms
                 button6.Enabled = false;
                 return;
             }
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorDireccionAsync(direccion);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -166,41 +168,22 @@ namespace linway_app.Forms
                 return;
             }
             await CargarRecibos();
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    //
-                    var nuevoRecibo = new Recibo
-                    {
-                        ClienteId = _clienteAgregarRecibo.Id,
-                        DireccionCliente = _clienteAgregarRecibo.Direccion,
-                        ImporteTotal = _subTo,
-                        Impreso = 0,
-                        Fecha = DateTime.Now.ToString(Constants.FormatoDeFecha)
-                    };
-                    servicesContext.ReciboServices.Add(nuevoRecibo);
-                    //
-                    foreach (DetalleRecibo detalle in _lstDetallesAAgregar)
-                    {
-                        detalle.Recibo = nuevoRecibo;
-                    }
-                    servicesContext.DetalleReciboServices.AddMany(_lstDetallesAAgregar);
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IAgregarReciboUseCase>();
+                    return await useCase.ExecuteAsync(_clienteAgregarRecibo, _lstDetallesAAgregar);
                 },
                 "No se pudo agregar el Recibo",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             LimpiarCampos();
@@ -210,6 +193,7 @@ namespace linway_app.Forms
             button6.Enabled = false;
             label18.Text = "0";
             _lstDetallesAAgregar.Clear();
+            _subTo = 0;
             await Actualizar();
             _clienteAgregarRecibo = null;
         }

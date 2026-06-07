@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormProductos : Form
     {

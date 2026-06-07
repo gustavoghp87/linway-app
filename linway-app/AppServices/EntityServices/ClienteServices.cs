@@ -1,0 +1,79 @@
+﻿using AppServices.Interfaces;
+using Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace AppServices.EntityServices
+{
+    public class ClienteServices: IClienteServices
+    {
+        private readonly IServicesBase<Cliente> _services;
+        public ClienteServices(IServicesBase<Cliente> services)
+        {
+            _services = services;
+        }
+        public async Task AddAsync(Cliente cliente)
+        {
+            cliente.Direccion = cliente.Direccion.Trim();
+            {   // no permitir comillas simples
+                while (cliente.Direccion.Contains("'"))
+                {
+                    cliente.Direccion = cliente.Direccion.Replace(char.Parse("'"), '"');
+                }
+                while (cliente.Nombre.Contains("'"))
+                {
+                    cliente.Nombre = cliente.Nombre.Replace(char.Parse("'"), '"');
+                }
+            }
+            {   // no permitir direcciones repetidas (no se hace por DB porque se permiten repetidos entre clientes eliminados)
+                var clientes = await GetAllAsync();  // ya filtró los falsos eliminados
+                if (clientes.Exists(x => x.Direccion == cliente.Direccion))
+                {
+                    throw new Exception($"Ya existe un cliente con esta dirección: {cliente.Direccion}");
+                }
+            }
+            _services.Add(cliente);
+        }
+        public void Delete(Cliente cliente)
+        {
+            _services.Delete(cliente);
+        }
+        public void Edit(Cliente cliente)
+        {
+            _services.Edit(cliente);
+        }
+        public async Task<Cliente> GetPorIdAsync(long clientId)
+        {
+            Cliente cliente = await _services.GetAsync(clientId);
+            return cliente;
+        }
+        public async Task<Cliente> GetPorDireccionAsync(string direccion)
+        {
+            List<Cliente> clientes = await GetAllAsync();
+            Cliente cliente = clientes.Find(x => x.Direccion.ToLower().Contains(direccion.ToLower()));
+            if (cliente == null)
+            {
+                List<string> direcciones = Helpers.IgnorarTildes(direccion);
+                if (direcciones == null || direcciones.Count == 0)
+                {
+                    return null;
+                }
+                foreach (var direc in direcciones)
+                {
+                    Cliente cliente1 = clientes.Find(x => x.Direccion.ToLower().Contains(direc));
+                    if (cliente1 != null)
+                    {
+                        return cliente1;
+                    }
+                }
+            }
+            return cliente;
+        }
+        public async Task<List<Cliente>> GetAllAsync()
+        {
+            List<Cliente> clientes = await _services.GetAllAsync();
+            return clientes;
+        }
+    }
+}

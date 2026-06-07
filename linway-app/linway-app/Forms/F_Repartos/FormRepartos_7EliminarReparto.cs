@@ -1,11 +1,12 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormRepartos : Form
     {
@@ -30,39 +31,21 @@ namespace linway_app.Forms
             Reparto reparto = _lstDiaRepartos
                 .Find(x => x.Dia == diaReparto).Repartos.ToList()
                 .Find(x => x.Nombre == nombreReparto);
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    //
-                    var prodVendidosDelReparto = new List<ProdVendido>();
-                    foreach (Pedido pedido in reparto.Pedidos)
-                    {
-                        foreach (ProdVendido prodVendido in pedido.ProdVendidos)
-                        {
-                            prodVendido.PedidoId = null;
-                        }
-                        prodVendidosDelReparto.AddRange(pedido.ProdVendidos);
-                    }
-                    servicesContext.ProdVendidoServices.EditOrDeleteMany(prodVendidosDelReparto);
-                    //
-                    servicesContext.PedidoServices.DeleteMany(reparto.Pedidos);
-                    //
-                    servicesContext.RepartoServices.Delete(reparto);
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IEliminarRepartoUseCase>();
+                    return await useCase.ExecuteAsync(reparto);
                 },
                 "No se pudo realizar",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             LimpiarPantalla();

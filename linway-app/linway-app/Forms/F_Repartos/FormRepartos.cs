@@ -1,5 +1,5 @@
-﻿using linway_app.PresentationHelpers;
-using linway_app.Services.FormServices;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormRepartos : Form
     {
@@ -29,11 +29,11 @@ namespace linway_app.Forms
         }
         private async Task Actualizar()
         {
-            List<DiaReparto> diaRepartos = await UIExecutor.ExecuteAsync(
+            var diaRepartos = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.DiaRepartoServices.GetAllAsync();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                    return await diaRepartoServices.GetAllAsync();
                 },
                 "No se pudieron buscar los Días de Reparto",
                 null
@@ -45,24 +45,6 @@ namespace linway_app.Forms
         {
             await Actualizar();
             List<Pedido> pedidos = _lstDiaRepartos.Find(x => x.Dia == diaReparto)?.Repartos?.ToList().Find(x => x.Nombre == nombreReparto)?.Pedidos?.ToList().OrderBy(x => x.Orden).ToList() ?? new List<Pedido>();
-            //    _scope,
-            //    async sp =>
-            //    {
-            //        var servicesContext = ServiceContext.Get(sp);
-            //        List<DiaReparto> lstDiasRep = await servicesContext.DiaRepartoServices.GetAllAsync();
-            //        Reparto reparto = lstDiasRep
-            //            .Find(x => x.Dia == diaReparto).Repartos.ToList()
-            //            .Find(x => x.Nombre == nombreReparto);
-            //        var pedidos = await servicesContext.PedidoServices.GetPorRepartoIdAsync(reparto.Id);
-            //        return pedidos.OrderBy(x => x.Orden).ToList();
-            //    },
-            //    "No se pudieron buscar los Pedidos",
-            //    null
-            //);
-            //if (pedidos == null)
-            //{
-            //    return;
-            //}
             _lstPedidos = pedidos;
         }
         private void LimpiarPantalla()
@@ -98,33 +80,23 @@ namespace linway_app.Forms
         }
         private async Task<bool> EliminarPedidoAsync(Pedido pedidoAEliminar)  // handler
         {
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    Reparto reparto = await servicesContext.RepartoServices.GetPorIdAsync(pedidoAEliminar.RepartoId);
-                    //
-                    List<ProdVendido> prodVendidosDelPedido = pedidoAEliminar.ProdVendidos.ToList();
-                    foreach (ProdVendido prodVendido in prodVendidosDelPedido)
-                    {
-                        prodVendido.PedidoId = null;
-                    }
-                    servicesContext.ProdVendidoServices.EditOrDeleteMany(prodVendidosDelPedido);
-                    //
-                    servicesContext.PedidoServices.Delete(pedidoAEliminar);
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IEliminarPedidoUseCase>();
+                    return await useCase.ExecuteAsync(pedidoAEliminar);
                 },
                 "No se pudo realizar",
                 this
             );
-            return logrado;
+            if (resultado == null || !resultado.Success)
+            {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
+            }
+            return resultado.Success;
         }
         // MENUES
         private void AgregarReparto_ToolStripMenuItem_Click(object sender, EventArgs ev)

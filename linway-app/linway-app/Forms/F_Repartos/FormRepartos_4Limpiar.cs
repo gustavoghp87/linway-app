@@ -1,12 +1,13 @@
-﻿using linway_app.PresentationHelpers;
-using linway_app.Services.FormServices;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormRepartos : Form
     {
@@ -17,43 +18,22 @@ namespace linway_app.Forms
         }
         private async void LimpiarRepartos_Click(object sender, EventArgs ev)
         {
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    //
-                    List<Reparto> repartosALimpiar = _lstDiaRepartos.SelectMany(x => x.Repartos).ToList();
-                    List<ProdVendido> prodVendidosALimpiar = repartosALimpiar.SelectMany(x => x.Pedidos).SelectMany(x => x.ProdVendidos).ToList();
-                    //
-                    foreach (ProdVendido prodVendido in prodVendidosALimpiar)
-                    {
-                        prodVendido.PedidoId = null;
-                    }
-                    servicesContext.ProdVendidoServices.EditMany(prodVendidosALimpiar);
-                    //
-                    foreach (Reparto reparto in repartosALimpiar)
-                    {
-                        foreach (Pedido pedido in reparto.Pedidos)
-                        {
-                            pedido.Entregar = 0;
-                        }
-                    }
-                    servicesContext.PedidoServices.EditMany(repartosALimpiar.SelectMany(x => x.Pedidos).ToList());
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<ILimpiarRepartosUseCase>();
+                    return await useCase.ExecuteAsync(_lstDiaRepartos);
                 },
                 "No se pudieron limpiar los Repartos o no había nada para limpiar",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             LimpiarPantalla();
@@ -73,43 +53,23 @@ namespace linway_app.Forms
                 return;
             }
             await Actualizar();
-            bool logrado = await UIExecutor.ExecuteAsync(
+            List<Reparto> repartosALimpiar = _lstDiaRepartos.Find(x => x.Dia == diaReparto).Repartos.ToList();
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    //
-                    List<Reparto> repartosALimpiar = _lstDiaRepartos.Find(x => x.Dia == diaReparto).Repartos.ToList();
-                    List<ProdVendido> prodVendidosALimpiar = repartosALimpiar.SelectMany(x => x.Pedidos).SelectMany(x => x.ProdVendidos).ToList();
-                    //
-                    foreach (ProdVendido prodVendido in prodVendidosALimpiar)
-                    {
-                        prodVendido.PedidoId = null;
-                    }
-                    servicesContext.ProdVendidoServices.EditMany(prodVendidosALimpiar);
-                    //
-                    foreach (var reparto in repartosALimpiar)
-                    {
-                        foreach (Pedido pedido in reparto.Pedidos)
-                        {
-                            pedido.Entregar = 0;
-                        }
-                    }
-                    servicesContext.PedidoServices.EditMany(repartosALimpiar.SelectMany(x => x.Pedidos).ToList());
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<ILimpiarDiaRepartoUseCase>();
+                    return await useCase.ExecuteAsync(repartosALimpiar);
                 },
                 "No se pudieron limpiar los Repartos",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             LimpiarPantalla();
@@ -132,43 +92,25 @@ namespace linway_app.Forms
                 MessageBox.Show("Debe seleccionar un día");
                 return;
             }
-            Reparto reparto = await UIExecutor.ExecuteAsync(
+            Reparto repartoALimpiar = _lstDiaRepartos
+                .Find(x => x.Dia == diaReparto).Repartos.ToList()
+                .Find(x => x.Nombre == nombreReparto);
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    //
-                    Reparto repartoALimpiar = _lstDiaRepartos
-                        .Find(x => x.Dia == diaReparto).Repartos.ToList()
-                        .Find(x => x.Nombre == nombreReparto);
-                    List<ProdVendido> prodVendidosALimpiar = repartoALimpiar.Pedidos.SelectMany(x => x.ProdVendidos).ToList();
-                    //
-                    foreach (ProdVendido prodVendido in prodVendidosALimpiar)
-                    {
-                        prodVendido.PedidoId = null;
-                    }
-                    servicesContext.ProdVendidoServices.EditMany(prodVendidosALimpiar);
-                    //
-                    foreach (Pedido pedido in repartoALimpiar.Pedidos)
-                    {
-                        pedido.Entregar = 0;
-                    }
-                    servicesContext.PedidoServices.EditMany(repartoALimpiar.Pedidos);
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                        return null;
-                    }
-                    return repartoALimpiar;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<ILimpiarRepartoUseCase>();
+                    return await useCase.ExecuteAsync(repartoALimpiar);
                 },
                 "No se pudo realizar",
                 this
             );
-            if (reparto == null)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             //comboBox1ListaDias.SelectedIndex = comboBox8.SelectedIndex;
@@ -186,44 +128,22 @@ namespace linway_app.Forms
         {
             await ReCargarHDR(comboBox1ListaDias.Text, comboBox2ListaRepartos.Text);
             string direccion = label36.Text;
-            Reparto reparto = await UIExecutor.ExecuteAsync(
+            Pedido pedidoAEditar = _lstPedidos.Find(x => x.Cliente.Direccion.Equals(direccion));
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    //
-                    Pedido pedidoAEditar = _lstPedidos.Find(x => x.Cliente.Direccion.Equals(direccion));
-                    Reparto repartoAEditar = pedidoAEditar.Reparto;
-                    List<ProdVendido> prodVendidosALimpiar = pedidoAEditar.ProdVendidos.ToList();
-                    //
-                    foreach (ProdVendido prodVendido in prodVendidosALimpiar)
-                    {
-                        prodVendido.PedidoId = null;
-                    }
-                    servicesContext.ProdVendidoServices.EditMany(prodVendidosALimpiar);
-                    //
-                    foreach (Pedido pedido in repartoAEditar.Pedidos)
-                    {
-                        if (pedido.Id == pedidoAEditar.Id)
-                        {
-                            pedido.Entregar = 0;
-                        }
-                    }
-                    servicesContext.PedidoServices.EditMany(repartoAEditar.Pedidos);
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                        return null;
-                    }
-                    return await servicesContext.RepartoServices.GetPorIdAsync(pedidoAEditar.RepartoId);
+                    var useCase = _scope.ServiceProvider.GetRequiredService<ILimpiarPedidoUseCase>();
+                    return await useCase.ExecuteAsync(pedidoAEditar);
                 },
                 "No se pudo realizar",
                 this
             );
-            if (reparto == null)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             LimpiarPantalla();

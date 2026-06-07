@@ -1,11 +1,13 @@
-﻿using linway_app.PresentationHelpers;
-using linway_app.Services.FormServices;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.EntityServices;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Enums;
 using System;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormCrearNota : Form
     {
@@ -25,11 +27,11 @@ namespace linway_app.Forms
             {
                 return;
             }
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorIdAsync(clienteId);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el cliente",
                 null
@@ -55,11 +57,11 @@ namespace linway_app.Forms
                 labelClienteId.Text = "";
                 return;
             }
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorDireccionAsync(direccion);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el cliente",
                 null
@@ -90,12 +92,12 @@ namespace linway_app.Forms
             {
                 return;
             }
-            Producto producto = await UIExecutor.ExecuteAsync(
+            var producto = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ProductoServices.GetPorIdAsync(productoId);
+                    var productoServices = sp.GetRequiredService<IProductoServices>();
+                    return await productoServices.GetPorIdAsync(productoId);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -123,12 +125,12 @@ namespace linway_app.Forms
                 labelProductoNumero.Text = "";
                 return;
             }
-            Producto producto = await UIExecutor.ExecuteAsync(
+            var producto = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ProductoServices.GetPorNombreAsync(nombreDeProducto);
+                    var productoServices = sp.GetRequiredService<IProductoServices>();
+                    return await productoServices.GetPorNombreAsync(nombreDeProducto);
                 },
                 "No se pudo buscar el Producto",
                 null

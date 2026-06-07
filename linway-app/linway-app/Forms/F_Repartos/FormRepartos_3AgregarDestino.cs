@@ -1,12 +1,14 @@
-﻿using linway_app.PresentationHelpers;
-using linway_app.Services.FormServices;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.EntityServices;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormRepartos : Form
     {
@@ -43,11 +45,11 @@ namespace linway_app.Forms
             {
                 return;
             }
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorIdAsync(clienteId);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -68,11 +70,11 @@ namespace linway_app.Forms
                 label8AgregarPedidoDireccion.Text = "No encontrado";
                 return;
             }
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorDireccionAsync(direccion);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -97,34 +99,30 @@ namespace linway_app.Forms
             //await ReCargarHDR(diaReparto, nombreReparto);
             //comboBox1.SelectedIndex = comboBox4.SelectedIndex;
             //comboBox2.SelectedIndex = comboBox5.SelectedIndex;
-            bool logrado = await UIExecutor.ExecuteAsync(
+            Reparto reparto = _lstDiaRepartos
+                .Find(x => x.Dia == diaReparto).Repartos.ToList()
+                .Find(x => x.Nombre == nombreReparto);
+            if (_lstPedidos.Exists(x => x.ClienteId == _clienteAReparto.Id && x.RepartoId == reparto.Id))
+            {
+                MessageBox.Show("Ese cliente ya estaba en el Reparto");
+                return;
+            }
+            var pedido = PedidoServices.GetNuevoPedido(_clienteAReparto, reparto);
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    Reparto reparto = _lstDiaRepartos
-                        .Find(x => x.Dia == diaReparto).Repartos.ToList()
-                        .Find(x => x.Nombre == nombreReparto);
-                    if (_lstPedidos.Exists(x => x.ClienteId == _clienteAReparto.Id && x.RepartoId == reparto.Id))
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("Ese cliente ya estaba en el Reparto");
-                        return false;
-                    }
-                    var pedido = PedidoServices.GetNuevoPedido(_clienteAReparto, reparto);
-                    await servicesContext.PedidoServices.AddAsync(pedido);
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IAgregarPedidoUseCase>();
+                    return await useCase.ExecuteAsync(pedido);
                 },
                 "No se pudo realizar",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             LimpiarPantalla();

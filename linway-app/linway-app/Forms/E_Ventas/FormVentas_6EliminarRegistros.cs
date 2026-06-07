@@ -1,10 +1,12 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormVentas : Form
     {
@@ -37,39 +39,21 @@ namespace linway_app.Forms
             {
                 return;
             }
-            var prodVendidosAEditarOEliminar = new List<ProdVendido>();
-            foreach (RegistroVenta registroVenta in _registrosAEliminar)
-            {
-                prodVendidosAEditarOEliminar.AddRange(registroVenta.ProdVendidos);
-            }
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    //
-                    foreach (ProdVendido pv in prodVendidosAEditarOEliminar)
-                    {
-                        pv.RegistroVentaId = null;
-                    }
-                    servicesContext.ProdVendidoServices.EditOrDeleteMany(prodVendidosAEditarOEliminar);
-                    //
-                    servicesContext.RegistroVentaServices.DeleteMany(_registrosAEliminar);
-                    //
-                    await servicesContext.VentaServices.RestarDesdeProdVendidosAsync(prodVendidosAEditarOEliminar);
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IEliminarRegistroVentasUseCase>();
+                    return await useCase.ExecuteAsync(_registrosAEliminar);
                 },
                 "No se pudieron eliminar los Registros de Venta",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             await Actualizar();

@@ -1,4 +1,4 @@
-﻿namespace linway_app.Forms
+﻿namespace AppLinway.Forms
 {
     partial class FormProductos
     {

@@ -1,4 +1,4 @@
-﻿using linway_app.Services.FormServices;
+﻿using AppServices.EntityServices;
 using Models;
 using Models.Entities;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormVentas : Form
     {

@@ -1,4 +1,5 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormVentas : Form
     {
@@ -29,10 +30,12 @@ namespace linway_app.Forms
             var respuesta = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    List<DiaReparto> dias = await servicesContext.DiaRepartoServices.GetAllAsync();
-                    List<Venta> ventas = await servicesContext.VentaServices.GetAllAsync();
-                    List<RegistroVenta> registros = await servicesContext.RegistroVentaServices.GetAllAsync();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                    var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
+                    var ventaServices = sp.GetRequiredService<IVentaServices>();
+                    var dias = await diaRepartoServices.GetAllAsync();
+                    var registros = await registroVentaServices.GetAllAsync();
+                    var ventas = await ventaServices.GetAllAsync();
                     return (dias, ventas, registros);
                 },
                 "No se pudieron buscar las Ventas y los Registros de Ventas",
@@ -123,8 +126,8 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    servicesContext.ExportarServices.ExportarVentas(_lstVentas);
+                    var exportarServices = sp.GetRequiredService<IExportarServices>();
+                    exportarServices.ExportarVentas(_lstVentas);
                     return true;
                 },
                 "No se pudieron buscar las Ventas y los Registros de Ventas",

@@ -1,5 +1,6 @@
-﻿using linway_app.PresentationHelpers;
-using linway_app.Services.FormServices;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Entities;
 using System;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormVentas : Form
     {
@@ -46,11 +47,11 @@ namespace linway_app.Forms
             {
                 return;
             }
-            RegistroVenta registroVenta = await UIExecutor.ExecuteAsync(
+            var registroVenta = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.RegistroVentaServices.GetPorIdAsync(registroVentaId);
+                    var registroVentaServices = sp.GetRequiredService<IRegistroVentaServices>();
+                    return await registroVentaServices.GetPorIdAsync(registroVentaId);
                 },
                 "No se pudo buscar el Registro de Venta",
                 null
@@ -84,38 +85,21 @@ namespace linway_app.Forms
                 return;
             }
             bool restarDeVentas = checkBox3EliminarRegistroRestarDeVentas.Checked;
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    //
-                    if (restarDeVentas)
-                    {
-                        await servicesContext.VentaServices.RestarDesdeProdVendidosAsync(_registroVerEliminar.ProdVendidos);
-                    }
-                    //
-                    foreach (ProdVendido pv in _registroVerEliminar.ProdVendidos)
-                    {
-                        pv.RegistroVentaId = null;
-                        pv.PedidoId = null;
-                    }
-                    servicesContext.ProdVendidoServices.EditOrDeleteMany(_registroVerEliminar.ProdVendidos.ToList());
-                    //
-                    servicesContext.RegistroVentaServices.Delete(_registroVerEliminar);
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IEliminarRegistroVentaUseCase>();
+                    return await useCase.ExecuteAsync(_registroVerEliminar, restarDeVentas);
                 },
                 "No se pudo eliminar el Registro de Venta",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             await Actualizar();

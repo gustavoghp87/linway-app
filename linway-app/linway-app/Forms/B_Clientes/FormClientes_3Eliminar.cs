@@ -1,13 +1,11 @@
-﻿using linway_app.PresentationHelpers;
-using linway_app.Services.FormServices;
-using Microsoft.EntityFrameworkCore.Internal;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormClientes : Form
     {
@@ -15,7 +13,7 @@ namespace linway_app.Forms
         private async void BorrarPorId_textBox_TextChanged(object sender, EventArgs ev)  // cliente por Id
         {
             _clienteAEliminar = null;
-            string numeroDeCliente = textBox22.Text;
+            var numeroDeCliente = textBox22.Text;
             if (numeroDeCliente == "" || !long.TryParse(textBox22.Text, out long clienteId))
             {
                 label47EliminarDireccion.Visible = false;
@@ -24,11 +22,11 @@ namespace linway_app.Forms
                 return;
             }
             label47EliminarDireccion.Visible = true;
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorIdAsync(clienteId);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -46,7 +44,7 @@ namespace linway_app.Forms
         private async void BorrarPorDire_textBox_TextChanged(object sender, EventArgs ev)  // cliente por dirección
         {
             _clienteAEliminar = null;
-            string direccion = textBoxDireEnBorrar.Text;
+            var direccion = textBoxDireEnBorrar.Text;
             if (direccion == "")
             {
                 label47EliminarDireccion.Visible = false;
@@ -55,11 +53,11 @@ namespace linway_app.Forms
                 return;
             }
             label47EliminarDireccion.Visible = true;
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorDireccionAsync(direccion);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -80,58 +78,21 @@ namespace linway_app.Forms
             {
                 return;
             }
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    //
-                    {
-                        // se eliminan sus Recibos con sus Detalles
-                        List<Recibo> recibos = await servicesContext.ReciboServices.GetAllAsync();
-                        List<Recibo> recibosDelCliente = recibos.FindAll(r => r.ClienteId == _clienteAEliminar.Id);
-                        if (recibosDelCliente.Any())
-                        {
-                            servicesContext.DetalleReciboServices.DeleteMany(recibosDelCliente.SelectMany(r => r.DetalleRecibos).ToList());
-                            servicesContext.ReciboServices.DeleteMany(recibosDelCliente);
-                        }
-                    }
-                    {
-                        // se eliminan sus Notas de Envío con sus Productos Vendidos
-                        List<NotaDeEnvio> notas = await servicesContext.NotaDeEnvioServices.GetAllAsync();
-                        List<NotaDeEnvio> notasDelCliente = notas.FindAll(n => n.ClienteId == _clienteAEliminar.Id);
-                        servicesContext.ProdVendidoServices.DeleteMany(notasDelCliente.SelectMany(n => n.ProdVendidos).ToList());
-                        servicesContext.NotaDeEnvioServices.DeleteMany(notasDelCliente);
-                    }
-                    {
-                        // se eliminan sus Pedidos con sus Productos Vendidos
-                        List<Pedido> pedidos = await servicesContext.PedidoServices.GetAllAsync();
-                        List<Pedido> pedidosDelCliente = pedidos.FindAll(p => p.ClienteId == _clienteAEliminar.Id);
-                        servicesContext.ProdVendidoServices.DeleteMany(pedidosDelCliente.SelectMany(p => p.ProdVendidos).ToList());
-                        servicesContext.PedidoServices.DeleteMany(pedidosDelCliente);
-                    }
-                    {
-                        // se eliminan sus Registros de Venta con sus Productos Vendidos
-                        List<RegistroVenta> registros = await servicesContext.RegistroVentaServices.GetAllAsync();
-                        List<RegistroVenta> registrosDelCliente = registros.FindAll(r => r.ClienteId == _clienteAEliminar.Id);
-                        servicesContext.ProdVendidoServices.DeleteMany(registrosDelCliente.SelectMany(r => r.ProdVendidos).ToList());
-                        servicesContext.RegistroVentaServices.DeleteMany(registrosDelCliente);
-                    }
-                    //
-                    servicesContext.ClienteServices.Delete(_clienteAEliminar);
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IEliminarClienteUseCase>();
+                    return await useCase.ExecuteAsync(_clienteAEliminar);
                 },
                 "No se pudo eliminar el Cliente",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             _clienteAEliminar = null;

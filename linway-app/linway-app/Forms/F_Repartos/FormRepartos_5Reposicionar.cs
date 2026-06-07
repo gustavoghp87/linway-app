@@ -1,11 +1,12 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormRepartos : Form  // TODO: usar dos atributos Pedido
     {
@@ -40,68 +41,26 @@ namespace linway_app.Forms
             string pedidoReferencia = label31ReposicionarReferencia.Text;
             string diaReparto = comboBox1ListaDias.Text;
             string nombreReparto = comboBox2ListaRepartos.Text;
-            bool logrado = await UIExecutor.ExecuteAsync(
+            Reparto reparto = _lstDiaRepartos
+                .Find(x => x.Dia == diaReparto).Repartos.ToList()
+                .Find(x => x.Nombre == nombreReparto);
+            Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Cliente.Direccion == pedidoAMover);
+            Pedido pedido2 = reparto.Pedidos.ToList().Find(x => x.Cliente.Direccion == pedidoReferencia);
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    //
-                    Reparto reparto = _lstDiaRepartos
-                        .Find(x => x.Dia == diaReparto).Repartos.ToList()
-                        .Find(x => x.Nombre == nombreReparto);
-                    Pedido pedido1 = reparto.Pedidos.ToList().Find(x => x.Cliente.Direccion == pedidoAMover);
-                    Pedido pedido2 = reparto.Pedidos.ToList().Find(x => x.Cliente.Direccion == pedidoReferencia);
-                    long order1 = pedido1.Orden;
-                    long order2 = pedido2.Orden;
-                    if (order2 == order1)
-                    {
-                        return false;
-                    }
-                    var pedidosAEditar = new List<Pedido>();
-                    if (order2 > order1)
-                    {
-                        //foreach (Pedido pedido in reparto.Pedidos.Where(x => x.Entregar == 1))
-                        foreach (Pedido pedido in reparto.Pedidos)
-                        {
-                            if (pedido.Orden > order1 && pedido.Orden < order2)
-                            {
-                                pedido.Orden -= 1;
-                                pedidosAEditar.Add(pedido);
-                            }
-                        }
-                        pedido1.Orden = pedido2.Orden;
-                        pedido2.Orden -= 1;
-                        pedidosAEditar.Add(pedido1);
-                        pedidosAEditar.Add(pedido2);
-                    }
-                    else
-                    {
-                        //foreach (Pedido pedido in reparto.Pedidos.Where(x => x.Entregar == 1))
-                        foreach (Pedido pedido in reparto.Pedidos)
-                        {
-                            if (pedido.Orden < order1 && pedido.Orden > order2)
-                            {
-                                pedido.Orden += 1;
-                                pedidosAEditar.Add(pedido);
-                            }
-                        }
-                        pedido1.Orden = pedido2.Orden + 1;
-                        pedidosAEditar.Add(pedido1);
-                        pedidosAEditar.Add(pedido2);
-                    }
-                    servicesContext.PedidoServices.EditMany(pedidosAEditar);
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IReposicionarRepartoUseCase>();
+                    return await useCase.ExecuteAsync(reparto, pedido1, pedido2);
                 },
                 "No se pudo reposicionar",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             LimpiarPantalla();

@@ -1,10 +1,12 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormRecibos : Form
     {
@@ -99,26 +101,22 @@ namespace linway_app.Forms
                     detallesAEliminar.AddRange(recibo.DetalleRecibos);
                 }
             }
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    servicesContext.DetalleReciboServices.DeleteMany(detallesAEliminar);  // primero
-                    servicesContext.ReciboServices.DeleteMany(recibosAEliminar);  // segundo
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IEliminarRecibosUseCase>();
+                    return await useCase.ExecuteAsync(recibosAEliminar, detallesAEliminar);
                 },
                 "No se pudieron eliminar los Recibos",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             await Actualizar();

@@ -1,18 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11605.240 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "linway-app\App.csproj", "{65BF7AFC-BB51-499D-BD9D-AC22A886BE41}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0C2610D0-68F1-42EB-8DA5-288E3D98BA43} = {0C2610D0-68F1-42EB-8DA5-288E3D98BA43}
+		{B4A40BA6-3B3E-4749-8962-C7ED0C5BD9DB} = {B4A40BA6-3B3E-4749-8962-C7ED0C5BD9DB}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{0C2610D0-68F1-42EB-8DA5-288E3D98BA43}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{DD5C2812-6E1E-4766-A6B1-0E28544FE936}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppServices", "InfrasServices\AppServices.csproj", "{B4A40BA6-3B3E-4749-8962-C7ED0C5BD9DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppServices", "AppServices\AppServices.csproj", "{B4A40BA6-3B3E-4749-8962-C7ED0C5BD9DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,11 +1,13 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormNotasEnvio : Form
     {
@@ -104,58 +106,21 @@ namespace linway_app.Forms
             bool eliminarDeLosRepartos = checkBox1EliminarIncluirRepartos.Checked;
             bool eliminarRegistros = checkBox2EliminarIncluirRegistros.Checked;
             bool restarDeVentas = checkBox1EliminarRestarDeVentas.Checked;
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    List<ProdVendido> prodVendidosDeLasNotas = notasAEliminar.SelectMany(n => n.ProdVendidos).ToList();
-                    foreach (ProdVendido prod in prodVendidosDeLasNotas)
-                    {
-                        prod.NotaDeEnvioId = null;
-                    }
-                    //
-                    if (eliminarDeLosRepartos)
-                    {
-                        foreach (ProdVendido prod in prodVendidosDeLasNotas)
-                        {
-                            prod.PedidoId = null;
-                        }
-                    }
-                    //
-                    if (eliminarRegistros)
-                    {
-                        if (restarDeVentas)
-                        {
-                            List<ProdVendido> prodARestar = prodVendidosDeLasNotas.FindAll(x => x.RegistroVentaId != null);
-                            await servicesContext.VentaServices.RestarDesdeProdVendidosAsync(prodARestar);
-                        }
-                        //
-                        List<RegistroVenta> registrosAEliminar = prodVendidosDeLasNotas.Where(pv => pv.RegistroVentaId != null).Select(pv => pv.RegistroVenta).ToList();
-                        servicesContext.RegistroVentaServices.DeleteMany(registrosAEliminar);
-                        //
-                        foreach (ProdVendido prod in prodVendidosDeLasNotas)
-                        {
-                            prod.RegistroVentaId = null;
-                        }
-                    }
-                    //
-                    servicesContext.ProdVendidoServices.EditOrDeleteMany(prodVendidosDeLasNotas);
-                    //
-                    servicesContext.NotaDeEnvioServices.DeleteMany(notasAEliminar);
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IEliminarNotaDeEnvioUseCase>();
+                    return await useCase.ExecuteAsync(notasAEliminar, eliminarDeLosRepartos, eliminarRegistros, restarDeVentas);
                 },
                 "No se pudieron eliminar las Notas de Envío",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             comboBox3EliminarModalidad.SelectedItem = "(Seleccionar)";

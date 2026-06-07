@@ -1,10 +1,12 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Enums;
 using System;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormProductos : Form
     {
@@ -122,12 +124,12 @@ namespace linway_app.Forms
             {
                 return;
             }
-            Producto producto = await UIExecutor.ExecuteAsync(
+            var producto = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ProductoServices.GetPorIdAsync(productoId);
+                    var productoServices = sp.GetRequiredService<IProductoServices>();
+                    return await productoServices.GetPorIdAsync(productoId);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -152,12 +154,12 @@ namespace linway_app.Forms
                 comboBox2.Visible = false;
                 return;
             }
-            Producto producto = await UIExecutor.ExecuteAsync(
+            var producto = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ProductoServices.GetPorNombreAsync(nombreDeProducto);
+                    var productoServices = sp.GetRequiredService<IProductoServices>();
+                    return await productoServices.GetPorNombreAsync(nombreDeProducto);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -184,30 +186,25 @@ namespace linway_app.Forms
             {
                 return;
             }
-            string tipo = comboBox3.Text;
-            string subtipo = comboBox2.Visible && comboBox2.Text != "" ? comboBox2.Text : "";
             _productoAEditar.Precio = precio;
-            _productoAEditar.Tipo = tipo;
-            _productoAEditar.SubTipo = subtipo;
-            bool logrado = await UIExecutor.ExecuteAsync(
+            _productoAEditar.Tipo = comboBox3.Text;
+            _productoAEditar.SubTipo = comboBox2.Visible && comboBox2.Text != "" ? comboBox2.Text : "";
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    servicesContext.ProductoServices.Edit(_productoAEditar);
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IEditarProductoUseCase>();
+                    return await useCase.ExecuteAsync(_productoAEditar.Nombre, _productoAEditar.Precio, _productoAEditar.Tipo, _productoAEditar.SubTipo);
                 },
                 "No se pudo editar el Producto",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             _productoAEditar = null;

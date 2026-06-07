@@ -1,5 +1,6 @@
-using linway_app.PresentationHelpers;
-using linway_app.Services.FormServices;
+using AppLinway.PresentationHelpers;
+using AppServices.EntityServices;
+using AppServices.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
@@ -8,7 +9,7 @@ using System.Drawing.Printing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormImprimirRecibo : Form
     {
@@ -61,14 +62,12 @@ namespace linway_app.Forms
             {
                 return;
             }
-            _recibo.Impreso = 1;
             await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    servicesContext.ReciboServices.Edit(_recibo);
-                    return await servicesContext.SavingServices.SaveAsync();
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IMarcarReciboComoImprimidoUseCase>();
+                    return await useCase.ExecuteAsync(_recibo);
                 },
                 "No se pudo marcar Recibo como Imprimido",
                 null

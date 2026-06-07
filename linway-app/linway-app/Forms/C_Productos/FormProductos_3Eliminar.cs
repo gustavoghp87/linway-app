@@ -1,15 +1,13 @@
-﻿using linway_app.PresentationHelpers;
-using linway_app.Services.Interfaces;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
-using Models.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormProductos : Form
     {
@@ -51,12 +49,12 @@ namespace linway_app.Forms
             {
                 return;
             }
-            Producto producto = await UIExecutor.ExecuteAsync(
+            var producto = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ProductoServices.GetPorIdAsync(productoId);
+                    var productoServices = sp.GetRequiredService<IProductoServices>();
+                    return await productoServices.GetPorIdAsync(productoId);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -82,12 +80,12 @@ namespace linway_app.Forms
                 button22Eliminar.Enabled = false;
                 return;
             }
-            Producto producto = await UIExecutor.ExecuteAsync(
+            var producto = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ProductoServices.GetPorNombreAsync(nombreDeProducto);
+                    var productoServices = sp.GetRequiredService<IProductoServices>();
+                    return await productoServices.GetPorNombreAsync(nombreDeProducto);
                 },
                 "No se pudo buscar el Producto",
                 null
@@ -101,34 +99,6 @@ namespace linway_app.Forms
             _productoAEliminar = producto;
             CargarEtiquetas();
         }
-        private async Task ValidarSiSePuedeEliminarAsync(IProdVendidoServices prodVendidoServices)
-        {
-            List<ProdVendido> prodVendidos = await prodVendidoServices.GetAllAsync();
-            List<ProdVendido> prodVendidosDelProducto = prodVendidos.FindAll(pv => pv.ProductoId == _productoAEliminar.Id);
-            string excepcion = "";
-            if (prodVendidosDelProducto.Any(pv => pv.NotaDeEnvioId != null))
-            {
-                excepcion += "\n\n";
-                excepcion += $"No se puede eliminar el producto porque tiene las siguientes Notas de Envío asociadas: ";
-                excepcion += string.Join(", ", prodVendidosDelProducto.Where(pv => pv.NotaDeEnvioId != null).Select(pv => pv.NotaDeEnvioId));
-            }
-            if (prodVendidosDelProducto.Any(pv => pv.PedidoId != null))
-            {
-                excepcion += "\n\n";
-                excepcion += $"No se puede eliminar el producto porque tiene los siguientes Pedidos asociados: ";
-                excepcion += string.Join(", ", prodVendidosDelProducto.Where(pv => pv.PedidoId != null).Select(pv => $"{pv.Pedido.Reparto.DiaReparto.Dia} {pv.Pedido.Reparto.Nombre}"));
-            }
-            if (prodVendidosDelProducto.Any(pv => pv.RegistroVentaId != null))
-            {
-                excepcion += "\n\n";
-                excepcion += $"No se puede eliminar el producto porque tiene los siguientes Registros de Venta asociados: ";
-                excepcion += string.Join(", ", prodVendidosDelProducto.Where(pv => pv.RegistroVentaId != null).Select(pv => pv.RegistroVentaId));
-            }
-            if (excepcion.Length > 0)
-            {
-                throw new InvalidOperationException(excepcion);
-            }
-        }
         private async void Eliminar_Click(object sender, EventArgs ev)
         {
             if (_productoAEliminar == null)
@@ -141,35 +111,22 @@ namespace linway_app.Forms
                 MessageBox.Show("Tilde si esta seguro para borrar el producto");
                 return;
             }
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    await ValidarSiSePuedeEliminarAsync(servicesContext.ProdVendidoServices);
-                    //
-                    List<Venta> ventas = await servicesContext.VentaServices.GetAllAsync();
-                    Venta venta = ventas.Find(v => v.ProductoId == _productoAEliminar.Id);
-                    if (venta != null)
-                    {
-                        servicesContext.VentaServices.Delete(venta);
-                    }
-                    //
-                    servicesContext.ProductoServices.Delete(_productoAEliminar);
-                    //
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IEliminarProductoUseCase>();
+                    return await useCase.ExecuteAsync(_productoAEliminar);
                 },
                 "No se pudo eliminar el Producto",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             button22Eliminar.Enabled = false;

@@ -1,4 +1,5 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormNotasEnvio : Form
     {
@@ -31,9 +32,10 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    List<NotaDeEnvio> notas = await servicesContext.NotaDeEnvioServices.GetAllAsync();
-                    List<DiaReparto> dias = await servicesContext.DiaRepartoServices.GetAllAsync();
+                    var diaRepartoServices = sp.GetRequiredService<IDiaRepartoServices>();
+                    var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
+                    var dias = await diaRepartoServices.GetAllAsync();
+                    var notas = await notaDeEnvioServices.GetAllAsync();
                     return (notas, dias);
                 },
                 "No se pudieron buscar las Notas de Envío o los Repartos por Día",
@@ -52,9 +54,10 @@ namespace linway_app.Forms
             bool logrado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    List<NotaDeEnvio> notas = await servicesContext.NotaDeEnvioServices.GetAllAsync();
-                    servicesContext.ExportarServices.ExportarNotas(notas);
+                    var exportarServices = sp.GetRequiredService<IExportarServices>();
+                    var notaDeEnvioServices = sp.GetRequiredService<INotaDeEnvioServices>();
+                    var notas = await notaDeEnvioServices.GetAllAsync();
+                    exportarServices.ExportarNotas(notas);
                     return true;
                 },
                 "Algo falló",

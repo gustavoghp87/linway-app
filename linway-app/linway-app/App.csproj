@@ -8,9 +8,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{65BF7AFC-BB51-499D-BD9D-AC22A886BE41}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>linway_app</RootNamespace>
-    <AssemblyName>linway-app</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <RootNamespace>AppLinway</RootNamespace>
+    <AssemblyName>AppLinway</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,6 +32,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -533,7 +534,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PresentationHelpers\LoadingOverlayHelper.cs" />
-    <Compile Include="PresentationHelpers\ServiceContext.cs" />
     <Compile Include="PresentationHelpers\UIExecutor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -619,8 +619,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InfrasServices\AppServices.csproj">
-      <Project>{B4A40BA6-3B3E-4749-8962-C7ED0C5BD9DB}</Project>
+    <ProjectReference Include="..\AppServices\AppServices.csproj">
+      <Project>{b4a40ba6-3b3e-4749-8962-c7ed0c5bd9db}</Project>
       <Name>AppServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">

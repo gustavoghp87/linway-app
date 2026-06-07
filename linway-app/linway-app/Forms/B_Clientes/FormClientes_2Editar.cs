@@ -1,12 +1,12 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormClientes : Form
     {
@@ -79,11 +79,11 @@ namespace linway_app.Forms
             {
                 return;
             }
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorIdAsync(clienteId);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorIdAsync(clienteId);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -97,7 +97,7 @@ namespace linway_app.Forms
         private async void TextBox6_TextChanged(object sender, EventArgs ev)  // cliente por dirección
         {
             _clienteAEditar = null;
-            string direccion = textBox6EditarBusquedaDireccion.Text;
+            var direccion = textBox6EditarBusquedaDireccion.Text;
             if (direccion == "")
             {
                 label23EditarDireccionActual.Text = "";
@@ -110,11 +110,11 @@ namespace linway_app.Forms
                 radioButton4EditarMonotributo.Checked = false;
                 return;
             }
-            Cliente cliente = await UIExecutor.ExecuteAsync(
+            var cliente = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp => {
-                    var servicesContext = ServiceContext.Get(sp);
-                    return await servicesContext.ClienteServices.GetPorDireccionAsync(direccion);
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    return await clienteServices.GetPorDireccionAsync(direccion);
                 },
                 "No se pudo buscar el Cliente",
                 null
@@ -138,25 +138,22 @@ namespace linway_app.Forms
             _clienteAEditar.Nombre = textBox11EditarNombreActual.Text;
             _clienteAEditar.Cuit = textBox10EditarCuitActual.Text;
             _clienteAEditar.Tipo = radioButton3EditarInscripto.Checked ? TipoR.Inscripto.ToString() : TipoR.Monotributo.ToString();
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    servicesContext.ClienteServices.Edit(_clienteAEditar);
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IEditarClienteUseCase>();
+                    return await useCase.ExecuteAsync(_clienteAEditar.Direccion, _clienteAEditar.CodigoPostal, _clienteAEditar.Telefono, _clienteAEditar.Nombre, _clienteAEditar.Cuit, _clienteAEditar.Tipo);
                 },
-                "No se pudo buscar el cliente, no se modificó o no se pudo actualizar dirección en los Repartos",
+                "No se pudo modificar el cliente",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             _clienteAEditar = null;

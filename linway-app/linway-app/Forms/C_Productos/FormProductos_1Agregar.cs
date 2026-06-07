@@ -1,10 +1,11 @@
-﻿using linway_app.PresentationHelpers;
-using Models;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models.Enums;
 using System;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormProductos : Form
     {
@@ -68,35 +69,22 @@ namespace linway_app.Forms
             {
                 return;
             }
-            var nuevoProducto = new Producto
-            {
-                Nombre = textBox6AgregarNombre.Text,
-                Precio = precio,
-                Tipo = _tipoAgregar.ToString()
-            };
-            if (_subTipoAgregar != "")
-            {
-                nuevoProducto.SubTipo = _subTipoAgregar;
-            }
-            bool logrado = await UIExecutor.ExecuteAsync(
+            var resultado = await UIExecutor.ExecuteAsync(
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    servicesContext.ProductoServices.Add(nuevoProducto);
-                    bool guardado = await servicesContext.SavingServices.SaveAsync();
-                    if (!guardado)
-                    {
-                        servicesContext.SavingServices.DiscardChanges();
-                        MessageBox.Show("No se hicieron cambios");
-                    }
-                    return guardado;
+                    var useCase = _scope.ServiceProvider.GetRequiredService<IAgregarProductoUseCase>();
+                    return await useCase.ExecuteAsync(textBox6AgregarNombre.Text, precio, _tipoAgregar, _subTipoAgregar);
                 },
                 "No se pudo agregar Producto",
                 this
             );
-            if (!logrado)
+            if (resultado == null || !resultado.Success)
             {
+                if (resultado?.ErrorMessage != null)
+                {
+                    MessageBox.Show(resultado.ErrorMessage);
+                }
                 return;
             }
             limpiarBtn.PerformClick();

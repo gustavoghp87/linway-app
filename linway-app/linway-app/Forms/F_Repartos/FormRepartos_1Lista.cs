@@ -1,4 +1,6 @@
-﻿using linway_app.PresentationHelpers;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Models.Entities;
 using System;
@@ -6,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class FormRepartos : Form
     {
@@ -75,8 +77,8 @@ namespace linway_app.Forms
                     _scope,
                     async sp =>
                     {
-                        var servicesContext = ServiceContext.Get(sp);
-                        servicesContext.ExportarServices.ExportarReparto(reparto);
+                        var exportarService = sp.GetRequiredService<IExportarServices>();
+                        exportarService.ExportarReparto(reparto);
                         return true;
                     },
                     "No se pudo exportar",

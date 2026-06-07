@@ -1,19 +1,20 @@
-﻿using AutoMapper;
+﻿using AppLinway.PresentationHelpers;
+using AppServices.Interfaces;
+using AutoMapper;
 using Infrastructure.Repositories;
-using linway_app.PresentationHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-//using static linway_app.Services.Delegates.AutoBackup;
+//using static AppLinway.Services.Delegates.AutoBackup;
 
-namespace linway_app.Forms
+namespace AppLinway.Forms
 {
     public partial class Form1 : Form
     {
-        public static IMapper Mapper;
+        public static IMapper Mapper;  // revisar esto...
         private List<Cliente> _lstClientes;
         private List<Producto> _lstProductos;
         private IServiceScope _scope;  // scope por formulario para que no se pierdan los atributos generados por Lazy Loading
@@ -43,9 +44,10 @@ namespace linway_app.Forms
                 _scope,
                 async sp =>
                 {
-                    var servicesContext = ServiceContext.Get(sp);
-                    List<Producto> productos = await servicesContext.ProductoServices.GetAllAsync();
-                    List<Cliente> clientes = await servicesContext.ClienteServices.GetAllAsync();
+                    var clienteServices = sp.GetRequiredService<IClienteServices>();
+                    var productoServices = sp.GetRequiredService<IProductoServices>();
+                    var clientes = await clienteServices.GetAllAsync();
+                    var productos = await productoServices.GetAllAsync();
                     return (clientes, productos);
                 },
                 "No se pudieron buscar los Clientes y los Productos",
