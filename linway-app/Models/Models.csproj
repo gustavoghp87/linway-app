@@ -140,21 +140,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\EReparto.cs" />
-    <Compile Include="LogsService.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Models\DetalleRecibo.cs" />
     <Compile Include="Models\DiaReparto.cs" />
-    <Compile Include="Entities\ECliente.cs" />
-    <Compile Include="Entities\EDetalleRecibo.cs" />
-    <Compile Include="Entities\ENotaDeEnvio.cs" />
-    <Compile Include="Entities\EPedido.cs" />
-    <Compile Include="Entities\EProducto.cs" />
-    <Compile Include="Entities\EProdVendido.cs" />
-    <Compile Include="Entities\ERecibo.cs" />
-    <Compile Include="Entities\ERegistroVenta.cs" />
-    <Compile Include="Entities\EVenta.cs" />
     <Compile Include="Enums\TipoLiquido.cs" />
     <Compile Include="Enums\TipoPolvo.cs" />
     <Compile Include="Enums\TipoProducto.cs" />

@@ -11,7 +11,6 @@ Mejoras de características para próximas versiones:
 
 Mejoras de sistema para próximas versiones:
 ------------------------------------------
--Llevar todos los servicios a la capa de servicios
 -Separar dirección de localidad
 -Migrar de Windows Forms a WPS u otro más moderno
 -ClienteId no debería ser obligatorio en Registro de Venta (por venta particular cargada desde Ventas)
@@ -51,6 +50,7 @@ DROP DATABASE linway1;
 CREATE DATABASE linway1;
 USE linway1;
 SOURCE "C:\Users\g\Desktop\linway_completo.sql";
+GRANT ALL PRIVILEGES ON linway1.* TO 'linway'@'localhost';
 
 --
 RENAME TABLE Cliente TO Clientes;

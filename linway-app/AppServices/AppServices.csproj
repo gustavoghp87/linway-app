@@ -135,6 +135,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\ECliente.cs" />
+    <Compile Include="DTOs\EDetalleRecibo.cs" />
+    <Compile Include="DTOs\ENotaDeEnvio.cs" />
+    <Compile Include="DTOs\EPedido.cs" />
+    <Compile Include="DTOs\EProducto.cs" />
+    <Compile Include="DTOs\EProdVendido.cs" />
+    <Compile Include="DTOs\ERecibo.cs" />
+    <Compile Include="DTOs\ERegistroVenta.cs" />
+    <Compile Include="DTOs\EReparto.cs" />
+    <Compile Include="DTOs\EVenta.cs" />
     <Compile Include="Mapping\MappingProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interfaces\EntitityServices\ISavingServices.cs" />

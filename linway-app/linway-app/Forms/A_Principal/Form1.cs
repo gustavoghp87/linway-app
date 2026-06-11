@@ -1,6 +1,7 @@
 ﻿using AppLinway.PresentationHelpers;
 using AppServices.Interfaces;
 using AutoMapper;
+using Infrastructure.Loggers;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Models;

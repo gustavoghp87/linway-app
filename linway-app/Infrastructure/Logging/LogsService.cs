@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Models
+namespace Infrastructure.Loggers
 {
-    public static class Logger
+    public static class Logger  // mover a infrastructure
     {
         public static void LogException(Exception ex)
         {

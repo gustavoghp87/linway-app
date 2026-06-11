@@ -1,8 +1,8 @@
 ﻿using AppLinway.PresentationHelpers;
+using AppServices.DTOs;
 using AppServices.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
-using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;

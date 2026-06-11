@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Models.Entities
+namespace AppServices.DTOs
 {
     public partial class EPedido
     {

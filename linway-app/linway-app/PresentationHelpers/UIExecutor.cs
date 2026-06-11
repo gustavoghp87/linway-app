@@ -1,6 +1,6 @@
 ﻿using AppServices.Interfaces;
+using Infrastructure.Loggers;
 using Microsoft.Extensions.DependencyInjection;
-using Models;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;

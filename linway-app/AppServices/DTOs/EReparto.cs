@@ -1,4 +1,4 @@
-﻿namespace Models.Entities
+﻿namespace AppServices.DTOs
 {
     public partial class EReparto
     {

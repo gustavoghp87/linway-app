@@ -1,7 +1,7 @@
-﻿using AppServices.EntityServices;
+﻿using AppServices.DTOs;
+using AppServices.EntityServices;
 using AutoMapper;
 using Models;
-using Models.Entities;
 using Models.Enums;
 using System.Linq;
 

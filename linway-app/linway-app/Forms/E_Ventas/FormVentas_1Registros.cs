@@ -1,6 +1,6 @@
-﻿using AppServices.EntityServices;
+﻿using AppServices.DTOs;
+using AppServices.EntityServices;
 using Models;
-using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
